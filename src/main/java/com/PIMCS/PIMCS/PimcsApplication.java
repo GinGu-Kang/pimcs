@@ -8,6 +8,6 @@ public class PimcsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PimcsApplication.class, args);
-		System.out.println("hihihi");
 	}
 }
+

@@ -1,6 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,8 +13,7 @@ import javax.persistence.Id;
 import java.sql.Timestamp;
 
 
-@Getter
-@Setter
+@Data
 @Entity
 public class User {
     @Id

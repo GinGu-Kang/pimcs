@@ -24,7 +24,7 @@ public class MatService {
 
     /**
      * 매트생성 서비스
-     * @throws IllegalStateException 사용할수없는 시리얼번호일 발생
+     * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
      */
     public String createMat(Mat mat){
 

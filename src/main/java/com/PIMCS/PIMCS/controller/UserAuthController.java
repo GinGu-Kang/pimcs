@@ -1,6 +1,7 @@
 package com.PIMCS.PIMCS.controller;
 
 
+import com.PIMCS.PIMCS.annotation.CheckMatManageMentRole;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class UserAuthController {
     private String signUpForm(){
         return "user/auth/signUp.html";
     }
+
+
     @PostMapping("signUp")
     private String signUp(User user){
 

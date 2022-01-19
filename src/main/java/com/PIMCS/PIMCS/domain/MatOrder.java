@@ -1,4 +1,4 @@
-package com.sample;
+package com.PIMCS.PIMCS.domain;
 
 
 public class MatOrder {

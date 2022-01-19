@@ -27,7 +27,6 @@ public class MatServiceIntegrationTest {
 
 
     @Test
-    @Commit
     public void creatMat(){
         /**
          *  1. 생성권한 있는지 검증
@@ -36,7 +35,7 @@ public class MatServiceIntegrationTest {
         
         //given
         Mat mat = new Mat();
-        mat.setSerialNumber("w1234");
+        mat.setSerialNumber("w1234w");
         mat.setProdCode("prod123");
         mat.setCompanyCode("code123");
         mat.setCalcMethod(1);
@@ -48,6 +47,7 @@ public class MatServiceIntegrationTest {
         mat.setProductOrderCnt(2);
         mat.setBoxWeight(5);
         mat.setBattery(10);
+
 
         //when
         String serialNum = matService.createMat(mat);

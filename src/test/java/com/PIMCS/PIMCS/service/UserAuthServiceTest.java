@@ -21,7 +21,6 @@ public class UserAuthServiceTest {
     @Commit
     public void saveTest(){
         Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
-        user.get().setEmail("hihi@naver.com");
         userAuthService.userUpdate(user.get());
         System.out.println(user.isEmpty());
     }

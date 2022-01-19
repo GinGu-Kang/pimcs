@@ -29,7 +29,9 @@ public class UserAuthService {
         userAuthRepository.deleteByEmail(email);
 
     }
-    public void userUpdate(User user){
+    public String userUpdate(User user){
         userAuthRepository.save(user);
+
+        return user.getEmail();
     }
 }

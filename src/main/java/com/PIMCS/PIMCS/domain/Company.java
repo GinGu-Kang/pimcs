@@ -1,5 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 
 public class Company {
 
@@ -7,6 +9,7 @@ public class Company {
   private String businessCategoryName;
   private String companyName;
   private String companyAddress;
+  @CreationTimestamp
   private java.sql.Timestamp createat;
   private String contactPhone;
   private String ceoEmail;

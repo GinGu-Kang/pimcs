@@ -27,4 +27,6 @@ public class User {
     private Timestamp creatat;
     @UpdateTimestamp
     private Timestamp updatedate;
+
+
 }

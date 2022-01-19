@@ -5,6 +5,8 @@ import com.PIMCS.PIMCS.repository.UserAuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserAuthService {
     private  final  UserAuthRepository userAuthRepository;
@@ -17,5 +19,17 @@ public class UserAuthService {
     public String signUp(User user){
         userAuthRepository.save(user);
         return user.getEmail();
+    }
+
+    public Optional<User> findUser(String email){
+        Optional<User> findUser = userAuthRepository.findByEmail(email);
+        return findUser;
+    }
+    public void userDelete(String email){
+        userAuthRepository.deleteByEmail(email);
+
+    }
+    public void userUpdate(User user){
+        userAuthRepository.save(user);
     }
 }

@@ -2,6 +2,7 @@ package com.PIMCS.PIMCS.controller;
 
 
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.form.LoginForm;
 import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,10 +53,12 @@ public class UserAuthController {
     @GetMapping("login")
     private String loginForm(){
 
+
         return "user/auth/login.html";
     }
     @PostMapping("login")
-    private String login(){
+    private String login(LoginForm login){
+
 
         return "member/auth/login.html";
     }

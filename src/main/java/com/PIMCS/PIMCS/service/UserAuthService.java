@@ -1,6 +1,7 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.form.LoginForm;
 import com.PIMCS.PIMCS.repository.UserAuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +34,18 @@ public class UserAuthService {
         userAuthRepository.save(user);
 
         return user.getEmail();
+    }
+    public String userLogin(LoginForm loginForm){
+        Optional<User> user= userAuthRepository.findByEmail(loginForm.getEmail());
+
+
+        if(!user.isEmpty()){
+            return user.get().getEmail();
+        }else{
+            return "empty";
+        }
+
+
+
     }
 }

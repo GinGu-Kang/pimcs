@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Spring Security Example </title>
 </head>
 <body>
-    <from name="login" action="/auth/login" method="post">
-        <p>아이디</p>
-        <input type="text" name="email" placeholder="아이디를 입력하세요">
-        <p>비밀번호</p>
-        <input type="password" name="password" placeholder="00000000"><br>
-        <input type="submit" value="login">
-    </from>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<form th:action="@{/auth/login}" method="post">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+    <div><label> User Name : <input type="text" name="email"/> </label></div>
+    <div><label> Password: <input type="password" name="password"/> </label></div>
+    <div><input type="submit" value="Sign In"/></div>
+</form>
 
 </body>
 </html>

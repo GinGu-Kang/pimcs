@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/auth")
 public class UserAuthController {
+
     private final UserAuthService userAuthService;
 
     @Autowired
@@ -29,39 +30,37 @@ public class UserAuthController {
         this.userAuthService = userAuthService;
     }
 
-    @GetMapping("signUp")
+    //회원 가입
+    @GetMapping("/signUp")
     private String signUpForm(){
         return "user/auth/signUp.html";
     }
-    @PostMapping("signUp")
-    private String signUp(User user){
 
+    @PostMapping("/signUp")
+    private String signUp(User user){
         userAuthService.signUp(user);
-        return "user/auth/signUp.html";
+        return "user/auth/login.html";
     }
 
+    //회원정보수정
     @GetMapping("update")
-    private String userUpdateForm(@RequestParam("email") String email, Model model){
+    private String editPersonalInfoForm(@RequestParam("email") String email, Model model){
         model.addAttribute("user",userAuthService.findUser(email).get());
         return "user/auth/userUpdate.html";
     }
     @PostMapping("update")
-    private String userUpdate(User user){
+    private String editPersonalInfo(User user){
         userAuthService.userUpdate(user);
         return "user/auth/userUpdate.html";
     }
-    @GetMapping("login")
+
+    //로그인
+    @GetMapping("/login")
     private String loginForm(){
-
-
-        return "user/auth/login.html";
+        return "user/auth/login";
     }
-    @PostMapping("login")
-    private String login(LoginForm login){
 
 
-        return "member/auth/login.html";
-    }
 
 
 

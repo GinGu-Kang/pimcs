@@ -1,8 +1,8 @@
 package com.PIMCS.PIMCS.service;
 
 
+import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
-import com.PIMCS.PIMCS.repository.UserAuthRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,20 +37,56 @@ public class UserAuthServiceTest {
         Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
         System.out.println(user.isEmpty());
     }
+
     @Test
-    public void deleteTest(){
-        userAuthService.userDelete("wlsrn212@gmail.com");
+    public void deleteUserTest() {
+        userAuthService.deleteUser("wlsrn212@gmail.com");
         Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
         System.out.println(user.isEmpty());
     }
+
     @Test
     @Commit
-    public void updateTest(){
+    public void updateTest() {
         Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
         user.get().setName("강진구");
         userAuthService.userUpdate(user.get());
         System.out.println(user.isEmpty());
     }
 
+    @Test
+    public void findById() {
+        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
+    }
+
+    @Test
+    @Commit
+    public void insertRoleTest() {
+        Role role = new Role();
+        role.setName("CategoryMangement");
+        userAuthService.roleUpdate(role);
+    }
+
+    @Test
+    @Commit
+    public void mappingRoleTest() {
+        userAuthService.UserRoleUpdate("rkdwlsrn212@gmail.com", "User");
+    }
+
+    @Test
+    public void userRoleFindTest() {
+        System.out.println(userAuthService.findUser("wlsrn212@gmail.com").get().getAuthorities());
+    }
+
+    @Test
+    public void authTest() {
+        System.out.println(userAuthService.loadUserByUsername("wlsrn212@gmail.com"));
+    }
+
+    @Test
+    @Commit
+    public void deleteUserRoleTest() {
+        userAuthService.deleteUserAllRole("rkdwlsrn212@gmail.com");
+    }
 
 }

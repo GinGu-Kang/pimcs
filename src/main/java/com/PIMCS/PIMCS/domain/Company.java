@@ -1,80 +1,43 @@
 package com.PIMCS.PIMCS.domain;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+
+@Getter
+@Setter
+@Entity
 public class Company {
-
+  @Id
+  @Column(name = "company_code")
   private String companyCode;
+
+  @Column(name = "business_category_name")
   private String businessCategoryName;
+
+  @Column(name = "company_name")
   private String companyName;
+
+  @Column(name = "company_address")
   private String companyAddress;
+
   @CreationTimestamp
   private java.sql.Timestamp createat;
+
+  @Column(name = "contact_phone")
   private String contactPhone;
+
+  @Column(name = "ceo_email")
   private String ceoEmail;
 
-
-  public String getCompanyCode() {
-    return companyCode;
-  }
-
-  public void setCompanyCode(String companyCode) {
-    this.companyCode = companyCode;
-  }
-
-
-  public String getBusinessCategoryName() {
-    return businessCategoryName;
-  }
-
-  public void setBusinessCategoryName(String businessCategoryName) {
-    this.businessCategoryName = businessCategoryName;
-  }
-
-
-  public String getCompanyName() {
-    return companyName;
-  }
-
-  public void setCompanyName(String companyName) {
-    this.companyName = companyName;
-  }
-
-
-  public String getCompanyAddress() {
-    return companyAddress;
-  }
-
-  public void setCompanyAddress(String companyAddress) {
-    this.companyAddress = companyAddress;
-  }
-
-
-  public java.sql.Timestamp getCreateat() {
-    return createat;
-  }
-
-  public void setCreateat(java.sql.Timestamp createat) {
-    this.createat = createat;
-  }
-
-
-  public String getContactPhone() {
-    return contactPhone;
-  }
-
-  public void setContactPhone(String contactPhone) {
-    this.contactPhone = contactPhone;
-  }
-
-
-  public String getCeoEmail() {
-    return ceoEmail;
-  }
-
-  public void setCeoEmail(String ceoEmail) {
-    this.ceoEmail = ceoEmail;
-  }
+  @OneToMany(mappedBy = "company")
+  private List<Product> products = new ArrayList<>();
 
 }

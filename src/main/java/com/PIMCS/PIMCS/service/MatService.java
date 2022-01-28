@@ -1,12 +1,15 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.Mat;
+import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
+import com.PIMCS.PIMCS.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +18,13 @@ import java.util.Optional;
 @Transactional
 public class MatService {
     private final MatRepository matRepository;
+    private final ProductRepository productRepository;
+
 
     @Autowired
-    public MatService(MatRepository matRepository) {
+    public MatService(MatRepository matRepository, ProductRepository productRepository) {
         this.matRepository = matRepository;
+        this.productRepository = productRepository;
     }
 
 
@@ -27,6 +33,11 @@ public class MatService {
      * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
      */
     public String createMat(Mat mat){
+        //유효성 검사
+        HashMap<String,Object> resultMap = checkMatSerialNumberService(mat.getSerialNumber());
+        if(!(boolean)resultMap.get("result")){ //등록할수 없는 매트일때
+            throw new IllegalStateException(resultMap.get("message").toString());
+        }
 
         //db에 삽입
         matRepository.save(mat);
@@ -36,9 +47,9 @@ public class MatService {
     /**
      * 매트읽기 서버스
      */
-    public List<Mat> readMat(Mat mat){
-
-        return null;
+    public List<Mat> readMat(){
+        List<Mat> mats = matRepository.findAll();
+        return mats;
     }
 
     /**
@@ -53,7 +64,9 @@ public class MatService {
      * 매트삭제 서비스
      */
     public String deleteMat(Mat mat){
-        return null;
+
+        matRepository.delete(mat);
+        return mat.getSerialNumber();
     }
 
     /**
@@ -61,14 +74,16 @@ public class MatService {
      * @return hashMap
      *      hashMap.get('result'): true면 serialNumber 사용가능, false면 serialNumber 사용불가능
      */
-    public HashMap<String,Boolean> checkMatSerialNumberService(String serialNumber){
-        HashMap<String,Boolean> hashMap = new HashMap<>();
+    public HashMap checkMatSerialNumberService(String serialNumber){
+        HashMap hashMap = new HashMap<>();
         Optional<Mat> optMat = matRepository.findBySerialNumber(serialNumber);
 
         if(optMat.isPresent()){ //null 값이아니면
             hashMap.put("result", false);
+            hashMap.put("message","매트가 이미 등록되어 있습니다.");
         }else{
             hashMap.put("result", true);
+            hashMap.put("message","등록할 수 있는 시리얼번호 입니다.");
         }
         return hashMap;
     }
@@ -85,14 +100,21 @@ public class MatService {
                 break;
             case "matLocation":
                 matList = matRepository.findByMatLocationContaining(searchForm.getSearchQuery());
+
                 break;
             case "productCode":
-                System.out.println("개발중");
+
+                List<Product> products =productRepository.findByProdCodeContaining(searchForm.getSearchQuery());
+                List<Mat> finalMatList =  new ArrayList<>();
+                products.forEach(p ->{
+                    finalMatList.addAll(p.getMats());
+                });
+                matList = finalMatList;
+
                 break;
             case "matVersion":
                 matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
                 break;
-
         }
 
         return matList;

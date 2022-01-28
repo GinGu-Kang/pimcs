@@ -19,8 +19,9 @@ public class Mat {
     @Column(name = "serial_number")
     private String serialNumber; //매트고유번호
 
-    @Column(name = "prod_code")
-    private String prodCode; //상품코드
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "prod_code")
+    private Product product; //상품코드
 
     @Column(name = "company_code")
     private String companyCode; //회사코드

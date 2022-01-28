@@ -17,7 +17,7 @@ public class UserAuthServiceTest {
     UserAuthService userAuthService;
 
 
-<<<<<<< HEAD
+
     @Test
     @Commit
     public void saveTest(){
@@ -25,9 +25,6 @@ public class UserAuthServiceTest {
         userAuthService.userUpdate(user.get());
         System.out.println(user.isEmpty());
     }
-=======
-
->>>>>>> 4ca2b39372df0df4e6adabbb04952f3150056249
 
     @Test
     public void emailCheck() {

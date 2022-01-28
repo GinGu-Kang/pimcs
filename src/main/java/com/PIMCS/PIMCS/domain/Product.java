@@ -1,77 +1,46 @@
 package com.PIMCS.PIMCS.domain;
 
 
-public class Product {
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+public class Product {
+  @Id
+  @Column(name = "prod_code")
   private String prodCode;
-  private String companyCode;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "company_code")
+  private Company company;
+
+  @CreationTimestamp
+  @Column(name = "createat")
   private java.sql.Timestamp creatat;
-  private long productCategoryId;
+
+  @Column(name = "product_category_id")
+  private long prodCategoryId;
+
+  @Column(name = "prod_image")
   private String prodImage;
+
+  @Column(name = "prod_weight")
   private long prodWeight;
+
+  @Column(name = "prod_name")
   private String prodName;
 
-
-  public String getProdCode() {
-    return prodCode;
-  }
-
-  public void setProdCode(String prodCode) {
-    this.prodCode = prodCode;
-  }
-
-
-  public String getCompanyCode() {
-    return companyCode;
-  }
-
-  public void setCompanyCode(String companyCode) {
-    this.companyCode = companyCode;
-  }
-
-
-  public java.sql.Timestamp getCreatat() {
-    return creatat;
-  }
-
-  public void setCreatat(java.sql.Timestamp creatat) {
-    this.creatat = creatat;
-  }
-
-
-  public long getProductCategoryId() {
-    return productCategoryId;
-  }
-
-  public void setProductCategoryId(long productCategoryId) {
-    this.productCategoryId = productCategoryId;
-  }
-
-
-  public String getProdImage() {
-    return prodImage;
-  }
-
-  public void setProdImage(String prodImage) {
-    this.prodImage = prodImage;
-  }
-
-
-  public long getProdWeight() {
-    return prodWeight;
-  }
-
-  public void setProdWeight(long prodWeight) {
-    this.prodWeight = prodWeight;
-  }
-
-
-  public String getProdName() {
-    return prodName;
-  }
-
-  public void setProdName(String prodName) {
-    this.prodName = prodName;
-  }
-
+  @OneToMany(mappedBy = "product")
+  List<Mat> mats = new ArrayList<>();
 }

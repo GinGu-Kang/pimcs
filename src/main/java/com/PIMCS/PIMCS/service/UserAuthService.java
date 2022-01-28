@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
+import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
@@ -41,7 +42,6 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         user.setPassword(encoder.encode(user.getPassword()));
         user.setEnabled(Boolean.TRUE);
         userRepository.save(user);
-
         userRole.setUser(user);
         userRole.setRole(roleRepository.findByName("User"));
         System.out.println(userRole.getUser().getEmail());
@@ -77,12 +77,14 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         userRole.setRole(roleRepository.findByName(roleName));
         userRoleRepository.save(userRole);
     }
-
+    //UserDetailSurvice Defaultmethod 이름 권한 이메일 설정
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
         System.out.println(user.getAuthorities());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),user.getAuthorities());
+//        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompanyCode());
+        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompanyCode());
+        //org.springframework.security.core.userdetails.User
     }
 
     public String deleteUserAllRole(String email){

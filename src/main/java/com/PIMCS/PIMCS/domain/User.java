@@ -16,7 +16,8 @@ import java.sql.Timestamp;
 import java.util.*;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
 @Table(name="User")
@@ -29,6 +30,7 @@ public class User implements UserDetails {//implements UserDetails
     private String name;
     private String phone;
     private String department;
+
     @CreationTimestamp
     private Timestamp creatat;
     @UpdateTimestamp

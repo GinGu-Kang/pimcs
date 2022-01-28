@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>회사 등록</title>
+</head>
+<body>
+
+<section>
+    <h1>회사등록 페이지</h1>
+</section>
+
+<section>
+    <form name="signUp" action="/auth/signUp" method="post">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        회사이름<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        회사주소<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        상세주소<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        회사 전화번호<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        업종<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+
+        이름<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        이메일<br>
+        <input type="text" name="email" placeholder="이메일 입력" ><br>
+        소속 부서<br>
+        <input type="text" name="company_code" placeholder="회사 코드입력"><br>
+        비밀번호<br>
+        <input type="password" name="password" placeholder="123456"><br>
+        비밀번호확인<br>
+        <input type="text" name="name" placeholder="이름입력"><br>
+        <br><br>
+
+        <input type="submit"  value="제출">
+
+    </form>
+    <!--이용약관 추가하기-->
+</section>
+
+
+</body>
+</html>

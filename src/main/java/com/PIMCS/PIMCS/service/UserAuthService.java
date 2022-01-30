@@ -36,19 +36,17 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
 
     public User signUp(User user) {
-        List<UserRole> userRoles = new ArrayList<>();
-        UserRole userRole = new UserRole();
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setEnabled(Boolean.TRUE);
         userRepository.save(user);
-        userRole.setUser(user);
-        userRole.setRole(roleRepository.findByName("User"));
-        System.out.println(userRole.getUser().getEmail());
-        user.setUserRoles(userRoles);
-
-        userRoleRepository.save(userRole);
-
+//        List<UserRole> userRoles = new ArrayList<>();
+//        UserRole userRole = new UserRole();
+//        userRole.setUser(user);
+//        userRole.setRole(roleRepository.findByName("User"));
+//        System.out.println(userRole.getUser().getEmail());
+//        user.setUserRoles(userRoles);
+//        userRoleRepository.save(userRole);
 
         return user;
     }

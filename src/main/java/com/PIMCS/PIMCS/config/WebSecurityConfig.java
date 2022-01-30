@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 
                 .authorizeRequests()
-                    .antMatchers( "/auth/signUp").permitAll() //permitAll이 있을시 로그인없이도 접근가능
+                    .antMatchers( "/auth/signUp","/company/registration").permitAll() //permitAll이 있을시 로그인없이도 접근가능
                     .antMatchers("/hello","/home","auth/update").hasRole("User")
                     .antMatchers("/company/**").hasRole("UserManagement")
 

@@ -44,8 +44,10 @@ public class UserAuthController {
         return "user/auth/signUp.html";
     }
     //회사등록하며 대표가입시에는 CompanyManagementController companyRegistration참조
+
     @PostMapping("/signUp")
     private String signUp(User user){
+        System.out.println("이곳오는거니 ??");
         userAuthService.signUp(user);
         return "user/auth/login.html";
     }

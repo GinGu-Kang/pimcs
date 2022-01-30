@@ -15,5 +15,4 @@ public interface UserRepository extends JpaRepository<User,String> {
     void deleteByEmail(String email);
     @EntityGraph(value = "User.userRoles")
     List<User> findByCompanyCode(String companyCode);
-
 }

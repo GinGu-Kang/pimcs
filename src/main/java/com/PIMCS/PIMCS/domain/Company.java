@@ -40,4 +40,6 @@ public class Company {
   @OneToMany(mappedBy = "company")
   private List<Product> products = new ArrayList<>();
 
+
+
 }

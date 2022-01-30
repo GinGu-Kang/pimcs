@@ -23,4 +23,11 @@ public class CompanyManagementServiceTest {
             System.out.println(user.getAuthorities());
         }
     }
+    @Test
+    public void findApproveWaitWorkerTest(){
+        List<User> myCompanyWorkes=companyManagementService.findApproveWaitWorker("code123");
+        for (User user:myCompanyWorkes) {
+            System.out.println(user.getAuthorities());
+        }
+    }
 }

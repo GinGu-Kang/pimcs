@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>권한없음</title>
+</head>
+<body>
+<h1> 썩물러가거라!</h1>
+<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]</h1><br>
+<h3 th:inline="text">Your Role: [[${#httpServletRequest.UserPrincipal.Authorities}]]</h3>
+<form th:action="@{auth/logout}" method="post">
+    <input type="submit" value="Sign Out"/>
+</form>
+
+</body>
+</html>

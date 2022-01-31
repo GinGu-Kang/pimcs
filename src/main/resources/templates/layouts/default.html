@@ -1,0 +1,15 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:with="lang=${#locale.language}" th:lang="${lang}"> 
+    <head> 
+        <th:block th:insert="layouts/fragments/head :: headFragment"></th:block>
+    </head> 
+    <body> 
+        <header th:replace="layouts/fragments/header :: headerFragment"></header>
+        <div class="d-flex">
+            <nav th:replace="layouts/fragments/navigation :: navigationFragment"></nav>
+            <div layout:fragment="content" class="content"></div>
+        </div>
+        
+        
+    </body> 
+</html>

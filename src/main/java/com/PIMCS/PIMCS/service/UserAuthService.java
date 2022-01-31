@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
+import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
@@ -13,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +22,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     private  final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
+
 
 
 
@@ -35,20 +36,17 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
 
     public User signUp(User user) {
-        List<UserRole> userRoles = new ArrayList<>();
-        UserRole userRole = new UserRole();
+
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setEnabled(Boolean.TRUE);
         userRepository.save(user);
-
-        userRole.setUser(user);
-        userRole.setRole(roleRepository.findByName("User"));
-        System.out.println(userRole.getUser().getEmail());
-        user.setUserRoles(userRoles);
-
-        userRoleRepository.save(userRole);
-
+//        List<UserRole> userRoles = new ArrayList<>();
+//        UserRole userRole = new UserRole();
+//        userRole.setUser(user);
+//        userRole.setRole(roleRepository.findByName("User"));
+//        System.out.println(userRole.getUser().getEmail());
+//        user.setUserRoles(userRoles);
+//        userRoleRepository.save(userRole);
 
         return user;
     }
@@ -77,12 +75,14 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         userRole.setRole(roleRepository.findByName(roleName));
         userRoleRepository.save(userRole);
     }
-
+    //UserDetailSurvice Defaultmethod 이름 권한 이메일 설정
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
         System.out.println(user.getAuthorities());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),user.getPassword(),user.getAuthorities());
+//        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompanyCode());
+        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany().getCompanyCode());
+        //org.springframework.security.core.userdetails.User
     }
 
     public String deleteUserAllRole(String email){
@@ -91,15 +91,14 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return "삭제되었습니다.";
     }
 
+    public List<Role> findRole(){
+        return roleRepository.findAll();
+
+    }
 
 
 
 
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        System.out.println(userRepository.findByEmail(email).get().getEmail());
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException((email)));
-//    }
+
 }

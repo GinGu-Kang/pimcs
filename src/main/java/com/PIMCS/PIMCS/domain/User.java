@@ -16,19 +16,22 @@ import java.sql.Timestamp;
 import java.util.*;
 
 
-@Data
+@Getter
+@Setter
 @Entity
 @NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
 @Table(name="User")
 public class User implements UserDetails {//implements UserDetails
     @Id
     private String email;
-    @Column(name="company_code")
-    private String companyCode;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_code")
+    private Company company;
     private String password;
     private String name;
     private String phone;
     private String department;
+
     @CreationTimestamp
     private Timestamp creatat;
     @UpdateTimestamp

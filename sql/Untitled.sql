@@ -111,7 +111,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
   `prod_code` VARCHAR(45) NOT NULL ,
-  `company_code` VARCHAR(30) NOT NULL,
+  `company_code` VARCHAR(50) NOT NULL,
   `creatat` DATETIME NULL,
   `product_category_id` INT NOT NULL,
   `prod_image` VARCHAR(100) NULL,

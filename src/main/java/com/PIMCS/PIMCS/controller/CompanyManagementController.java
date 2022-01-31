@@ -1,8 +1,8 @@
 package com.PIMCS.PIMCS.controller;
 
 
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.User;
-import com.PIMCS.PIMCS.form.CompanyRegistrationFrom;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +33,22 @@ import java.util.List;
 public class CompanyManagementController {
     private final CompanyManagementService companyManagementService;
 
+
     @Autowired
     public CompanyManagementController(CompanyManagementService companyManagementService) {
         this.companyManagementService = companyManagementService;
     }
-    //회사 가입
+    //회사 등록
     @GetMapping("registration")
     public String companyRegistrationFrom( ){
         return "company/companyRegistration";
     }
+
+
     @PostMapping("registration")
-    public String companyRegistration(CompanyRegistrationFrom companyRegistrationFrom){
-        User user= new User();
+    public String companyRegistration(User ceo, Company company){
+        ceo.setEmail(company.getCeoEmail());
+        companyManagementService.companyRegistration(ceo,company);
 
 
         return "user/auth/login";

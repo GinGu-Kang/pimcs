@@ -75,7 +75,7 @@ public class UserAuthServiceTest {
 
     @Test
     public void userRoleFindTest() {
-        System.out.println(userAuthService.findUser("wlsrn212@gmail.com").get().getAuthorities());
+        System.out.println(userAuthService.findUser("rkdwlsrn212@gmail.com").get().getCompany().getCompanyCode());
     }
 
     @Test
@@ -89,4 +89,10 @@ public class UserAuthServiceTest {
         userAuthService.deleteUserAllRole("rkdwlsrn212@gmail.com");
     }
 
+
+
+    @Test
+    public void findRoleTest(){
+        System.out.println(userAuthService.findRole());
+    }
 }

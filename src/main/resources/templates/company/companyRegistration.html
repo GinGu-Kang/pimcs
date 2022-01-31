@@ -13,6 +13,8 @@
 <section>
     <form name="signUp" th:action="@{/company/registration}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <input type="hidden" name="enabled" value="true" />
+
         회사이름<br>
         <input type="text" name="companyName" placeholder="이메일 입력" ><br>
         회사주소<br>
@@ -24,8 +26,9 @@
         업종<br>
         <input type="text" name="businessCategoryName" placeholder="이메일 입력" ><br>
 
-        이름<br>
-        <input type="text" name="name" placeholder="이메일 입력" ><br>
+        이름<br>        <input type="text" name="name" placeholder="이메일 입력" ><br>
+        전화번호<br>
+        <input type="text" name="phone" placeholder="이메일 입력" ><br>
         이메일<br>
         <input type="text" name="ceoEmail" placeholder="이메일 입력" ><br>
         소속 부서<br>

@@ -14,7 +14,7 @@ import java.util.List;
 public class Role {
   @Id
   private String name;
-  @OneToMany(mappedBy = "role",fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "role",fetch = FetchType.LAZY)
   private List<UserRole> userRoles = new ArrayList<>();
 
 }

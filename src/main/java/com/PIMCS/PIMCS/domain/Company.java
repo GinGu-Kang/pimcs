@@ -40,6 +40,11 @@ public class Company {
   @OneToMany(mappedBy = "company")
   private List<Product> products = new ArrayList<>();
 
+  @OneToMany(mappedBy = "company")
+  private List<User> companyWorker=new ArrayList<>();
+
+
+
 
 
 }

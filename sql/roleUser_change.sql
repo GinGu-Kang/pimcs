@@ -18,8 +18,8 @@ INSERT INTO pimcs.role VALUES("CategoryManagement");
 -- Table `test`.`user_role`
 
 CREATE TABLE IF NOT EXISTS `pimcs`.`user_role` (
-                                                   `id` INT NOT NULL AUTO_INCREMENT,
-                                                   `role_name` VARCHAR(40) NOT NULL,
+   `id` INT NOT NULL AUTO_INCREMENT,
+   `role_name` VARCHAR(40) NOT NULL,
     `user_email` VARCHAR(40) NOT NULL,
     PRIMARY KEY (`id`, `user_email`),
     INDEX `fk_table1_role_idx` (`role_name` ASC) VISIBLE,

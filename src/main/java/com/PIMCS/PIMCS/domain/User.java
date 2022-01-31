@@ -24,8 +24,9 @@ import java.util.*;
 public class User implements UserDetails {//implements UserDetails
     @Id
     private String email;
-    @Column(name="company_code")
-    private String companyCode;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "company_code")
+    private Company company;
     private String password;
     private String name;
     private String phone;

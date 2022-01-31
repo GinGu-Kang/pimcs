@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     private  final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
+
 
 
 
@@ -81,7 +81,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
         System.out.println(user.getAuthorities());
 //        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompanyCode());
-        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompanyCode());
+        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany().getCompanyCode());
         //org.springframework.security.core.userdetails.User
     }
 
@@ -91,16 +91,14 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return "삭제되었습니다.";
     }
 
+    public List<Role> findRole(){
+        return roleRepository.findAll();
+
+    }
 
 
 
 
 
 
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        System.out.println(userRepository.findByEmail(email).get().getEmail());
-//        return userRepository.findByEmail(email)
-//                .orElseThrow(() -> new UsernameNotFoundException((email)));
-//    }
 }

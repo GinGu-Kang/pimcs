@@ -53,9 +53,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
 
                 .authorizeRequests()
-                    .antMatchers( "/auth/signUp").permitAll() //permitAll이 있을시 로그인없이도 접근가능
+                    .antMatchers( "/auth/signUp","/").permitAll() //permitAll이 있을시 로그인없이도 접근가능
                     .antMatchers("/hello","/home","auth/update").hasRole("User")
-                    .antMatchers("/management/company/worker").hasRole("UserMangement")
+                    .antMatchers("/management/company/worker").hasRole("UserManagement")
+                    .antMatchers("/mat/create","/mat/update","/mat/delete").hasRole("MatMangement")
+                    .antMatchers("/product/create","/product/update","/product/delete").hasRole("MatMangement")
                     .anyRequest().authenticated() //나머지 요청들은 권한의 종류에 상관 없이 권한이 있어야 접근 가능(로그인해야함)
                 .and()
                 .formLogin()

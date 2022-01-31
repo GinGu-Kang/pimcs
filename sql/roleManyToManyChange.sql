@@ -1,15 +1,17 @@
-USE `pimcs` ;
-
-drop table if not EXISTS pimcs.role;
+drop table if exists pimcs.user_role;
+drop table if exists pimcs.role;
 -- -----------------------------------------------------
 -- Table `test`.`role`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`role` (
     `name` VARCHAR(40) NOT NULL,
     PRIMARY KEY (`name`));
+    
 
-
-
+INSERT INTO pimcs.role VALUES("User");
+INSERT INTO pimcs.role VALUES("UserManagement");
+INSERT INTO pimcs.role VALUES("MatManagement"); 
+INSERT INTO pimcs.role VALUES("CategoryManagement"); 
 
 
 -- -----------------------------------------------------
@@ -25,9 +27,9 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`user_role` (
     CONSTRAINT `fk_table1_role`
     FOREIGN KEY (`role_name`)
     REFERENCES `pimcs`.`role` (`name`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE cascade
+    ON UPDATE cascade,
     CONSTRAINT `fk_table1_user1`
     FOREIGN KEY (`user_email`)
     REFERENCES `pimcs`.`user` (`email`)
-    ON DELETE NO ACTION);
+    ON DELETE cascade);

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @Controller
-@RequestMapping(value = "/mat")
 public class MatController {
 
     private final MatService matService;
@@ -22,14 +21,22 @@ public class MatController {
     }
 
     /**
+     * 매트 조회
+     */
+    @GetMapping("/")
+    public String inquiryMat(){
+        return "mat/inquiryMat";
+    }
+
+    /**
      * 매트생성
      */
-    @GetMapping("/create")
+    @GetMapping("/mat/create")
     public String createMatForm(){
 
         return "mat/createMat.html";
     }
-    @PostMapping("/create")
+    @PostMapping("/mat/create")
     public String createMat(Mat mat){
 
 
@@ -39,7 +46,7 @@ public class MatController {
     /**
      * 매드읽기
      */
-    @GetMapping("/read")
+    @GetMapping("/mat/read")
     public String readMat(Model model){
         return "mat/readMat.html";
     }
@@ -48,12 +55,12 @@ public class MatController {
     /**
      * 매트수정
      */
-    @GetMapping("/update")
+    @GetMapping("/mat/update")
     public String updateMatForm(Mat mat,Model model){
 
         return "mat/updateMat.html";
     }
-    @PostMapping("/update")
+    @PostMapping("/mat/update")
     public String updateMat(Mat mat,Model model){
 
         matService.updateMat(mat);
@@ -63,11 +70,11 @@ public class MatController {
     /**
      * 매트삭제
      */
-    @GetMapping("/delete")
+    @GetMapping("/mat/delete")
     public String deleteMatForm(Model model){
         return null;
     }
-    @PostMapping("/delete")
+    @PostMapping("/mat/delete")
     public String deleteMat(Model model){
         return null;
     }
@@ -75,7 +82,7 @@ public class MatController {
     /**
      * 매트 serial num 체크
      */
-    @GetMapping("/check/serialNum")
+    @GetMapping("/mat/check/serialNum")
     @ResponseBody
     public HashMap<String,Boolean> checkMatSerialNum(@RequestParam("serialNum") String serialNum){
 
@@ -85,7 +92,7 @@ public class MatController {
     /**
      * 검색(시리얼번호,상품위치,제품코드,기기버전)
      */
-    @PostMapping("/search")
+    @PostMapping("/mat/search")
     public String searchMat(SearchForm searchForm, Model model){
 
         matService.searchMat(searchForm);

@@ -8,10 +8,7 @@ import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -70,6 +67,15 @@ public class UserAuthController {
         return "user/auth/login";
     }
 
+    @PostMapping("/idCheck")
+    @ResponseBody
+    public boolean idCheck(@RequestParam("id") String id){
+        System.out.println("userIdCheck 진입");
+        System.out.println("전달받은 id:"+id);
+        boolean cnt = userAuthService.idCheck(id);
+        System.out.println("확인 결과:"+cnt);
+        return cnt;
+    }
 
 
 

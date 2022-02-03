@@ -16,25 +16,28 @@ import java.util.List;
 @Entity
 public class Company {
   @Id
-  @Column(name = "company_code")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   private String companyCode;
 
-  @Column(name = "business_category_name")
-  private String businessCategoryName;
 
-  @Column(name = "company_name")
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="businessCategoryId")
+  private BusinessCategory businessCategoryId;
+
+
   private String companyName;
 
-  @Column(name = "company_address")
+
   private String companyAddress;
 
   @CreationTimestamp
-  private java.sql.Timestamp createat;
+  private java.sql.Timestamp createdAt;
 
-  @Column(name = "contact_phone")
+
   private String contactPhone;
 
-  @Column(name = "ceo_email")
+
   private String ceoEmail;
 
   @OneToMany(mappedBy = "company")

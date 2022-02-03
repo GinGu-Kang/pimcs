@@ -22,7 +22,7 @@ public class HomeController {
         model.addAttribute("user",user);
         return "/home";
     }
-    @GetMapping("hello")
+    @GetMapping("/hello")
     public String Hello(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",user);
         return "/hello";

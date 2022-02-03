@@ -1,17 +1,16 @@
 package com.PIMCS.PIMCS.domain;
 
 
-public class BusinessCategory {
+import javax.persistence.*;
 
+@Entity
+@Table(name="businessCategory")
+public class BusinessCategory {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   private String categoryName;
 
 
-  public String getCategoryName() {
-    return categoryName;
-  }
-
-  public void setCategoryName(String categoryName) {
-    this.categoryName = categoryName;
-  }
 
 }

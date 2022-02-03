@@ -1,4 +1,4 @@
-drop table if exists pimcs.user_role;
+drop table if exists pimcs.;
 drop table if exists pimcs.role;
 -- -----------------------------------------------------
 -- Table `test`.`role`
@@ -15,9 +15,9 @@ INSERT INTO pimcs.role VALUES("CategoryManagement");
 
 
 -- -----------------------------------------------------
--- Table `test`.`user_role`
+-- Table `test`.``
 
-CREATE TABLE IF NOT EXISTS `pimcs`.`user_role` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`` (
    `id` INT NOT NULL AUTO_INCREMENT,
    `role_name` VARCHAR(40) NOT NULL,
     `user_email` VARCHAR(40) NOT NULL,

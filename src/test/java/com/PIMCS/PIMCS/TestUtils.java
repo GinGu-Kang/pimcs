@@ -45,7 +45,7 @@ public class TestUtils {
     public Company createCompantObject(){
         Company company = new Company();
         company.setCompanyCode(System.currentTimeMillis()+"");
-        company.setBusinessCategoryName("sw");
+
         company.setCompanyName("sw");
         company.setCompanyAddress("서울시");
         company.setContactPhone("010xxxx");

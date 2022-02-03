@@ -69,7 +69,7 @@ public class CompanyManagementService {
 
 
         for (Role role:roleRepository.findAll()
-             ) {
+        ) {
             UserRole userRole=new UserRole();
             userRole.setUser(ceo);
             userRole.setRole(role);
@@ -79,9 +79,10 @@ public class CompanyManagementService {
         ceo.setUserRoles(userRoles);
         userRepository.save(ceo);
         userRoleRepository.saveAll(userRoles);
-
-
-
-
     }
+    public void saveCompany(Company company){
+        companyRepository.save(company);
+    }
+
+
 }

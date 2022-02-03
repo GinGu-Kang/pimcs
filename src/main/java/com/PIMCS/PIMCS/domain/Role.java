@@ -13,6 +13,8 @@ import java.util.List;
 @Entity
 public class Role {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   private String name;
   @OneToMany(mappedBy = "role",fetch = FetchType.LAZY)
   private List<UserRole> userRoles = new ArrayList<>();

@@ -9,17 +9,17 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="user_role")
+@Table(name="userRole")
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_name")
+    @JoinColumn(name = "roleId")
     private Role role;
 
     @ManyToOne
-    @JoinColumn(name = "user_email")
+    @JoinColumn(name = "userEmail")
     private User user;
 
 }

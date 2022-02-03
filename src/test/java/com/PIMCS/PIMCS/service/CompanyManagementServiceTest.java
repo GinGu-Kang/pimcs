@@ -1,12 +1,14 @@
 package com.PIMCS.PIMCS.service;
 
 
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -25,6 +27,15 @@ public class CompanyManagementServiceTest {
         for (User user:myCompanyWorkes) {
             System.out.println(user.getAuthorities());
         }
+    }
+    @Test
+    @Commit
+    public void saveCompanyTest(){
+        Company company = new Company();
+        company.setCompanyName("rebook");
+        company.setContactPhone("sdf");
+        company.setCompanyAddress("asdf");
+        companyManagementService.saveCompany(company);
     }
 
 }

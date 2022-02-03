@@ -19,24 +19,24 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
-@NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
-@Table(name="User")
+//@NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
 public class User implements UserDetails {//implements UserDetails
     @Id
     private String email;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_code")
+    @JoinColumn(name = "companyId")
     private Company company;
     private String password;
     private String name;
     private String phone;
     private String department;
-
     @CreationTimestamp
-    private Timestamp creatat;
+    private Timestamp createdAt;
     @UpdateTimestamp
     private Timestamp updatedate;
     private Boolean enabled;
+    @Transient
+    private String companyCode;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<UserRole> userRoles = new ArrayList<>();
@@ -50,7 +50,6 @@ public class User implements UserDetails {//implements UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> roles = new ArrayList<GrantedAuthority>(); //List인 이유 : 여러개의 권한을 가질 수 있다
-
         if (userRoles.isEmpty()){
             roles.add(new SimpleGrantedAuthority("ROLE_unapprovedUser"));
         }else{

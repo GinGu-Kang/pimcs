@@ -1,5 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,6 +12,8 @@ import javax.persistence.*;
 @Setter
 @Entity
 @Table(name="userRole")
+@Builder
+@AllArgsConstructor
 public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +26,7 @@ public class UserRole {
     @JoinColumn(name = "userEmail")
     private User user;
 
+    public UserRole() {
+
+    }
 }

@@ -1,10 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +16,9 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+//@AllArgsConstructor
 //@NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
 public class User implements UserDetails {//implements UserDetails
     @Id
@@ -41,6 +41,9 @@ public class User implements UserDetails {//implements UserDetails
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<UserRole> userRoles = new ArrayList<>();
 
+    public User() {
+
+    }
 
 
     /*
@@ -59,6 +62,10 @@ public class User implements UserDetails {//implements UserDetails
         }
         return roles;
     }
+
+
+
+
     @Override
     public String getUsername() {
         return this.email;

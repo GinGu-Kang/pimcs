@@ -5,13 +5,16 @@
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        .email_ok{color:black; display: none;}
+        .email_already{color:#6A82FB; display: none;}
+        .company_ok{color:black; display: none;}
+        .company_already{color:#6A82FB; display: none;}
+
+    </style>
 </head>
 <body>
-<style>
-    .id_ok{color:black; display: none;}
-    .id_already{color:#6A82FB; display: none;}
 
-</style>
 
 <section>
     <h1>회원가입 페이지</h1>
@@ -23,12 +26,15 @@
     <form name="signUp" th:action="@{/auth/signUp}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="enabled" value="true" />
-        <span class="id_ok">사용 가능한 아이디입니다.</span>
-        <span class="id_already">누군가 이 아이디를 사용하고 있어요.</span><br>
+        <span class="email_ok">사용 가능한 아이디입니다.</span>
+        <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span><br>
         아이디<br>
-        <input type="text" id = "id" name="email" placeholder="이메일 입력" autocomplete="username" onblur="checkId()"/><br>
+        <input type="text" id = "email" name="email" placeholder="이메일 입력" autocomplete="username" onblur="checkEmail()"/><br>
         회사코드입력<br>
-        <input type="text" name="companyCode" placeholder="회사 코드입력"><br>
+        <span class="company_ok">확인되었습니다.</span>
+        <span class="company_already">존재하지 않는 회사코드입니다.</span><br>
+        <input type="text" id = "company" name="companyCode" placeholder="이메일 입력" value="회사코드입력" onblur="checkCompany()"/><br>
+
 
         비밀번호<br>
         <input type="password" name="password" placeholder="123456"><br>
@@ -47,28 +53,57 @@
 </section>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
-    function checkId(){
-        var id = $('#id').val();
+    function checkEmail(){
+        var email = $('#email').val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url:'/auth/idCheck',
+            type:'post',
+            data:{email:email},
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다
+                if(isEmail){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+                    console.log("왜이래");
+                    $('.email_already').css("display", "none");
+                    $('.email_ok').css("display","inline-block");
+                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+                    $('.email_already').css("display","inline-block");
+                    $('.email_ok').css("display", "none");
+                }
+            },
+            error:function(){
+                alert("에러입니다");
+            }
+        });
+    };
+
+    function checkCompany(){
+        var company = $('#company').val();
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
 
         $.ajax({
-            url:'/auth/idCheck',
+            url:'/auth/companyCheck',
             type:'post',
-            data:{id:id},
+            data:{company:company},
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
-            success:function(cnt){ //컨트롤러에서 넘어온 cnt값을 받는다
-                if(cnt){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-                    console.log("왜이래");
-                    $('.id_already').css("display", "none");
-                    $('.id_ok').css("display","inline-block");
+            success:function(isCompany){ //컨트롤러에서 넘어온 cnt값을 받는다
+                if(!isCompany){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+
+                    $('.company_already').css("display", "none");
+                    $('.company_ok').css("display","inline-block");
                 } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-                    $('.id_already').css("display","inline-block");
-                    $('.id_ok').css("display", "none");
+                    $('.company_already').css("display","inline-block");
+                    $('.company_ok').css("display", "none");
                 }
             },
             error:function(){

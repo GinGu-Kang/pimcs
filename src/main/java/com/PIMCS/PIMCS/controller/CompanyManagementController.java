@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,26 +49,35 @@ public class CompanyManagementController {
     public String companyRegistration(User ceo, Company company){
         ceo.setEmail(company.getCeoEmail());
         companyManagementService.companyRegistration(ceo,company);
-
-
         return "user/auth/login";
     }
 
-    //사원 관리 현재 get으로 회사코드를 받아옴. 회사코드를 알면 사원정보를 알수있기 때문에 나중에 post방식으로 변경
+
     @GetMapping("worker")
     public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompanyCode());
+        ArrayList<String> a = new ArrayList<>();
+        a.add("ROLE_User");
+//        System.out.println(companyWorker.get(0).getAuthorities().contains(2,"sadf"));
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }
 
+    @PostMapping("giveAuthority")
+    @ResponseBody
+    public Model giveAuthority(String email,String authority){
 
-    @GetMapping("worker/approve")
-    public String companyWorkerApprove(Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        List<User> companyWorker=companyManagementService.findApproveWaitWorker(user.getCompanyCode());
-        model.addAttribute("companyWorker",companyWorker);
-        return "company/worker/workerManagement";
     }
+
+
+
+//    @GetMapping("worker/approve")
+//    public String companyWorkerApprove(Model model, @AuthenticationPrincipal SecUserCustomForm user){
+//        List<User> companyWorker=companyManagementService.findApproveWaitWorker(user.getCompanyCode());
+//        model.addAttribute("companyWorker",companyWorker);
+//        return "company/worker/workerManagement";
+//    }
 
 
 

@@ -42,16 +42,15 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
     public User signUp(User user) {
         Optional<Company> company= companyRepository.findByCompanyCode(user.getCompanyCode());
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        List<UserRole> userRoles = new ArrayList<>();
-        UserRole userRole = new UserRole();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
+        UserRole userRole =UserRole.builder()
+                .user(user)
+                .role(roleRepository.findByName("User"))
+                .build();
+
         user.setPassword(encoder.encode(user.getPassword()));
         user.setCompany(company.get());
-        userRole.setUser(user);
-        userRole.setRole(roleRepository.findByName("User"));
-        userRoles.add(userRole);
-        System.out.println(userRole.getUser().getEmail());
-        user.setUserRoles(userRoles);
+
         userRepository.save(user);
         userRoleRepository.save(userRole);
 
@@ -59,15 +58,19 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     }
 
     public Optional<User> findUser(String email){
-        Optional<User> findUser = userRepository.findByEmail(email);
-        return findUser;
+        return userRepository.findByEmail(email);
     }
+
     public void deleteUser(String email){
         userRepository.deleteByEmail(email);
-
     }
     public String userUpdate(User user){
-        userRepository.save(user);
+        boolean isUser=userRepository.findByEmail(user.getEmail()).isPresent();
+        if(isUser){
+            userRepository.save(user);
+        }else{
+            throw new UsernameNotFoundException("존재하지 않는 아이디");
+        }
         return user.getEmail();
     }
 
@@ -76,19 +79,20 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return role.getName();
     }
 
-    public void UserRoleUpdate(String email, String roleName){
+    public void UserRoleSave(String email, String roleName){
         UserRole userRole=new UserRole();
-        userRole.setUser(userRepository.findByEmail(email).get());
-        userRole.setRole(roleRepository.findByName(roleName));
+        userRole.builder()
+                .user(userRepository.findByEmail(email).get())
+                .role(roleRepository.findByName(roleName));
         userRoleRepository.save(userRole);
     }
-    //UserDetailSurvice Defaultmethod 이름 권한 이메일 설정
+
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
         System.out.println(user.getAuthorities());
         return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany().getCompanyCode());
-        //org.springframework.security.core.userdetails.User
     }
 
     public String deleteUserAllRole(String email){
@@ -101,9 +105,13 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return roleRepository.findAll();
 
     }
-    public boolean idCheck(String id) {
-        boolean cnt = userRepository.findByEmail(id).isEmpty();
-        return cnt;
+    public boolean emailCheck(String email) {
+        boolean isEmail = userRepository.findByEmail(email).isEmpty();
+        return isEmail;
+    }
+    public boolean companyCheck(String companyCode) {
+        boolean isCompany = companyRepository.findByCompanyCode(companyCode).isEmpty();
+        return isCompany;
     }
 
 

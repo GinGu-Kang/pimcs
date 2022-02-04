@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company,String> {
 
 //    @EntityGraph(value = "User.userRoles")
+    @EntityGraph(value = "Company.companyWorker")
     Optional<Company> findByCompanyCode(String companyCode);
 
 

@@ -18,7 +18,9 @@
     <th>이메일</th>
     <th>전화번호</th>
     <th>학과</th>
-    <th>권한</th>
+    <th>재고관리권한</th>
+    <th>사원관리권한</th>
+
     </thead>
     <tbody>
     <tr th:each="worker:${companyWorker}">
@@ -26,7 +28,9 @@
         <td th:text="${worker.getEmail()}"></td>
         <td th:text="${worker.getPhone()}"></td>
         <td th:text="${worker.getDepartment()}"></td>
-        <td th:text="${worker.getAuthorities()}"></td>
+        <td ><input type="button" th:value="권한승인"></td>
+        <td ><input type="button" th:value="권한승인"></td>
+
     </tr>
     </tbody>
 </table>

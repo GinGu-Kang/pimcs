@@ -41,7 +41,7 @@ public class ProductServiceIntegrationTest {
          String prodCode = productService.createProduct(product);
 
          //then
-         Optional<Product> productOpt = productRepository.findByProdCode(prodCode);
+         Optional<Product> productOpt = productRepository.findByProductCode(prodCode);
 
          if(!productOpt.isPresent()){
              Assertions.fail("정상등록 되지 않았습니다.");
@@ -60,26 +60,26 @@ public class ProductServiceIntegrationTest {
     @Test
     public void updateProductTest(){
         //given
-        Product product = productRepository.findByProdCode("1642661076618").get();
-        product.setProdName("안녕");
+        Product product = productRepository.findByProductCode("1642661076618").get();
+        product.setProductCode("안녕");
         //when
         String prodCode = productService.updateProduct(product);
         //then
-        Product updatedProduct = productRepository.findByProdCode(prodCode).get();
-        org.assertj.core.api.Assertions.assertThat(updatedProduct.getProdName()).isEqualTo(product.getProdName());
+        Product updatedProduct = productRepository.findByProductCode(prodCode).get();
+        org.assertj.core.api.Assertions.assertThat(updatedProduct.getProductName()).isEqualTo(product.getProductName());
 
     }
 
     @Test
     public void deleteProductTest(){
         //given
-        Product product = productRepository.findByProdCode("1642661076618").get();
+        Product product = productRepository.findByProductCode("1642661076618").get();
 
         //when
         String prodCode = productService.deleteProduct(product);
 //
 //        //then
-        Optional<Product> deletedProduct = productRepository.findByProdCode(prodCode);
+        Optional<Product> deletedProduct = productRepository.findByProductCode(prodCode);
         if(deletedProduct.isPresent()){
            Assertions.fail("삭제실패");
         }
@@ -94,7 +94,7 @@ public class ProductServiceIntegrationTest {
         List<Product> products = company.getProducts();
 
         products.forEach(product -> {
-            System.out.println(product.getProdCode() + ", "+ product.getProdName());
+            System.out.println(product.getProductCode() + ", "+ product.getProductName());
         });
 
 //        List<Company> companys = companyRepository.findAll();

@@ -26,7 +26,7 @@ public class ProductService {
     public String createProduct(Product product){
 
         productRepository.save(product);
-        return product.getProdCode();
+        return product.getProductCode();
     }
 
     /**
@@ -42,7 +42,7 @@ public class ProductService {
     public String updateProduct(Product product){
 
         productRepository.save(product);
-        return product.getProdCode();
+        return product.getProductCode();
     }
 
     /**
@@ -51,7 +51,7 @@ public class ProductService {
     public String deleteProduct(Product product){
 
         productRepository.delete(product);
-        return product.getProdCode();
+        return product.getProductCode();
     }
 
     /**

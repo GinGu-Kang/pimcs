@@ -104,7 +104,7 @@ public class MatService {
                 break;
             case "productCode":
 
-                List<Product> products =productRepository.findByProdCodeContaining(searchForm.getSearchQuery());
+                List<Product> products =productRepository.findByProductCodeContaining(searchForm.getSearchQuery());
                 List<Mat> finalMatList =  new ArrayList<>();
                 products.forEach(p ->{
                     finalMatList.addAll(p.getMats());

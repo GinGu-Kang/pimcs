@@ -1,10 +1,29 @@
 <!DOCTYPE html> 
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
     <head> 
-        <title>content1</title> 
+        <title>매트조회</title>
+        <link rel="stylesheet" href="css/mat/inquiryMat.css" />
+   
+   
     </head> 
-    <div layout:fragment="content"> 
-        pojkopjopjopjopjkoplkl;<main></main>
-    </div> 
+    <div layout:fragment="content" class="content inquery-mat-container" >
+        <!--매트조회 헤더-->
+        <div class="inquery-mat-header col-md-12 d-flex">
+
+            <div class="inquery-mat-header-left-box col-md-6 d-flex">
+                <select class="pimcs-select text-size-middle">
+                    <option val="Must"> Mustard </option>
+                    <option val="Cat" > Ketchup </option>
+                    <option val="Rel" > Relish  </option>
+                </select>
+                <input class="form-control text-size-middle" placeholder="Search All"/>
+
+            </div>
+            <div class="inquery-mat-header-right-box col-md-6 d-flex">
+
+            </div>
+        </div>
+
+    </div>
 </html>
 

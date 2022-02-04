@@ -1,0 +1,33 @@
+.pimcs-custom-select {
+    position: relative;
+    border-radius: 4px;
+    border: 2px solid #ffffff;
+    background-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+  }
+.pimcs-custom-select::after {    
+    background: url("/img/arrow_down.png") no-repeat 0px 0px;  
+    content: "";
+    display: inline-block;
+    height: 8px;
+    width: 11px;    
+    position: absolute;
+    right: 7px;
+    top: 8px;
+}
+
+.pimcs-custom-select .pimcs-custom-select-btn {
+    display: inline-block;
+    align-items: center;
+    border: 0 none;
+    outline: 0 none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .pimcs-custom-select-btn{
+      margin-left: 13px;
+  }
+  

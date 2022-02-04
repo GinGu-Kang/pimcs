@@ -9,11 +9,11 @@ import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product,String> {
 
-    Optional<Product> findByProdCode(String prodCode);
+    Optional<Product> findByProductCode(String prodCode);
 
     @Override
 //    @EntityGraph(attributePaths = {"company"})
     List<Product> findAll();
 
-    List<Product> findByProdCodeContaining(String prodCode);
+    List<Product> findByProductCodeContaining(String prodCode);
 }

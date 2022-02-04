@@ -5,9 +5,9 @@
     </head> 
     <body> 
         <header th:replace="layouts/fragments/header :: headerFragment"></header>
-        <div class="d-flex">
+        <div class="d-flex" id="container">
             <nav th:replace="layouts/fragments/navigation :: navigationFragment"></nav>
-            <div layout:fragment="content" class="content"></div>
+            <div layout:fragment="content"></div>
         </div>
         
         

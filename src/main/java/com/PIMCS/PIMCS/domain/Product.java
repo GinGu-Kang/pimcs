@@ -18,28 +18,18 @@ import java.util.List;
 @Entity
 public class Product {
   @Id
-  @Column(name = "prod_code")
-  private String prodCode;
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "company_code")
+  @JoinColumn(name = "companyId")
   private Company company;
-
+  private String productCode;
   @CreationTimestamp
-  @Column(name = "createat")
-  private java.sql.Timestamp creatat;
-
-  @Column(name = "product_category_id")
-  private long prodCategoryId;
-
-  @Column(name = "prod_image")
-  private String prodImage;
-
-  @Column(name = "prod_weight")
-  private long prodWeight;
-
-  @Column(name = "prod_name")
-  private String prodName;
+  private java.sql.Timestamp createdAt;
+  private int productCategoryId;
+  private String productImage;
+  private int productWeight;
+  private String productName;
 
   @OneToMany(mappedBy = "product")
   List<Mat> mats = new ArrayList<>();

@@ -29,25 +29,25 @@ public class ProductServiceIntegrationTest {
 
     TestUtils testUtils = new TestUtils();
 
-    @Test
-    public void createProductTest(){
-
-        //given
-         Company company =  testUtils.createCompantObject();
-         Product product = testUtils.createProductObject(company);
-
-         //when
-         companyRepository.save(company);
-         String prodCode = productService.createProduct(product);
-
-         //then
-         Optional<Product> productOpt = productRepository.findByProductCode(prodCode);
-
-         if(!productOpt.isPresent()){
-             Assertions.fail("정상등록 되지 않았습니다.");
-         }
-
-    }
+//    @Test
+//    public void createProductTest(){
+//
+//        //given
+//         Company company =  testUtils.createCompantObject();
+//         Product product = testUtils.createProductObject(company);
+//
+//         //when
+//         companyRepository.save(company);
+//         String prodCode = productService.createProduct(product);
+//
+//         //then
+//         Optional<Product> productOpt = productRepository.findByProductCode(prodCode);
+//
+//         if(!productOpt.isPresent()){
+//             Assertions.fail("정상등록 되지 않았습니다.");
+//         }
+//
+//    }
     @Test
     public void readProductTest(){
         org.assertj.core.api.Assertions.assertThat(productService.readProduct().size()).isEqualTo(5);

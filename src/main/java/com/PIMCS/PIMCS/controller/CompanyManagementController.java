@@ -3,7 +3,11 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.domain.UserRole;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.repository.RoleRepository;
+import com.PIMCS.PIMCS.repository.UserRepository;
+import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -11,8 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 2022.01.27
@@ -31,11 +35,17 @@ import java.util.List;
 @Controller
 @RequestMapping("company")
 public class CompanyManagementController {
+    private  final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final CompanyManagementService companyManagementService;
 
 
     @Autowired
-    public CompanyManagementController(CompanyManagementService companyManagementService) {
+    public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
         this.companyManagementService = companyManagementService;
     }
     //회사 등록
@@ -56,28 +66,26 @@ public class CompanyManagementController {
     @GetMapping("worker")
     public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompanyCode());
-        ArrayList<String> a = new ArrayList<>();
-        a.add("ROLE_User");
-//        System.out.println(companyWorker.get(0).getAuthorities().contains(2,"sadf"));
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@");
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }
-
-    @PostMapping("giveAuthority")
+    @PostMapping("give/authority")
     @ResponseBody
-    public Model giveAuthority(String email,String authority){
-
+    public boolean giveAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
+        boolean isEqualCompany=companyManagementService.userRoleSave(email,authority,user.getCompanyCode());
+        return isEqualCompany;
+    }
+    @PostMapping("remove/authority")
+    @ResponseBody
+    public boolean removeAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
+        boolean isEqualCompany=companyManagementService.userRoleDelete(email,authority,user.getCompanyCode());
+        return isEqualCompany;
     }
 
 
 
-//    @GetMapping("worker/approve")
-//    public String companyWorkerApprove(Model model, @AuthenticationPrincipal SecUserCustomForm user){
-//        List<User> companyWorker=companyManagementService.findApproveWaitWorker(user.getCompanyCode());
-//        model.addAttribute("companyWorker",companyWorker);
-//        return "company/worker/workerManagement";
-//    }
+
+
 
 
 

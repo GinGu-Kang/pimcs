@@ -70,7 +70,7 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     public void mappingRoleTest() {
-        userAuthService.UserRoleSave("rkdwlsrn212@gmail.com", "UserManagement");
+        userAuthService.UserRoleSave("tatata", "UserManagement");
     }
 
     @Test

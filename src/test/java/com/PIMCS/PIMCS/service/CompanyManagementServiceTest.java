@@ -37,5 +37,10 @@ public class CompanyManagementServiceTest {
         company.setCompanyAddress("asdf");
         companyManagementService.saveCompany(company);
     }
+    @Test
+    @Commit
+    public void userRoleSaveTest(){
+        companyManagementService.userRoleSave("tatata", "UserManagement","c524e5969cb44ee3a02855b9741e5b");
+    }
 
 }

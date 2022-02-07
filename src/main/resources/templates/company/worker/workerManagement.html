@@ -14,105 +14,108 @@
     <title>Title</title>
 </head>
 <body>
-    <table>
-        <thead>
-            <th>이름</th>
-            <th>이메일</th>
-            <th>전화번호</th>
-            <th>부서</th>
-            <th>더미</th>
-            <th>재고관리권한</th>
-            <th>사원관리권한</th>
+<table>
+    <thead>
+    <th>이름</th>
+    <th>이메일</th>
+    <th>전화번호</th>
+    <th>부서</th>
+    <th>더미</th>
+    <th>재고관리권한</th>
+    <th>사원관리권한</th>
 
-        </thead>
-        <tbody>
-            <tr th:each="worker:${companyWorker}">
-                <td th:text="${worker.getName()}"></td>
-                <td class="email" th:text="${worker.getEmail()}"></td>
-                <td th:text="${worker.getPhone()}"></td>
-                <td th:text="${worker.getDepartment()}"></td>
-                <td th:text="${#strings.contains(worker.getAuthorities(),'UserManagement')}"></td>
-                <td th:if="${#strings.contains(worker.getAuthorities(),'User')}"><input class="inventoryManagement" type="checkbox" onclick="checkEvent(this)" checked>
-                <input type="hidden" >
-                </td>
-                <td th:unless="${#strings.contains(worker.getAuthorities(),'User')}"><input class="inventoryManagement" type="checkbox"  onclick="checkEvent(this)"></td>
-                <td th:if="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" checked></td>
-                <td th:unless="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" ></td>
-            </tr>
-        </tbody>
-    </table>
+    </thead>
+    <tbody>
+    <tr th:each="worker:${companyWorker}">
+        <td th:text="${worker.getName()}"></td>
+        <td class="email" th:text="${worker.getEmail()}"></td>
+        <td th:text="${worker.getPhone()}"></td>
+        <td th:text="${worker.getDepartment()}"></td>
+        <td th:text="${#strings.contains(worker.getAuthorities(),'UserManagement')}"></td>
+        <td th:if="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
+        <td th:unless="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox"  onclick="checkEvent(this)"></td>
+        <td th:if="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
+        <td th:unless="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" ></td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
-    function checkEvent(e){
-        var emailTd = $(e).parent().parent().children(".email");
-        var email = $(emailTd).text()
-        var authority = $(e).attr('class');
-        if ($(e).is(':checked')){
-            giveAuthority(email,authority)
-        }else{
 
+
+    function checkEvent(checkbox){
+        var emailTd = $(checkbox).parent().parent().children(".email");
+        var email = $(emailTd).text()
+        var authority = $(checkbox).attr('class');
+        if ($(checkbox).is(':checked')){
+            giveAuthority({
+                email:email,
+                authority: authority,
+                checkbox: $(checkbox)
+            });
+            alert("권한이 설정되었습니다.")
+        }
+            //throw $(e).prop("checked",true)
+        else{
+            // console.log($(checkbox))
+            removeAuthority({
+                email:email,
+                authority: authority,
+                checkbox: $(checkbox)
+            });
+            alert("권한이 삭제되었습니다.")
         }
 
     }
 
-    function giveAuthority(email,authority){
+    function giveAuthority({email,authority, checkbox}){
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
         $.ajax({
-            url:'/auth/companyCheck',
+            url:'/company/give/authority',
             type:'post',
             data:{email:email,authority:authority},
             beforeSend : function(xhr)
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
-            success:function(isSuccess){ //컨트롤러에서 넘어온 cnt값을 받는다
-                if(!isCompany){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-
-                    $('.company_already').css("display", "none");
-                    $('.company_ok').css("display","inline-block");
-                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-                    $('.company_already').css("display","inline-block");
-                    $('.company_ok').css("display", "none");
+            success:function (isEqualCompany){
+                if(!isEqualCompany){
+                    alert("해당 회사의 사원만 수정할 수 있습니다.")
                 }
+
             },
-            error:function(){
-                alert("에러입니다");
+            error:function(request,status,error){
+                alert("권한 설정에 실패하였습니다.")
+                $(checkbox).prop("checked",false);
             }
         });
 
     }
-    // function checkEvent(e){
-    //     var email = $('#email').val();
-    //     var token = $("meta[name='_csrf']").attr("content");
-    //     var header = $("meta[name='_csrf_header']").attr("content");
-    //
-    //     $.ajax({
-    //         url:'/auth/companyCheck',
-    //         type:'post',
-    //         data:{company:company},
-    //         beforeSend : function(xhr)
-    //         {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-    //             xhr.setRequestHeader(header, token);
-    //         },
-    //         success:function(isCompany){ //컨트롤러에서 넘어온 cnt값을 받는다
-    //             if(!isCompany){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-    //
-    //                 $('.company_already').css("display", "none");
-    //                 $('.company_ok').css("display","inline-block");
-    //             } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-    //                 $('.company_already').css("display","inline-block");
-    //                 $('.company_ok').css("display", "none");
-    //             }
-    //         },
-    //         error:function(){
-    //             alert("에러입니다");
-    //         }
-    //     });
+    function removeAuthority({email,authority, checkbox}){
+
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            url:'/company/remove/authority',
+            type:'post',
+            data:{email:email,authority:authority},
+            beforeSend : function(xhr)
+            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+            error:function(request,status,error){
+                alert("권한 설정에 실패하였습니다.")
+                $(checkbox).prop("checked",true);
+            }
+        });
+
+    };
 
 
 </script>

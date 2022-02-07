@@ -28,17 +28,17 @@ public class TestUtils {
         return mat;
     }
 
-    public Product createProductObject(Company company){
-
-            Product product = new Product();
-            product.setProdCode(System.currentTimeMillis()+"");
-            product.setCompany(company);
-            product.setProdCategoryId(1);
-            product.setProdImage(null);
-            product.setProdWeight(10);
-            product.setProdName("컴퓨터"+System.currentTimeMillis());
-            return product;
-        }
+//    public Product createProductObject(Company company){
+//
+//            Product product = new Product();
+//            product.setProdCode(System.currentTimeMillis()+"");
+//            product.setCompany(company);
+//            product.setProdCategoryId(1);
+//            product.setProdImage(null);
+//            product.setProdWeight(10);
+//            product.setProdName("컴퓨터"+System.currentTimeMillis());
+//            return product;
+//        }
 
 
 

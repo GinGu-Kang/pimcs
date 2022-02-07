@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -66,6 +67,38 @@ public class CompanyManagementService {
         companyRepository.save(company);
         userRepository.save(ceo);
         userRoleRepository.saveAll(userRoles);
+    }
+
+
+    public boolean userRoleSave(String email, String authority,String companyCode){
+        Optional<User> companyWorker=userRepository.findByEmail(email);
+        String tartgetCompanyCode=companyWorker.get().getCompany().getCompanyCode();
+
+        if(tartgetCompanyCode.equals(companyCode)){//해당회사가 맞는지 체크
+            UserRole userRole=UserRole.builder()
+                    .user(companyWorker.get())
+                    .role(roleRepository.findByName(authority)).build();
+            userRoleRepository.save(userRole);
+        }else{
+            return false;
+        }
+        return true;
+
+    }
+    public boolean userRoleDelete(String email, String authority,String companyCode){
+        Optional<User> companyWorker=userRepository.findByEmail(email);
+        String tartgetCompanyCode=companyWorker.get().getCompany().getCompanyCode();
+
+        if(tartgetCompanyCode.equals(companyCode)){
+            List<UserRole> userRoles= userRoleRepository.findByUserAndRole(companyWorker.get(),roleRepository.findByName(authority));
+            if(!userRoles.isEmpty()){
+                userRoleRepository.deleteAllInBatch(userRoles);
+            }
+        }else{
+            return false;
+        }
+        return true;
+
     }
 
 

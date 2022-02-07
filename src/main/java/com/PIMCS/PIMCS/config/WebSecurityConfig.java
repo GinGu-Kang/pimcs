@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+
                 .authorizeRequests()
                 .antMatchers( "/auth/**","/","/company/registration","/auth/idCheck").permitAll() //permitAll이 있을시 로그인없이도 접근가능
                 .antMatchers("/home/hello","/home","auth/update").hasRole("User")

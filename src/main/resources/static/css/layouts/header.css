@@ -1,24 +1,24 @@
 
 header > *{
-    line-height: 4vw;
+    line-height: 55px;
 }
 
 header{
     width: 100%;
-    height: 4vw;
+    height: 55px;
     background-color: #4d83f7;
 }
 
 .header-left-box .logo-icon-box > img{
-    height: 4vw;
+    height: 55px;
 }
 .header-left-box .menu-icon-box{
     margin-left: 29px;
 }
 .header-left-box .menu-icon-box > svg{
-    width: 1.5vw;
-    height: 1.5vw;
-    line-height: 1.5vw;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
 }
 .header-left-box .logo-icon-box{
     margin-left: 22px;

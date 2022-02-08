@@ -5,14 +5,17 @@
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <style>
-        .email_ok{color:black; display: none;}
-        .email_already{color:#6A82FB; display: none;}
-        .company_ok{color:black; display: none;}
-        .company_already{color:#6A82FB; display: none;}
 
-    </style>
 </head>
+<style>
+    .postService{
+        padding-top: 10px;
+    }
+    .postService input{
+        margin: 10px;
+        margin-left: 0px;
+    }
+</style>
 <body>
 
 
@@ -20,50 +23,54 @@
     <h1>회원가입 페이지</h1>
 </section>
 
-<section>
-    <div></div>
-    <div></div>
+<section style="display:flex;">
 
-
-    <form name="signUp" th:action="@{/auth/signUp}" method="post">
+    <form name="signUp" th:action="@{/buy/mat}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-
+        <div style="display: block">
+            A6<br>
+            <input type="number" min="0"><br>
+            A5<br>
+            <input type="number" min="0"><br>
+            A4<br>
+            <input type="number" min="0"><br>
+        </div>
+        <div>
+            희망 배송일<br>
+            <input type="date" id="hopeDate" min="2022-01-0"><br>
+            주문자 이름<br>
+            <input type="text" ><br>
+            <section class="postService">
+                <input type="text" placeholder="우편번호" id="postNumber" min="0">
+                <input type="button" value="우편번호 찾기" onclick="postCode()"><br>
+                <input type="text" placeholder="주소" id="address" min="0">
+                <input type="text" placeholder="상세 주소" id="detailAddress" ><br>
+            </section>
+        </div>
     </form>
 </section>
+
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+    $("#hopeDate").prop("min",date);
+    function postCode(){
+        new daum.Postcode({
+            oncomplete: function(data) {
+                $("#postNumber").prop("value",data.zonecode);
+                $("#address").prop("value",data.address);
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+            }
+        }).open();
+
+    }
+
+</script>
 <script type="text/javascript">
 
 
-    function checkCompany(){
-        var company = $('#company').val();
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-
-
-        $.ajax({
-            url:'/auth/companyCheck',
-            type:'post',
-            data:{company:company},
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                xhr.setRequestHeader(header, token);
-            },
-            success:function(isCompany){ //컨트롤러에서 넘어온 cnt값을 받는다
-                if(!isCompany){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-
-                    $('.company_already').css("display", "none");
-                    $('.company_ok').css("display","inline-block");
-                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-                    $('.company_already').css("display","inline-block");
-                    $('.company_ok').css("display", "none");
-                }
-            },
-            error:function(){
-                alert("에러입니다");
-            }
-        });
-    };
 </script>
 
 </body>

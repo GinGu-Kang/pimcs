@@ -58,10 +58,12 @@ public class CompanyManagementService {
 
         for (Role role:roleRepository.findAll()
         ) {
-            UserRole userRole=new UserRole();
-            userRole.setUser(ceo);
-            userRole.setRole(role);
-            userRoles.add(userRole);
+            if(!role.getName().equals("ChiefOfPimcs")){
+                UserRole userRole=new UserRole();
+                userRole.setUser(ceo);
+                userRole.setRole(role);
+                userRoles.add(userRole);
+            }
         }
 
         companyRepository.save(company);

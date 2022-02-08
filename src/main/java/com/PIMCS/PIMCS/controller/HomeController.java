@@ -25,7 +25,7 @@ public class HomeController {
     @GetMapping("/hello")
     public String Hello(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",user);
-        return "/hello";
+        return "hello";
     }
     @GetMapping("/noneRole")
     public String noneRole(){

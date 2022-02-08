@@ -1,47 +1,33 @@
 package com.PIMCS.PIMCS.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+@Getter
+@Setter
+@Entity
+@Builder
+@AllArgsConstructor
 public class MatCategoryOrder {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  private int orderCnt;
 
-  private long id;
-  private long orderId;
-  private String matCategoryMatCategory;
-  private long orderCnt;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "orderId")
+  private MatOrder matOrder;
 
-  public long getId() {
-    return id;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name="matCategoryId")
+  private MatCategory matCategory;
+
+  public MatCategoryOrder() {
+
   }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public long getOrderId() {
-    return orderId;
-  }
-
-  public void setOrderId(long orderId) {
-    this.orderId = orderId;
-  }
-
-
-  public String getMatCategoryMatCategory() {
-    return matCategoryMatCategory;
-  }
-
-  public void setMatCategoryMatCategory(String matCategoryMatCategory) {
-    this.matCategoryMatCategory = matCategoryMatCategory;
-  }
-
-
-  public long getOrderCnt() {
-    return orderCnt;
-  }
-
-  public void setOrderCnt(long orderCnt) {
-    this.orderCnt = orderCnt;
-  }
-
 }

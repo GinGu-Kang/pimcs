@@ -63,7 +63,7 @@ public class UserAuthServiceTest {
     @Commit
     public void insertRoleTest() {
         Role role = new Role();
-        role.setName("InventoryManagement");
+        role.setName("ChiefOfPimcs");
         userAuthService.roleUpdate(role);
     }
 

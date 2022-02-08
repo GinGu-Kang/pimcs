@@ -66,7 +66,6 @@ public class CompanyManagementController {
     @GetMapping("worker")
     public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompany().getCompanyCode());
-
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }

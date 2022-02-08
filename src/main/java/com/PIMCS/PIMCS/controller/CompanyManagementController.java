@@ -65,20 +65,20 @@ public class CompanyManagementController {
 
     @GetMapping("worker")
     public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompanyCode());
+        List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompany().getCompanyCode());
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }
     @PostMapping("give/authority")
     @ResponseBody
     public boolean giveAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
-        boolean isEqualCompany=companyManagementService.userRoleSave(email,authority,user.getCompanyCode());
+        boolean isEqualCompany=companyManagementService.userRoleSave(email,authority,user.getCompany().getCompanyCode());
         return isEqualCompany;
     }
     @PostMapping("remove/authority")
     @ResponseBody
     public boolean removeAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
-        boolean isEqualCompany=companyManagementService.userRoleDelete(email,authority,user.getCompanyCode());
+        boolean isEqualCompany=companyManagementService.userRoleDelete(email,authority,user.getCompany().getCompanyCode());
         return isEqualCompany;
     }
 

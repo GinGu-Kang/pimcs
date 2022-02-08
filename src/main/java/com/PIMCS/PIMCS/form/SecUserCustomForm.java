@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.form;
 
+import com.PIMCS.PIMCS.domain.Company;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,15 +12,15 @@ import java.util.Collection;
 @Setter
 public class SecUserCustomForm extends User  {
 
-    private String companyCode;
-    public SecUserCustomForm(String username, String password, Collection<? extends GrantedAuthority> authorities,String companyCode) {
+    private Company company;
+    public SecUserCustomForm(String username, String password, Collection<? extends GrantedAuthority> authorities,Company company) {
         super(username, password, authorities);
-        this.companyCode = companyCode;
+        this.company = company;
     }
 
     public SecUserCustomForm(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
-        this.companyCode = companyCode;
+        this.company = company;
     }
 
 }

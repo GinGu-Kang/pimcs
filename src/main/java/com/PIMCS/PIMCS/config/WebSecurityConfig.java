@@ -59,6 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/mat/create","/mat/update","/mat/delete").hasRole("MatMangement")
                 .antMatchers("/product/create","/product/update","/product/delete").hasRole("MatMangement")
                 .antMatchers("/company/**").hasRole("UserManagement")
+                .antMatchers("/admin/**").hasRole("ChiefOfPimcs")
+
 //                    .antMatchers("company/worker").hasRole("UserManagement")
                 .anyRequest().authenticated() //나머지 요청들은 권한의 종류에 상관 없이 권한이 있어야 접근 가능(로그인해야함)
                 .and()

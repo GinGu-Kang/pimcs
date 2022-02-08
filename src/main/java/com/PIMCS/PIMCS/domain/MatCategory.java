@@ -1,47 +1,33 @@
 package com.PIMCS.PIMCS.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import java.sql.Blob;
+
+@Getter
+@Setter
+@Entity
 
 public class MatCategory {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
   private String matCategory;
-  private long matPrice;
-  private String matInfomation;
-  private long maxWeight;
+  private int matPrice;
+  private String matInformation;
+  private int maxWeight;
 
 
-  public String getMatCategory() {
-    return matCategory;
+
+  public MatCategory() {
+
   }
-
-  public void setMatCategory(String matCategory) {
-    this.matCategory = matCategory;
-  }
-
-
-  public long getMatPrice() {
-    return matPrice;
-  }
-
-  public void setMatPrice(long matPrice) {
-    this.matPrice = matPrice;
-  }
-
-
-  public String getMatInfomation() {
-    return matInfomation;
-  }
-
-  public void setMatInfomation(String matInfomation) {
-    this.matInfomation = matInfomation;
-  }
-
-
-  public long getMaxWeight() {
-    return maxWeight;
-  }
-
-  public void setMaxWeight(long maxWeight) {
-    this.maxWeight = maxWeight;
-  }
-
 }

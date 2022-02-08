@@ -40,7 +40,7 @@ public class CompanyManagementServiceTest {
     @Test
     @Commit
     public void userRoleSaveTest(){
-        companyManagementService.userRoleSave("tatata", "UserManagement","c524e5969cb44ee3a02855b9741e5b");
+        companyManagementService.userRoleSave("wlsrn", "ChiefOfPimcs","320642a3c85c47468bc7a1880c301a");
     }
 
 }

@@ -92,7 +92,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
         System.out.println(user.getAuthorities());
-        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany().getCompanyCode());
+        return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany());
     }
 
     public String deleteUserAllRole(String email){

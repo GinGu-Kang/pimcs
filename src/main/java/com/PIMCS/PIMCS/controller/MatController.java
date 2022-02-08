@@ -2,13 +2,19 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.form.SearchForm;
+import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.MatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 
 @Controller
 public class MatController {
@@ -24,8 +30,13 @@ public class MatController {
      * 매트 조회
      */
     @GetMapping("/")
-    public String inquiryMat(){
-        return "mat/inquiryMat";
+    public String readMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                             @PageableDefault(size = 10) Pageable pageable,
+                             Model model){
+
+        Page<Mat> mats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
+        model.addAttribute("mats",mats);
+        return "mat/readMat";
     }
 
     /**
@@ -43,13 +54,6 @@ public class MatController {
         return null;
     }
 
-    /**
-     * 매드읽기
-     */
-    @GetMapping("/mat/read")
-    public String readMat(Model model){
-        return "mat/readMat.html";
-    }
 
 
     /**

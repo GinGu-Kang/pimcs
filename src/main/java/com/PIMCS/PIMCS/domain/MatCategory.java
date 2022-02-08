@@ -5,7 +5,7 @@ public class MatCategory {
 
   private String matCategory;
   private long matPrice;
-  private String matInfomation;
+  private String matInformation;
   private long maxWeight;
 
 
@@ -27,12 +27,12 @@ public class MatCategory {
   }
 
 
-  public String getMatInfomation() {
-    return matInfomation;
+  public String getMatInformation() {
+    return matInformation;
   }
 
-  public void setMatInfomation(String matInfomation) {
-    this.matInfomation = matInfomation;
+  public void setMatInformation(String matInfomation) {
+    this.matInformation = matInfomation;
   }
 
 

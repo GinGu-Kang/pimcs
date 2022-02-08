@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`role` (
     PRIMARY KEY (`name`));
     
 
+
 INSERT INTO pimcs.role VALUES("User");
 INSERT INTO pimcs.role VALUES("UserManagement");
 INSERT INTO pimcs.role VALUES("MatManagement"); 

@@ -1,41 +1,48 @@
-//package com.PIMCS.PIMCS.service;
-//
-//import com.PIMCS.PIMCS.TestUtils;
-//import com.PIMCS.PIMCS.domain.Company;
-//import com.PIMCS.PIMCS.domain.Mat;
-//import com.PIMCS.PIMCS.domain.Product;
-//import com.PIMCS.PIMCS.form.SearchForm;
-//import com.PIMCS.PIMCS.repository.CompanyRepository;
-//import com.PIMCS.PIMCS.repository.MatRepository;
-//import com.PIMCS.PIMCS.repository.ProductRepository;
-//import org.assertj.core.api.Assertions;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.stereotype.Repository;
-//import org.springframework.test.annotation.Commit;
-//import org.springframework.transaction.annotation.Transactional;
-//
-//import java.sql.Timestamp;
-//import java.util.HashMap;
-//import java.util.List;
-//import java.util.Optional;
-//
-//@SpringBootTest
-//@Transactional
-//public class MatServiceIntegrationTest {
-//
-//    @Autowired
-//    MatRepository matRepository;
-//    @Autowired
-//    CompanyRepository companyRepository;
-//    @Autowired
-//    ProductRepository productRepository;
-//
-//    @Autowired
-//    MatService matService;
-//    @Autowired
-//    ProductService productService;
+package com.PIMCS.PIMCS.service;
+
+import com.PIMCS.PIMCS.TestUtils;
+import com.PIMCS.PIMCS.domain.*;
+import com.PIMCS.PIMCS.form.SearchForm;
+import com.PIMCS.PIMCS.repository.*;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Repository;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Optional;
+
+@SpringBootTest
+@Transactional
+public class MatServiceIntegrationTest {
+
+    @Autowired
+    MatRepository matRepository;
+    @Autowired
+    CompanyRepository companyRepository;
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    RoleRepository roleRepository;
+    @Autowired
+    UserRoleRepository userRoleRepository;
+    @Autowired
+    ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    MatService matService;
+    @Autowired
+    ProductService productService;
+
+
 //
 //
 //    TestUtils testUtils = new TestUtils();
@@ -188,4 +195,62 @@
 //    }
 //
 //
-//}
+
+    @Test
+    @Commit
+    public void change(){
+        User user = userRepository.findByEmail("ryongho1997@gmail.com").get();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
+        user.setPassword(encoder.encode("1234"));
+    }
+
+
+    @Test
+    @Commit
+    public void preparePaginationData(){
+        User user = userRepository.findByEmail("ryongho1997@gmail.com").get();
+        Company company = user.getCompany();
+        Product product = productRepository.findById(2).get();
+
+        TestUtils testUtils = new TestUtils();
+
+        for(int i=0; i<1317; i++){
+            matRepository.save(testUtils.createMatObject(product, company));
+        }
+    }
+
+    @Test
+    @Commit
+    public void initMatTest(){
+        /**
+         *  1. 회사 생성
+         *  2. 사용자 생성
+         *  3. 권한 생성
+         *  4. 사용자 권한 생성
+         *  5. 상품 카테고리 생성
+         *  6. 상품 생성
+         *  7. 매트 생성
+         */
+        TestUtils testUtils = new TestUtils();
+
+        Company company = testUtils.createCompantObject();
+        companyRepository.save(company);
+
+        User user = testUtils.createUserObject(company);
+        userRepository.save(user);
+
+        List<Role> roles = roleRepository.findAll();
+        for(Role role : roles){
+//            roleRepository.save(role);
+            UserRole userRole = testUtils.createUserRoleObject(user,role);
+            userRoleRepository.save(userRole);
+        }
+
+//        ProductCategory productCategory = testUtils.createProductCategory(company);
+//        productCategoryRepository.save(productCategory);
+//
+//        Product product = testUtils.createProductObject(company,productCategory);
+//        productRepository.save(product);
+
+    }
+}

@@ -11,6 +11,8 @@ public interface ProductRepository extends JpaRepository<Product,String> {
 
     Optional<Product> findByProductCode(String prodCode);
 
+    Optional<Product> findById(int id);
+
     @Override
 //    @EntityGraph(attributePaths = {"company"})
     List<Product> findAll();

@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`productCategory` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`product`
 -- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                  `productCode` VARCHAR(45) NOT NULL,
@@ -97,6 +98,8 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
                                                  `productImage` VARCHAR(255) NULL,
                                                  `productWeight` INT NULL,
                                                  `productName` VARCHAR(45) NULL,
+                                                 `createdAt` datetime NULL,
+                                                 `updatedate` datetime NUll,
                                                  PRIMARY KEY (`id`),
                                                  INDEX `fk_product_product_category1_idx` (`productCategoryId` ASC) VISIBLE,
                                                  INDEX `fk_product_company1_idx` (`companyId` ASC) VISIBLE,
@@ -111,17 +114,21 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
     ENGINE = InnoDB;
 
 
+
 -- -----------------------------------------------------
 -- Table `pimcs`.`mat`
 -- -----------------------------------------------------
+
+-- set FOREIGN_KEY_CHECKS = 1;
+-- drop table mat;
 CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
                                              `id` INT NOT NULL AUTO_INCREMENT,
                                              `productId` INT  NULL,
                                              `companyId` INT NOT NULL,
-                                             `serialNumber` VARCHAR(40) NOT NULL,
+                                             `serialNumber` VARCHAR(255) NOT NULL,
                                              `calcMethod` TINYINT(1) NULL,
                                              `threshold` INT NULL,
-                                             `inventoryCnt` INT NULL,
+                                             `inventoryWeight` INT NULL,
                                              `recentlyNoticeDate` DATETIME NULL,
                                              `isSendEmail` TINYINT(1) NULL,
                                              `matLocation` VARCHAR(45) NULL,
@@ -152,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
                                                      `id` INT NOT NULL AUTO_INCREMENT,
-                                                     `email` INT NOT NULL,
+                                                     `email` VARCHAR(45) NOT NULL,
                                                      `matId` INT NOT NULL,
                                                      PRIMARY KEY (`id`),
                                                      UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
@@ -160,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
                                                      CONSTRAINT `fk_notice_email_mat1`
                                                          FOREIGN KEY (`matId`)
                                                              REFERENCES `pimcs`.`mat` (`id`)
-                                                             ON DELETE cascade
+                                                             ON DELETE NO ACTION
                                                              ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
@@ -168,11 +175,12 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`mat_category`
 -- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `pimcs`.`matCategory` (
                                                      `id` INT NOT NULL AUTO_INCREMENT,
                                                      `matCategory` VARCHAR(45) NOT NULL,
                                                      `matPrice` INT NULL,
-                                                     `matInfomation` BLOB NULL,
+                                                     `matInformation` BLOB NULL,
                                                      `maxWeight` INT NULL,
                                                      PRIMARY KEY (`id`),
                                                      UNIQUE INDEX `mat_category_UNIQUE` (`matCategory` ASC) VISIBLE)
@@ -198,18 +206,32 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
 
 
 -- -----------------------------------------------------
--- Table `pimcs`.`order`
+
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`order` (
-                                               `id` INT NOT NULL AUTO_INCREMENT,
-                                               `deliveryAddress` VARCHAR(255) NULL,
-                                               `hopeDeliveryDate` DATETIME NULL,
-                                               `username` VARCHAR(45) NULL,
-                                               `createat` DATETIME NULL,
-                                               `depositStatus` INT NULL,
-                                               `deliveryStatus` INT NULL,
-                                               `deliveryCode` VARCHAR(45) NULL,
-                                               PRIMARY KEY (`id`))
+CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
+                                                 `id` INT NOT NULL AUTO_INCREMENT,
+                                                 `userEmail` VARCHAR(60) NOT NULL,
+                                                 `companyId` INT NOT NULL,
+                                                 `deliveryAddress` VARCHAR(60) NULL,
+                                                 `depositStatus` INT NULL,
+                                                 `hopeDeliveryDate` DATETIME NULL,
+                                                 `depositerName` VARCHAR(45) NULL,
+                                                 `createdAt` DATETIME NULL,
+                                                 `deliveryStatus` INT NULL,
+                                                 `deliveryCode` VARCHAR(45) NULL,
+                                                 PRIMARY KEY (`id`),
+                                                 INDEX `fk_matOrder_user1_idx` (`userEmail` ASC) VISIBLE,
+                                                 INDEX `fk_matOrder_company1_idx` (`companyId` ASC) VISIBLE,
+                                                 CONSTRAINT `fk_matOrder_user1`
+                                                     FOREIGN KEY (`userEmail`)
+                                                         REFERENCES `pimcs`.`user` (`email`)
+                                                         ON DELETE NO ACTION
+                                                         ON UPDATE NO ACTION,
+                                                 CONSTRAINT `fk_matOrder_company1`
+                                                     FOREIGN KEY (`companyId`)
+                                                         REFERENCES `pimcs`.`company` (`id`)
+                                                         ON DELETE cascade
+                                                         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
 
@@ -226,7 +248,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
                                                           INDEX `fk_mat_category_order_mat_category1_idx` (`matCategoryId` ASC) VISIBLE,
                                                           CONSTRAINT `fk_mat_device_order_order1`
                                                               FOREIGN KEY (`orderId`)
-                                                                  REFERENCES `pimcs`.`order` (`id`)
+                                                                  REFERENCES `pimcs`.`matOrder` (`id`)
                                                                   ON DELETE no action
                                                                   ON UPDATE NO ACTION,
                                                           CONSTRAINT `fk_mat_category_order_mat_category1`

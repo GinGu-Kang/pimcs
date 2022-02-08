@@ -6,6 +6,7 @@ import jdk.jfr.DataAmount;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -15,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
+@ToString(exclude = {"company","product"})
 @Entity
 public class Mat {
     @Id
@@ -22,9 +24,11 @@ public class Mat {
     private int id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")
-    private Product product; //상품코드
+    private Product product; //상품 object
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "companyId")
+    private Company company; //회사 object
     private String serialNumber; //매트고유번호
-    private String companyCode; //회사코드
     private int calcMethod; //계산방식(0이면 무게, 1이면 갯수)
     private int threshold; //무게가 임계값 보다 낮아지면 통지이메일 발송
     private int inventoryWeight; //현재재고무게
@@ -35,8 +39,7 @@ public class Mat {
     private int boxWeight; //박스 무게
     private int battery;
     @CreationTimestamp
-    private Timestamp createadAt;
+    private Timestamp createdAt;
     @UpdateTimestamp
     private Timestamp updatedate;
-
 }

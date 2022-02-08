@@ -1,13 +1,17 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +31,13 @@ public class MatService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 매트 조회
+     */
+    public Page<Mat> readMatService(Company company, Pageable pageable){
+        Page<Mat> mats = matRepository.findByCompany(company, pageable);
+        return mats;
+    }
 
     /**
      * 매트생성 서비스

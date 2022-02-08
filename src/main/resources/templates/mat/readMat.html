@@ -1,10 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
-    <meta charset="UTF-8">
-    <title>readMat</title>
+    <title>매트조회</title>
+    <link rel="stylesheet" href="css/mat/inquiryMat.css" />
+    <script type="text/javascript" src="js/jquery.twbsPagination.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+    
+            var totalPages = /*[[ ${mats.getTotalPages()} ]]*/;
+            var number = /*[[ ${mats.getNumber()} ]]*/;
+            var size = /*[[ ${mats.getSize()} ]]*/;
+        /*]]*/
+        jQuery(function ($) {
+            $(".pagination").twbsPagination({
+                totalPages:totalPages,    //총 페이지 갯수
+                visiblePages:5,    //보여줄 페이지
+                startPage:number,
+                initiateStartPageClick:false,
+                prev:'<',
+                next:'>',
+                first:'',
+                last:'',
+                onPageClick: function (event, page) {
+                    
+                    if(number != page){
+                        window.location.href=`${location.pathname}?page=${page}&size=${size}`;
+                    }
+                    
+                }
+            });
+        });
+        
+    </script>
+    
 </head>
-<body>
+<div layout:fragment="content" class="content inquery-mat-container" >
+    <!--매트조회 헤더-->
+    <div class="inquery-mat-header col-md-12 d-flex">
+        <!--header left box-->
+        <div class="inquery-mat-header-left-box col-md-6 d-flex">
+            <select class="pimcs-select text-size-middle">
+                <option>Search</option>
+                <option>시리얼 번호</option>
+            </select>
+            <div class="search-input-container">
+                <input class="search-input text-size-middle" placeholder="Search All"/>
+            </div>
+        </div>
+        <!--header right box-->
+        <div class="inquery-mat-header-right-box col-md-6 d-flex justify-content-end">
+            <div class="show-item-container">
+                show
+                <select class="show-item-select">
+                    <option selected>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                items per page
+            </div>
+            <div class="viewer-btn-container">
+                <img src="/img/table_viewer_active_icon.png"/>
+                <img src="/img/card-viewer-icon.png"/>
+            </div>
 
-</body>
+        </div>
+    </div>
+    <!--ACTION BUTTON CONTAINER-->
+    <div class="action-btn-container d-flex">
+        <!--ACTION BUTTON LEFT CONTAINER-->
+        <div class="action-btn-left-container d-flex">
+            <div class="square">
+                <img src="/img/modify_icon.png"/>
+            </div>
+            <div class="square">
+                <img src="/img/graph_icon.png"/>
+            </div>
+            <div class="square">
+                <img src="/img/delete_icon.png"/>
+            </div>
+
+            <p class="inventory-cnt-viewer-container">
+                선택된 재고: <span class="inventory-cnt-viewer" th:text="${mats.getTotalPages()}"></span>
+            </p>
+        </div>
+        <!--ACTION BUTTON RIGHT CONTAINER-->
+        <div class="action-btn-right-container d-flex justify-content-end">
+            <div class="rect">임계값 미달 목록</div>
+            <div class="rect">CSV Download</div>
+            <div class="rect">Display Setting</div>
+        </div>
+    </div>
+    <!--PAGINATION-->
+    <div aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination text-size-between-middle-samll"></ul>
+    </div>
+
+    <!--TABLE-->
+    <table class="table pimcs-table">
+        <thead>
+        <tr class="text-size-middle">
+            <th scope="col"><input type="checkbox"/></th>
+            <th scope="col">시리얼 번호</th>
+            <th scope="col">기기 버전</th>
+            <th scope="col">제품명</th>
+            <th scope="col">임계값</th>
+            <th scope="col">현재 재고</th>
+            <th scope="col">현재 무게</th>
+            <th scope="col">잔여 배터리</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="text-size-between-middle-samll" th:each="mat : ${mats}">
+            <td><input type="checkbox"/></td>
+            <td th:text="${mat.getSerialNumber()}"></td>
+            <td th:text="A3"></td>
+            <td th:text="${mat.getProduct().getProductName()}"></td>
+            <td th:text="${mat.getThreshold()}"></td>
+            <td th:text="${mat.getInventoryWeight()}"></td>
+            <td th:text="${mat.getInventoryWeight()}"></td>
+            <td th:text="${mat.getBattery()}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </html>
+

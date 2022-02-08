@@ -95,6 +95,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany());
     }
 
+
     public String deleteUserAllRole(String email){
         List<UserRole> userRoles=userRepository.findByEmail(email).get().getUserRoles();
         userRoleRepository.deleteAllInBatch(userRoles);

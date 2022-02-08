@@ -93,7 +93,7 @@
 
 .pimcs-table{
     width: 97%;
-    margin-top: 43px;
+    margin-top: 2px;
     
 }
 .pimcs-table tbody{
@@ -119,5 +119,4 @@ thead th:first-child {
     background-color: #4282ff;
 
 }
-  
-  
+

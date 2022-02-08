@@ -54,3 +54,24 @@
     font-size: 9px;
 }
 
+/*PAGINATION*/
+
+.pagination{
+  margin-top: 27px;
+}
+.page-item{
+  
+  margin-left: 15px;
+
+}
+.page-link{
+  /* width: 13px;
+  height: 12px; */
+  border: 0px solid #dee2e6;
+  background-color: #fafafa;
+  color: #969696;
+  padding: 2px 7px;
+  border-radius: 4px;
+  
+}
+

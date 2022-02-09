@@ -178,12 +178,12 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
 
 CREATE TABLE IF NOT EXISTS `pimcs`.`matCategory` (
                                                      `id` INT NOT NULL AUTO_INCREMENT,
-                                                     `matCategory` VARCHAR(45) NOT NULL,
+                                                     `matCategoryName` VARCHAR(45) NOT NULL,
                                                      `matPrice` INT NULL,
                                                      `matInformation` BLOB NULL,
                                                      `maxWeight` INT NULL,
                                                      PRIMARY KEY (`id`),
-                                                     UNIQUE INDEX `mat_category_UNIQUE` (`matCategory` ASC) VISIBLE)
+                                                     UNIQUE INDEX `mat_category_UNIQUE` (`matCategoryName` ASC) VISIBLE)
     ENGINE = InnoDB;
 
 
@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
     UNIQUE INDEX `serial_number_UNIQUE` (`serialNumber` ASC) VISIBLE,
     CONSTRAINT `fk_mat_device_mat_category1`
     FOREIGN KEY (`matCategory`)
-    REFERENCES `pimcs`.`matCategory` (`matCategory`)
+    REFERENCES `pimcs`.`matCategory` (`matCategoryName`)
     ON DELETE set null
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -208,11 +208,13 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                  `userEmail` VARCHAR(60) NOT NULL,
                                                  `companyId` INT NOT NULL,
                                                  `deliveryAddress` VARCHAR(60) NULL,
+                                                 `postCode` VARCHAR(40) NULL,
                                                  `depositStatus` INT NULL,
                                                  `hopeDeliveryDate` DATETIME NULL,
                                                  `depositerName` VARCHAR(45) NULL,
@@ -233,7 +235,6 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                          ON DELETE cascade
                                                          ON UPDATE NO ACTION)
     ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `pimcs`.`mat_category_order`

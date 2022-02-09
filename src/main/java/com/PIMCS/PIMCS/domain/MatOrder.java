@@ -26,6 +26,8 @@ public class MatOrder {
   private java.sql.Timestamp createdAt;
   private int deliveryStatus;
   private String deliveryCode;
+  @Transient
+  private String detailAddress;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "userEmail")

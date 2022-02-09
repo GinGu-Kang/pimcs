@@ -8,8 +8,12 @@ header{
     height: 55px;
     background-color: #4d83f7;
 }
+.header-left-box, .header-right-box{
+    width: 100%;
+}
 
 .header-left-box .logo-icon-box > img{
+    
     height: 55px;
 }
 .header-left-box .menu-icon-box{
@@ -31,26 +35,21 @@ header{
     
 }
 .header-right-box  p:nth-of-type(1){
-    font-size: 1vw;  
     margin-left: 15px;
     margin-right: 35px;
 }
 
-.header-right-box  p:nth-of-type(2){
-    font-size: 0.7vw;
-}
-.header-right-box svg:nth-of-type(1){
-    width: 1.5vw;
-    height: 1.5vw;
-    line-height: 1.5vw;
+.header-right-box div:first-child svg{
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
 }
 
-.header-right-box svg:nth-of-type(2){
-    width: 0.8vw;
-    height: 0.8vw;
-    line-height: 0.8vw;
+.header-right-box div:last-child svg{
+    width: 14px;
+    height: 12px;
+    line-height: 10px;
 }
-
 .header-right-box div:nth-of-type(2){
     
     margin-left: 15px;

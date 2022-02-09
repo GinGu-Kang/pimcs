@@ -1,6 +1,9 @@
 package com.PIMCS.PIMCS.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,10 +29,12 @@ public class Product {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "companyId")
+  @JsonIgnore
   private Company company;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "productCategoryId")
+  @JsonIgnore
   private ProductCategory productCategory;
 
   private String productCode;
@@ -47,5 +52,6 @@ public class Product {
   private java.sql.Timestamp updatedate;
 
   @OneToMany(mappedBy = "product")
+  @JsonBackReference
   List<Mat> mats = new ArrayList<>();
 }

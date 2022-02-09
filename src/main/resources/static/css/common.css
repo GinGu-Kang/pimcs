@@ -74,4 +74,8 @@
   border-radius: 4px;
   
 }
-
+.page-item:first-child .page-link {
+  background-color: #fafafa;
+  color: #969696;
+  
+}

@@ -30,7 +30,7 @@ public class TestUtils {
         mat.setMatLocation("화상실");
         mat.setProductOrderCnt(2);
         mat.setBoxWeight(5);
-        mat.setBattery(10);
+        mat.setBattery((int) (Math.random()*(100-0)) + 0);
         return mat;
     }
 

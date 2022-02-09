@@ -39,8 +39,8 @@
     margin-right: 53px;
 }
 .square{
-    width: 33px;
-    height: 33px;
+    width: 28px;
+    height: 28px;
     border: 2px solid #ffffff;
     border-radius: 3px;
     margin-right: 14px;
@@ -59,7 +59,6 @@
 .inventory-cnt-viewer-container{
     margin: auto 0px;
     margin-left:18px;
-    font-size: 16px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -118,5 +117,20 @@ thead th:first-child {
     color:#ffffff;
     background-color: #4282ff;
 
+}
+.blue{
+    color: #4282ff;
+}
+.red{
+    color: #ea2400;
+}
+
+.battery-small-rect{
+    display: inline-block;
+    margin: 0px;
+    padding:0px;
+    width: 8px;
+    height: 8px;
+    background-color: #ebebeb;
 }
 

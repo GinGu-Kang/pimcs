@@ -20,12 +20,15 @@ public class AdminOrderService {
 
 
     public void addMatCategory(MatCategory matCategory){
-        System.out.println(matCategory.getMatCategory());
+        System.out.println(matCategory.getMatCategoryName());
         matCategoryRepository.save(matCategory);
     }
 
     public void modifyMatCategory(MatCategory matCategory){
-        if(matCategoryRepository.findById(matCategory.getId()).isPresent()){
+        Optional<MatCategory> matCategorySource=matCategoryRepository.findByMatCategoryName(matCategory.getMatCategoryName());
+
+        if(matCategorySource.isPresent()){
+            matCategory.setId(matCategorySource.get().getId());
             matCategoryRepository.save(matCategory);
         }
 
@@ -34,8 +37,8 @@ public class AdminOrderService {
         return matCategoryRepository.findAll();
     }
 
-    public void removeMatCategory(String matCategoryName){
-        Optional<MatCategory> matCategory=matCategoryRepository.findByMatCategory(matCategoryName);
+    public void removeMatCategory(Integer id){
+        Optional<MatCategory> matCategory=matCategoryRepository.findById(id);
         if(matCategory.isPresent()){
             matCategoryRepository.delete(matCategory.get());
         }

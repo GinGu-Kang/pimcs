@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="utf-8"/>
     <title>Cocoon</title>
@@ -7,15 +8,6 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
 </head>
-<style>
-    .postService{
-        padding-top: 10px;
-    }
-    .postService input{
-        margin: 10px;
-        margin-left: 0px;
-    }
-</style>
 <body>
 
 
@@ -25,28 +17,27 @@
 
 <section style="display:flex;">
 
-    <form name="signUp" th:action="@{/buy/mat}" method="post">
+    <form name="signUp" th:action="@{/order/mat}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <div style="display: block">
-            A6<br>
-            <input type="number" min="0"><br>
-            A5<br>
-            <input type="number" min="0"><br>
-            A4<br>
-            <input type="number" min="0"><br>
-        </div>
+        <section th:each="matCategory:${matCategoryList}">
+            <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
+            <input name="categoryName" type="hidden" th:value="${matCategory.getMatCategoryName()}">
+            <input name="categoryCount" type="number" min="0"><br>
+        </section>
+
         <div>
             희망 배송일<br>
             <input type="date" id="hopeDate" min="2022-01-0"><br>
             주문자 이름<br>
             <input type="text" ><br>
             <section class="postService">
-                <input type="text" placeholder="우편번호" id="postNumber" min="0">
-                <input type="button" value="우편번호 찾기" onclick="postCode()"><br>
-                <input type="text" placeholder="주소" id="address" min="0">
-                <input type="text" placeholder="상세 주소" id="detailAddress" ><br>
+                <input type="text" placeholder="우편번호" id="postCode" min="0" name="postCode">
+                <input type="button" value="우편번호 찾기" onclick="searchPostCode()"><br>
+                <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress">
+                <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress"><br>
             </section>
         </div>
+        <input type="submit" th:value="주문완료">
     </form>
 </section>
 
@@ -55,11 +46,11 @@
 <script>
     let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
     $("#hopeDate").prop("min",date);
-    function postCode(){
+    function searchPostCode(){
         new daum.Postcode({
             oncomplete: function(data) {
-                $("#postNumber").prop("value",data.zonecode);
-                $("#address").prop("value",data.address);
+                $("#postCode").prop("value",data.zonecode);
+                $("#deliveryAddress").prop("value",data.address);
                 // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
                 // 예제를 참고하여 다양한 활용법을 확인해 보세요.
             }

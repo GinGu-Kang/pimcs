@@ -1,10 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <style>
+        th,td {padding:15px;}
+        td{
+            text-align: center;
+
+        }
+    </style>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
+<table>
+    <thead>
+    <th>매트 종류</th>
+    <th>매트 정보</th>
+    <th>매트 가격</th>
+    <th>매트 무게</th>
+    <th>DBId</th>
+    <th>수정</th>
+    <th>삭제</th>
+
+
+    </thead>
+    <tbody>
+    <tr th:each="matCategory:${matCategoryList}">
+        <td ><input type="text" th:value="${matCategory.getMatCategoryName()}"></td>
+        <td ><input type="text" th:value="${matCategory.getMatInformation()}"></td>
+        <td ><input type="text" th:value="${matCategory.getMatPrice()}"></td>
+        <td ><input type="text " th:value="${matCategory.getMaxWeight()}"></td>
+        <td ><input type="text " th:value="${matCategory.getId()}" disabled></td>
+
+        <td><input type="button" value="수정" onclick="matCategoryModify(this)"></td>
+        <td><input type="button" value="삭제" onclick="matCategoryRemove(this)"></td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+
+    function matCategoryModify(modifyButton) {
+        var matCategoryName = $(modifyButton).closest("tr").children("td:eq(0)").children().prop('value');
+        var matInformation = $(modifyButton).closest("tr").children("td:eq(1)").children().prop('value');
+        var matPrice = $(modifyButton).closest("tr").children("td:eq(2)").children().prop('value');
+        var maxWeight = $(modifyButton).closest("tr").children("td:eq(3)").children().prop('value');
+
+
+        $.ajax({
+            url: '/admin/matcategory/modify',
+            type: 'post',
+            data: {
+                matCategoryName: matCategoryName,
+                matInformation: matInformation,
+                matPrice: matPrice,
+                maxWeight: maxWeight
+            },
+            beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                xhr.setRequestHeader(header, token);
+            },
+
+            error: function () {
+                alert("에러입니다");
+            }
+        });
+    }
+
+
+    function matCategoryRemove(removeButton) {
+        var parentTr = $(removeButton).closest("tr")
+        var DBId = $(removeButton).closest("tr").children("td:eq(4)").children().prop('value');
+        console.log(DBId)
+        $.ajax({
+                    url:'/admin/matcategory/remove',
+                    type:'post',
+                    data:{DBId:DBId},
+                    beforeSend : function(xhr)
+                    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                        xhr.setRequestHeader(header, token);
+                    },
+                    success:function(){ //컨트롤러에서 넘어온 cnt값을 받는다
+                        $(parentTr).css("display","none")
+                    },
+                    error:function(){
+                        alert("에러입니다");
+                    }
+                });
+            };
+
+</script>
 </html>

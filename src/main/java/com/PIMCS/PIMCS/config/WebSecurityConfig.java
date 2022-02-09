@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers( "/auth/**","/company/registration","/auth/idCheck").permitAll() //permitAll이 있을시 로그인없이도 접근가능
-                .antMatchers("/home/hello","/home","auth/update").hasRole("User")
+                .antMatchers("/home/hello","/home","auth/update","/order/**").hasRole("User")
                 .antMatchers("/management/company/worker").hasRole("UserManagement")
                 .antMatchers("/mat/create","/mat/update","/mat/delete").hasRole("MatMangement")
                 .antMatchers("/product/create","/product/update","/product/delete").hasRole("MatMangement")
@@ -80,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.exceptionHandling().accessDeniedPage("/noneRole");
+        http.exceptionHandling().accessDeniedPage("/home/noneRole");
     }
 
 //    @Autowired

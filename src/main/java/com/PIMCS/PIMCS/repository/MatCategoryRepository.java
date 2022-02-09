@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MatCategoryRepository extends JpaRepository<MatCategory,Integer> {
 
-    Optional<MatCategory> findByMatCategory(String matCategory);
+    Optional<MatCategory> findByMatCategoryName(String matCategoryName);
 }

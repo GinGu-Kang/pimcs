@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,30 +27,29 @@ public class AdminController {
 
     @PostMapping("/matcategory/add")
     public String matCategoryAdd(MatCategory matCategory){
-        System.out.println("여기안와 ?");
         adminOrderService.addMatCategory(matCategory);
-        return "admin/addMatCategory";
+        return "redirect:/admin/matcategory/read";
     }
 
 
     @GetMapping("matcategory/read")
     public String matCategoryList(Model model){
         model.addAttribute(adminOrderService.findMatCategory());
-        return "admin/buyMat";
+        return "admin/categoryManagement";
     }
 
-    @GetMapping("matcategory/modify")
-    public String matCategoryModify(MatCategory matCategory){
+    @PostMapping("matcategory/modify")
+    @ResponseBody
+    public boolean matCategoryModify(MatCategory matCategory){
+        System.out.println(matCategory.getMatCategoryName());;
         adminOrderService.modifyMatCategory(matCategory);
-        return "buy/buyMat";
+        return true;
     }
+
+    @ResponseBody
     @PostMapping("matcategory/remove")
-    public String matCategoryRemove(String matCategoryName){
-        adminOrderService.removeMatCategory(matCategoryName);
-        return "buy/buyMat";
+    public boolean matCategoryRemove(Integer DBId){
+        adminOrderService.removeMatCategory(DBId);
+        return true;
     }
-
-
-
-
 }

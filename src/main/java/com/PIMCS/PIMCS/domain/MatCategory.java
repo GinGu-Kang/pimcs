@@ -20,7 +20,7 @@ public class MatCategory {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  private String matCategory;
+  private String matCategoryName;
   private int matPrice;
   private String matInformation;
   private int maxWeight;

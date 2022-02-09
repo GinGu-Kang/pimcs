@@ -1,6 +1,6 @@
 package com.PIMCS.PIMCS.domain;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.*;
 import jdk.jfr.DataAmount;
 
 import lombok.Data;
@@ -22,14 +22,21 @@ public class Mat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")
+    @JsonManagedReference
     private Product product; //상품 object
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyId")
+    @JsonIgnore
     private Company company; //회사 object
+
     private String serialNumber; //매트고유번호
+
     private int calcMethod; //계산방식(0이면 무게, 1이면 갯수)
+
     private int threshold; //무게가 임계값 보다 낮아지면 통지이메일 발송
     private int inventoryWeight; //현재재고무게
     private Timestamp recentlyNoticeDate; //최근통지 일시

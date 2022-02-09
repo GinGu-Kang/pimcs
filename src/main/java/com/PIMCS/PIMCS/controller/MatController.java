@@ -4,6 +4,7 @@ import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.MatService;
+import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.http.HttpHeaders;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,13 +33,22 @@ public class MatController {
      */
     @GetMapping("/")
     public String readMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                             @PageableDefault(size = 10) Pageable pageable,
+                             @PageableDefault(page = 1,size = 10) Pageable pageable,
                              Model model){
 
         Page<Mat> mats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
         model.addAttribute("mats",mats);
         return "mat/readMat";
     }
+    @GetMapping("/api/mats")
+    @ResponseBody
+    public Page<Mat> ajaxLoadMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                              @PageableDefault(page = 1,size = 10) Pageable pageable,
+                              Model model){
+
+        return matService.readMatService(secUserCustomForm.getCompany(),pageable);
+    }
+
 
     /**
      * 매트생성

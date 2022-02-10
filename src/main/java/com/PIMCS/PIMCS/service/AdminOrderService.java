@@ -20,7 +20,6 @@ public class AdminOrderService {
 
 
     public void addMatCategory(MatCategory matCategory){
-        System.out.println(matCategory.getMatCategoryName());
         matCategoryRepository.save(matCategory);
     }
 
@@ -43,4 +42,10 @@ public class AdminOrderService {
             matCategoryRepository.delete(matCategory.get());
         }
     }
+
+    public List<MatCategory> findMatCategoryList(List<Integer> matCategoryIdList){
+        return matCategoryRepository.findAllById(matCategoryIdList);
+    }
+
+
 }

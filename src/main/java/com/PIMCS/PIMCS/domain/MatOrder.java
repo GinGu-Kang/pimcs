@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -19,11 +20,12 @@ public class MatOrder {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
   private String deliveryAddress;
+  private String postCode;
   private long depositStatus;
   private Date hopeDeliveryDate;
   private String depositerName;
   @CreationTimestamp
-  private java.sql.Timestamp createdAt;
+  private Timestamp createdAt;
   private int deliveryStatus;
   private String deliveryCode;
   @Transient

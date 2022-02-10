@@ -41,7 +41,7 @@ public class AdminController {
     @PostMapping("matcategory/modify")
     @ResponseBody
     public boolean matCategoryModify(MatCategory matCategory){
-        System.out.println(matCategory.getMatCategoryName());;
+
         adminOrderService.modifyMatCategory(matCategory);
         return true;
     }

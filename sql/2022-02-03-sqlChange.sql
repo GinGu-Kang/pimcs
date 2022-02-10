@@ -250,7 +250,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
                                                           CONSTRAINT `fk_mat_device_order_order1`
                                                               FOREIGN KEY (`orderId`)
                                                                   REFERENCES `pimcs`.`matOrder` (`id`)
-                                                                  ON DELETE no action
+                                                                  ON DELETE cascade
                                                                   ON UPDATE NO ACTION,
                                                           CONSTRAINT `fk_mat_category_order_mat_category1`
                                                               FOREIGN KEY (`matCategoryId`)

@@ -19,17 +19,17 @@
 
     <form name="signUp" th:action="@{/order/mat}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <section th:each="matCategory:${matCategoryList}">
+        <section th:each="matCategory,i:${matCategoryList}">
             <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
-            <input name="categoryName" type="hidden" th:value="${matCategory.getMatCategoryName()}">
-            <input name="categoryCount" type="number" min="0"><br>
+            <input th:name="'matCategoryIdList['+${i.index}+']'" type="hidden" th:value="${matCategory.getId()}">
+            <input th:name="'matCategoryOrderList['+${i.index}+'].orderCnt'" type="number" min="0"><br>
         </section>
 
         <div>
             희망 배송일<br>
-            <input type="date" id="hopeDate" min="2022-01-0"><br>
+            <input type="date" id="hopeDate" min="2022-01-0" name="hopeDeliveryDate"><br>
             주문자 이름<br>
-            <input type="text" ><br>
+            <input type="text" name="depositerName"><br>
             <section class="postService">
                 <input type="text" placeholder="우편번호" id="postCode" min="0" name="postCode">
                 <input type="button" value="우편번호 찾기" onclick="searchPostCode()"><br>

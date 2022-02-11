@@ -1,9 +1,10 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.MatCategory;
 import com.PIMCS.PIMCS.domain.MatCategoryOrder;
 import com.PIMCS.PIMCS.domain.MatOrder;
-import com.PIMCS.PIMCS.form.MatCategoryAndOrderList;
+import com.PIMCS.PIMCS.form.MatCategoryAndOrderForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.MatCategoryOrderRepository;
 import com.PIMCS.PIMCS.repository.MatCategoryRepository;
@@ -20,6 +21,7 @@ public class OrderService {
     private final MatOrderRepository matOrderRepository;
     private final UserRepository userRepository;
 
+
     public OrderService(MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, UserRepository userRepository) {
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
@@ -27,19 +29,31 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
-    public void saveOrder(MatOrder matOrder, SecUserCustomForm user, List<MatCategoryOrder> matCategoryAndOrderList,List<Integer> matCategoryId){
+
+
+    public void saveOrder(MatOrder matOrder, SecUserCustomForm user, MatCategoryAndOrderForm matCategoryAndOrderForm){
+        List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
+        List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
 
         matOrder.setCompany(user.getCompany());
         matOrder.setUser(userRepository.findByEmail(user.getUsername()).get());
         matOrderRepository.save(matOrder);
 
-        for(int i=0;i<matCategoryAndOrderList.size();i++){
-            matCategoryAndOrderList.get(i).setMatOrder(matOrder);
-            matCategoryAndOrderList.get(i).setMatCategory(matCategoryList.get(i));
+        for(int i=0;i<matCategoryOrderList.size();i++){
+            matCategoryOrderList.get(i).setMatOrder(matOrder);
+            matCategoryOrderList.get(i).setMatCategory(matCategoryList.get(i));
         }
 
-        matCategoryOrderRepository.saveAll(matCategoryAndOrderList);
+        matCategoryOrderRepository.saveAll(matCategoryOrderList);
+    }
+
+    public List<MatOrder> findOrder(Company company){
+        return matOrderRepository.findByCompany(company);
+    }
+
+    public List<MatCategoryOrder> findOrderList(Integer companyId){
+        return matCategoryOrderRepository.findByCompanyId(companyId);
     }
 
 

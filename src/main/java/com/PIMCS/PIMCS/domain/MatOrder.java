@@ -4,11 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,6 +39,9 @@ public class MatOrder {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="companyId")
   private Company company;
+
+  @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY)
+  private List<MatCategoryOrder> matCategoryOrderList;
 
 
 

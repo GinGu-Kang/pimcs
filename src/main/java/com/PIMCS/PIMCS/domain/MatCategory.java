@@ -1,15 +1,11 @@
 package com.PIMCS.PIMCS.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.sql.Blob;
+import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +20,9 @@ public class MatCategory {
   private int matPrice;
   private String matInformation;
   private int maxWeight;
+
+  @OneToMany(mappedBy = "matCategory",fetch = FetchType.LAZY)
+  private List<MatCategoryOrder> matCategoryOrderList;
 
 
 

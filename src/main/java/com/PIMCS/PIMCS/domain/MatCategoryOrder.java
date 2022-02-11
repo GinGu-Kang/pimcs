@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -19,13 +20,15 @@ public class MatCategoryOrder {
   private int orderCnt;
 
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "orderId")
   private MatOrder matOrder;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="matCategoryId")
   private MatCategory matCategory;
+
 
   public MatCategoryOrder() {
 

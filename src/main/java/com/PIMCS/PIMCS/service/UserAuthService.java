@@ -74,9 +74,8 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return user.getEmail();
     }
 
-    public String roleUpdate(Role role){
-        roleRepository.save(role);
-        return role.getName();
+    public void roleUpdate(List<Role> roleList){
+        roleRepository.saveAll(roleList);
     }
 
     public void UserRoleSave(String email, String roleName){

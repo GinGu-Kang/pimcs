@@ -9,7 +9,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
+
 @SpringBootTest
 @Transactional
 public class UserAuthServiceTest {
@@ -62,16 +66,16 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     public void insertRoleTest() {
-        Role role = new Role();
-        role.setName("UserManagement");
-        userAuthService.roleUpdate(role);
+        List<Role> roleList= new ArrayList<>();
+
+        roleList.add(Role.builder().name("UserManagement").build());
+        roleList.add(Role.builder().name("User").build());
+        roleList.add(Role.builder().name("InventoryManagement").build());
+        roleList.add(Role.builder().name("ChiefOfPimcs").build());
+
+        userAuthService.roleUpdate(roleList);
     }
 
-    @Test
-    @Commit
-    public void mappingRoleTest() {
-        userAuthService.UserRoleSave("tatata", "UserManagement");
-    }
 
     @Test
     public void userRoleFindTest() {

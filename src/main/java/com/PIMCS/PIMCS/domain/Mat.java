@@ -25,12 +25,10 @@ public class Mat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId")
-    @JsonManagedReference
     private Product product; //상품 object
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyId")
-    @JsonIgnore
     private Company company; //회사 object
 
     private String serialNumber; //매트고유번호

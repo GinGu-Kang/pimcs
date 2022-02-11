@@ -1,5 +1,7 @@
 package com.PIMCS.PIMCS.controller;
 
+import com.PIMCS.PIMCS.Utils.MatControllerUtils;
+import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
@@ -8,6 +10,7 @@ import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -38,15 +41,31 @@ public class MatController {
 
         Page<Mat> mats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
         model.addAttribute("mats",mats);
+        System.out.println(mats);
         return "mat/readMat";
     }
+
+    /**
+     *  ajax로 매트데이터 로드하기
+     *  Mat entity객체 사용하지않고 별도의 객체를 만들어서 response
+     */
     @GetMapping("/api/mats")
     @ResponseBody
-    public Page<Mat> ajaxLoadMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                              @PageableDefault(page = 1,size = 10) Pageable pageable,
-                              Model model){
+    public MatPageAdapter ajaxLoadMatData(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                                           Pageable pageable){
+        Page<Mat> pageMats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
+        System.out.println("=========");
+        System.out.println(pageMats);
+        System.out.println(pageMats.getNumber());
+        for(Mat mat : pageMats){
+            System.out.println(mat.getId());
+            System.out.println(mat.getSerialNumber());
+            System.out.println(mat.getBattery());
+            break;
+        }
 
-        return matService.readMatService(secUserCustomForm.getCompany(),pageable);
+        System.out.println("=========");
+        return  new MatControllerUtils().createMatPageAdapter(pageMats,secUserCustomForm.getCompany());
     }
 
 

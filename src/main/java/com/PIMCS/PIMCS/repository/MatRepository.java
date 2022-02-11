@@ -5,6 +5,7 @@ import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,7 @@ public interface MatRepository extends JpaRepository<Mat,String> {
      Optional<Mat> findBySerialNumber(String serialNum); //시리얼번호로 검색
 
      @EntityGraph(attributePaths = "product")
-     Page<Mat> findByCompany(Company company, Pageable pageable);
+     Page<Mat> findByCompanyOrderByIdDesc(Company company, Pageable pageable);
 
      @EntityGraph(attributePaths = "product")
      List<Mat> findByMatLocationContaining(String matLocation); //매트위치로 검색

@@ -29,12 +29,10 @@ public class Product {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "companyId")
-  @JsonIgnore
   private Company company;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "productCategoryId")
-  @JsonIgnore
   private ProductCategory productCategory;
 
   private String productCode;

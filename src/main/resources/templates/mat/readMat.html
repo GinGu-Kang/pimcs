@@ -7,22 +7,11 @@
     <script type="text/javascript" src="js/mat/readMat.js"></script>
 
     <script type="text/javascript" th:inline="javascript">
-        /*<![CDATA[*/
-            var totalPages = /*[[ ${mats.getTotalPages()} ]]*/;
-            var currentPage = /*[[ ${mats.getNumber()} ]]*/;
-            var size = /*[[ ${mats.getSize()} ]]*/;
-        /*]]*/
+        
         
         jQuery(function ($) {
-            //pagination 활성화
-            pagination({
-                totalPages: totalPages,
-                currentPage: currentPage,
-                size: size
-            });
-                    
-            // 배터리양 그래프화
-            amountBatteryToGraph();
+            // 초기화 
+            init();
         });
         
     </script>
@@ -101,7 +90,7 @@
     <table class="table pimcs-table">
         <thead>
         <tr class="text-size-middle">
-            <th scope="col"><input type="checkbox"/></th>
+            <th scope="col"><input class="all-rows-checked" type="checkbox"/></th>
             <th scope="col">시리얼 번호</th>
             <th scope="col">기기 버전</th>
             <th scope="col">제품명</th>

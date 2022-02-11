@@ -35,7 +35,7 @@ public class MatService {
      * 매트 조회
      */
     public Page<Mat> readMatService(Company company, Pageable pageable){
-        Page<Mat> mats = matRepository.findByCompany(company, pageable);
+        Page<Mat> mats = matRepository.findByCompanyOrderByIdDesc(company, pageable);
         return mats;
     }
 

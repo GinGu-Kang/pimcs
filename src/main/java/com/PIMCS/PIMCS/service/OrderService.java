@@ -52,6 +52,11 @@ public class OrderService {
         return matOrderRepository.findByCompany(company);
     }
 
+    /**
+     * 회사별 주문 조회
+     * @param companyId
+     * @return 매트 카테고리, 카테고리 별 주문갯수, 주문자 정보
+     */
     public List<MatCategoryOrder> findOrderList(Integer companyId){
         return matCategoryOrderRepository.findByCompanyId(companyId);
     }

@@ -18,8 +18,16 @@ import org.springframework.data.repository.query.Param;
 import java.awt.*;
 import java.util.List;
 
+
 public interface MatCategoryOrderRepository extends JpaRepository<MatCategoryOrder, Integer> {
 
+
+    /**
+     *
+     * @param companyID
+     * @return
+     * 회사별 주문 조회
+     */
     @Query("select mco,mc,mo,co from MatCategoryOrder mco " +
             "INNER JOIN  MatOrder mo on mco.matOrder = mo " +
             "INNER JOIN  Company co on mo.company = co " +

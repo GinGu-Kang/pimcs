@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="displaySettingModal" class="modal fade" id="displaySettingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h6 class="modal-title">표시 항목 설정</h6>
+          </div>
+          <div class="modal-body text-size-middle custom-modal-body">
+            <!--시리얼번호-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-serial-number" columnName="serialNumber"/>
+              <label for="display-setting-serial-number">시리얼 번호</label>
+            </div>    
+            <!--기기버전-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-mat-version" columnName="matVersion"/>
+              <label for="display-setting-mat-version">기기 버전</label>
+            </div>    
+            <!--제품코드-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-product-code" columnName="productCode"/>
+              <label for="display-setting-product-code">제품코드</label>
+            </div>    
+            <!--제품명-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-product-name" columnName="productName"/>
+              <label for="display-setting-product-name">제품명</label>
+            </div>    
+            <!--제품이미지-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-product-image" columnName="productImage"/>
+              <label for="display-setting-product-image">제품 이미지</label>
+            </div>    
+            <!--현재무게-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-inventory-weight" columnName="inventoryWeight"/>
+              <label for="display-setting-inventory-weight">현재 무게</label>
+            </div>    
+            <!--계산방식-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-calc-method" columnName="calcMethod"/>
+              <label for="display-setting-calc-method">계산방식</label>
+            </div>    
+            
+            <!--임계값-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-threthold" columnName="threshold"/>
+              <label for="display-setting-threthold">임계값</label>
+            </div>    
+            <!--현재재고-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-inventory-cnt" columnName="inventoryCnt"/>
+              <label for="display-setting-inventory-cnt">현재 재고</label>
+            </div>    
+            <!--매트위치-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-mat-location" columnName="matLocation"/>
+              <label for="display-setting-mat-location">매트위치</label>
+            </div>    
+            <!--상품주문개수-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-product-order-cnt" columnName="productOrderCnt"/>
+              <label for="display-setting-product-order-cnt">상품주문개수</label>
+            </div>    
+            <!--박스무게-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-box-weight" columnName="boxWeight"/>
+              <label for="display-setting-box-weight">박스무게</label>
+            </div>    
+            <!--배터리-->
+            <div class="form-group">
+              <input type="checkbox" class="displaySettingCheckbox" id="display-setting-battery" columnName="battery"/>
+              <label for="display-setting-battery">잔여 배터리</label>
+            </div>    
+
+          </div>
+        </div>
+      </div>
+  </div>
+</html>

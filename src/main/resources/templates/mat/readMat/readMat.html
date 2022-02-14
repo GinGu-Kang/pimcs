@@ -2,22 +2,25 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
     <title>매트조회</title>
-    <link rel="stylesheet" href="css/mat/readMat.css" />
+    <link rel="stylesheet" href="css/mat/readMat/readMat.css" />
+    <link rel="stylesheet" href="css/mat/readMat/modal/displaySettingModal.css" />
     <script type="text/javascript" src="js/jquery.twbsPagination.js"></script>
-    <script type="text/javascript" src="js/mat/readMat.js"></script>
-
+    <script type="text/javascript" src="js/mat/readMat/readMatCommon.js"></script>
+    <script type="text/javascript" src="js/mat/readMat/readMatTable.js"></script>
+    <script type="text/javascript" src="js/mat/readMat/readMatCardView.js"></script>
+    <script type="text/javascript" src="js/mat/readMat/modal/displaySettingModal.js"></script>
     <script type="text/javascript" th:inline="javascript">
-        
-        
         jQuery(function ($) {
             // 초기화 
             init();
         });
-        
     </script>
     
 </head>
 <div layout:fragment="content" class="content inquery-mat-container" >
+    <!--display setting 모달 include-->
+    <div th:replace="mat/readMat/modal/displaySettingModal :: displaySettingModal"></div>
+
     <!--매트조회 헤더-->
     <div class="inquery-mat-header col-md-12 d-flex">
         <!--header left box-->
@@ -31,7 +34,7 @@
             </div>
         </div>
         <!--header right box-->
-        <div class="inquery-mat-header-right-box col-md-6 d-flex justify-content-end">
+        <div class="inquery-mat-header-right-box col-md-6 d-flex">
             <div class="show-item-container">
                 show
                 <select class="show-item-select">
@@ -42,9 +45,9 @@
                 </select>
                 items per page
             </div>
-            <div class="viewer-btn-container">
-                <img src="/img/table_viewer_active_icon.png"/>
-                <img src="/img/card-viewer-icon.png"/>
+            <div class="viewer-btn-container d-flex">
+                <div class="table-viewer-btn table-viewer-active"></div>
+                <div class="card-viewer-btn"></div>
             </div>
 
         </div>
@@ -75,50 +78,41 @@
             </p>
         </div>
         <!--ACTION BUTTON RIGHT CONTAINER-->
-        <div class="action-btn-right-container d-flex justify-content-end">
+        <div class="action-btn-right-container d-flex">
             <div class="rect">임계값 미달 목록</div>
             <div class="rect">CSV Download</div>
-            <div class="rect">Display Setting</div>
+            <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Display Setting</div>
         </div>
     </div>
     <!--PAGINATION-->
     <div aria-label="Page navigation" class="d-flex justify-content-center">
         <ul class="pagination text-size-between-middle-samll"></ul>
     </div>
-
+    
     <!--TABLE-->
-    <table class="table pimcs-table">
+    <table class="table pimcs-table content-display">
         <thead>
-        <tr class="text-size-middle">
-            <th scope="col"><input class="all-rows-checked" type="checkbox"/></th>
-            <th scope="col">시리얼 번호</th>
-            <th scope="col">기기 버전</th>
-            <th scope="col">제품명</th>
-            <th scope="col">임계값</th>
-            <th scope="col">현재 재고</th>
-            <th scope="col">현재 무게</th>
-            <th scope="col">잔여 배터리</th>
-        </tr>
+            <tr class="text-size-middle">
+                <th scope="col"><input class="all-rows-checked" type="checkbox"/></th>
+                <th scope="col">시리얼 번호</th>
+                <th scope="col">기기 버전</th>
+                <th scope="col">제품명</th>
+                <th scope="col">임계값</th>
+                <th scope="col">현재 재고</th>
+                <th scope="col">현재 무게</th>
+                <th scope="col">잔여 배터리</th>
+            </tr>
         </thead>
         <tbody>
-            <!-- <tr class="text-size-between-middle-samll" th:each="mat : ${mats}">
-                <td><input type="checkbox"/></td>
-                <td th:text="${mat.getSerialNumber()}"></td>
-                <td th:text="A3"></td>
-                <td th:text="${mat.getProduct().getProductName()}"></td>
-                <td th:text="${mat.getThreshold()}" class="blue"></td>
-                <td th:text="${mat.getInventoryWeight()}" class="blue"></td>
-                <td th:text="${mat.getInventoryWeight()}"></td>
-                <td class="amountBattery" th:data="${mat.getBattery()}">
-                    <div class="battery-small-rect"></div>
-                    <div class="battery-small-rect"></div>
-                    <div class="battery-small-rect"></div>
-                    <div class="battery-small-rect"></div>
-                    <div class="battery-small-rect"></div>
-                </td>
-            </tr> -->
+        
         </tbody>
     </table>
+    <!--CARD VIEW-->
+    <div class="pimcs-card-container">
+        
+    </div>
+
+
 </div>
 
 </html>

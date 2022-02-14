@@ -1,0 +1,12 @@
+#displaySettingModal .modal-body{
+    color: #707070;
+}
+
+#displaySettingModal .form-group{
+    margin-top: 7px;
+}
+#displaySettingModal .form-group:first-child{
+    margin-top: 0px;
+}
+
+

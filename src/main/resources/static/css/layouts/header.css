@@ -32,14 +32,14 @@ header{
 .header-right-box  p{
     color: white;
     font-weight: bold;
-    
+    margin-right: 15px;
 }
 .header-right-box  p:nth-of-type(1){
-    margin-left: 15px;
-    margin-right: 35px;
+    
+    margin-right: 16px;
 }
 
-.header-right-box div:first-child svg{
+.header-right-box .profile-icon-box svg{
     width: 24px;
     height: 24px;
     line-height: 24px;
@@ -52,7 +52,7 @@ header{
 }
 .header-right-box div:nth-of-type(2){
     
-    margin-left: 15px;
+    margin-left: 3px;
     margin-right: 52px;
 
 }

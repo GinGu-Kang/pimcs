@@ -40,18 +40,22 @@
 
 .text-size-between-large-middle{
   font-size: 17px;
+  
 }
 
 .text-size-middle{
     font-size: 13px;
+  
 }
 
 .text-size-between-middle-samll{
   font-size: 11px;
+  
 }
 
 .text-size-small{
     font-size: 9px;
+  
 }
 
 /*PAGINATION*/
@@ -78,4 +82,16 @@
   background-color: #fafafa;
   color: #969696;
   
+}
+
+.dot3{
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.line3_dot3{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; 
+  -webkit-box-orient: vertical;
+  word-wrap:break-word;
 }

@@ -42,7 +42,7 @@ public class MatController {
         Page<Mat> mats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
         model.addAttribute("mats",mats);
         System.out.println(mats);
-        return "mat/readMat";
+        return "mat/readMat/readMat";
     }
 
     /**

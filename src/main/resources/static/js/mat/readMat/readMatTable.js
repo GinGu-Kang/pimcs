@@ -1,25 +1,52 @@
-const showItemsSelectbox = ".show-item-select";
-
-/**
- * 세션스토리지 비우기 및 테이블데이터 초기화
- */
-const init = function(){
-
-    sessionStorage.clear();
-    initTableData({page:1, size:10});
-}
 
 /**
  * 테이블 데이터초기화
  * @param page 페이지번호
  * @param size 한페이지당 개수
  */
-const initTableData = function({page,size}){
+ const initTableData = function({page,size}){
     
     //ajax로 mat테이블 데이터 로드
     let tableData = loadTableData({page: page, size: size});
+    
     //행생성해서 tbody에 삽입
     createTableRow(tableData);
+    //매트 테이블 구조 변경
+    modifyDisplayColumns();
+}
+
+/**
+ * display setting에서 check된 컬럼만 보여주기
+ */
+const modifyDisplayColumns = function(){
+    //thead th태그 생성
+    $("thead").empty();
+    let trs = `<tr class='text-size-middle'>`;
+    trs += createColumnThTag();
+    trs += `</tr>`;
+    $("thead").append(trs);
+
+    //tbody 보여질 컬럼 class에 display 추가
+    $("tbody td").removeClass("display");
+    $("#displaySettingModal input:checked").each(function(index, element){
+        let columnName = $(element).attr('columnName');
+        $(`tbody td[columnName='${columnName}']`).addClass("display");
+    });
+}
+
+/**
+ * thead th태그 생성
+ * @returns th태그들을 반환
+ */
+const createColumnThTag = function(){
+    let ths = "";
+    ths += `<th><input class='all-rows-checked' type='checkbox'/></th>`
+    $("#displaySettingModal input:checked").each(function(index, element){
+        let elementId = $(element).attr("id");
+        let columnText = $(`label[for='${elementId}']`).text();
+        ths += `<th>${columnText}</th>`;
+    });
+    return ths;
 }
 
 /**
@@ -38,10 +65,11 @@ $(document).on("change",".all-rows-checked",function(){
     });
 });
 
+
 /**
  * 체크박스 체크시 발생하는 이벤트
  */
-$(document).on("change",".row-checked",function(){
+ $(document).on("change",".row-checked",function(){
     //전체checkbox가 체크되면 전체체크박스 활성화
     let showItemsCnt = parseInt($(showItemsSelectbox).children("option:selected").val());
     if($(".row-checked:checked").length == showItemsCnt)
@@ -64,51 +92,11 @@ $(document).on("change", showItemsSelectbox, function(){
     initTableData({page: 1, size: size});
 });
 
-/**
- * 
- * @param mat 매트데이터
- * @param isChecked 매트가 체크박스를 통해 체크되었는 여부
- */
-const setStorage = function({mat, isChecked}){
-    mat['checked'] = isChecked;
-    sessionStorage.setItem(mat.id,JSON.stringify(mat));
-}
-
-const getStorageItem = function(key){
-    return JSON.parse(sessionStorage.getItem(key));
-}
-
-
-/**
- * twbsPagination 활성화
- * @param  totalPages 전체페이지
- * @param  currentPage 현재페이지
- * @param size 한페이지에 보여지는 개수
- */
-const pagination = function({totalPages,currentPage,size}){
-    $(".pagination").twbsPagination('destroy'); // 페이지네이션 객체를 ram에서 소멸
-    $(".pagination").twbsPagination({
-        totalPages:totalPages,    
-        visiblePages:5,    
-        startPage: (currentPage != 0) ? currentPage : 1,
-        initiateStartPageClick:false,
-        prev:'<',
-        next:'>',
-        first:'',
-        last:'',
-        onPageClick: function (event, page) {
-            if(currentPage != page){
-                console.log(page);
-                initTableData({page:page, size:size});
-            }
-        }
-    });
-}
 
 /**
  * 배터리양을 그래프화 
  */
-const amountBatteryToGraph = function(){
+ const amountBatteryToGraph = function(){
 
     $(".amountBattery").each(function(index, element){
         let amountBattery = parseInt($(element).attr("data"));
@@ -134,41 +122,11 @@ const amountBatteryToGraph = function(){
     });
 }
 
-
-/**
- *매트조회 테이블데이터 로드
- *@param  data 요청데이터 {page:1, size:10}
- */
- const loadTableData = function(data){
-    let resultData = {};
-    
-    const url = "/api/mats"
-    $.ajax({
-        url: url,
-        type:'GET',
-        data:data,
-        async: false, // 동기식으로 동작
-        success:function(response){
-            resultData = response;    
-            //페이지네이션 생성 및 재생성
-            pagination({
-                totalPages: resultData.totalPages,
-                currentPage: resultData.pageNumber,
-                size: resultData.pageSize
-            });
-        },
-        error:function(){
-            alert("오류발생");
-        }
-    });
-    return resultData;
-}
-
 /**
  * 매트테이블 행생성
  * @param tableData Mat 및 page데이터
  */
-const createTableRow = function(tableData){
+ const createTableRow = function(tableData){
     $("tbody").empty();
     let checkedCount = 0; // 몇개행이 체크되었는지
     for(let mat of tableData.data){
@@ -196,16 +154,22 @@ const createTableRow = function(tableData){
 const createMatRow = function(mat){
     const findMat = getStorageItem(mat.id);
     const checked = (findMat.checked) ? 'checked' : '';
-    
+
     let row = `<tr class='text-size-between-middle-samll'>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
-        row +=    `<td>${mat.serialNumber}</td>`;
-        row +=    `<td>A3</td>`;
-        row +=    `<td>${mat.product.productName}</td>`;
-        row +=    `<td class='blue'>${mat.threshold}</td>`;
-        row +=    `<td class='blue'>${mat.inventoryWeight}</td>`;
-        row +=    `<td>${mat.inventoryWeight}</td>`;
-        row +=    `<td class='amountBattery' data=${mat.battery}>`;
+        row +=    `<td columnName='serialNumber'>${mat.serialNumber}</td>`;
+        row +=    `<td columnName='matVersion'>A3</td>`;
+        row +=    `<td columnName='productCode'>${mat.product.productCode}</td>`;
+        row +=    `<td columnName='productName'>${mat.product.productName}</td>`;
+        row +=    `<td columnName='productImage'>${mat.product.productImage}</td>`;
+        row +=    `<td columnName='inventoryCnt'>${mat.inventoryWeight}</td>`;
+        row +=    `<td columnName='calcMethod'>${mat.calcMethod}</td>`;
+        row +=    `<td class='blue' columnName='threshold'>${mat.threshold}</td>`;
+        row +=    `<td class='blue' columnName='inventoryWeight'>${mat.inventoryWeight}</td>`;
+        row +=    `<td columnName='matLocation'>${mat.matLocation}</td>`;
+        row +=    `<td columnName='productOrderCnt'>${mat.productOrderCnt}</td>`;
+        row +=    `<td columnName='boxWeight'>${mat.boxWeight}</td>`;
+        row +=    `<td class='amountBattery' columnName='battery' data=${mat.battery}>`;
         row +=          `<div class='battery-small-rect'></div>`;
         row +=          `<div class='battery-small-rect'></div>`;
         row +=          `<div class='battery-small-rect'></div>`;
@@ -213,7 +177,7 @@ const createMatRow = function(mat){
         row +=          `<div class='battery-small-rect'></div>`;
         row +=     `<td>`;
         row += `</tr>`
+       
     return row;
 }
-
 

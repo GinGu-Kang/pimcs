@@ -26,3 +26,11 @@ nav summary{
     color: #707070;
     
 }
+
+
+@media (max-width: 1024px) {
+
+    nav{
+        display: none;
+    }
+}

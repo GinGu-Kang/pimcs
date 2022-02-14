@@ -42,6 +42,7 @@ public class MatPageAdapter {
         private String productImage;
         private int productWeight;
         private String productName;
+
     }
     @Data
     @Builder

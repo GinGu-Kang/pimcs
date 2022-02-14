@@ -30,7 +30,6 @@ public class OrderService {
     }
 
 
-
     public void saveOrder(MatOrder matOrder, SecUserCustomForm user, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
@@ -60,8 +59,5 @@ public class OrderService {
     public List<MatCategoryOrder> findOrderList(Integer companyId){
         return matCategoryOrderRepository.findByCompanyId(companyId);
     }
-
-
-
 
 }

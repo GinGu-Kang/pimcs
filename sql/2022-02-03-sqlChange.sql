@@ -214,6 +214,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                  `userEmail` VARCHAR(60) NOT NULL,
                                                  `companyId` INT NOT NULL,
                                                  `deliveryAddress` VARCHAR(60) NULL,
+                                                 `pgOrderId` varchar (60) not null ,
                                                  `postCode` VARCHAR(40) NULL,
                                                  `depositStatus` INT NULL,
                                                  `hopeDeliveryDate` DATETIME NULL,

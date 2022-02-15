@@ -33,7 +33,9 @@
 
         $("body").click(function(e){
             if(_this.isCapturing(e.target.className)) return //캡쳐링 방지
+            
             _this.deactivate(null);
+            $("ul[aria-labelledby='dropdownMenuButton1']").removeClass("show")
         });
     }
 
@@ -57,6 +59,7 @@
      * @returns true면 캡쳐링 발생, false면 발생하지 않음
      */
     var isCapturing = function(className){
+        if(typeof(className) != "string") return true;
         if(className.search("pimcs-custom-select-btn") != -1) return true;
         else if(className.search("pimcs-custom-select") != -1) return true;
         else if(className.search("option-item") != -1) return true;

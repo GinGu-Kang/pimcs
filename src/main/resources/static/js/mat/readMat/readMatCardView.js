@@ -1,7 +1,12 @@
-
+/**
+ * 카드뷰 데이터 초기화
+ * @param {*} page 페이지네이션 현재 page
+ * @param {*} size 한페이지당 개수
+ */
 const initCardView = function({page,size}){
 
     let matData = loadTableData({page: page, size: size});
+    console.log(matData);
     createCardView(matData);
 
 }
@@ -9,6 +14,13 @@ const initCardView = function({page,size}){
 const createCardView = function(matData){
     $(".pimcs-card-container").empty();
     for(let mat of matData.data){
+        let findMat = getStorageItem(mat.id);
+        let isChecked = false;
+        if(findMat != null){ // 로컬저장된 매트데이터가 있으면 저장된 check여부 적용
+            isChecked = findMat.checked;
+        }
+        setStorage({mat:mat,isChecked: isChecked});
+
         let cardView = `<div class="pimcs-card">`;
             cardView+=      createCardViewHead(mat);
             cardView+=      createCardViewBody(mat);
@@ -20,13 +32,15 @@ const createCardView = function(matData){
 
 
 const createCardViewHead = function(mat){
+    const findMat = getStorageItem(mat.id);
+    const checked = (findMat.checked) ? 'checked' : '';
     let cardViewHead = `<div class="pimcs-card-head d-flex">`;
         cardViewHead +=     `<div>`;
         cardViewHead +=         `<p class="card-product-name text-size-middle dot3">${mat.product.productName}</p>`;
         cardViewHead +=         `<p class="card-serial-number text-size-between-middle-samll dot3">${mat.serialNumber}</p>`;
         cardViewHead +=     `</div>`;
         cardViewHead +=     `<div class="d-flex justify-content-end">`;
-        cardViewHead +=         `<input class="card-checked" type="checkbox"/>`;
+        cardViewHead +=         `<input class="card-checked" type="checkbox" data=${mat.id} ${checked}/>`;
         cardViewHead +=     `</div>`;
         cardViewHead +=`</div>`
 
@@ -35,6 +49,7 @@ const createCardViewHead = function(mat){
 }
 
 const createCardViewBody = function(mat){
+    
     let cardViewBody = `<div class="pimcs-card-body d-flex">`;
         cardViewBody +=     `<div class="info-area">`;
         cardViewBody +=         `<div>`;
@@ -69,3 +84,10 @@ const createCardViewFooter = function(mat){
         cardViewFooter+= `</div>`;
     return cardViewFooter;
 }
+
+$(document).on("change",".card-checked",function(){
+    let id = $(this).attr("data");
+    let isChecked = $(this).is(":checked");
+    let mat = getStorageItem(id);
+    setStorage({mat:mat, isChecked: isChecked})
+});

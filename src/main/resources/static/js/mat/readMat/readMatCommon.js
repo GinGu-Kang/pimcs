@@ -48,8 +48,11 @@ const pagination = function({totalPages,currentPage,size}){
         last:'',
         onPageClick: function (event, page) {
             if(currentPage != page){
-                
-                initTableData({page:page, size:size});
+                if($(".card-viewer-btn").hasClass("card-viewer-active")){
+                    initCardView({page:page, size:size});
+                }else{
+                    initTableData({page:page, size:size});
+                }
             }
         }
     });
@@ -95,7 +98,7 @@ $(document).on("click",".table-viewer-btn",function(){
 
     $(".pimcs-table").addClass("content-display");
     $(".pimcs-card-container").removeClass("content-display");
-
+    initTableData({page:1, size:10});
 });
 
 /**

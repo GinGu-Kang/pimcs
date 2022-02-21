@@ -5,58 +5,112 @@
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/signUp.css" />
     <style>
-        .email_ok{color:black; display: none;}
-        .email_already{color:#6A82FB; display: none;}
-        .company_ok{color:black; display: none;}
-        .company_already{color:#6A82FB; display: none;}
+
 
     </style>
 </head>
 <body>
 
 
-<section>
-    <h1>회원가입 페이지</h1>
-</section>
+<div class="workerForm">
+    <img src="/img/logo2.png" ><br>
+    <form id="signUp" name="signUp" th:action="@{/auth/signUp}" method="post" onsubmit="return checkForm()">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /><br>
+        <input type="hidden" name="enabled" value="true" /><br>
 
-<section>
-
-
-    <form name="signUp" th:action="@{/auth/signUp}" method="post">
-        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-        <input type="hidden" name="enabled" value="true" />
-        <span class="email_ok">사용 가능한 아이디입니다.</span>
-        <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span><br>
-        아이디<br>
-        <input type="text" id = "email" name="email" placeholder="이메일 입력" autocomplete="username" onblur="checkEmail()"/><br>
-        회사코드입력<br>
         <span class="company_ok">확인되었습니다.</span>
         <span class="company_already">존재하지 않는 회사코드입니다.</span><br>
-        <input type="text" id = "company" name="companyCode" placeholder="이메일 입력" value="회사코드입력" onblur="checkCompany()"/><br>
+        <input type="text" id = "company" name="companyCode" placeholder="회사 코드"  onblur="checkCompany()" required /><br><br>
+
+        <input  type="text" name="name" placeholder="이름" required><br><br>
+
+        <input  type="number" name="phone" placeholder="전화번호" maxlength="11" oninput="maxLengthCheck(this)" required><br><br>
+
+        <input  type="text" name="department" placeholder="소속 부서" required><br><br>
+
+        <span class="email_ok">사용 가능한 아이디입니다.</span>
+        <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span><br>
+        <input type="email" id = "email" name="email" placeholder="이메일" onblur="checkEmail()" required />
 
 
-        비밀번호<br>
-        <input type="password" name="password" placeholder="123456"><br>
-        이름<br>
-        <input type="text" name="name" placeholder="이름입력"><br>
-        <br>
-        핸드폰 번호 입력<br>
-        <input type="number" name="phone" placeholder="11"><br>
-        부서<br>
-        <input type="text" name="department" placeholder="이름입력"><br>
         <br><br>
 
-        <input type="submit"  value="제출">
+
+        <input class="input" type="password" name="password" id="password" placeholder="비밀번호" required onchange="check_password()"><br><br>
+
+        <input class="input" type="password" id="passwordVerify" placeholder="비밀번호 확인" required onchange="check_password()"><br><br>
+
+        <div class="check_box" >
+            <input type="checkbox" name="auto_login" value="자동 로그인"> 이용약관 및 개인정보 처리방침에 동의합니다.
+        </div>
+
+        <br>
+
+        <input  class="button" type="submit"  value="확인">
 
     </form>
-</section>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    function check_password(){
+
+        var password = document.getElementById('password').value;
+        var SC = ["!","@","#","$","%"];
+        var check_SC = 0;
+
+        if(password.length < 6 || password.length>16){
+            window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');
+            document.getElementById('password').value='';
+        }
+        for(var i=0;i<SC.length;i++){
+            if(password.indexOf(SC[i]) != -1){
+                check_SC = 1;
+            }
+        }
+        if(check_SC == 0){
+            window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')
+            document.getElementById('password').value='';
+        }
+        if(document.getElementById('password').value !='' & document.getElementById('passwordVerify').value!=''){
+            if(document.getElementById('password').value==document.getElementById('passwordVerify').value){
+                document.getElementById('check').innerHTML='비밀번호가 일치합니다.'
+                document.getElementById('check').style.color='blue';
+            }
+            else{
+                document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+                document.getElementById('check').style.color='red';
+            }
+        }
+    }
+</script>
 <script type="text/javascript">
+
+    function checkForm(){
+
+        if($('.email_ok').css("display")=="none"){
+            $('#email').focus();
+            alert("이메일을 확인 해주세요.");
+            return false
+        }else if($('.company_ok').css("display")=="none"){
+            $('#company').focus();
+            alert("회사코드를 확인 해주세요.");
+            return false
+        }else{
+            return true
+        }
+
+    }
     function checkEmail(){
         var email = $('#email').val();
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
+        var form = $("#signUp")
 
         $.ajax({
             url:'/auth/idCheck',
@@ -68,9 +122,9 @@
             },
             success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다
                 if(isEmail){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-                    console.log("왜이래");
                     $('.email_already').css("display", "none");
                     $('.email_ok').css("display","inline-block");
+
                 } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
                     $('.email_already').css("display","inline-block");
                     $('.email_ok').css("display", "none");
@@ -86,6 +140,7 @@
         var company = $('#company').val();
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
+        var form = $("#signUp")
 
 
         $.ajax({
@@ -101,9 +156,11 @@
 
                     $('.company_already').css("display", "none");
                     $('.company_ok').css("display","inline-block");
+
                 } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
                     $('.company_already').css("display","inline-block");
                     $('.company_ok').css("display", "none");
+
                 }
             },
             error:function(){
@@ -111,6 +168,13 @@
             }
         });
     };
+
+
+    function maxLengthCheck(object){
+        if (object.value.length > object.maxLength){
+            object.value = object.value.slice(0, object.maxLength);
+        }
+    }
 </script>
 
 </body>

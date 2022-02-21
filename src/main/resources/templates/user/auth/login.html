@@ -2,21 +2,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <meta charset="UTF-8">
     <title>Spring Security Example </title>
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/login.css" />
+
+
 </head>
 <body>
-<div th:if="${param.error}">
-    Invalid username and password.
-</div>
-<div th:if="${param.logout}">
-    You have been logged out.
+<div class="wrraper">
+<section class="loginForm">
+    <img src="/img/logo2.png" ><br><br>
+<div th:if="${param.error}" class="failedMessage">
+    <p>아이디가 존재하지 않거나 비밀번호가 틀립니다.</p>
 </div>
 <form th:action="@{/auth/login}" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-    <div><label> User Name : <input type="text" name="email"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
-</form>
 
+    <section class="textWrraper">
+
+        <input class="e_mail"  type="text" required placeholder="이메일" name = "email">
+        <br><br>
+
+        <input class="password" type="password" required placeholder="비밀번호" name = "password">
+        <br><br>
+    </section>
+
+    <p class="check_box" ><input type="checkbox" name="auto_login" value="자동 로그인"> 자동 로그인 </p>
+    <br>
+
+    <input class="button" type="submit"  value="로그인">
+    <br><br>
+    <section class="loginForm-footer">
+        <a href='#' class="text"> 이메일 찾기 </a><span>&nbsp;|&nbsp;</span>
+        <a href='#' class="text"> 비밀번호 찾기 </a><span>&nbsp;|&nbsp;</span>
+        <a href='회사_사원_등록.html' class="text"> 회원가입 </a>
+    </section>
+</form>
+</section>
+</div>
 </body>
 </html>

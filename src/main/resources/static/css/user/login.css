@@ -1,0 +1,126 @@
+
+
+.failedMessage{
+    text-align: left;
+    color: red;
+}
+
+img{
+    width: 10vmax;
+    height: 6vmax;
+}
+
+.box form{
+    width: 100%;
+    height: 100%;
+}
+
+
+.wrraper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginForm-footer{
+    width: 100%;
+    font-size: 22px;
+    margin-top: 1vmax;
+
+}
+.loginForm-footer a,span{
+    width: 30%;
+    text-align: center;
+    text-decoration:none;
+    font-family: Roboto;
+    font-size: 1.0vmax;
+    opacity: 0.5;
+    font-weight: normal;
+    color: #383838;
+}
+.loginForm-footer span{
+    padding: 0 1vmax;
+}
+
+/* .text{
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+} */
+.textWrraper input{
+    width: 90%;
+    height: 5vh;
+    margin: 20px 0 0;
+    padding: 1% 5%;
+    border-radius: 0.4vmax;
+    border:none;
+    box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+    font-size:1vmax;
+    font-family: Roboto;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: #707070;
+}
+
+.button {
+    border:1px solid;
+    width: 100%;
+    height: 5.6vh;
+    margin: 24px 0 0;
+    padding: 8px;
+    border-radius: 0.4vmax;
+    box-shadow:  0px 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #4282ff;
+    font-family: Roboto;
+    font-size: 1vmax;
+    font-weight: normal;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: center;
+    color: #fff;
+}
+
+.loginForm{
+    display: inline-block;
+    height: 100vw;
+    width: 25vw;
+    text-align: center;
+    margin: 0;
+    vertical-align: middle;
+    margin-top: 10%;
+
+}
+
+
+
+
+
+
+
+
+.check_box{
+    margin-top: 1vmax;
+
+    font-size: 1vmax;
+    color: #3c3c3c;
+    text-align: left;
+
+}
+
+.check_box input[type="checkbox"]{
+    border-radius: 50%;
+    vertical-align:-0.1vmax;
+    width: 1vmax; /*Desired width*/
+
+    height: 1vmax; /*Desired height*/
+
+
+}

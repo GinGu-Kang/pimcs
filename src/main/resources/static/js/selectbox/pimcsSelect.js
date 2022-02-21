@@ -8,6 +8,7 @@
     const SelectBox = function(){   
         this.select = $(".pimcs-select");
         
+        if($(this.select).length == 0) return;
         this.options = this.getOptionsValue();
         if(this.options.length == 0) throw Error("option태그가 존재하지 않습니다.");
         

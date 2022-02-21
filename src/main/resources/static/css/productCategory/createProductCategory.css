@@ -1,0 +1,73 @@
+.product-category-container > div{
+    
+    margin-right: 58px;
+    float: left;
+}
+.product-category-container > div:last-child{
+    margin-right: 0px;
+}
+.product-category-container .card{
+    width: 274px;
+    height: 155px;
+    border: 1px solid #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    
+}
+.product-category-container .card-label{
+    font-weight: bold;
+    margin-bottom: 29px;
+}
+
+.product-category-container .category-name-label{
+    font-weight: bold;
+    margin-top: 29px;
+    margin-bottom: 12px;
+    margin-left: 10%;
+}
+.product-category-container .input{
+    width: 80%;
+    height: 29px;
+    margin: 0 auto;
+  
+}
+.product-category-container .save-btn{
+    width: 70%;
+    height: 29px;
+    margin-top: 18px;
+}
+
+.product-category-container .vertical-line{
+    width: 1px;
+    height: 155px;
+    margin-top: 49px;
+    background-color: #d9d9d9;
+   
+}
+
+.product-category-container .input-group{
+    width: 80%;
+    height: 29px;
+    margin: 0 auto;
+    margin-top: 12px;
+}
+.product-category-container .input-group-text{
+    height: 29px;
+}
+
+
+.category-name-list{
+    width: 100%;
+    height: 100%;
+    list-style: none;
+    margin-top: 9px;
+    overflow-x:hidden; 
+    overflow-y:auto;
+}
+.category-name-list::-webkit-scrollbar-thumb {background-color: #c7d6ff;}
+.category-name-list::-webkit-scrollbar-track{background-color: #c7d6ff;}
+
+.category-name-list > li{
+    margin-left: 13px;
+    margin-top: 3px;
+}

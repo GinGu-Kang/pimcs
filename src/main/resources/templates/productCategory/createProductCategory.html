@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+    <head>
+        <title>제품카테고리등록</title>
+        <link rel="stylesheet" href="/css/productCategory/createProductCategory.css"/>
+    </head>
+    <div layout:fragment="content" class="content product-category-container">
+        <!--카테고리 등록-->
+        <div class="card-conatiner">
+            <p class="text-size-middle card-label">카테고리 등록</p>
+            <div class="card">
+                <form>
+                    <p class="text-size-between-middle-samll category-name-label">카테고리 명</p>
+                    <input class="pimcs-blue-input input"/>
+                    
+                    <div class="text-center">
+                        <input type="submit" class="pimcs-blue-btn text-size-between-middle-samll save-btn" value="저장하기"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="vertical-line"></div>
+        <!--등록된 카테고리-->
+        <div class="card-conatiner">
+            <p class="text-size-middle card-label">카테고리 등록</p>
+            <div class="card">
+                <form>
+                    <div class="input-group">
+                        <input type="text" class="pimcs-blue-search-input input category-name-search">
+                        
+                        <div class="input-group-append">
+                          <span class="input-group-text">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#afafaf" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                          </span>
+                        </div>
+                      </div>
+                </form>
+                <ul class="category-name-list">
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                    <li class="text-size-between-middle-samll">일식</li>
+                    <li class="text-size-between-middle-samll">양식</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</html>

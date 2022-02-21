@@ -54,17 +54,6 @@ public class MatController {
     public MatPageAdapter ajaxLoadMatData(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                            Pageable pageable){
         Page<Mat> pageMats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
-        System.out.println("=========");
-        System.out.println(pageMats);
-        System.out.println(pageMats.getNumber());
-        for(Mat mat : pageMats){
-            System.out.println(mat.getId());
-            System.out.println(mat.getSerialNumber());
-            System.out.println(mat.getBattery());
-            break;
-        }
-
-        System.out.println("=========");
         return  new MatControllerUtils().createMatPageAdapter(pageMats,secUserCustomForm.getCompany());
     }
 

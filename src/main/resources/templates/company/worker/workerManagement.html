@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -13,16 +13,18 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
-<table>
+<div layout:fragment="content"  class="content">
+
+
+<table class="table pimcs-table">
     <thead>
-    <th>이름</th>
-    <th>이메일</th>
-    <th>전화번호</th>
-    <th>부서</th>
-    <th>더미</th>
-    <th>재고관리권한</th>
-    <th>사원관리권한</th>
+    <th scope="col" class="text-center">이름</th>
+    <th scope="col" class="text-center">이메일</th>
+    <th scope="col" class="text-center">전화번호</th>
+    <th scope="col" class="text-center">부서</th>
+    <th scope="col" class="text-center">더미</th>
+    <th scope="col" class="text-center">재고관리권한</th>
+    <th scope="col" class="text-center">사원관리권한</th>
 
     </thead>
     <tbody>
@@ -39,8 +41,6 @@
     </tr>
     </tbody>
 </table>
-
-</body>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
 
@@ -119,4 +119,5 @@
 
 
 </script>
+</div>
 </html>

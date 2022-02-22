@@ -41,6 +41,11 @@ img{
 .loginForm-footer span{
     padding: 0 1vmax;
 }
+input[type=button]:hover,input[type=submit]:hover{
+    background-color: #9ab3f1;
+    cursor: pointer;
+
+}
 
 /* .text{
     font-stretch: normal;

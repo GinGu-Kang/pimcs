@@ -7,50 +7,35 @@
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <style>
-        .email_ok{color:black; display: none;}
-        .email_already{color:#6A82FB; display: none;}
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/companyRegistration.css" />
 
-
-    </style>
     <title>회사 등록</title>
 
 </head>
 <body>
 
 <section>
-    <h1>회사등록 페이지</h1>
-</section>
+    <div class="companyForm">
+        <img src="/img/logo2.png" ><br>
 
-<section>
-    <form name="signUp" th:action="@{/company/registration}" method="post">
+        <form name="signUp" th:action="@{/company/registration}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="enabled" value="true" />
 
-        회사이름<br>
-        <input type="text" name="companyName" placeholder="이메일 입력" ><br>
-        회사주소<br>
-        <input type="text" name="companyAddress" placeholder="이메일 입력" ><br>
-        상세주소<br>
+        <input type="text" name="companyName" placeholder="회사 이름" ><br>
+        <input type="text" name="companyAddress" placeholder="회사 주소" ><br>
         <input type="text" name="companyAddressdetail" placeholder="이메일 입력" ><br>
-        회사 전화번호<br>
         <input type="text" name="contactPhone" placeholder="이메일 입력" ><br>
-        업종<br>
         <input type="text" name="businessCategoryName" placeholder="이메일 입력" ><br>
 
-        이름<br>
         <input type="text"   name="name" placeholder="이메일 입력" ><br>
-        전화번호<br>
         <input type="text" name="phone" placeholder="이메일 입력" ><br>
         <span class="email_ok">사용 가능한 아이디입니다.</span>
         <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span><br>
-        이메일<br>
         <input type="text" id = "email" name="ceoEmail" placeholder="이메일 입력" autocomplete="username" onblur="checkEmail()"/><br>
-        소속 부서<br>
         <input type="text" name="department" placeholder="회사 코드입력"><br>
-        비밀번호<br>
         <input type="password" name="password" placeholder="123456"><br>
-        비밀번호확인<br>
         <input type="text" name="passwordVerify" placeholder="이름입력"><br>
         <br><br>
 
@@ -58,40 +43,43 @@
 
     </form>
     <!--이용약관 추가하기-->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/user/signUp.js" ></script>
+    </div>
 </section>
 
 
 </body>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script type="text/javascript">
-    function checkEmail(){
-        var email = $('#email').val();
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
+<!--<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--    function checkEmail(){-->
+<!--        var email = $('#email').val();-->
+<!--        var token = $("meta[name='_csrf']").attr("content");-->
+<!--        var header = $("meta[name='_csrf_header']").attr("content");-->
 
-        $.ajax({
-            url:'/auth/idCheck',
-            type:'post',
-            data:{email:email},
-            beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                xhr.setRequestHeader(header, token);
-            },
-            success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다
-                if(isEmail){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
-                    console.log("왜이래");
-                    $('.email_already').css("display", "none");
-                    $('.email_ok').css("display","inline-block");
-                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
-                    $('.email_already').css("display","inline-block");
-                    $('.email_ok').css("display", "none");
-                }
-            },
-            error:function(){
-                alert("에러입니다");
-            }
-        });
-    };
+<!--        $.ajax({-->
+<!--            url:'/auth/idCheck',-->
+<!--            type:'post',-->
+<!--            data:{email:email},-->
+<!--            beforeSend : function(xhr)-->
+<!--            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/-->
+<!--                xhr.setRequestHeader(header, token);-->
+<!--            },-->
+<!--            success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다-->
+<!--                if(isEmail){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디-->
+<!--                    console.log("왜이래");-->
+<!--                    $('.email_already').css("display", "none");-->
+<!--                    $('.email_ok').css("display","inline-block");-->
+<!--                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디-->
+<!--                    $('.email_already').css("display","inline-block");-->
+<!--                    $('.email_ok').css("display", "none");-->
+<!--                }-->
+<!--            },-->
+<!--            error:function(){-->
+<!--                alert("에러입니다");-->
+<!--            }-->
+<!--        });-->
+<!--    };-->
 
-</script>
+<!--</script>-->
 </html>

@@ -45,7 +45,7 @@ public class UserAuthController {
     @PostMapping("/signUp")
     private String signUp(User user){
         userAuthService.signUp(user);
-        return "user/auth/login.html";
+        return "redirect:/auth/login";
     }
 
     //회원정보수정

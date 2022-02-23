@@ -298,8 +298,8 @@ tbody td{
     .inquery-mat-header-left-box{
         width: 100%;
         justify-content: center;
-        
-        
+
+
     }
     .inquery-mat-header-right-box,
     .action-btn-right-container{
@@ -313,7 +313,7 @@ tbody td{
         justify-content: start;
         margin-left: 64px;
     }
-        
-    
-    
+
+
+
 }

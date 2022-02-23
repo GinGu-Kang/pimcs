@@ -1,4 +1,8 @@
 
+.email_ok{color:#6A82FB; display: none;}
+.email_already{color: #ff003e; display: none;}
+.pw-text{color: #ff003e; display: none;text-align: left;}
+.email-guide{color: #ff003e;}
 body{
     display: flex;
     justify-content: center;
@@ -8,6 +12,10 @@ body{
 img{
     width: 10vmax;
     height: 6vmax;
+}
+form span{
+    width: 90%;
+    text-align: left;
 }
 input,select {
     width: 90%;
@@ -189,3 +197,4 @@ input[type="checkbox"]{
 
 
 }
+

@@ -3,8 +3,9 @@
 .company_ok{color:#6A82FB; display: none;text-align: left;}
 .company_already{color:#ff003e; display: none;text-align: left;}
 .pw-text{color: #ff003e; display: none;text-align: left;}
+
 span{
-    width: 90%;
+    width: 90vw;
     text-align: left;
 }
 body{

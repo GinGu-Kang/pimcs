@@ -1,0 +1,64 @@
+/**/
+th,td {padding:15px;}
+td{
+    text-align: center;
+}
+/*액션 전체 컨테이너*/
+.action-btn-container{
+    width: 97%;
+    display: flex;
+    padding: 20px 0;
+}
+/*검색 바 컨테이너*/
+.search-select{
+    font-size: 13px;
+    font-weight: normal;
+    width: 120px;
+    height: 28px;
+    border-radius: 6px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+}
+.inquery-mat-header-left-box{
+    display: flex;
+    width: 100%;
+    justify-content: left;
+}
+.inquery-mat-header-right-box,
+/*임계값미달, 휴지통 아이콘*/
+.action-btn-right-container{
+    display: flex;
+    width: 100%;
+    justify-content:right;
+    padding-right: 4.2%;
+}
+.select-worker-display{
+    width: 93px;
+    height: 28px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+    color: #333;
+    font-size: 12px;
+    border-radius: 6px;
+    line-height: 27px;
+    text-align: center;
+    cursor: pointer;
+    margin-right: 14px;
+}
+.square{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    margin-right: 14px;
+    background-color: #fff;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    text-align: center;
+    cursor: pointer;
+}
+
+

@@ -5,8 +5,8 @@
         var verifyText=$('#pw-verify-text');
         var password =$('#password').val();
         var passwordVerify =$('#password-verify').val();
-        var eng = password.search(/[a-z]/ig);
-        var spe=password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
+        var eng = password.search(/[a-z]/g);
+        var spe=password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/g);
         var num=password.search(/[0-9]/g);
 
 
@@ -63,6 +63,7 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var form = $("#signUp")
+
 
         $.ajax({
             url:'/auth/idCheck',

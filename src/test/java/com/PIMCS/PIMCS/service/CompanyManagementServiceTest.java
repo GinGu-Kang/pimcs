@@ -25,14 +25,14 @@ public class CompanyManagementServiceTest {
     @Autowired
     CompanyManagementService companyManagementService;
 
-    @DisplayName("Fetch Join 테스트")
-    @Test
-    public void findMyCompanyWorkersTest(){
-        List<User> myCompanyWorkes=companyManagementService.findMyCompanyWorker("code123");
-        for (User user:myCompanyWorkes) {
-            System.out.println(user.getAuthorities());
-        }
-    }
+//    @DisplayName("Fetch Join 테스트")
+//    @Test
+//    public void findMyCompanyWorkersTest(){
+//        List<User> myCompanyWorkes=companyManagementService.findMyCompanyWorker();
+//        for (User user:myCompanyWorkes) {
+//            System.out.println(user.getAuthorities());
+//        }
+//    }
     @Test
     @Commit
     public void saveCompanyTest(){

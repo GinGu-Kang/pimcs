@@ -17,4 +17,6 @@ public interface UserRepository extends JpaRepository<User,String> {
 
 //    @EntityGraph(value = "User.userRoles")
     List<User> findByCompany(Company company);
+    List<User> findByCompanyAndDepartment(Company company,String department);
+    List<User> findByCompanyAndName(Company company,String name);
 }

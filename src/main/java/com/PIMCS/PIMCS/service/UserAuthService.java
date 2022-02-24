@@ -64,8 +64,10 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     public void deleteUser(String email){
         userRepository.deleteByEmail(email);
     }
+
     public String userUpdate(User user){
         boolean isUser=userRepository.findByEmail(user.getEmail()).isPresent();
+
         if(isUser){
             userRepository.save(user);
         }else{

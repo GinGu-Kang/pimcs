@@ -62,19 +62,33 @@ public class CompanyManagementController {
         return "user/auth/login";
     }
 
-
+    //회사원 전체 조회
     @GetMapping("worker")
     public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompany().getCompanyCode());
+        List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompany());
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }
+    //필터링 조회
+    @PostMapping("worker")
+    public String searchCompanyWorkerManagement(String searchVal,String selectOption,Model model, @AuthenticationPrincipal SecUserCustomForm user){
+        System.out.println(searchVal);
+        System.out.println(selectOption);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
+        List<User> companyWorker=companyManagementService.filterMyCompanyWorker(searchVal,selectOption,user.getCompany());
+        model.addAttribute("companyWorker",companyWorker);
+        return "company/worker/workerManagement";
+    }
+
+
     @PostMapping("give/authority")
     @ResponseBody
     public boolean giveAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
         boolean isEqualCompany=companyManagementService.userRoleSave(email,authority,user.getCompany().getCompanyCode());
         return isEqualCompany;
     }
+
     @PostMapping("remove/authority")
     @ResponseBody
     public boolean removeAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){

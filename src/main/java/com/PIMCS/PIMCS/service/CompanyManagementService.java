@@ -39,9 +39,26 @@ public class CompanyManagementService {
     }
 
 
-    public List<User> findMyCompanyWorker(String companyCode){
-        Company company = companyRepository.findByCompanyCode(companyCode).get();
-        List<User> myCompanyWorkers =company.getCompanyWorker();
+    //회사원 전체검색
+    public List<User> findMyCompanyWorker(Company company){
+        List<User> myCompanyWorkers =userRepository.findByCompany(company);
+        return myCompanyWorkers;
+    }
+
+    //회사원 필터링 검색
+    public List<User> filterMyCompanyWorker(String searchVal,String selectOption,Company company){
+        List<User> myCompanyWorkers= new ArrayList<>();
+
+        switch (selectOption){
+            case "이름":
+                myCompanyWorkers =userRepository.findByCompanyAndName(company,searchVal);
+                break;
+            case "부서":
+                myCompanyWorkers =userRepository.findByCompanyAndDepartment(company,searchVal);
+                break;
+
+        }
+
         return myCompanyWorkers;
     }
 

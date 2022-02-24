@@ -1,0 +1,30 @@
+package com.PIMCS.PIMCS.service;
+
+import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class ProductCategoryService {
+    private final ProductCategoryRepository productCategoryRepository;
+
+    @Autowired
+    public ProductCategoryService(ProductCategoryRepository productCategoryRepository) {
+        this.productCategoryRepository = productCategoryRepository;
+    }
+
+    public List<ProductCategory> readProductCategoryService(Company company){
+        return productCategoryRepository.findByCompany(company);
+    }
+
+    public int createProductCategoryService(ProductCategory productCategory){
+        productCategoryRepository.save(productCategory);
+
+        return productCategory.getId();
+    }
+}

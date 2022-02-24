@@ -1,0 +1,18 @@
+<!-- image crop modal -->
+<div th:fragment="imageCropModal" class="modal fade" id="imageCropModal" tabindex="-1" aria-labelledby="imageCropModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body">
+            <img id="edit-img" style="display:block; max-width:100%;" src="/img/crop.png">
+        </div>
+        <div class="button-container d-flex justify-content-center">
+            <a class="modal-cancel-btn">
+              <i class="bi bi-x-lg cancel-btn-icon"></i>
+            </a>
+            <a class="modal-completion-btn">
+              <i class="bi bi-check-lg completion-btn-icon"></i>
+            </a>
+        </div>
+      </div>
+    </div>
+</div>

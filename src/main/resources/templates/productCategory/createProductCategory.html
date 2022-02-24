@@ -3,15 +3,22 @@
     <head>
         <title>제품카테고리등록</title>
         <link rel="stylesheet" href="/css/productCategory/createProductCategory.css"/>
+        <script src="/js/productCategory/createProductCategory.js"></script>
+        <script>
+            jQuery(function ($) {
+                init();
+            });
+        </script>
     </head>
     <div layout:fragment="content" class="content product-category-container">
         <!--카테고리 등록-->
         <div class="card-conatiner">
             <p class="text-size-middle card-label">카테고리 등록</p>
             <div class="card">
-                <form>
+                <form th:action="@{/product/category/create}" method="post">
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <p class="text-size-between-middle-samll category-name-label">카테고리 명</p>
-                    <input class="pimcs-blue-input input"/>
+                    <input required name="categoryName" class="pimcs-blue-input input"/>
                     
                     <div class="text-center">
                         <input type="submit" class="pimcs-blue-btn text-size-between-middle-samll save-btn" value="저장하기"/>
@@ -22,8 +29,8 @@
         <div class="vertical-line"></div>
         <!--등록된 카테고리-->
         <div class="card-conatiner">
-            <p class="text-size-middle card-label">카테고리 등록</p>
-            <div class="card">
+            <p class="text-size-middle card-label">등록된 카테고리</p>
+            <div class="card category-lis-card">
                 <form>
                     <div class="input-group">
                         <input type="text" class="pimcs-blue-search-input input category-name-search">
@@ -37,19 +44,12 @@
                         </div>
                       </div>
                 </form>
-                <ul class="category-name-list">
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
-                    <li class="text-size-between-middle-samll">일식</li>
-                    <li class="text-size-between-middle-samll">양식</li>
+                <ul class="categories">
+                    
+                    <li class="category d-flex"  th:each="productCategory : ${productCategories}">
+                        <p th:data="${productCategory.getId()}" th:text="${productCategory.getCategoryName()}" class="categories-name-text text-size-between-middle-samll"></p>
+                        <i class="bi bi-x-lg delete-category-btn text-size-between-middle-samll" th:data="${productCategory.getId()}"></i>
+                    </li>
                 </ul>
             </div>
         </div>

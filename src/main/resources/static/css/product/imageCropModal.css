@@ -1,0 +1,28 @@
+
+#imageCropModal .modal-body, #imageCropModal .modal-content{
+    width: 66vw;
+    height: 60vh;
+    padding: 0;
+}
+.modal-cancel-btn, .modal-completion-btn{
+    display: block;
+    width: 32px;
+    height: 32px;
+    background-color: #0d0d0d;
+    border-radius: 20px;
+    text-align: center;
+    margin: 7px;
+    margin-top: 29px;
+}
+
+.cancel-btn-icon{
+    color: #fff;
+    font-size: 17px;
+    line-height: 30px;
+
+}
+.completion-btn-icon{
+    color: #fff;
+    font-size: 20px;
+    line-height: 31px;   
+}

@@ -15,7 +15,7 @@ public class ProductController {
      */
     @GetMapping("/create")
     public String createForm(){
-        return null;
+        return "product/createProduct";
     }
     @PostMapping("/create")
     public String create(){

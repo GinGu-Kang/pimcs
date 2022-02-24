@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <title>제품등록</title>
+    <script>
+        
+        
+    </script>
+    <!--cropper-->
+    <link rel="stylesheet" type="text/css" href="https://fengyuanchen.github.io/cropperjs/css/cropper.css">
+    <script src="https://fengyuanchen.github.io/cropper/js/cropper.js"></script>
+    <!--createProduct-->
+    <link rel="stylesheet" href="/css/product/createProduct.css"/>
+    <script src="/js/product/createProduct.js"></script>
+    <!--modal-->
+    <link rel="stylesheet" href="/css/product/imageCropModal.css"/>
+    <script src="/js/product/imageCropModal.js"></script>
+    
+</head>
+    <div layout:fragment="content" class="content create-product-container">
+        <!--image crop modal-->
+        <div th:replace="product/createProduct/modal/imageCropModal :: imageCropModal"></div>
+        <!--end-->
+        
+        <h4 class="text-size-between-large-middle page-title">제품 등록</h4>
+        <form class="card-container" th:action="@{/product/create}" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+             <!--card view-->
+             <div class="dynamic-cardview-container">
+                <!--동작생성-->
+                
+             </div>
+            <!--end-->
+             <!-- <div class="append-card-view-btn" onclick="appendCardView()">
+                <img src="/img/plus-blue-icon.png"/>
+            </div> -->
+            
+            <input type="submit" class="pimcs-blue-btn text-size-between-middle-samll" value="저장하기"/>
+        </form>
+
+        <script>
+            const imageCropModal = new bootstrap.Modal(document.getElementById('imageCropModal'), {keyboard: false});
+        </script>
+    </div>
+
+</html>
+

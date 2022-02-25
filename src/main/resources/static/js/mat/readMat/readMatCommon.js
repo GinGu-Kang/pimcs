@@ -36,10 +36,31 @@ const getStorageItem = function(key){
  * @param size 한페이지에 보여지는 개수
  */
 const pagination = function({totalPages,currentPage,size}){
-    $(".pagination").twbsPagination('destroy'); // 페이지네이션 객체를 ram에서 소멸
-    $(".pagination").twbsPagination({
+    $("#desktop-pagination").twbsPagination('destroy'); // 페이지네이션 객체를 ram에서 소멸
+    $("#mobile-pagination").twbsPagination('destroy');
+    //데스크탑용 페이지네이션 생성
+    $("#desktop-pagination").twbsPagination({
         totalPages:totalPages,    
         visiblePages:5,    
+        startPage: (currentPage != 0) ? currentPage : 1,
+        initiateStartPageClick:false,
+        prev:'<',
+        next:'>',
+        first:'',
+        last:'',
+        onPageClick: function (event, page) {
+            if(currentPage != page){
+                if($(".card-viewer-btn").hasClass("card-viewer-active")){
+                    initCardView({page:page, size:size});
+                }else{
+                    initTableData({page:page, size:size});
+                }
+            }
+        }
+    });
+    $("#mobile-pagination").twbsPagination({
+        totalPages:totalPages,    
+        visiblePages:3,    
         startPage: (currentPage != 0) ? currentPage : 1,
         initiateStartPageClick:false,
         prev:'<',

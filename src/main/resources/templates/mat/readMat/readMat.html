@@ -22,9 +22,9 @@
     <!--display setting 모달 include-->
     <div th:replace="mat/readMat/modal/displaySettingModal :: displaySettingModal"></div>
 
-    <!--매트조회 헤더-->
-    <div class="inquery-mat-header col-md-12 d-flex">
-        <!--header left box-->
+    <!--DESKTOP 매트조회 헤더-->
+    <div class="inquery-mat-header col-md-12">
+        <!--DESKTOP header left box-->
         <div class="inquery-mat-header-left-box col-md-6 d-flex">
             <select class="pimcs-select text-size-middle">
                 <option>Search</option>
@@ -34,7 +34,7 @@
                 <input class="search-input text-size-middle" placeholder="Search All"/>
             </div>
         </div>
-        <!--header right box-->
+        <!--DESKTOP header right box-->
         <div class="inquery-mat-header-right-box col-md-6 d-flex">
             <div class="show-item-container">
                 show
@@ -53,9 +53,26 @@
 
         </div>
     </div>
-    <!--ACTION BUTTON CONTAINER-->
-    <div class="action-btn-container d-flex">
-        <!--ACTION BUTTON LEFT CONTAINER-->
+    <!--DESKTOP 매트조회 헤더-->
+    <div class="mobile-inquery-mat-header col-md-12">
+        <div class="d-flex">
+            <select class="pimcs-select text-size-middle">
+                <option>Search</option>
+                <option>시리얼 번호</option>
+            </select>
+            <div class="search-input-container">
+                <input class="search-input text-size-middle" placeholder="Search All"/>
+            </div>
+        </div>
+        <div class="viewer-btn-container d-flex">
+            <div class="table-viewer-btn table-viewer-active"></div>
+            <div class="card-viewer-btn"></div>
+        </div>
+    </div>
+    
+    <!--DESKTOP ACTION BUTTON CONTAINER-->
+    <div class="action-btn-container">
+        <!--DESKTOP ACTION BUTTON LEFT CONTAINER-->
         <div class="action-btn-left-container d-flex">
             <div class="square">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff"  class="bi bi-wrench" viewBox="0 0 16 16">
@@ -78,36 +95,86 @@
                 선택된 재고: <span class="inventory-cnt-viewer">0</span>
             </p>
         </div>
-        <!--ACTION BUTTON RIGHT CONTAINER-->
+        <!--DESKTOP ACTION BUTTON RIGHT CONTAINER-->
         <div class="action-btn-right-container d-flex">
-            <div class="rect">임계값 미달 목록</div>
-            <div class="rect">CSV Download</div>
-            <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Display Setting</div>
+            <div class="rect">임계 값미달</div>
+            <div class="rect">CSV</div>
+            <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Setting</div>
         </div>
     </div>
-    <!--PAGINATION-->
-    <div aria-label="Page navigation" class="d-flex justify-content-center">
-        <ul class="pagination text-size-between-middle-samll"></ul>
+    <!--MOBILE ACTION BUTTON CONTAINER-->
+    <div class="mobile-action-btn-container">
+        <div class="action-btn-left-container d-flex">
+            <div class="square">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff"  class="bi bi-wrench" viewBox="0 0 16 16">
+                    <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
+                </svg>
+            </div>
+            <div class="square">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-graph-up" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                  </svg>
+            </div>
+            <div class="square">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                </svg>
+            </div>
+            <p class="inventory-cnt-viewer-container text-size-middle">
+                선택된 재고: <span class="inventory-cnt-viewer">0</span>
+            </p>
+        </div>
+        <div class="action-btn-right-container d-flex">
+            <div class="rect">임계 값미달</div>
+            <div class="rect">CSV</div>
+            <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Setting</div>
+        </div>
+        
+    </div>
+    
+    <!--DESKTOP PAGINATION-->
+    <div aria-label="Page navigation" class="pagination-container justify-content-center">
+        <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+    </div>
+    <!--MOBLIE PAGINATION-->
+    <div class="mobile-pagination-container justify-content-end">
+        
+        <ul id="mobile-pagination" class="pagination text-size-between-middle-samll"></ul>
+        
+        
+        <div class="show-item-container">
+            show
+            <select class="show-item-select">
+                <option selected>10</option>
+                <option>25</option>
+                <option>50</option>
+                <option>100</option>
+            </select>
+            items per page
+        </div>
     </div>
     
     <!--TABLE-->
-    <table class="table pimcs-table content-display">
-        <thead>
-            <tr class="text-size-middle">
-                <th scope="col" class="text-center"><input class="all-rows-checked" type="checkbox"/></th>
-                <th scope="col" >시리얼 번호</th>
-                <th scope="col" >기기 버전</th>
-                <th scope="col" >제품명</th>
-                <th scope="col" >임계값</th>
-                <th scope="col" >현재 재고</th>
-                <th scope="col" >현재 무게</th>
-                <th scope="col" >잔여 배터리</th>
-            </tr>
-        </thead>
-        <tbody>
-        
-        </tbody>
-    </table>
+    <div class="pimcs-table-container">
+        <table class="table pimcs-table content-display">
+            <thead>
+                <tr class="text-size-middle">
+                    <th scope="col" class="text-center"><input class="all-rows-checked" type="checkbox"/></th>
+                    <th scope="col" >시리얼 번호</th>
+                    <th scope="col" >기기 버전</th>
+                    <th scope="col" >제품명</th>
+                    <th scope="col" >임계값</th>
+                    <th scope="col" >현재 재고</th>
+                    <th scope="col" >현재 무게</th>
+                    <th scope="col" >잔여 배터리</th>
+                </tr>
+            </thead>
+            <tbody>
+            
+            </tbody>
+        </table>
+    </div>
     <!--CARD VIEW-->
     <div class="pimcs-card-container">
         

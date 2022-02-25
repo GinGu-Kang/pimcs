@@ -15,8 +15,10 @@ public interface UserRepository extends JpaRepository<User,String> {
     Optional<User> findByEmail(String email);
     void deleteByEmail(String email);
 
+    List<User> findAllByEmailIn(List<String> userEmailList);
+
 //    @EntityGraph(value = "User.userRoles")
     List<User> findByCompany(Company company);
-    List<User> findByCompanyAndDepartment(Company company,String department);
-    List<User> findByCompanyAndName(Company company,String name);
+    List<User> findByCompanyAndDepartmentLike(Company company,String department);
+    List<User> findByCompanyAndNameLike(Company company,String name);
 }

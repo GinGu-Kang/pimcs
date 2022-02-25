@@ -81,6 +81,17 @@ public class CompanyManagementController {
         return "company/worker/workerManagement";
     }
 
+    /**
+     * 선택된 회사원 삭제
+     * 선택된 이메일 받아오기
+     */
+    @PostMapping("worker/remove")
+    @ResponseBody
+    public void removeSelectWorker(@RequestParam(value="selectWorkersEmail[]") List<String> selectWorkersEmail,@AuthenticationPrincipal SecUserCustomForm workerManager){
+        companyManagementService.companyWorkerDelete(selectWorkersEmail,workerManager.getCompany());
+        System.out.println(selectWorkersEmail.get(0));
+    }
+
 
     @PostMapping("give/authority")
     @ResponseBody

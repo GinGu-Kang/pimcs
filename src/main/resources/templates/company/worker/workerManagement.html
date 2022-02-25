@@ -16,8 +16,8 @@
     <title>Title</title>
 </head>
 <div layout:fragment="content"  class="content">
+    <input type="hidden" id="myEmail" th:value="${#httpServletRequest.remoteUser}">
     <section class="action-btn-container">
-                                                <!--option value column name으로 변경-->
         <form th:action="@{/company/worker}" method="post" >
             <div class="inquery-mat-header-left-box">
                     <select class="search-select" name="selectOption" >
@@ -32,7 +32,7 @@
         <div class="inquery-mat-header-right-box">
             <div class="action-btn-left-container d-flex">
                 <div class="select-worker-display" id="select-worker-display"><span id="check-display">선택된 사원: 0</span></div>
-                <div class="square">
+                <div class="square" onclick="removeSelectWorker()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
                         <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                         <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
@@ -58,7 +58,7 @@
         <tr class="worker-tr" th:each="worker:${companyWorker}">
             <td ><input type="checkbox" class="check-worker" name="check-worker" onclick="checkCount()"></td>
             <td class="name" th:text="${worker.getName()}"></td>
-            <td class="email" th:id="${worker.getEmail()}" th:text="${worker.getEmail()}"></td>
+            <td class="email" name="email[]" th:id="${worker.getEmail()}" th:text="${worker.getEmail()}+' '"></td>
             <td th:text="${worker.getPhone()}"></td>
             <td th:text="${worker.getDepartment()}"></td>
             <td th:if="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
@@ -78,136 +78,6 @@
 
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script>
-
-
-
-
-
-
-
-
-
-        //자기 자신 tr 삭제
-        var myEamil="[[${#httpServletRequest.remoteUser}]]"
-        var myTr=$('#'+myEamil).parent('tr')
-        var checkbox=myTr.find('.check-worker')
-        checkbox.attr('name','uncheck-worker')
-        myTr.remove()
-
-
-
-
-        //사원 검색
-        function searchWorker(e){
-            // $('.worker-tr').remove();
-            console.log(e)
-        }
-
-
-
-        //check 된 갯수 display
-        function checkCount(){
-            var checkDisplay=$('#check-display')
-            var checkCount=$("input:checkbox[name='check-worker']:checked").length
-            var checkboxCount=$("input:checkbox[name='check-worker']").length
-            var checkHead=$("#check-worker-head")
-            console.log(checkboxCount)
-            console.log(checkCount)
-
-            if(checkCount==checkboxCount){
-                checkHead.prop('checked',true)
-            }else{
-                checkHead.prop('checked',false)
-            }
-            checkDisplay.text("선택된 사원: "+checkCount)
-        }
-        //전체 체크
-        function checkAll(){
-            var checkHeadState=$('#check-worker-head').is(":checked");
-            var checkbox=$("input:checkbox[name='check-worker']")
-            if(checkHeadState){
-                checkbox.prop('checked', true)
-            }else{
-                checkbox.prop('checked', false)
-            }
-            checkCount();
-        }
-
-
-        //권한 수정 삭제
-        function checkEvent(checkbox){
-            var emailTd = $(checkbox).parent().parent().children(".email");
-            var email = $(emailTd).text()
-            var authority = $(checkbox).attr('class');
-            if ($(checkbox).is(':checked')){
-                giveAuthority({
-                    email:email,
-                    authority: authority,
-                    checkbox: $(checkbox)
-                });
-                alert("권한이 설정되었습니다.")
-            }
-                //throw $(e).prop("checked",true)
-            else{
-                // console.log($(checkbox))
-                removeAuthority({
-                    email:email,
-                    authority: authority,
-                    checkbox: $(checkbox)
-                });
-                alert("권한이 삭제되었습니다.")
-            }
-
-        }
-        //권한주기
-        function giveAuthority({email,authority, checkbox}){
-
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-
-            $.ajax({
-                url:'/company/give/authority',
-                type:'post',
-                data:{email:email,authority:authority},
-                beforeSend : function(xhr)
-                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                    xhr.setRequestHeader(header, token);
-                },
-                success:function (isEqualCompany){
-                    if(!isEqualCompany){
-                        alert("해당 회사의 사원만 수정할 수 있습니다.")
-                    }
-                },
-                error:function(request,status,error){
-                    alert("권한 설정에 실패하였습니다.")
-                    $(checkbox).prop("checked",false);
-                }
-            });
-
-        }
-        //권한뺏기
-      function removeAuthority({email,authority, checkbox}){
-
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-
-            $.ajax({
-                url:'/company/remove/authority',
-                type:'post',
-                data:{email:email,authority:authority},
-                beforeSend : function(xhr)
-                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-                    xhr.setRequestHeader(header, token);
-                },
-                error:function(request,status,error){
-                    alert("권한 설정에 실패하였습니다.")
-                    $(checkbox).prop("checked",true);
-                }
-            });
-
-        };
-
-    </script>
+    <script src="/js/company/workerManagement.js"></script>
     </div>
 </html>

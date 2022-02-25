@@ -51,15 +51,30 @@ public class CompanyManagementService {
 
         switch (selectOption){
             case "이름":
-                myCompanyWorkers =userRepository.findByCompanyAndName(company,searchVal);
+                myCompanyWorkers =userRepository.findByCompanyAndNameLike(company,"%"+searchVal+"%");
                 break;
             case "부서":
-                myCompanyWorkers =userRepository.findByCompanyAndDepartment(company,searchVal);
+                myCompanyWorkers =userRepository.findByCompanyAndDepartmentLike(company,"%"+searchVal+"%");
                 break;
-
         }
 
         return myCompanyWorkers;
+    }
+
+    /*선택된 회사원 삭제
+    * 회사원 들을 불러오고 companyid가 다르다면 정지.
+    *
+    * */
+    public void companyWorkerDelete(List<String> selectWorkersEmail,Company managerCompany){
+        List<User> selectWorker=userRepository.findAllByEmailIn(selectWorkersEmail);
+        selectWorker=selectWorker.stream().filter(worker -> worker.getCompany().getCompanyCode().equals(managerCompany.getCompanyCode())).collect(Collectors.toList());
+        System.out.println("가져왔따아다아다아당");
+
+        for (User user:selectWorker
+             ) {
+            System.out.println(user.getName());
+        }
+        userRepository.deleteAllInBatch(selectWorker);
     }
 
 
@@ -102,8 +117,8 @@ public class CompanyManagementService {
             return false;
         }
         return true;
-
     }
+
     public boolean userRoleDelete(String email, String authority,String companyCode){
         Optional<User> companyWorker=userRepository.findByEmail(email);
         String tartgetCompanyCode=companyWorker.get().getCompany().getCompanyCode();

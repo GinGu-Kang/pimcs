@@ -13,12 +13,18 @@
 } 
 /*BUTTON*/
 .pimcs-blue-btn{
+  display: flex;
+  width: 194px;
+  height: 29px;
   border: 1px solid #4d83f7;
   color: #fff;
   text-align: center;
   border-radius: 8px;
   box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
   background-color: #4d83f7;
+  cursor: pointer;
+  justify-content:center;
+  align-items: center;
 }
 
 /*SEARCH INPUT*/
@@ -69,14 +75,18 @@
 } */
 
 /**FORM**/
-.pimcs-blue-input{
+.pimcs-blue-input, .pimcs-gray-input{
   width: 100%;
   display: block;
   padding: 0.375rem 0.75rem;
   border: 2px solid #a8c6ff;
   border-radius: 5px;
-
 }
+.pimcs-gray-input {
+  
+  border: 2px solid #909090;
+}
+
 .pimcs-blue-search-input{
   width: 100%;
   display: block;

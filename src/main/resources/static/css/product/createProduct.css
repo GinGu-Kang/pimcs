@@ -6,10 +6,8 @@
 
 }
 .dynamic-cardview-container{
-    height: 500px;
     /* overflow-x:hidden; 
     overflow-y:auto;  */
-   
 }
 .create-product-container .card{
     width: 74%;
@@ -25,6 +23,7 @@
     padding-right: 56px;
     flex-direction: row;
     position: relative;
+    
 }
 
 .input-section{
@@ -36,6 +35,11 @@
 }
 .page-title{
     margin-left:11%;
+    margin-bottom: 14px;
+    color: #4282ff;
+}
+.registered-container{
+    margin-top: 51px;
 }
 .form-group {
     width: 209px;
@@ -59,10 +63,14 @@
     font-weight: 500;
     margin-bottom: 11px;
 }
-
+.registered-container{
+    height: 50%;
+    overflow-y:auto; 
+}
 /*IMAGE SECTION*/
 .img-section{
     margin-top: 13px;
+    
     
 }
 .img-view {
@@ -74,22 +82,18 @@
     color: #a8c6ff;
     text-align: center;
     line-height: 115px;
+    margin-top: 11px;
 }
+
 /*BUTTON*/
-.pimcs-blue-btn{
-    display: block;
-    width: 194px;
-    height: 29px;
+.save-product-btn{
     margin: 0 auto;
-    margin-top: 24px;
 }
 .delete-card-view-btn{
     position: absolute;
     right: 8px;
     top: 8px;
     color: #4d83f7;
-
-
 }
 .append-card-view-btn{
     width: 31px;

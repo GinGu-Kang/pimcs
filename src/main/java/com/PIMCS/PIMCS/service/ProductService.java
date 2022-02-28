@@ -1,32 +1,69 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Utils.FileUtils;
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.form.ProductForm;
 import com.PIMCS.PIMCS.form.SearchForm;
+import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ProductCategoryRepository productCategoryRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
         this.productRepository = productRepository;
+        this.productCategoryRepository = productCategoryRepository;
     }
 
     /**
      * 상품생성 서비스
      */
-    public String createProduct(Product product){
+    public List<ProductCategory> createProductFormService(Company company){
+        return productCategoryRepository.findByCompany(company);
+    }
 
-        productRepository.save(product);
-        return product.getProductCode();
+    /**
+     * 제품생성 만약 카테고리가 존재하지않으면 에러발생
+     * @param productForm 제품생성 폼데이터
+     * @return
+     */
+    public Product createProduct(ProductForm productForm, Company company){
+
+        Optional<ProductCategory> optProductCategory = productCategoryRepository.findById(productForm.getProductCategoryId());
+        String productImagePath = null;
+        try {
+            productImagePath = FileUtils.uploadFile(productForm.getProductImage());
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to upload file.");
+        }
+
+        if(optProductCategory.isPresent()){
+            Product product = new Product();
+            product.setProductCode(productForm.getProductCode());
+            product.setProductName(productForm.getProductName());
+            product.setProductCategory(optProductCategory.get());
+            product.setProductWeight(productForm.getProductWeight());
+            product.setCompany(company);
+            product.setProductImage(productImagePath);
+            productRepository.save(product);
+            return product;
+        }else{
+            throw new IllegalStateException("Category does not exist.");
+        }
     }
 
     /**

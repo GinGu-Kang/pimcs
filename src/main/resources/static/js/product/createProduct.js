@@ -55,30 +55,63 @@ jQuery(function ($) {
    
         });
         
-        // var contData = cropper.getContainerData(); //Get container data
-        // cropper.setCropBoxData({ height:'50v', width: '100%' })
     }
-
     /**
-     * ajax로 cardView html 요청해서 .card-container 태그에 추가
+     *  저장하기 클릭시 1개제품시 ajax를 이용해서 저장
      */
-    const appendCardView = function(){
-        let index = $(".card").length;
-        let cardViewHtml = loadGetData({
-                                url: "/product/create/cardview",
-                                data: {"index": index}
+    $(document).on("click",".save-product-btn",function(){
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+
+        let canvas = $("#edit-img").cropper('getCroppedCanvas');
+        let result = $("#preview-img").attr("src",canvas.toDataURL("image/jpeg"));
+        let formData = getFormInputValue();
+        canvas.toBlob(function(blob){
+            
+            formData.append( "productImage", blob);
+            let resultData = loadPostData({
+                                url: "/product/create",
+                                data: formData,
+                                header: {
+                                    'header': header,
+                                    'token': token
+                                }
                             });
+        });
         
-        $(".dynamic-cardview-container").append(cardViewHtml);
-    }
-
-    /**
-     * 카드뷰 추가버튼 클릭시
-     */
-    $(document).on("click",".append-card-view-btn",function(){
-        appendCardView();
+        
+        // appendRegisteredContainer(resultData);
+        // initFormInputValue();
     });
 
-    appendCardView();
+    /**
+     * 파일 제외한 모든 form input value를 FormData객체로 만들어서 return
+     */
+    const getFormInputValue = function(){
+        let formData = new FormData();
+        $("form.card-container").serializeArray().forEach(function(element){
+            formData.append(element['name'],element['value']);
+        });
+        return formData;
+    }
+
+    /**
+     * 등록된 상품영역에 등록
+     * @param {*} html 저장한 제품 cardview
+     */
+    const appendRegisteredContainer = function(html){
+        $(".registered-card-veiw").append(html);
+    }
+
+    /**
+     * form input값 및 selectbox값 초기화
+     */
+    const initFormInputValue = function(){
+        $("form.card-container input").each(function(index, element){
+            $(element).val("");
+        });
+        $("form.card-container select option").prop("selected", false);
+    }        
+
 });
 

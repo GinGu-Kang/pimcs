@@ -1,28 +1,46 @@
-<div  class="card d-flex">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="cardView (productCategories)" class="card d-flex">
     <div class="input-section">
         <div class="d-flex form-group-container">
             <!-- 제품명 -->
             <div class="form-group">
                 <p class="text-size-middle input-label">제품명</p>
-                <input th:name="|productForms[${index}].productName|" data="productName" class="pimcs-blue-input input"/>
+                <input th:if="${product != null}" readonly th:value="${product.getProductName()}" class="pimcs-gray-input input">
+                <input th:unless="${product != null}" name="productName" data="productName" class="pimcs-blue-input input"/>
             </div>
             <!--제품코드-->
             <div class="form-group">
                 <p class="text-size-middle input-label">제품 코드</p>
-                <input th:name="|productForms[${index}].productCode|" data="productCode" class="pimcs-blue-input input"/>
+                <input th:if="${product != null}" readonly th:value="${product.getProductCode()}" class="pimcs-gray-input input"/>
+                <input th:unless="${product != null}" name="productCode" data="productCode" class="pimcs-blue-input input"/>
             </div>
         </div>
         <div class="d-flex form-group-container">
             <!--제품카테고리-->
             <div class="form-group mt">
                 <p class="text-size-middle input-label">제품 카테고리</p>
-                <input th:name="|productForms[${index}].productCategory|" data="productCategory" class="pimcs-blue-input input"/>
+                <!--이미등록 된 상품일때-->
+                <select th:if="${product != null}" class="pimcs-gray-input input text-size-middle" readonly>
+                    <option th:value="${product.getProductCategory().getId()}">
+                        [[${product.getProductCategory().getCategoryName()}]]
+                    </option>
+                </select>
+                <select th:unless="${product != null}" class="pimcs-blue-input input text-size-middle" name="productCategoryId">
+                    <th:block th:each="productCategory : ${productCategories}">
+                        
+                        <option th:value="${productCategory.getId()}">
+                            [[${productCategory.getCategoryName()}]]
+                        </option>
+                    </th:block>
+                </select>
+                
             </div>
             <!--제품무게-->
             <div class="form-group mt">
-                
                 <p class="text-size-middle input-label">제품 무게</p>
-                <input type="number" th:name="|productForms[${index}].productWeight|" data="productWeight" class="pimcs-blue-input input"/>
+                <input th:if="${product != null}" type="number" readonly th:value="${product.getProductWeight()}" class="pimcs-gray-input input"/>
+                <input th:unless="${product != null}" type="number" name="productWeight" data="productWeight" class="pimcs-blue-input input"/>
             </div>
         </div>
     </div>
@@ -31,8 +49,8 @@
         <label for="product-img-file" class="img-view text-size-between-middle-samll">
             이미지를 끌어다 놓으세요.
         </label>
-        <input type="file" style="display: none;" id="product-img-file" class="product-img-file" />
+        <input type="file" style="display: none;" id="product-img-file" name="productImage" class="product-img-file" />
         
     </div>
-    <i class="bi bi-x-lg delete-card-view-btn"></i>
 </div>
+</html>

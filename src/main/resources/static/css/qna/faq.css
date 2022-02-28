@@ -1,0 +1,98 @@
+hr{
+    margin: 0;
+}
+
+.title{
+    width: 188px;
+    height: 40px;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #000;
+}
+.search{
+    margin-top: 10px;
+    width: 76%;
+    margin-right: 14%;
+    margin-left: 8%;
+    height: 50px;
+    border-radius: 10px;
+    padding-left: 3%;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+    border: none;
+    font-family: Roboto;
+    font-size: 18px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+}
+hr .line{
+    width: 100%;
+    height: 100%;
+    margin-right: 14%;
+    margin-left: 8%;
+    margin-top: 0;
+}
+li{
+    width: 100%;
+    height: 100%;
+}
+.faq-list{
+    width: 79%;
+    margin-right: 14%;
+    margin-left: 5%;
+    height: 50px;
+    border-radius: 10px;
+    padding-left: 3%;
+}
+.search-bar{
+    width: 100%;
+}
+
+.edit_icon{
+    margin: auto;
+    width: 15.5px;
+    height: 15.5px;
+    object-fit: cover;
+    margin-left: -18%;
+}
+
+.content summary{
+    list-style: none;
+    list-style-position:inside;
+    list-style-type: none;
+}
+.answer_title{
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+}
+.content summary::after {
+    content: url("/img/qna_arrow.png");
+
+}
+
+.answer_text span{
+    margin-left: 2%;
+    height: 10vh;
+}
+.answer_text {
+    padding-bottom: 1rem;
+
+}
+.answer_text hr{
+    margin-bottom: 1rem;
+}
+
+ul{
+    padding-top: 30px;
+}

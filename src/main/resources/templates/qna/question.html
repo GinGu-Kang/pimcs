@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/qna/question.css">
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <p class="title">
+        Q&A
+    </p>
+    <form th:action="@{/qna/question}" method="post">
+        <div th:class="question-form">
+            <section th:class="question-left">
+
+                <p>작성자</p>
+                <p>제목</p>
+                <p>문의 내용</p>
+            </section>
+            <section th:class="question-right">
+            <section th:class="question-right-top">
+                <input type="text" placeholder="이름">
+                <input type="text" placeholder="제목">
+                <input type="text" placeholder="문의 내용을 입력 해 주세요">
+            </section>
+            <section th:class="question-right-footer">
+                <label th:name="secret"><input type="radio" name="secret">비밀글</label>
+                <label th:name="secret"><input type="radio" name="secret">전체공개</label>
+            </section>
+            </section>
+
+
+        </div>
+    <input type="submit">
+    </form>
+
+</div>
+</html>

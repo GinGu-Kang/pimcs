@@ -6,27 +6,28 @@
 body{
     display: flex;
     justify-content: center;
-    font-size: 1vmax;
+    font-size: 18px;
 
 }
 img{
-    width: 10vmax;
-    height: 6vmax;
+    width: 153px;
+    height: 92px;
 }
 form span{
     width: 90%;
     text-align: left;
 }
+
 input,select {
     width: 90%;
-    height: 5vh;
+    height: 55px;
     margin: 20px 0 0;
     padding: 0.5vh 5%;
     border-radius: 0.4vmax;
     border:none;
     box-shadow: 0 3px 6px 0px rgba(0, 0, 0, 0.16);
     background-color: #fff;
-    font-size:1vmax;
+    font-size: 18px;
     font-family: Roboto;
     font-weight: normal;
     font-stretch: normal;
@@ -37,14 +38,14 @@ input,select {
 }
 .button {
     width: 100%;
-    height: 6vh;
+    height: 55px;
     margin: 20px 0 0;
     padding: 1% 5%;
     border-radius: 0.4vmax;
     box-shadow:  0px 3px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #4282ff;
     font-family: Roboto;
-    font-size: 1vmax;
+    font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -55,14 +56,14 @@ input,select {
 }
 input[type=button],input[type=submit] {
     width: 100%;
-    height: 6vh;
+    height: 55px;
     margin: 20px 0 0;
     padding: 1% 5%;
     border-radius: 0.4vmax;
     box-shadow:  0px 3px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #4282ff;
     font-family: Roboto;
-    font-size: 1vmax;
+    font-size: 18px;
     font-weight: normal;
     font-stretch: normal;
     font-style: normal;
@@ -96,8 +97,8 @@ input[type="checkbox"]{
 }
 .companyForm{
     display: inline-block;
-    height: 100vw;
-    width: 25vw;
+    height: 1450px;
+    width: 466px;
     text-align: center;
     margin: 0;
     vertical-align: middle;
@@ -135,7 +136,7 @@ input[type="checkbox"]{
     background-color: #fff;
 
     font-family: Roboto;
-    font-size: 1vmax;
+    font-size: 18px;
     font-weight: 500;
     font-stretch: normal;
     font-style: normal;
@@ -168,7 +169,7 @@ input[type="checkbox"]{
 
 
 .box{
-    width: 1200;
+    width: 1200px;
     height: 1500px;
     padding: 145px 433px 262px  435px;
     background-color: #fafafa;

@@ -9,16 +9,16 @@
 
     //체크시 tr색 변환
     $('.check-worker').change(function (){
+        changeTrColor()
+    })
+    //체크된 tr 색변환
+    function changeTrColor(){
+        let uncheckedTr=$('.check-worker').parents('tr')
         let checkedTr=$('.check-worker:checked').parents('tr')
-        
+        uncheckedTr.css('background-color','white')
         checkedTr.css('background-color','#ececec')
         console.log(checkedTr)
-        if($('.check-worker').is(":checked")){
-            alert('체크됨')
-        }else{
-            alert('체크해제')
-        }
-    })
+    }
 
 
 
@@ -69,21 +69,24 @@
 
     if(checkCount==checkboxCount){
     checkHead.prop('checked',true)
-}else{
-    checkHead.prop('checked',false)
-}
-    checkDisplay.text("선택된 사원: "+checkCount)
-}
-    //전체 체크
+    }else{
+        checkHead.prop('checked',false)
+    }
+        checkDisplay.text("선택된 사원: "+checkCount)
+    }
+    //전체 체크박스 체크
     function checkAll(){
     var checkHeadState=$('#check-worker-head').is(":checked");
     var checkbox=$("input:checkbox[name='check-worker']")
+
+
     if(checkHeadState){
     checkbox.prop('checked', true)
-}else{
-    checkbox.prop('checked', false)
+    }else{
+        checkbox.prop('checked', false)
 }
-    checkCount();
+    checkCount();   //체크된 갯수 체크
+    changeTrColor();//체크된 tr 색변경
 }
 
 
@@ -97,21 +100,21 @@
     email:email,
     authority: authority,
     checkbox: $(checkbox)
-});
-    alert("권한이 설정되었습니다.")
-}
-    //throw $(e).prop("checked",true)
-    else{
-    // console.log($(checkbox))
-    removeAuthority({
-    email:email,
-    authority: authority,
-    checkbox: $(checkbox)
-});
-    alert("권한이 삭제되었습니다.")
-}
+    });
+        alert("권한이 설정되었습니다.")
+    }
+        //throw $(e).prop("checked",true)
+        else{
+        // console.log($(checkbox))
+        removeAuthority({
+        email:email,
+        authority: authority,
+        checkbox: $(checkbox)
+    });
+        alert("권한이 삭제되었습니다.")
+    }
 
-}
+    }
     //권한주기
     function giveAuthority({email,authority, checkbox}){
 
@@ -123,21 +126,21 @@
     type:'post',
     data:{email:email,authority:authority},
     beforeSend : function(xhr)
-{   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-    xhr.setRequestHeader(header, token);
-},
-    success:function (isEqualCompany){
-    if(!isEqualCompany){
-    alert("해당 회사의 사원만 수정할 수 있습니다.")
-}
-},
-    error:function(request,status,error){
-    alert("권한 설정에 실패하였습니다.")
-    $(checkbox).prop("checked",false);
-}
-});
+    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+    },
+        success:function (isEqualCompany){
+        if(!isEqualCompany){
+        alert("해당 회사의 사원만 수정할 수 있습니다.")
+    }
+    },
+        error:function(request,status,error){
+        alert("권한 설정에 실패하였습니다.")
+        $(checkbox).prop("checked",false);
+    }
+    });
 
-}
+    }
     //권한뺏기
     function removeAuthority({email,authority, checkbox}){
 
@@ -149,13 +152,13 @@
     type:'post',
     data:{email:email,authority:authority},
     beforeSend : function(xhr)
-{   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
-    xhr.setRequestHeader(header, token);
-},
-    error:function(request,status,error){
-    alert("권한 설정에 실패하였습니다.")
-    $(checkbox).prop("checked",true);
-}
-});
+    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        xhr.setRequestHeader(header, token);
+    },
+        error:function(request,status,error){
+        alert("권한 설정에 실패하였습니다.")
+        $(checkbox).prop("checked",true);
+    }
+    });
 
-};
+    };

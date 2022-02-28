@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/qna/faq.css">
+    <link rel="stylesheet"  href="/css/reset.css">
+
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+
+    <p class="title">
+        자주 묻는 질문
+    </p>
+
+
+        <section class="search-bar">
+            <input class="search" type="text" name="search" placeholder="Q. 주문은 어디서 하나요?">
+            <img class="edit_icon" src="/img/search.png" >
+        </section>
+        <section class="faq-list">
+        <ul class="list">
+
+            <li>
+                <HR class="line">
+                <details  class="detail" ontoggle="changeDetailsColor()">
+                    <summary class="answer_title" >Q. 오주희는 바보인가요?
+                    </summary>
+                    <div class="answer_text" >
+                        <hr >
+                        <span >A. 네.</span>
+                    </div>
+                </details>
+            </li>
+            <li>
+                <HR class="line">
+                <details  class="detail" ontoggle="changeDetailsColor()">
+                    <summary class="answer_title" >Q. 오주희는 바보인가요?
+                    </summary>
+                    <div class="answer_text" >
+                        <hr class="line">
+                        <span >A. 네.</span>
+                    </div>
+                </details>
+            </li>
+            <li>
+                <HR class="line">
+                <details  class="detail" ontoggle="changeDetailsColor()">
+                    <summary class="answer_title" >Q. 오주희는 바보인가요?
+                    </summary>
+                    <div class="answer_text" >
+                        <hr >
+                        <span >A. 네.</span>
+                    </div>
+                </details>
+            </li>
+
+            <hr >
+            <div class="more">
+                <button class="more-btn">더보기</button>
+            </div>
+        </ul>
+        </section>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        //togle 열린것만 색상변경
+        function changeDetailsColor(){
+            $('.detail').parents('li').css('background-color','#fafafa')
+            $('.detail').each(function (e,b){
+                if($(b).prop('open')){
+                    $(b).parent().css('background-color','#f0f0f0')
+                }
+            })
+        }
+    </script>
+    </div>
+
+
+</div>
+</html>

@@ -16,26 +16,47 @@
         <div th:class="question-form">
             <section th:class="question-left">
 
-                <p>작성자</p>
                 <p>제목</p>
                 <p>문의 내용</p>
             </section>
             <section th:class="question-right">
-            <section th:class="question-right-top">
-                <input type="text" placeholder="이름">
-                <input type="text" placeholder="제목">
-                <input type="text" placeholder="문의 내용을 입력 해 주세요">
+                <section th:class="question-right-top">
+                    <input type="text" placeholder="제목" th:class="text-title" name="title">
+                    <textarea rows="10" placeholder="문의 내용을 입력 해 주세요" class="text-area" name="question"></textarea>
+                </section>
+                <section th:class="question-right-footer">
+                    <input th:class="is-secret" id="secret" type="radio" name="radioValue" value="secret" onchange="radioCustom()" checked>
+                    <label id="secret-label" for="secret">비밀글</label>
+                    <input th:class="is-secret" id="all" type="radio" name="radioValue" value="all" onchange="radioCustom()" >
+                    <label id="all-label" for="all">전체 공개</label>
+                </section>
             </section>
-            <section th:class="question-right-footer">
-                <label th:name="secret"><input type="radio" name="secret">비밀글</label>
-                <label th:name="secret"><input type="radio" name="secret">전체공개</label>
-            </section>
-            </section>
-
-
         </div>
-    <input type="submit">
+        <div th:class="submit-wrapper">
+            <input type="submit">
+        </div>
     </form>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        radioCustom()
+        function radioCustom(){
+            console.log($('.is-secret:checked').attr('value'))
+            $('label').css('background-color','#fff')
+            $('label').css('color','black')
+
+            switch ($('.is-secret:checked').attr('value')){
+                case "all":
+                    $('#all-label').css('background-color',"#4282ff")
+                    $('#all-label').css('color','#fff')
+
+                    break;
+                case "secret":
+                    $('#secret-label').css('background-color',"#4282ff")
+                    $('#secret-label').css('color','#fff')
+                    break;
+            }
+        }
+    </script>
 
 </div>
 </html>

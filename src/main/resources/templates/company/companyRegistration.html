@@ -19,29 +19,32 @@
     <div class="companyForm">
         <img src="/img/logo2.png" ><br>
 
-        <form name="signUp" th:action="@{/company/registration}" method="post">
+        <form name="signUp" th:action="@{/company/registration}" method="post"  onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="enabled" value="true" />
 
-        <input type="text" name="companyName" placeholder="회사 이름" ><br>
-        <input type="text" name="companyAddress" placeholder="회사 주소" ><br>
-        <input type="text" name="companyAddressdetail" placeholder="상세 주소" ><br>
+        <input type="text" name="companyName" placeholder="회사 이름"  required><br>
+        <input type="text" name="companyAddress" placeholder="회사 주소" required><br>
+        <input type="text" name="companyAddressdetail" placeholder="상세 주소" required><br>
         <input type="text" name="contactPhone" placeholder="회사 전화번호" ><br>
-        <input type="text" name="businessCategoryName" placeholder="업종" ><br>
+        <input type="text" name="businessCategoryName" placeholder="업종" required><br>
 
-        <input type="text"   name="name" placeholder="이름" ><br>
-        <input type="text" name="phone" placeholder="핸드폰 번호" ><br><br><br>
+        <input type="text"   name="name" placeholder="이름" required><br>
+        <input type="text" name="phone" placeholder="핸드폰 번호" required><br><br><br>
             <span class="email-guide" >인증을 받을수 있는 수신 가능한 이메일을 입력해주세요.</span>
-        <input type="email" id = "email" name="ceoEmail" placeholder="이메일"  onblur="checkEmail()"/><br><br>
+        <input type="email" id = "email" name="ceoEmail" placeholder="이메일" required onblur="checkEmail()"/><br><br>
         <span class="email_ok">사용 가능한 아이디입니다.</span>
         <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span>
-        <input type="text" name="department" placeholder="소속 부서"><br>
-        <input type="password" name="password" placeholder="비밀번호"><br>
-        <input type="text" name="passwordVerify" placeholder="비밀번호 확인"><br>
+        <input type="text" name="department" placeholder="소속 부서" required><br>
+            <input class="input" type="password" name="password" id="password" placeholder="비밀번호" required onkeyup="check_password()" ><br><br>
+            <span class="pw-text" id="pw-check-text"></span>
+            <input class="input" type="password" id="password-verify" placeholder="비밀번호 확인" required onkeyup="check_password()"><br><br>
+            <span class="pw-text" id="pw-verify-text"></span>
+            <div class="check_box" >
         <br><br>
 
         <input type="submit"  value="제출">
-
+            </div>
     </form>
     <!--이용약관 추가하기-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

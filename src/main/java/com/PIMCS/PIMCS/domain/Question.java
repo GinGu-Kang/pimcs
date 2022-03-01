@@ -1,77 +1,42 @@
 package com.PIMCS.PIMCS.domain;
 
 
-public class Question {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-  private long id;
-  private String userEmail;
-  private long isSecret;
+import javax.persistence.*;
+import java.sql.Timestamp;
+
+@Builder
+@AllArgsConstructor
+@Getter
+@Setter
+@Entity
+public class Question {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
+  private boolean isSecret;
   private String title;
   private String question;
-  private java.sql.Timestamp createat;
-  private String companyCompanyCode;
+
+  @CreationTimestamp
+  private Timestamp createdAt;
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "userEmail")
+  private User user;
+  @Transient
+  private String radioValue;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "companyId")
+  private Company company;
 
 
-  public long getId() {
-    return id;
+  public Question() {
+
   }
-
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public String getUserEmail() {
-    return userEmail;
-  }
-
-  public void setUserEmail(String userEmail) {
-    this.userEmail = userEmail;
-  }
-
-
-  public long getIsSecret() {
-    return isSecret;
-  }
-
-  public void setIsSecret(long isSecret) {
-    this.isSecret = isSecret;
-  }
-
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-
-  public String getQuestion() {
-    return question;
-  }
-
-  public void setQuestion(String question) {
-    this.question = question;
-  }
-
-
-  public java.sql.Timestamp getCreateat() {
-    return createat;
-  }
-
-  public void setCreateat(java.sql.Timestamp createat) {
-    this.createat = createat;
-  }
-
-
-  public String getCompanyCompanyCode() {
-    return companyCompanyCode;
-  }
-
-  public void setCompanyCompanyCode(String companyCompanyCode) {
-    this.companyCompanyCode = companyCompanyCode;
-  }
-
 }

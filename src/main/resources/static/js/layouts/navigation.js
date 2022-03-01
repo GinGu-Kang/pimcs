@@ -3,7 +3,8 @@ const URL_NAV_ITEM_MAPPING = {
     "/": "#inventory-list",
     "/product/category/create": "#category-registration",
     "/company/worker": "#company-worker",
-    "/product/create": "#product-registration"
+    "/product/create": "#product-registration",
+    "/mat/create": "#mat-registration"
 
 }
 jQuery(function ($) {

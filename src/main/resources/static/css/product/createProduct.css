@@ -22,8 +22,6 @@
     padding-left: 36px;
     padding-right: 56px;
     flex-direction: row;
-    position: relative;
-    
 }
 
 .input-section{
@@ -110,6 +108,19 @@
     width: 18px;
     height: 18px;
     margin-top: 3px;
+}
+
+/*FORM*/
+.product-weight-input{
+    width: 83%;
+    height: 29px !important;
+    border-right: 0px;
+    outline: none;
+}
+.input-group-text{
+    width: 17%;
+    height: 29px;
+    
 }
 @media (max-width: 1000px) {
     .card{

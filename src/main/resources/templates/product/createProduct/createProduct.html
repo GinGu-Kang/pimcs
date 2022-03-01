@@ -15,17 +15,62 @@
     <script src="/js/product/imageCropModal.js"></script>
     
 </head>
+    
     <div layout:fragment="content" class="content create-product-container">
         <!--image crop modal-->
-        <div th:replace="product/createProduct/modal/imageCropModal :: imageCropModal"></div>
-        <!--end-->
-        
+        <th:block th:replace="product/createProduct/modal/imageCropModal :: imageCropModal"></th:block>    
         <h4 class="text-size-between-large-middle page-title">제품 등록</h4>
         <form class="card-container">
              <!--card view-->
-             <div class="dynamic-cardview-container">
-                <th:block th:replace="product/createProduct/fragment/cardView :: cardView(${productCategories})"> </th:block>
-             </div>
+            <div class="card d-flex">
+                <div class="input-section">
+                    <div class="d-flex form-group-container">
+                        <!-- 제품명 -->
+                        <div class="form-group">
+                            <p class="text-size-middle input-label">제품명</p>
+                            <input name="product.productName" data="productName" class="pimcs-blue-input"/>
+                        </div>
+                        <!--제품코드-->
+                        <div class="form-group">
+                            <p class="text-size-middle input-label">제품 코드</p>
+                            <input name="product.productCode" data="productCode" class="pimcs-blue-input"/>
+                        </div>
+                    </div>
+                    <div class="d-flex form-group-container">
+                        <!--제품카테고리-->
+                        <div class="form-group mt">
+                            <p class="text-size-middle input-label">제품 카테고리</p>
+                            <select class="pimcs-blue-input input text-size-middle" name="productCategoryId">
+                                <th:block th:each="productCategory : ${productCategories}">
+                                    <option th:value="${productCategory.getId()}">
+                                        [[${productCategory.getCategoryName()}]]
+                                    </option>
+                                </th:block>
+                            </select>
+                            
+                        </div>
+                        <!--제품무게-->
+                        <div class="form-group mt">
+                            <p class="text-size-middle input-label">제품 무게</p>
+                            <div class="input-group">
+                                <input type="number" name="product.productWeight" data="productWeight" class="pimcs-blue-input input product-weight-input"/>
+                                <span class="input-group-text">g</span>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="img-section text-right">
+                    <p class="text-size-between-middle-samll">제품 이미지:</p>
+                    
+                    <label for="product-img-file" class="img-view text-size-between-middle-samll">
+                        이미지를 끌어다 놓으세요
+                    </label>
+                    <input type="file" style="display: none;" id="product-img-file" name="productImage" class="product-img-file" />
+                    
+                </div>
+            </div>
+             
             <div  class="pimcs-blue-btn text-size-between-middle-samll save-product-btn">저장하기</div>
         </form>
         <!--등록된 제품-->

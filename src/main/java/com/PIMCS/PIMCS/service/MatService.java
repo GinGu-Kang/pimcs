@@ -40,6 +40,16 @@ public class MatService {
     }
 
     /**
+     * 기기등록폼에 필요한 데이터를 db에서 조회
+     * @param company
+     * @return produts
+     */
+    public List<Product> createMatFormService(Company company){
+        List<Product> products = productRepository.findByCompany(company);
+        return products;
+    }
+
+    /**
      * 매트생성 서비스
      * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
      */

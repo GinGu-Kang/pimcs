@@ -70,6 +70,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .square:nth-last-child(1){
     margin: 0px;
 }
@@ -148,7 +149,11 @@
     margin-bottom: 11px;
     
 }
-
+/* DROPDOWN */
+.dropdown-menu{
+    margin-top:160px;
+    margin-left: 145px;
+}
 /* TABLE */
 
 .pimcs-table{

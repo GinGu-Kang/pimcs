@@ -1,13 +1,12 @@
 package com.PIMCS.PIMCS.form;
 
+import com.PIMCS.PIMCS.domain.Product;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ProductForm {
-    private String productCode;
-    private String productName;
+    private Product product;
     private int productCategoryId;
-    private int productWeight;
     private MultipartFile productImage;
 }

@@ -39,11 +39,13 @@ public class ProductService {
     /**
      * 제품생성 만약 카테고리가 존재하지않으면 에러발생
      * @param productForm 제품생성 폼데이터
-     * @return
+     * @return 제품객체
      */
     public Product createProduct(ProductForm productForm, Company company){
 
         Optional<ProductCategory> optProductCategory = productCategoryRepository.findById(productForm.getProductCategoryId());
+
+        //파일 저장
         String productImagePath = null;
         try {
             productImagePath = FileUtils.uploadFile(productForm.getProductImage());
@@ -51,14 +53,12 @@ public class ProductService {
             throw new IllegalStateException("Failed to upload file.");
         }
 
+        //제품정보 저장, 만약카테고리 존재하지 않으면 IllegalStateException 발생
         if(optProductCategory.isPresent()){
-            Product product = new Product();
-            product.setProductCode(productForm.getProductCode());
-            product.setProductName(productForm.getProductName());
+            Product product = productForm.getProduct();
             product.setProductCategory(optProductCategory.get());
-            product.setProductWeight(productForm.getProductWeight());
             product.setCompany(company);
-            product.setProductImage(productImagePath);
+            product.setProductImage("/product/image/"+productImagePath);
             productRepository.save(product);
             return product;
         }else{

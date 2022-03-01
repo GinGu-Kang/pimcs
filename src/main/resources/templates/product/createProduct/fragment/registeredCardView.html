@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <div class="card d-flex">
+        <div class="input-section">
+            <div class="d-flex form-group-container">
+                <!-- 제품명 -->
+                <div class="form-group">
+                    <p class="text-size-middle input-label">제품명</p>
+                    <input readonly th:value="${product.getProductName()}" class="pimcs-gray-input input">
+                </div>
+                <!--제품코드-->
+                <div class="form-group">
+                    <p class="text-size-middle input-label">제품 코드</p>
+                    <input readonly th:value="${product.getProductCode()}" class="pimcs-gray-input input"/>
+                </div>
+            </div>
+            <div class="d-flex form-group-container">
+                <!--제품카테고리-->
+                <div class="form-group mt">
+                    <p class="text-size-middle input-label">제품 카테고리</p>
+                    <select class="pimcs-gray-input input text-size-middle" readonly>
+                        <option th:value="${product.getProductCategory().getId()}">
+                            [[${product.getProductCategory().getCategoryName()}]]
+                        </option>
+                    </select>
+                </div>
+                <!--제품무게-->
+                <div class="form-group mt">
+                    <p class="text-size-middle input-label">제품 무게</p>
+                    <div class="input-group">
+                        <input type="number" readonly th:value="${product.getProductWeight()}" class="pimcs-gray-input input product-weight-input"/>
+                        <span class="input-group-text">g</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="img-section text-right">
+            <p class="text-size-between-middle-samll">제품 이미지:</p>
+            <label class="img-view text-size-between-middle-samll">
+                <img id="preview-img" th:src="${product.getProductImage()}" style="width: 100%; height: 100%;"/>
+            </label>
+        </div>
+    </div>
+</html>

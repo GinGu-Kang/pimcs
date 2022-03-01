@@ -74,11 +74,21 @@
     <div class="action-btn-container">
         <!--DESKTOP ACTION BUTTON LEFT CONTAINER-->
         <div class="action-btn-left-container d-flex">
-            <div class="square">
+            
+            <div class="square modify-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff"  class="bi bi-wrench" viewBox="0 0 16 16">
                     <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
-                </svg>
+                </svg><br>
+                <ul class="dropdown-menu modify-dropdown">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                </ul>
             </div>
+
+            
             <div class="square">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
@@ -104,12 +114,21 @@
     </div>
     <!--MOBILE ACTION BUTTON CONTAINER-->
     <div class="mobile-action-btn-container">
-        <div class="action-btn-left-container d-flex">
-            <div class="square">
+        <div class="action-btn-left-container d-flex ">
+            <!-- 수정버튼-->
+            <div class="square mobile-modify-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff"  class="bi bi-wrench" viewBox="0 0 16 16">
                     <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
                 </svg>
+                <ul class="dropdown-menu mobile-modify-dropdown">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                </ul>
             </div>
+
             <div class="square">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
@@ -154,7 +173,7 @@
             items per page
         </div>
     </div>
-    
+
     <!--TABLE-->
     <div class="pimcs-table-container">
         <table class="table pimcs-table content-display">

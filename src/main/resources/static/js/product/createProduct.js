@@ -12,6 +12,7 @@ jQuery(function ($) {
         var image = $('#edit-img');
         var imgFile = $(this).val();
         
+        console.log("file change");
         if(imgFile.match(IMG_EXT_REG)) { //유효한 이미지 확장자이면
         	var reader = new FileReader(); 
         	reader.onload = function(event) { 
@@ -77,11 +78,13 @@ jQuery(function ($) {
                                     'token': token
                                 }
                             });
+            console.log(resultData);
+            appendRegisteredContainer(resultData);
+            initFormInputValue();
         });
         
         
-        // appendRegisteredContainer(resultData);
-        // initFormInputValue();
+        
     });
 
     /**

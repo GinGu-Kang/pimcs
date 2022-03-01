@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+    <head>
+        <title>기기등록</title>
+        <!--createMat-->
+        <link rel="stylesheet" href="/css/mat/createMat.css"/>
+
+    </head>
+    
+    <div layout:fragment="content" class="content create-mat-container">
+        <h4 class="text-size-between-large-middle page-title">제품 등록</h4>
+        <form class="card-container" >
+            <div class="card d-flex">
+                <!--첫번째 행-->
+                <div class="form-group-container">
+                    <!--시리얼 번호-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">시리얼 번호</p>
+                        <input name="mat.serialNumber" class="pimcs-blue-input"/>
+                        <p class="input-message seirial-number-message text-size-between-middle-samll">dqjoijoijojdw</p>
+                    </div>
+                    <!--제품 명-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">제품명</p>
+                        <select class="pimcs-blue-input text-size-middle">
+                            <th:block th:each="product : ${products}">
+                                <option th:value="${product.getId()}">[[${product.getProductName}]]</option>
+                            </th:block>
+                        </select>
+                    </div>
+                    <!--위치-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">위치</p>
+                        <input name="mat.matLocation" class="pimcs-blue-input"/>
+                    </div>
+                </div>
+                <!--두번째 행-->
+                <div class="form-group-container form-group-container-mt">
+                    <!--임계값-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">임계값</p>
+                        <div class="input-group">
+                            <input type="number" name="mat.threshold" class="pimcs-blue-input input"/>
+                            <span class="input-group-text text-size-between-middle-samll">g/개</span>
+                        </div>
+                        
+                    </div>
+                    <!--상품 주문 갯수-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">상품 주문 갯수</p>
+                        <div class="input-group">
+                            <input type="number" name="mat.productOrderCnt" class="pimcs-blue-input input"/>
+                            <span class="input-group-text text-size-between-middle-samll">개</span>
+                        </div>
+                        
+                    </div>
+                    <!--박스 무게-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">박스 무게</p>
+                        <div class="input-group">
+                            <input type="number" name="mat.boxWeight" class="pimcs-blue-input input"/>
+                            <span class="input-group-text text-size-between-middle-samll">g</span>
+                        </div>
+                    </div>
+                </div>
+                <!--세번째행-->
+                <div class="form-group-container form-group-container-mt">
+                    <!--계산방식-->
+                    <div class="form-group">
+                        <p class="text-size-middle input-label">계산방식</p>
+                        <div class="fgc-justify-between">
+                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll">무게(g)</div>
+                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll">갯수(개)</div>
+                            <input type="hidden" name="mat.calcMethod"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="pimcs-blue-btn text-size-between-middle-samll register-btn">기기 등록하기</button>
+        </form>
+        <!--등록된 기기-->
+        <div class="registered-mat-container">
+            <h4 class="text-size-between-large-middle page-title">등록된 기기</h4>
+        </div>
+    </div>
+
+</html>

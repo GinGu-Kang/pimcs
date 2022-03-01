@@ -136,3 +136,12 @@ $(document).on("click",".card-viewer-btn", function(){
 
     initCardView({page:1, size: 10})
 });
+
+
+$(document).on("mouseover",".modify-btn",function(){
+     $(".modify-dropdown").css("display","block");
+});
+
+$(document).on("mouseleave",".modify-btn",function(){
+     $(".modify-dropdown").css("display","none");
+});

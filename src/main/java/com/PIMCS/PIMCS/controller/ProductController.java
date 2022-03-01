@@ -47,28 +47,31 @@ public class ProductController {
 
         Product product = productService.createProduct(productForm, secUserCustomForm.getCompany());
         model.addAttribute("product",product);
-        return "product/createProduct/fragment/cardView";
+        return "product/createProduct/fragment/registeredCardView";
     }
 
     /**
      * 제품 이미지 로드
      * @param fileName
-     * @return 이비지를 byte[]로 return
+     * @return 이미지를 byte[]로 return
      * @throws IOException
      */
-    @GetMapping("/product/image/{fileName:.+}")
-    public ResponseEntity<byte[]> loadProductImage(@PathVariable String fileName) throws IOException {
-        InputStream imageStream = new FileInputStream("/Users/gamdodo/Documents/java_workspace/media/" + fileName);
-        byte[] imageByteArray = imageStream.readAllBytes();
-        imageStream.close();
-        return  new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+    @GetMapping("/image/{fileName:.+}")
+    public ResponseEntity<byte[]> loadProductImage(@PathVariable String fileName)  {
+
+        try {
+            InputStream imageStream = new FileInputStream("/Users/gamdodo/Documents/java_workspace/media/" + fileName);
+            byte[] imageByteArray = new byte[0];
+            imageByteArray = imageStream.readAllBytes();
+            imageStream.close();
+            return  new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
-    @GetMapping("/create/cardview")
-    public String loadProductCardView(@RequestParam String index, Model model){
-        model.addAttribute("index",index);
-        return "product/createProduct/fragment/cardView";
-    }
 
     /**
      * 상품읽기

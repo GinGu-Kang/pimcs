@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.form.MatForm;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
@@ -52,17 +53,25 @@ public class MatService {
     /**
      * 매트생성 서비스
      * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
+     * @throws IllegalStateException product존재하지 않을때
      */
-    public String createMat(Mat mat){
+    public Mat createMat(MatForm matForm, Company company){
+        Mat mat = matForm.getMat();
         //유효성 검사
         HashMap<String,Object> resultMap = checkMatSerialNumberService(mat.getSerialNumber());
         if(!(boolean)resultMap.get("result")){ //등록할수 없는 매트일때
             throw new IllegalStateException(resultMap.get("message").toString());
         }
-
-        //db에 삽입
-        matRepository.save(mat);
-        return mat.getSerialNumber();
+        //prudct와 회사 객체를 mat entity에 추가
+        Optional<Product> productOpt = productRepository.findById(matForm.getProductId());
+        if(productOpt.isPresent()){
+            mat.setProduct(productOpt.get());
+            mat.setCompany(company);
+            matRepository.save(mat);
+            return mat;
+        }else{
+            throw new IllegalStateException("Product does not exist.");
+        }
     }
 
     /**
@@ -106,6 +115,9 @@ public class MatService {
             hashMap.put("result", true);
             hashMap.put("message","등록할 수 있는 시리얼번호 입니다.");
         }
+        System.out.println("========");
+        System.out.println(hashMap.get("message"));
+        System.out.println("========");
         return hashMap;
     }
 

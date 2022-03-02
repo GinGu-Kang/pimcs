@@ -2,27 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
     <head>
         <title>기기등록</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
         <!--createMat-->
         <link rel="stylesheet" href="/css/mat/createMat.css"/>
-
+        <script src="/js/mat/createMat.js"></script>
     </head>
     
     <div layout:fragment="content" class="content create-mat-container">
         <h4 class="text-size-between-large-middle page-title">제품 등록</h4>
-        <form class="card-container" >
+        <form class="card-container">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="card d-flex">
                 <!--첫번째 행-->
                 <div class="form-group-container">
                     <!--시리얼 번호-->
                     <div class="form-group">
                         <p class="text-size-middle input-label">시리얼 번호</p>
-                        <input name="mat.serialNumber" class="pimcs-blue-input"/>
-                        <p class="input-message seirial-number-message text-size-between-middle-samll">dqjoijoijojdw</p>
+                        <input name="mat.serialNumber" required class="pimcs-blue-input"/>
+                        <p class="input-message text-size-between-middle-samll"></p>
                     </div>
                     <!--제품 명-->
                     <div class="form-group">
                         <p class="text-size-middle input-label">제품명</p>
-                        <select class="pimcs-blue-input text-size-middle">
+                        <select class="pimcs-blue-input text-size-middle" name="productId">
                             <th:block th:each="product : ${products}">
                                 <option th:value="${product.getId()}">[[${product.getProductName}]]</option>
                             </th:block>
@@ -31,7 +34,7 @@
                     <!--위치-->
                     <div class="form-group">
                         <p class="text-size-middle input-label">위치</p>
-                        <input name="mat.matLocation" class="pimcs-blue-input"/>
+                        <input name="mat.matLocation" required class="pimcs-blue-input"/>
                     </div>
                 </div>
                 <!--두번째 행-->
@@ -40,7 +43,7 @@
                     <div class="form-group">
                         <p class="text-size-middle input-label">임계값</p>
                         <div class="input-group">
-                            <input type="number" name="mat.threshold" class="pimcs-blue-input input"/>
+                            <input type="number" required name="mat.threshold" class="pimcs-blue-input input"/>
                             <span class="input-group-text text-size-between-middle-samll">g/개</span>
                         </div>
                         
@@ -49,7 +52,7 @@
                     <div class="form-group">
                         <p class="text-size-middle input-label">상품 주문 갯수</p>
                         <div class="input-group">
-                            <input type="number" name="mat.productOrderCnt" class="pimcs-blue-input input"/>
+                            <input type="number" required name="mat.productOrderCnt" class="pimcs-blue-input input"/>
                             <span class="input-group-text text-size-between-middle-samll">개</span>
                         </div>
                         
@@ -58,7 +61,7 @@
                     <div class="form-group">
                         <p class="text-size-middle input-label">박스 무게</p>
                         <div class="input-group">
-                            <input type="number" name="mat.boxWeight" class="pimcs-blue-input input"/>
+                            <input type="number" required name="mat.boxWeight" class="pimcs-blue-input input"/>
                             <span class="input-group-text text-size-between-middle-samll">g</span>
                         </div>
                     </div>
@@ -69,9 +72,9 @@
                     <div class="form-group">
                         <p class="text-size-middle input-label">계산방식</p>
                         <div class="fgc-justify-between">
-                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll">무게(g)</div>
-                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll">갯수(개)</div>
-                            <input type="hidden" name="mat.calcMethod"/>
+                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll active calc-method-btn" data="0">무게(g)</div>
+                            <div class="pimcs-bd-blue-btn text-size-between-middle-samll calc-method-btn" data="1">갯수(개)</div>
+                            <input type="hidden" name="mat.calcMethod" value="0"/>
                         </div>
                     </div>
                 </div>

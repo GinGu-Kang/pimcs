@@ -4,6 +4,7 @@ import com.PIMCS.PIMCS.Utils.MatControllerUtils;
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.form.MatForm;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.MatService;
@@ -71,13 +72,11 @@ public class MatController {
     }
 
     @PostMapping("/mat/create")
-    public String createMat(Mat mat){
+    public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm){
 
-
-        return null;
+        matService.createMat(matForm,secUserCustomForm.getCompany());
+        return "redirect:/mat/create";
     }
-
-
 
     /**
      * 매트수정
@@ -111,7 +110,7 @@ public class MatController {
      */
     @GetMapping("/mat/check/serialNum")
     @ResponseBody
-    public HashMap<String,Boolean> checkMatSerialNum(@RequestParam("serialNum") String serialNum){
+    public HashMap<String,Object> checkMatSerialNum(@RequestParam("serialNum") String serialNum){
         return matService.checkMatSerialNumberService(serialNum);
     }
 

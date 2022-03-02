@@ -63,6 +63,9 @@
     display: flex;
     justify-content: end;
 }
+.input-message{
+    display: none;
+}
 
 /*BUTTON*/
 .pimcs-bd-blue-btn{

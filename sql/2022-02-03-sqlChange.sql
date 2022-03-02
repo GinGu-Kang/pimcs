@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
     `companyId` INT NOT NULL,
     `isSecret` TINYINT(1) NULL,
     `title` VARCHAR(200) NULL,
-    `question` BLOB NULL,
+    `content` BLOB NULL,
     `createdAt` DATETIME NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_question_user1_idx` (`userEmail` ASC) VISIBLE,

@@ -55,6 +55,7 @@ public class MatController {
     public MatPageAdapter ajaxLoadMatData(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                            Pageable pageable){
         Page<Mat> pageMats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
+
         return  new MatControllerUtils().createMatPageAdapter(pageMats,secUserCustomForm.getCompany());
     }
 

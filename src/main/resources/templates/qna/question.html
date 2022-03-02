@@ -22,9 +22,10 @@
             <section th:class="question-right">
                 <section th:class="question-right-top">
                     <input type="text" placeholder="제목" th:class="text-title" name="title">
-                    <textarea rows="10" placeholder="문의 내용을 입력 해 주세요" class="text-area" name="question"></textarea>
+                    <textarea rows="10" placeholder="문의 내용을 입력 해 주세요" class="text-area" name="content"></textarea>
                 </section>
                 <section th:class="question-right-footer">
+                    <input type="hidden" th:value="${#httpServletRequest.remoteUser}" name="user">
                     <input th:class="is-secret" id="secret" type="radio" name="radioValue" value="secret" onchange="radioCustom()" checked>
                     <label id="secret-label" for="secret">비밀글</label>
                     <input th:class="is-secret" id="all" type="radio" name="radioValue" value="all" onchange="radioCustom()" >

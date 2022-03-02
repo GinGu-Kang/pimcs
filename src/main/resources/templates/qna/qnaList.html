@@ -4,14 +4,19 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet"  href="/css/qna/qnaList.css">
+    <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
 
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <div layout:fragment="content"  class="content">
+    <input type="hidden" th:value="${questionPage.getTotalElements()}" id="totalData">
+    <input type="hidden" th:value="${questionPage.getSize()}" id="dataPerPage">
+
     <p class="title">
         Q&A
     </p>
+    <div id="paging"></div>
     <section class="action-btn-container">
         <form th:action="@{/company/worker}" method="post" >
             <div class="inquery-mat-header-left-box">
@@ -36,8 +41,12 @@
                 </div>
             </div>
         </div>
-    </section>
 
+    </section>
+    <!--DESKTOP PAGINATION-->
+    <div aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+    </div>
     <table class="table pimcs-table">
         <thead>
         <th scope="col" class="text-center">번호</th>
@@ -49,22 +58,113 @@
 
         </thead>
         <tbody id="pimcs-tbody" class="pimcs-tbody">
-        <tr class="worker-tr" th:each="worker:${companyWorker}">
-            <td class="name" th:text="${worker.getName()}"></td>
-            <td class="email" name="email[]" th:id="${worker.getEmail()}" th:text="${worker.getEmail()}+' '"></td>
-            <td th:text="${worker.getPhone()}"></td>
-            <td th:text="${worker.getDepartment()}"></td>
-            <td th:if="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
-            <td th:unless="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox"  onclick="checkEvent(this)"></td>
-            <td th:if="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
-            <td th:unless="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" ></td>
+        <tr class="worker-tr" th:each="question,i:${questionList}">
+            <td class="name" th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+            <td class="email" name="email[]" th:id="${question.getId()}" th:text="${question.getTitle()}"></td>
+            <td th:text="${question.isSecret()}"></td>
+            <td th:text="${question.getUser().getName()}"></td>
+            <td th:text="${question.getCreatedAt()}"></td>
+            <td th:text="없지롱"></td>
+
         </tr>
         </tbody>
     </table>
 
 
 
+<script >
+    /*<![CDATA[*/
+    let totalPage = "[[${questionPage.getTotalPages()}]]";
+    let size = "[[${questionPage.getSize()}]]";
+    let currentPage = "[[${questionPage.getNumber()}]]";
+    /*]]>*/
 
+
+    currentPage = parseInt(currentPage) + 1;
+console.log(currentPage)
+    $("#desktop-pagination").twbsPagination({
+        totalPages:totalPage,
+        visiblePages:size,
+        startPage: currentPage,
+        initiateStartPageClick:false,
+        prev:'<',
+        next:'>',
+        first:'',
+        last:'',
+        onPageClick: function (event, page) {
+            location.href=`${location.pathname}?page=${page}&size=${size}`;
+        }
+    });
+    // var totalData = $('#totalData').val()   // 총 데이터 수
+    // var totalData = 10  // 총 데이터 수
+    // var dataPerPage = $('#dataPerPage').val()    // 한 페이지에 나타낼 데이터 수
+    // var pageCount = 4;        // 한 화면에 나타낼 페이지 수
+    // console.log(totalData)
+    // console.log(dataPerPage)
+    // function paging(totalData, dataPerPage, pageCount, currentPage){
+    //
+    //     console.log("currentPage : " + currentPage);
+    //
+    //     var totalPage = Math.ceil(totalData/dataPerPage);    // 총 페이지 수
+    //     var pageGroup = Math.ceil(currentPage/pageCount);    // 페이지 그룹
+    //     console.log("pageGroup : " + pageGroup);
+    //
+    //     var last = pageGroup * pageCount;    // 화면에 보여질 마지막 페이지 번호
+    //     if(last > totalPage)
+    //         last = totalPage;
+    //     var first = last - (pageCount-1);    // 화면에 보여질 첫번째 페이지 번호
+    //     var next = last+1;
+    //     var prev = first-1;
+    //
+    //     console.log("last : " + last);
+    //     console.log("first : " + first);
+    //     console.log("next : " + next);
+    //     console.log("prev : " + prev);
+    //
+    //     var $pingingView = $("#paging");
+    //
+    //     var html = "";
+    //
+    //     if(prev > 0)
+    //         html += "<a href=# id='prev'><</a> ";
+    //     else{
+    //             html += "<span href=# id='prevNone'><</span> ";
+    //     }
+    //
+    //     for(var i=first; i <= last; i++){
+    //         html += "<a href='#' id=" + i + ">" + i + "</a> ";
+    //     }
+    //
+    //     if(last < totalPage)
+    //         html += "<a href=# id='next'>></a>";
+    //     else{
+    //         html += "<span href=# id='next'>></span>";
+    //     }
+    //
+    //     $("#paging").html(html);    // 페이지 목록 생성
+    //     $("#paging a").css({"color":"black","text-decoration":"none"});
+    //     $("#paging a#" + currentPage).css({"text-decoration":"none",
+    //         "color":"red",
+    //         "font-weight":"bold"});    // 현재 페이지 표시
+    //
+    //     $("#paging a").click(function(){
+    //
+    //         var $item = $(this);
+    //         var $id = $item.attr("id");
+    //         var selectedPage = $item.text();
+    //
+    //         if($id == "next")    selectedPage = next;
+    //         if($id == "prev")    selectedPage = prev;
+    //
+    //         paging(totalData, dataPerPage, pageCount, selectedPage);
+    //     });
+    //
+    // }
+    //
+    // $("document").ready(function(){
+    //     paging(totalData, dataPerPage, pageCount, 1);
+    // });
+</script>
 </div>
 
 </html>

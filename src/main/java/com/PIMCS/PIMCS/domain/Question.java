@@ -21,7 +21,7 @@ public class Question {
   private int id;
   private boolean isSecret;
   private String title;
-  private String question;
+  private String content;
 
   @CreationTimestamp
   private Timestamp createdAt;

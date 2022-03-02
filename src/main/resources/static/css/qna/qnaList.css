@@ -11,6 +11,9 @@
     text-align: left;
     color: #4282ff;
 }
+.table{
+    text-align: center!important;
+}
 /*액션 전체 컨테이너*/
 .action-btn-container{
     width: 97%;

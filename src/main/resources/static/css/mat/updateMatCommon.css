@@ -1,0 +1,26 @@
+.update-mat-modal .modal-header,
+.update-mat-modal .modal-footer{
+    background-color: #f5f5f5;
+}
+.update-mat-modal .modal-body{
+    height: 250px;
+}
+.target-container{
+    height: 66%;
+}
+.target-list-container{
+    height: 75%;
+    list-style-type: disc;
+    padding-left: 30px;
+    overflow-y: auto;
+}
+.target-list-container > li{
+    margin-top: 10px;
+}
+
+.replace-container{
+    margin-top: 10px;
+}
+.pimcs-bold{
+    font-weight: bold;
+}

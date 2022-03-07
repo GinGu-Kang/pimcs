@@ -15,6 +15,10 @@ import java.util.Optional;
 
 public interface MatRepository extends JpaRepository<Mat,String> {
 
+
+     Optional<Mat> findByIdAndCompany(int id, Company company);
+
+     List<Mat> findByCompany(Company company);
      Optional<Mat> findBySerialNumber(String serialNum); //시리얼번호로 검색
 
      @EntityGraph(attributePaths = "product")

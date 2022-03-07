@@ -57,37 +57,21 @@
 }
 
 .input-group-text{
-    width: 25%;
+ 
     height: 29px;
     color: #585858;
     display: flex;
     justify-content: end;
+}
+.input-group-bd-gray{
+    border-color: #909090;
 }
 .input-message{
     display: none;
 }
 
 /*BUTTON*/
-.pimcs-bd-blue-btn{
-    width: 46%;
-    height: 29px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 1px solid #a8c6ff;
-    border-radius: 5px;
-    color: #585858;
-    cursor: pointer;
-}
 
-.pimcs-bd-blue-btn:hover{
-    background-color: #a8c6ff;
-    color: #ffffff;
-}
-.pimcs-bd-blue-btn.active{
-    background-color: #a8c6ff;
-    color: #ffffff;
-}
 .register-btn{
     margin: 0 auto;
 }
@@ -98,6 +82,8 @@
 }
 
 /* RESGISTERED MAT SECTION*/
-.registered-mat-container{
+.registered-mat-section{
+    height: 36%;
+    overflow-y:auto; 
     margin-top: 34px;
 }

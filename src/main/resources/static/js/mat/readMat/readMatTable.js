@@ -155,7 +155,7 @@ const createMatRow = function(mat){
     const findMat = getStorageItem(mat.id);
     const checked = (findMat.checked) ? 'checked' : '';
 
-    let row = `<tr class='text-size-between-middle-samll'>`;
+    let row = `<tr class='text-size-between-middle-samll' data=${mat.id}>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
         row +=    `<td columnName='serialNumber'>${mat.serialNumber}</td>`;
         row +=    `<td columnName='matVersion'>A3</td>`;

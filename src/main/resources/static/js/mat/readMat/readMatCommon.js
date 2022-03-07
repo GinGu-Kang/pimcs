@@ -8,8 +8,7 @@ const init = function(){
     sessionStorage.clear();
     //display setting modal 초기화
     initDisplaySettingModal();
-    //테이블 데이터 초기화
-    initTableData({page:1, size:10});
+    
 
 }
 
@@ -22,6 +21,46 @@ const init = function(){
 const setStorage = function({mat, isChecked}){
     mat['checked'] = isChecked;
     sessionStorage.setItem(mat.id,JSON.stringify(mat));
+}
+/**
+ * 체크된 아이템들 찾기
+ * @returns 체크된 아이템 list
+ */
+const getCheckedItems = function(){
+    let checkedItems=[];
+    for(let matId of Object.keys(sessionStorage)){
+        let mat = getStorageItem(matId);
+        if(mat['checked'])
+            checkedItems.push(mat);
+    }
+    return checkedItems;
+}
+
+/**
+ * 
+ * @param columnName
+ * @param replaceValue
+ */
+const updateMat = function({columnName, replaceValue}){
+
+    //sessionStorage 데이터 업데이트
+    for(let mat of getCheckedItems()){
+        mat[columnName] = replaceValue;
+        if(columnName == "product"){
+            $(`tr[data='${mat.id}'] > td[columnname='productCode']`).text(mat[columnName].productCode);
+            $(`tr[data='${mat.id}'] > td[columnname='productName']`).text(mat[columnName].productName);
+            $(`tr[data='${mat.id}'] > td[columnname='productImagex']`).text(mat[columnName].productImage);
+        }else{
+            $(`tr[data='${mat.id}'] > td[columnname='${columnName}']`).text(mat[columnName]);
+        }
+        
+        $(`.row-checked[data=${mat.id}]`).click();
+        
+        setStorage({
+            mat: mat,
+            isChecked: false
+        });
+    }
 }
 
 const getStorageItem = function(key){
@@ -139,9 +178,11 @@ $(document).on("click",".card-viewer-btn", function(){
 
 
 $(document).on("mouseover",".modify-btn",function(){
-     $(".modify-dropdown").css("display","block");
+    $(".modify-dropdown").css("display","block");
+    $(this).addClass("hover");
 });
 
 $(document).on("mouseleave",".modify-btn",function(){
      $(".modify-dropdown").css("display","none");
+     $(this).removeClass("hover");
 });

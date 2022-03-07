@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="product" class="modal fade update-mat-modal" id="productModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="productModal">제품 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+            <div class="modal-body">
+            <div class="target-container">
+                <h5 class="pimcs-bold">변경할 시리얼번호/제품</h5>
+                <ul class="target-list-container"></ul>
+            </div>
+            <div class="replace-container">
+                <h5 class="pimcs-bold">변경 값</h5>
+                <div class="d-flex justify-content-between mt-2">
+                    <select class="pimcs-blue-input" name="matForms.productId">
+                        
+                    </select>
+                </div>
+                
+            </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="onClickedUpdateProduct()">변경</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <script>
+
+        let resultProducts;
+        $('#productModal').on('show.bs.modal', function (e) {
+            resultProducts = loadGetData({
+                url: "/api/products",
+                data: null
+            });
+            $("select[name='matForms.productId']").empty();
+            $("select[name='matForms.productId']").append(createProductItemModal(resultProducts));
+
+        });
+        /**
+         * ajax로 받은 product데이터로 select option tag 만들기
+         */
+        const createProductItemModal = function(products){
+            let option = "";
+            for(let product of products){
+                option += `<option value="${product.id}">${product.productName}</option>`;
+            }
+            return option;
+        }
+        /**
+         * 제품찾기, 없으면 null 
+         */
+        const findProduct = function(id){
+            for(let product of resultProducts){
+                if(product.id == id) return product;
+            }
+            return null;
+        }
+        
+        /**
+         * 변경 버튼클릭시 
+         */
+        const onClickedUpdateProduct = function(){
+            let selectedId =$("select[name='matForms.productId'] option:selected").val();
+            let product = findProduct(selectedId);
+
+            console.log("select: "+ selectedId);
+            console.log(product);
+            if(product == null){
+                alert("오류");
+                return;
+            }
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+            
+            let formData = updateMatFormData({
+                columnName: "product",
+                replaceValue: product
+            });
+            let queryString = new URLSearchParams(formData).toString();
+            
+            let resultData = loadPostData({
+                url: "/mat/update",
+                data: queryString,
+                header: {
+                    'header': header,
+                    'token': token
+                }
+            });
+
+            if(resultData != undefined){
+                
+                updateMat({
+                    columnName: "product",
+                    replaceValue: product
+                });
+                $(`[data-bs-dismiss="modal"]`).click();
+                alert(resultData.message);
+            }
+        }
+       
+    </script>
+</div>
+</html>

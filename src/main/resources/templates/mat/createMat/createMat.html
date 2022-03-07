@@ -8,11 +8,9 @@
         <link rel="stylesheet" href="/css/mat/createMat.css"/>
         <script src="/js/mat/createMat.js"></script>
     </head>
-    
     <div layout:fragment="content" class="content create-mat-container">
         <h4 class="text-size-between-large-middle page-title">제품 등록</h4>
         <form class="card-container">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <div class="card d-flex">
                 <!--첫번째 행-->
                 <div class="form-group-container">
@@ -46,7 +44,6 @@
                             <input type="number" required name="mat.threshold" class="pimcs-blue-input input"/>
                             <span class="input-group-text text-size-between-middle-samll">g/개</span>
                         </div>
-                        
                     </div>
                     <!--상품 주문 갯수-->
                     <div class="form-group">
@@ -79,11 +76,12 @@
                     </div>
                 </div>
             </div>
-            <button class="pimcs-blue-btn text-size-between-middle-samll register-btn">기기 등록하기</button>
+            <div class="pimcs-blue-btn text-size-between-middle-samll register-btn">기기 등록하기</div>
         </form>
         <!--등록된 기기-->
-        <div class="registered-mat-container">
+        <div class="registered-mat-section">
             <h4 class="text-size-between-large-middle page-title">등록된 기기</h4>
+            <div class="registered-mat-container"></div>
         </div>
     </div>
 

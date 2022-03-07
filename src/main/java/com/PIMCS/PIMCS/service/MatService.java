@@ -1,9 +1,11 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Utils.MatServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.MatForm;
+import com.PIMCS.PIMCS.form.MatFormList;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
@@ -63,7 +65,7 @@ public class MatService {
             throw new IllegalStateException(resultMap.get("message").toString());
         }
         //prudct와 회사 객체를 mat entity에 추가
-        Optional<Product> productOpt = productRepository.findById(matForm.getProductId());
+        Optional<Product> productOpt = productRepository.findByIdAndCompany(matForm.getProductId(), company);
         if(productOpt.isPresent()){
             mat.setProduct(productOpt.get());
             mat.setCompany(company);
@@ -84,10 +86,35 @@ public class MatService {
 
     /**
      * 매트수정 서비스
+     * @throws  IllegalStateException 회사에 등록되지 않은 product 또는 mat 일때 발생
      */
-    public String updateMat(Mat mat){
-        matRepository.save(mat);
-        return mat.getSerialNumber();
+    public HashMap<String, String> updateMat(Company company, MatFormList matFormList){
+        //로그인한 유저 회사에 등록된 produts와 mats찾기
+        List<Product> findProducts = productRepository.findByCompany(company);
+        List<Mat> findMats = matRepository.findByCompany(company);
+
+        MatServiceUtils matServiceUtils = new MatServiceUtils();
+        //saveAll 하기위한 List
+        List<Mat> saveMats = new ArrayList<>();
+        for(MatForm matForm : matFormList.getMatForms()){
+            Mat saveMat = matForm.getMat();
+            // 회사에 등록된 product 또는 mat인지 찾기, null이면 등록되지 않음
+            Product findProduct = matServiceUtils.findProduct(findProducts, matForm.getProductId());
+            Mat findMat = matServiceUtils.findMat(findMats, saveMat.getId());
+
+            if(findProduct != null && findMat != null){
+                saveMat.setProduct(findProduct);
+                saveMat.setCompany(company);
+                saveMats.add(saveMat);
+            }else{
+                throw new IllegalStateException("Product or Mat does not exist.");
+            }
+        }
+
+        matRepository.saveAll(saveMats);
+        HashMap<String, String> hashMap =new HashMap<>();
+        hashMap.put("message","수정 완료했습니다.");
+        return hashMap;
     }
 
     /**

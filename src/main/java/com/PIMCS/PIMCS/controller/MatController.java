@@ -5,6 +5,7 @@ import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.MatForm;
+import com.PIMCS.PIMCS.form.MatFormList;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.MatService;
@@ -55,6 +56,7 @@ public class MatController {
     @ResponseBody
     public MatPageAdapter ajaxLoadMatData(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                            Pageable pageable){
+
         Page<Mat> pageMats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
 
         return  new MatControllerUtils().createMatPageAdapter(pageMats,secUserCustomForm.getCompany());
@@ -72,25 +74,21 @@ public class MatController {
     }
 
     @PostMapping("/mat/create")
-    public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm){
+    public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm, Model model){
 
-        matService.createMat(matForm,secUserCustomForm.getCompany());
-        return "redirect:/mat/create";
+        Mat mat = matService.createMat(matForm,secUserCustomForm.getCompany());
+        model.addAttribute("mat",mat);
+        return "mat/createMat/fragment/registeredCardView.html";
     }
 
     /**
      * 매트수정
      */
-    @GetMapping("/mat/update")
-    public String updateMatForm(Mat mat,Model model){
-
-        return "mat/updateMat.html";
-    }
     @PostMapping("/mat/update")
-    public String updateMat(Mat mat,Model model){
+    @ResponseBody
+    public HashMap<String,String> updateMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
 
-        matService.updateMat(mat);
-        return null;
+        return matService.updateMat(secUserCustomForm.getCompany(),matFormList);
     }
 
     /**

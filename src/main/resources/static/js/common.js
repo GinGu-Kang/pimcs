@@ -56,13 +56,13 @@ const loadGetData = function({url, data}){
 }
 
 /**
- * post 요청
+ * post multipartfile 요청
  * @param url 요청할 url
  * @param header csrf관련정보
  * @param data 요청데이터
  * @returns  응답결과를 리턴, ex) html, json 등
  */
-const loadPostData = function({url,header,data}){
+const loadPostMultipartData = function({url,header,data}){
     let resultData;
     $.ajax({
         url:url,
@@ -85,8 +85,33 @@ const loadPostData = function({url,header,data}){
     return resultData;
 }
 
-
-
+/**
+ * post 요청
+ * @param url 요청할 url
+ * @param header csrf관련정보
+ * @param data 요청데이터
+ * @returns  응답결과를 리턴, ex) html, json 등
+ */
+const loadPostData = function({url,header,data}){
+    let resultData;
+    $.ajax({
+        url:url,
+        type:'post',
+        data:data,
+        async: false, // 동기식으로 동작
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header['header'], header['token']);
+        },
+        success:function(response){ 
+            resultData = response;
+        },
+        error:function(){
+            alert("에러입니다");
+        }
+    });
+    return resultData;
+}
 
 
 

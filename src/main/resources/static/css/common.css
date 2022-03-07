@@ -30,6 +30,26 @@
   background-color: #9ab3f1;
   border: 1px solid #9ab3f1;
 }
+.pimcs-bd-blue-btn{
+  width: 46%;
+  height: 29px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #a8c6ff;
+  border-radius: 5px;
+  color: #585858;
+  cursor: pointer;
+}
+
+.pimcs-bd-blue-btn:hover{
+  background-color: #a8c6ff;
+  color: #ffffff;
+}
+.pimcs-bd-blue-btn.active{
+  background-color: #a8c6ff;
+  color: #ffffff;
+}
 
 /*SEARCH INPUT*/
 
@@ -91,6 +111,13 @@
   border: 2px solid #909090;
 }
 
+.input-group .pimcs-blue-input{
+  width: 80%;
+  
+  border-right: 0;
+  outline: none;
+}
+
 .pimcs-blue-search-input{
   width: 100%;
   display: block;
@@ -104,12 +131,16 @@
 }
 
 .input-group-text{
+  display: inline-block;
+  width: 20%;
+
   background-color: #fff;
   border: 2px solid #a8c6ff;
   border-left: 0px;
   border-radius: 0px;
   border-top-right-radius: .25rem;
   border-bottom-right-radius: .25rem;
+  text-align: right;
 }
 
 

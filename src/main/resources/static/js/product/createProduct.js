@@ -70,7 +70,7 @@ jQuery(function ($) {
         canvas.toBlob(function(blob){
             
             formData.append( "productImage", blob);
-            let resultData = loadPostData({
+            let resultData = loadPostMultipartData({
                                 url: "/product/create",
                                 data: formData,
                                 header: {
@@ -103,7 +103,7 @@ jQuery(function ($) {
      * @param {*} html 저장한 제품 cardview
      */
     const appendRegisteredContainer = function(html){
-        $(".registered-card-veiw").append(html);
+        $(".registered-card-veiw").prepend(html);
     }
 
     /**

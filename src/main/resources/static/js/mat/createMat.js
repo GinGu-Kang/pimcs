@@ -6,8 +6,15 @@ let serialNumValidation;
  */
 $(document).on("focusout","input[name='mat.serialNumber']",function(){
     let messageTag = $(this).next();
-    let validation = checkSerialNumber($(this).val());
 
+    if($(this).val() == ""){
+        return {
+            "message": "등록할 수 있는 시리얼번호 입니다.",
+            "result":  false
+        }
+    }
+
+    let validation = checkSerialNumber($(this).val());
     if(validation.result) 
         $(messageTag).css("color","#6A82FB");
     else
@@ -47,17 +54,39 @@ const checkSerialNumber = function(serialNum){
 }
 
 /**
- * form 전송시 유효성 검사
- * 1. serial number
- * @returns 오류없으면 true, 있으면 false
+ * "기기 등록하기"버튼 클릭시
+ * ajax post요청으로 기기등록하고 등록한 기기를 registered-mat-container추가
  */
-const isValid = function(){
-    let serialNumResult = checkSerialNumber($("input[name='mat.serialNumber']").val());
+$(document).on("click",".register-btn",function(e){
     
-    if(!serialNumResult.result){
-        alert(serialNumResult.message)
-        return false;
-    }
-    
-    return true;
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    let data = $("form.card-container").serialize();
+
+    let resultData = loadPostData({
+        url: "/mat/create",
+        data: data,
+        header: {
+            'header': header,
+            'token': token
+        }
+    });
+    initFormInputValue();
+    $(".registered-mat-container").prepend(resultData);
+});
+
+/**
+ * form input value 초기화
+ */
+const initFormInputValue = function(){
+    serialNumValidation = undefined;
+    $("form.card-container input").each(function(index, element){
+        $(element).val("");
+    });
+    $(".input-message").css("display","none");
+
+    $("select[name='productId'] option:eq(0)").prop("selected", true);
+
+    $(".calc-method-btn").removeClass("active");
+    $(".calc-method-btn").first().addClass("active");
 }

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="boxWeight" class="modal fade update-mat-modal" id="boxWeightModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="locationModal">박스무게 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+            <div class="modal-body">
+            <div class="target-container">
+                <h5 class="pimcs-bold">변경할 시리얼번호/박스무게</h5>
+                <ul class="target-list-container"></ul>
+            </div>
+            <div class="replace-container">
+                <h5 class="pimcs-bold">변경 값</h5>
+                <div class="d-flex justify-content-between mt-2">
+                    <input type="text" required name="mat.boxWeight" class="pimcs-blue-input"/>
+                </div>
+                
+            </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="onClickedUpdateBoxWeight()">변경</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        
+        /**
+         * 변경 버튼클릭시 
+         */
+        const onClickedUpdateBoxWeight = function(){
+            if($("input[name='mat.boxWeight']").val() == ""){
+                alert("매트위치를 입력해주세요.");
+                return;
+            }
+
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+            let formData = updateMatFormData({
+                columnName: "boxWeight",
+                replaceValue: $("input[name='mat.boxWeight']").val()
+            });
+            let queryString = new URLSearchParams(formData).toString();
+            
+            let resultData = loadPostData({
+                url: "/mat/update",
+                data: queryString,
+                header: {
+                    'header': header,
+                    'token': token
+                }
+            });
+
+            if(resultData != undefined){
+                
+                updateMat({
+                    columnName: "boxWeight",
+                    replaceValue: $("input[name='mat.boxWeight']").val()
+                });
+                $(`[data-bs-dismiss="modal"]`).click();
+                alert(resultData.message);
+            }
+        }
+       
+    </script>
+</div>
+</html>

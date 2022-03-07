@@ -2,25 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
     <title>매트조회</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" href="/css/mat/readMat/readMat.css" />
     <link rel="stylesheet" href="/css/mat/readMat/modal/displaySettingModal.css" />
+    <link rel="stylesheet" href="/css/mat/updateMatCommon.css"/>
     <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
     <script type="text/javascript" src="/js/mat/readMat/readMatCommon.js"></script>
     <script type="text/javascript" src="/js/mat/readMat/readMatTable.js"></script>
     <script type="text/javascript" src="/js/mat/readMat/readMatCardView.js"></script>
     <script type="text/javascript" src="/js/mat/readMat/modal/displaySettingModal.js"></script>
     <script src="/js/selectbox/pimcsSelect.js"></script>
+    <script src="/js/mat/updateMat/updateMatModalCommon.js"></script>
+
     <script type="text/javascript" th:inline="javascript">
         jQuery(function ($) {
+            
+            
             // 초기화 
             init();
+            //테이블 데이터 초기화
+            initTableData({page:1, size:10});
         });
     </script>
+
+
     
 </head>
 <div layout:fragment="content" class="content inquery-mat-container" >
     <!--display setting 모달 include-->
     <div th:replace="mat/readMat/modal/displaySettingModal :: displaySettingModal"></div>
+    <!--계산방식변경 모달-->
+    <div th:replace="mat/updateMat/updateCalcMethodModal :: calcMethod"></div>
+    <!--임계값변경 모달-->
+    <div th:replace="mat/updateMat/updateThresholdModal :: threshold"></div>
+    <!--위치값변경 모달-->
+    <div th:replace="mat/updateMat/updateLocationModal :: location"></div>
+    <!--상품주문개수 변경 모달-->
+    <div th:replace="mat/updateMat/updateProductOderCntModal :: productOrderCnt"></div>
+    <!--박스무게 변경 모달-->
+    <div th:replace="mat/updateMat/updateBoxWeightModal :: boxWeight"></div>
+    <!--상품 변경 모달-->
+    <div th:replace="mat/updateMat/updateProductModal :: product"></div>
 
     <!--DESKTOP 매트조회 헤더-->
     <div class="inquery-mat-header col-md-12">
@@ -80,11 +103,12 @@
                     <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
                 </svg><br>
                 <ul class="dropdown-menu modify-dropdown">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="product" target="productModal">상품 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="calcMethod" target="calcMethodModal">계산방식 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="threshold" target="thresholdModal">임계값 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="matLocation" target="locationModal">매트위치 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
                 </ul>
             </div>
 

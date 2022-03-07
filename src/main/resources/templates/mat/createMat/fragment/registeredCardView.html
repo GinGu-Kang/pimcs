@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="card d-flex">
+    <!--첫번째 행-->
+    <div class="form-group-container">
+        <!--시리얼 번호-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">시리얼 번호</p>
+            <input  readonly th:value="${mat.getSerialNumber()}" class="pimcs-gray-input"/>
+            <p class="input-message text-size-between-middle-samll"></p>
+        </div>
+        <!--제품 명-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">제품명</p>
+            <select class="pimcs-gray-input text-size-middle">
+                <option th:value="${mat.getProduct().getId()}">
+                    [[${mat.getProduct().getProductName()}]]
+                </option>
+            </select>
+        </div>
+        <!--위치-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">위치</p>
+            <input name="mat.matLocation" readonly th:value="${mat.getMatLocation()}" class="pimcs-gray-input"/>
+        </div>
+    </div>
+    <!--두번째 행-->
+    <div class="form-group-container form-group-container-mt">
+        <!--임계값-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">임계값</p>
+            <div class="input-group">
+                <input type="number"  name="mat.threshold" readonly th:value="${mat.getThreshold()}" class="pimcs-gray-input input"/>
+                <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">g/개</span>
+            </div>
+        </div>
+        <!--상품 주문 갯수-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">상품 주문 갯수</p>
+            <div class="input-group">
+                <input type="number"  name="mat.productOrderCnt" readonly th:value="${mat.getProductOrderCnt()}" class="pimcs-gray-input input"/>
+                <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">개</span>
+            </div>
+
+        </div>
+        <!--박스 무게-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">박스 무게</p>
+            <div class="input-group">
+                <input type="number" name="mat.boxWeight" th:value="${mat.getBoxWeight()}" class="pimcs-gray-input input"/>
+                <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">g</span>
+            </div>
+        </div>
+    </div>
+    <!--세번째행-->
+    <div class="form-group-container form-group-container-mt">
+        <!--계산방식-->
+        <div class="form-group">
+            <p class="text-size-middle input-label">계산방식</p>
+            <div class="fgc-justify-between">
+
+                <div th:if="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll active calc-method-btn" data="0">무게(g)</div>
+                <div th:unless="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll calc-method-btn" data="0">무게(g)</div>
+                <div th:if="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll active calc-method-btn" data="1">갯수(개)</div>
+                <div th:unless="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll calc-method-btn" data="1">갯수(개)</div>
+<!--                <input type="hidden" name="mat.calcMethod" value="0"/>-->
+            </div>
+        </div>
+    </div>
+</div>
+</html>

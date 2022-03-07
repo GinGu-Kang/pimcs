@@ -46,15 +46,15 @@ public class CompanyManagementService {
     }
 
     //회사원 필터링 검색
-    public List<User> filterMyCompanyWorker(String searchVal,String selectOption,Company company){
+    public List<User> filterMyCompanyWorker(String keyword,String selectOption,Company company){
         List<User> myCompanyWorkers= new ArrayList<>();
 
         switch (selectOption){
             case "이름":
-                myCompanyWorkers =userRepository.findByCompanyAndNameLike(company,"%"+searchVal+"%");
+                myCompanyWorkers =userRepository.findByCompanyAndNameLike(company,"%"+keyword+"%");
                 break;
             case "부서":
-                myCompanyWorkers =userRepository.findByCompanyAndDepartmentLike(company,"%"+searchVal+"%");
+                myCompanyWorkers =userRepository.findByCompanyAndDepartmentLike(company,"%"+keyword+"%");
                 break;
         }
 

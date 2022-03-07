@@ -12,14 +12,14 @@
 <div layout:fragment="content"  class="content">
     <input type="hidden" id="myEmail" th:value="${#httpServletRequest.remoteUser}">
     <section class="action-btn-container">
-        <form th:action="@{/company/worker}" method="post" >
+        <form th:action="@{/company/search}" method="get" >
             <div class="inquery-mat-header-left-box">
                     <select class="search-select" name="selectOption" >
                         <option>이름</option>
                         <option>부서</option>
                     </select>
                     <div class="search-input-container">
-                        <input name="searchVal" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+                        <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
                     </div>
             </div>
         </form>

@@ -53,11 +53,23 @@ public class QnAController {
     public String qnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                           Model model){
         Page<Question> questionPage=qnaService.findAllQuestion(pageable);
-        System.out.println(questionPage.getSize());
-        System.out.println(questionPage.getNumber());
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
 
         return "/qna/qnaList";
     }
+
+
+    //필터링 조회
+    @GetMapping("/search")
+    public String searchQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
+        System.out.println(keyword);
+        System.out.println(selectOption);
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        Page<Question> questionPage=qnaService.filterQuestion(keyword,selectOption,pageable);
+        model.addAttribute("questionPage",questionPage);
+        model.addAttribute("questionList",questionPage.getContent());
+        return "/qna/qnaList";
+    }
+
 }

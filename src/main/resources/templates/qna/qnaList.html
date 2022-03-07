@@ -18,26 +18,24 @@
     </p>
     <div id="paging"></div>
     <section class="action-btn-container">
-        <form th:action="@{/company/worker}" method="post" >
+        <form th:action="@{/qna/search}" method="get" >
             <div class="inquery-mat-header-left-box">
                 <select class="search-select" name="selectOption" >
-                    <option>이름</option>
-                    <option>부서</option>
+                    <option>제목</option>
                 </select>
                 <div class="search-input-container">
-                    <input name="searchVal" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+                    <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
                 </div>
             </div>
         </form>
         <div class="inquery-mat-header-right-box">
             <div class="action-btn-left-container d-flex">
-                <div class="square">
+                <div class="square" onclick="location.href='/qna/question'">
                     <span>글쓰기</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
                         <path id="pen-solid_1_" data-name="pen-solid (1)" d="M10.507,1.115a1.857,1.857,0,0,1,2.625,0l1.141,1.142a1.855,1.855,0,0,1,0,2.623l-1.4,1.4L9.105,2.517Zm1.709,5.822L5.461,13.69a2.54,2.54,0,0,1-1.083.643L.892,15.358a.653.653,0,0,1-.688-.2A.637.637,0,0,1,.028,14.5L1.054,11.01A2.554,2.554,0,0,1,1.7,9.927L8.451,3.172Z" transform="translate(0 -0.572)" fill="#fff"/>
                     </svg>
                 </svg>
-
                 </div>
             </div>
         </div>
@@ -58,12 +56,13 @@
 
         </thead>
         <tbody id="pimcs-tbody" class="pimcs-tbody">
-        <tr class="worker-tr" th:each="question,i:${questionList}">
-            <td class="name" th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
-            <td class="email" name="email[]" th:id="${question.getId()}" th:text="${question.getTitle()}"></td>
-            <td th:text="${question.isSecret()}"></td>
-            <td th:text="${question.getUser().getName()}"></td>
-            <td th:text="${question.getCreatedAt()}"></td>
+        <tr class="worker-tr" th:each="question,i:${questionList}" onclick="">
+            <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+            <td th:class="db-id" th:id="${question.getId()}" th:text="${question.getTitle()}"></td>
+            <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
+            <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
+            <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
+            <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
             <td th:text="없지롱"></td>
 
         </tr>
@@ -73,15 +72,25 @@
 
 
 <script >
+
+
+
     /*<![CDATA[*/
     let totalPage = "[[${questionPage.getTotalPages()}]]";
     let size = "[[${questionPage.getSize()}]]";
     let currentPage = "[[${questionPage.getNumber()}]]";
     /*]]>*/
+    //파라미터 값 가져오기
+    const searchParams = new URLSearchParams(location.search);
+
+    var keyword = searchParams.get('keyword');
+    var selectOption = searchParams.get('selectOption');
+    console.log(keyword)
+
+
 
 
     currentPage = parseInt(currentPage) + 1;
-console.log(currentPage)
     $("#desktop-pagination").twbsPagination({
         totalPages:totalPage,
         visiblePages:size,
@@ -92,78 +101,13 @@ console.log(currentPage)
         first:'',
         last:'',
         onPageClick: function (event, page) {
-            location.href=`${location.pathname}?page=${page}&size=${size}`;
+            if (keyword!=null)
+                location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+            else{
+                location.href=`${location.pathname}?page=${page}&size=${size}`
+            }
         }
     });
-    // var totalData = $('#totalData').val()   // 총 데이터 수
-    // var totalData = 10  // 총 데이터 수
-    // var dataPerPage = $('#dataPerPage').val()    // 한 페이지에 나타낼 데이터 수
-    // var pageCount = 4;        // 한 화면에 나타낼 페이지 수
-    // console.log(totalData)
-    // console.log(dataPerPage)
-    // function paging(totalData, dataPerPage, pageCount, currentPage){
-    //
-    //     console.log("currentPage : " + currentPage);
-    //
-    //     var totalPage = Math.ceil(totalData/dataPerPage);    // 총 페이지 수
-    //     var pageGroup = Math.ceil(currentPage/pageCount);    // 페이지 그룹
-    //     console.log("pageGroup : " + pageGroup);
-    //
-    //     var last = pageGroup * pageCount;    // 화면에 보여질 마지막 페이지 번호
-    //     if(last > totalPage)
-    //         last = totalPage;
-    //     var first = last - (pageCount-1);    // 화면에 보여질 첫번째 페이지 번호
-    //     var next = last+1;
-    //     var prev = first-1;
-    //
-    //     console.log("last : " + last);
-    //     console.log("first : " + first);
-    //     console.log("next : " + next);
-    //     console.log("prev : " + prev);
-    //
-    //     var $pingingView = $("#paging");
-    //
-    //     var html = "";
-    //
-    //     if(prev > 0)
-    //         html += "<a href=# id='prev'><</a> ";
-    //     else{
-    //             html += "<span href=# id='prevNone'><</span> ";
-    //     }
-    //
-    //     for(var i=first; i <= last; i++){
-    //         html += "<a href='#' id=" + i + ">" + i + "</a> ";
-    //     }
-    //
-    //     if(last < totalPage)
-    //         html += "<a href=# id='next'>></a>";
-    //     else{
-    //         html += "<span href=# id='next'>></span>";
-    //     }
-    //
-    //     $("#paging").html(html);    // 페이지 목록 생성
-    //     $("#paging a").css({"color":"black","text-decoration":"none"});
-    //     $("#paging a#" + currentPage).css({"text-decoration":"none",
-    //         "color":"red",
-    //         "font-weight":"bold"});    // 현재 페이지 표시
-    //
-    //     $("#paging a").click(function(){
-    //
-    //         var $item = $(this);
-    //         var $id = $item.attr("id");
-    //         var selectedPage = $item.text();
-    //
-    //         if($id == "next")    selectedPage = next;
-    //         if($id == "prev")    selectedPage = prev;
-    //
-    //         paging(totalData, dataPerPage, pageCount, selectedPage);
-    //     });
-    //
-    // }
-    //
-    // $("document").ready(function(){
-    //     paging(totalData, dataPerPage, pageCount, 1);
-    // });
 </script>
 </div>
 

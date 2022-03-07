@@ -70,13 +70,13 @@ public class CompanyManagementController {
         return "company/worker/workerManagement";
     }
     //필터링 조회
-    @PostMapping("worker")
-    public String searchCompanyWorkerManagement(String searchVal,String selectOption,Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        System.out.println(searchVal);
+    @GetMapping("search")
+    public String searchCompanyWorkerManagement(String keyword,String selectOption,Model model, @AuthenticationPrincipal SecUserCustomForm user){
+        System.out.println(keyword);
         System.out.println(selectOption);
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-        List<User> companyWorker=companyManagementService.filterMyCompanyWorker(searchVal,selectOption,user.getCompany());
+        List<User> companyWorker=companyManagementService.filterMyCompanyWorker(keyword,selectOption,user.getCompany());
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }

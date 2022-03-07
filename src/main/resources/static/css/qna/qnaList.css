@@ -83,6 +83,15 @@ form{
     width: 80%;
 }
 
-.d-flex{
+.action-btn-left-container{
     justify-content: flex-end;
+}
+
+/*tr 커서 */
+.worker-tr{
+    cursor: pointer;
+}
+
+.unlock-icon{
+    padding-left: 4px;
 }

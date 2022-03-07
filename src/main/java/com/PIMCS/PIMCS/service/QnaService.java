@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,6 +30,7 @@ public class QnaService {
     }
 
 
+    //질문 추가
     public void addQuestion(Question question, User user, Company company){
         Boolean isSecret=question.getRadioValue().equals("secret");
 
@@ -41,5 +43,20 @@ public class QnaService {
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
 
+    }
+
+    //질문 필터링 검색
+    public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
+
+        Page<Question> searchQuestions =  null ;
+
+        switch (selectOption){
+            case "제목":
+                searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
+                break;
+
+        };
+
+        return searchQuestions;
     }
 }

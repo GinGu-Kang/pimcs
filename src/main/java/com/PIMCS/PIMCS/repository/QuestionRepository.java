@@ -11,4 +11,6 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Page<Question> findByTitleLike(String title, Pageable pageable);
+
+    Question getOne(Integer id);
 }

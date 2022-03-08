@@ -20,7 +20,7 @@
     <section class="action-btn-container">
         <form th:action="@{/qna/search}" method="get" >
             <div class="inquery-mat-header-left-box">
-                <select class="search-select" name="selectOption" >
+                <select class="search-select" name="selectOption"  disabled>
                     <option>제목</option>
                 </select>
                 <div class="search-input-container">
@@ -56,16 +56,19 @@
 
         </thead>
         <tbody id="pimcs-tbody" class="pimcs-tbody">
-        <tr class="worker-tr" th:each="question,i:${questionList}" onclick="">
-            <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
-            <td th:class="db-id" th:id="${question.getId()}" th:text="${question.getTitle()}"></td>
-            <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
-            <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
-            <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
-            <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
-            <td th:text="없지롱"></td>
 
-        </tr>
+            <th:block th:each="question,i:${questionList}">
+                <tr class="worker-tr"  th:onclick="|location.href='@{/qna/view/?question={questionId}(questionId=${question.getId()})}'|">
+                    <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
+                    <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+                    <td  th:text="${question.getTitle()}"></td>
+                    <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
+                    <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
+                    <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
+                    <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
+                    <td th:text="${question.getAnswer()!=null}"></td>
+                </tr>
+            </th:block>
         </tbody>
     </table>
 

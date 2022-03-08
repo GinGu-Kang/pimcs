@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`answer` (
                                                 `id` INT NOT NULL AUTO_INCREMENT,
-                                                `answer` BLOB NULL,
+                                                `comment` BLOB NULL,
                                                 `createdAt` DATETIME NULL,
                                                 `questionId` INT NOT NULL,
                                                 PRIMARY KEY (`id`),

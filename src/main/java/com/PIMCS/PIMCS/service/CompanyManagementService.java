@@ -14,6 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,10 +66,10 @@ public class CompanyManagementService {
     * 회사원 들을 불러오고 companyid가 다르다면 정지.
     *
     * */
+    @Transactional(rollbackFor = Exception.class)
     public void companyWorkerDelete(List<String> selectWorkersEmail,Company managerCompany){
         List<User> selectWorker=userRepository.findAllByEmailIn(selectWorkersEmail);
         selectWorker=selectWorker.stream().filter(worker -> worker.getCompany().getCompanyCode().equals(managerCompany.getCompanyCode())).collect(Collectors.toList());
-        System.out.println("가져왔따아다아다아당");
 
         for (User user:selectWorker
              ) {
@@ -79,6 +80,7 @@ public class CompanyManagementService {
 
 
     //회사와 대표 저장 회사코드 : UUID
+    @Transactional(rollbackFor = Exception.class)
     public void companyRegistration(User ceo, Company company){
         List<UserRole> userRoles = new ArrayList<>();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -2,21 +2,16 @@ package com.PIMCS.PIMCS.service;
 
 
 
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.domain.Question;
-import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.domain.*;
+import com.PIMCS.PIMCS.repository.AnswerRepository;
 import com.PIMCS.PIMCS.repository.QuestionRepository;
+import com.PIMCS.PIMCS.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,6 +19,7 @@ public class QnaService {
 
     @Autowired
     private final QuestionRepository questionRepository;
+
 
     public QnaService(QuestionRepository questionRepository) {
         this.questionRepository = questionRepository;
@@ -54,9 +50,14 @@ public class QnaService {
             case "제목":
                 searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
                 break;
-
+            default:
+                searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
+                break;
         };
 
         return searchQuestions;
     }
+
+
+
 }

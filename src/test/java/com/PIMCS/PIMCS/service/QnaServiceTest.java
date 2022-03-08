@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.domain.Answer;
 import com.PIMCS.PIMCS.domain.Question;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,6 @@ class QnaServiceTest {
         Page<Question> qeustions=qnaService.filterQuestion("test","제목",pageable);
         assertEquals("test",qeustions.getContent().get(0).getTitle());
     }
+
+
 }

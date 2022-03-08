@@ -40,7 +40,7 @@ public class User implements UserDetails {//implements UserDetails
     private String companyCode;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private List<UserRole> userRoles = new ArrayList<>();
+    private List<UserRole> userRoles;
 
     public User() {
 

@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -63,13 +64,16 @@ public class QnAController {
     //필터링 조회
     @GetMapping("/search")
     public String searchQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
-        System.out.println(keyword);
-        System.out.println(selectOption);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         Page<Question> questionPage=qnaService.filterQuestion(keyword,selectOption,pageable);
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
         return "/qna/qnaList";
+    }
+
+    @GetMapping("/view")
+    public String detailQna(Model model,Question question){//@RequestParam("questionId")Integer questionId
+        model.addAttribute(question);
+        return "/qna/qnaView";
     }
 
 }

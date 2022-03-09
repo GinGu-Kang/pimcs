@@ -57,6 +57,16 @@ public class QnaService {
 
         return searchQuestions;
     }
+    public Question findQuestion(Integer questionId){
+        Question question=questionRepository.findById(questionId).get();
+        if (question.getAnswer()==null){
+            Answer answer = Answer.builder().comment("답변 준비 중입니다.").build();
+            question.setAnswer(answer);
+        }
+
+
+        return question;
+    }
 
 
 

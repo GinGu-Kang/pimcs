@@ -71,7 +71,8 @@ public class QnAController {
     }
 
     @GetMapping("/view")
-    public String detailQna(Model model,Question question){//@RequestParam("questionId")Integer questionId
+    public String detailQna(Model model,Integer questionId){
+        Question question = qnaService.findQuestion(questionId);
         model.addAttribute(question);
         return "/qna/qnaView";
     }

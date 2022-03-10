@@ -25,7 +25,7 @@ public class Question {
   private boolean isSecret;
   private String title;
   private String content;
-
+  @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
   @ManyToOne(fetch = FetchType.EAGER)

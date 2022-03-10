@@ -38,14 +38,11 @@ public class QnaService {
 
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
-
     }
 
     //질문 필터링 검색
     public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
-
         Page<Question> searchQuestions =  null ;
-
         switch (selectOption){
             case "제목":
                 searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
@@ -54,16 +51,15 @@ public class QnaService {
                 searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
                 break;
         };
-
         return searchQuestions;
     }
     public Question findQuestion(Integer questionId){
         Question question=questionRepository.findById(questionId).get();
+
         if (question.getAnswer()==null){
             Answer answer = Answer.builder().comment("답변 준비 중입니다.").build();
             question.setAnswer(answer);
         }
-
 
         return question;
     }

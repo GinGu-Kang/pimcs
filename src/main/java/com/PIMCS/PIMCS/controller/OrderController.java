@@ -5,7 +5,7 @@ import com.PIMCS.PIMCS.domain.MatCategory;
 import com.PIMCS.PIMCS.domain.MatOrder;
 import com.PIMCS.PIMCS.form.MatCategoryAndOrderForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
-import com.PIMCS.PIMCS.service.AdminOrderService;
+import com.PIMCS.PIMCS.service.AdminService;
 import com.PIMCS.PIMCS.service.OrderService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -19,10 +19,10 @@ import java.util.List;
 @Controller
 @RequestMapping("order")
 public class OrderController {
-    private final AdminOrderService adminOrderService;
+    private final AdminService adminOrderService;
     private final OrderService orderService;
 
-    public OrderController(AdminOrderService adminOrderService, OrderService orderService) {
+    public OrderController(AdminService adminOrderService, OrderService orderService) {
         this.adminOrderService = adminOrderService;
         this.orderService = orderService;
     }

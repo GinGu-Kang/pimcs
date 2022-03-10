@@ -31,6 +31,7 @@ public class User implements UserDetails {//implements UserDetails
     private String name;
     private String phone;
     private String department;
+    @Column(updatable =false)
     @CreationTimestamp
     private Timestamp createdAt;
     @UpdateTimestamp

@@ -1,9 +1,6 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.Answer;
-import com.PIMCS.PIMCS.domain.MatCategory;
-import com.PIMCS.PIMCS.repository.CompanyRepository;
-import com.PIMCS.PIMCS.repository.MatCategoryRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,28 +11,28 @@ import java.util.List;
 
 @SpringBootTest
 @Transactional
-public class AdminOrderServiceTest {
+public class AdminServiceTest {
 
-    AdminOrderService adminOrderService;
+    AdminService adminService;
 
 
     @Autowired
-    public AdminOrderServiceTest(AdminOrderService adminOrderService) {
-        this.adminOrderService = adminOrderService;
+    public AdminServiceTest(AdminService adminService) {
+        this.adminService = adminService;
     }
 
 
     @Test
     public void findTest(){
         List<Integer> number = List.of(10,11);
-        System.out.println(adminOrderService.findMatCategoryList(number).get(0).getMatCategoryName());
+        System.out.println(adminService.findMatCategoryList(number).get(0).getMatCategoryName());
     }
 
     @Test
     @Commit
     void addAnswer() {
         Answer answer=Answer.builder().comment("야임마 그걸내가 어떻게알앙!!!").build();
-        adminOrderService.addAnswer(1,answer);
+        adminService.addAnswer(1,answer);
     }
 
 
@@ -50,6 +47,6 @@ public class AdminOrderServiceTest {
 //                .maxWeight(15)
 //                .matPrice(250000)
 //                .build();
-//        adminOrderService.addMatCategory(matCategory);
+//        adminService.addMatCategory(matCategory);
 //    }
 }

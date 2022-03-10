@@ -7,13 +7,15 @@ import com.PIMCS.PIMCS.repository.AnswerRepository;
 import com.PIMCS.PIMCS.repository.MatCategoryRepository;
 import com.PIMCS.PIMCS.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class AdminOrderService {
+public class AdminService {
     @Autowired
     private final AnswerRepository answerRepository;
     @Autowired
@@ -22,7 +24,7 @@ public class AdminOrderService {
     private final QuestionRepository questionRepository;
 
     @Autowired
-    public AdminOrderService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, QuestionRepository questionRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
         this.questionRepository = questionRepository;
@@ -62,8 +64,38 @@ public class AdminOrderService {
         Question question=questionRepository.getOne(questionId);
 
         answer.setQuestion(question);
-
         answerRepository.save(answer);
+    }
+
+    public Page<Question> findAllQuestion(Pageable pageable){
+        return questionRepository.findAll(pageable);
+    }
+
+    public Question findQuestion(Integer questionId){
+        Question question=questionRepository.findById(questionId).get();
+
+        if (question.getAnswer()==null){
+            Answer answer = Answer.builder().comment("").build();
+            question.setAnswer(answer);
+        }
+
+        return question;
+    }
+    //질문 필터링 검색
+    public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
+
+        Page<Question> searchQuestions =  null ;
+
+        switch (selectOption){
+            case "제목":
+                searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
+                break;
+            default:
+                searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
+                break;
+        };
+
+        return searchQuestions;
     }
 
 

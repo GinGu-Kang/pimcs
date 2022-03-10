@@ -10,7 +10,6 @@
     <title>Title</title>
 </head>
 <div layout:fragment="content"  class="content">
-
     <p class="title">
         Q&A
     </p>
@@ -22,29 +21,18 @@
                 <div th:if="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-true" >답변 완료</div></div>
                 <div th:unless="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-false" >답변 미완료</div></div>
             </div>
-            <hr>
-            <p ><span th:class="write-label">작성자</span><span th:class="write-value" th:text="${question.getUser().getName()}"></span></p>
-            <hr>
-            <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></span></p>
-
-
+                <hr>
+                <p ><span th:class="write-label">작성자</span><span th:class="write-value" th:text="${question.getUser().getName()}"></span></p>
+                <hr>
+                <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></span></p>
         </section>
-
         <section th:class="answer-container">
-            <span th:class="qa-icon">
-                    A.
-            </span>
-            <section th:class="answer-text">
-                <pre th:text="${question.getAnswer().getComment()}"></pre>
-
-            </section>
-
-
+            <span th:class="qa-icon">A.</span>
+                <section th:class="answer-text">
+                    <pre th:text="${question.getAnswer().getComment()}"></pre>
+                </section>
         </section>
-
-
-
     </section>
-
+    <p id="list-p"><a th:class="list-button"  th:href="@{/qna/list}">목록</a></p>
 </div>
 </html>

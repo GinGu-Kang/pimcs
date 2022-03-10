@@ -85,7 +85,19 @@
     width: 80%;
 
 }
+.text-area{
+    width: 100%;
+    margin-right: 8%;
+    height: 7%;
+    text-align: left;
+    line-height: 200%;
+    font-size: 16px;
+    border-radius: 4px;
+    padding-left: 20px;
+    border: solid 1px #dbdbdb;
+    overflow:visible;
 
+}
 .answer-container pre{
     white-space: pre-wrap;
     overflow: hidden;

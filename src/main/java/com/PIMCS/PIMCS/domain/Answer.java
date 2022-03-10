@@ -17,6 +17,7 @@ public class Answer {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String comment;
+  @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
   @OneToOne(fetch = FetchType.LAZY)

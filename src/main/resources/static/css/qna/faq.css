@@ -1,6 +1,12 @@
 hr{
     margin: 0;
 }
+.faq-list li{
+    transition: all 0.5s;
+}
+.content ul{
+    margin-top: 30px;
+}
 
 .title{
     width: 188px;
@@ -13,7 +19,7 @@ hr{
     line-height: normal;
     letter-spacing: normal;
     text-align: left;
-    color: #000;
+    color: #4282ff;
 }
 .search{
     margin-top: 10px;
@@ -22,7 +28,7 @@ hr{
     margin-left: 8%;
     height: 50px;
     border-radius: 10px;
-    padding-left: 3%;
+    padding-left: 30px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
     background-color: #fff;
     border: none;
@@ -72,17 +78,19 @@ li{
     list-style-type: none;
 }
 .answer_title{
+    padding-left: 30px;
     display: flex;
     justify-content: space-between;
     margin: 1rem 0;
 }
 .content summary::after {
     content: url("/img/qna_arrow.png");
+    padding-right: 2%;
 
 }
 
 .answer_text span{
-    margin-left: 2%;
+    margin-left: 30px;
     height: 10vh;
 }
 .answer_text {

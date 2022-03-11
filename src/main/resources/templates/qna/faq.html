@@ -15,15 +15,13 @@
     <p class="title">
         자주 묻는 질문
     </p>
-
-
         <section class="search-bar">
             <input class="search" type="text" name="search" placeholder="Q. 주문은 어디서 하나요?">
             <img class="edit_icon" src="/img/search.png" >
         </section>
         <section class="faq-list">
         <ul class="list">
-
+            <th:block th:each="question,i:${questionList}">
             <li>
                 <HR class="line">
                 <details  class="detail" ontoggle="changeDetailsColor()">
@@ -35,6 +33,7 @@
                     </div>
                 </details>
             </li>
+            </th:block>
             <li>
                 <HR class="line">
                 <details  class="detail" ontoggle="changeDetailsColor()">
@@ -75,6 +74,23 @@
                     $(b).parent().css('background-color','#f0f0f0')
                 }
             })
+        }
+
+        function filter() {
+            let search = document.getElementById("search").value.toLowerCase();
+            let listInner = document.getElementsByClassName("listInner");
+
+            for (let i = 0; i < listInner.length; i++) {
+                city = listInner[i].getElementsByClassName("city");
+                country = listInner[i].getElementsByClassName("country");
+                if (city[0].innerHTML.toLowerCase().indexOf(search) != -1 ||
+                    country[0].innerHTML.toLowerCase().indexOf(search) != -1
+                ) {
+                    listInner[i].style.display = "flex"
+                } else {
+                    listInner[i].style.display = "none"
+                }
+            }
         }
     </script>
     </div>

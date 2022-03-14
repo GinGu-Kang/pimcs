@@ -47,6 +47,12 @@ public class UserAuthController {
         userAuthService.signUp(user);
         return "redirect:/auth/login";
     }
+    //회원가입 선택
+    @GetMapping("choice/signUp")
+    private String signUpChoice(){
+        return "user/auth/signUpChoice.html";
+    }
+
 
     //회원정보수정
     @GetMapping("update")

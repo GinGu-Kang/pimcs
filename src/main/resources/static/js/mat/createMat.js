@@ -58,11 +58,31 @@ const checkSerialNumber = function(serialNum){
  * ajax post요청으로 기기등록하고 등록한 기기를 registered-mat-container추가
  */
 $(document).on("click",".register-btn",function(e){
+
+    if($(`input[name='mat.serialNumber']`).val() == ""){
+        alert("시리얼번호를 입력해주세요.");
+        return;
+    }
+    if($(`input[name='mat.matLocation']`).val() == ""){
+        alert("위치를 입력해주세요.");
+        return;
+    }
+    if($(`input[name='mat.threshold']`).val() == ""){
+        alert("임계값을 입력해주세요.");
+        return;
+    }
+    if($(`input[name='mat.productOrderCnt']`).val() == ""){
+        alert("상품주문갯수를 입력해주세요.");
+        return;
+    }
+    if($(`input[name='mat.boxWeight']`).val() == ""){
+        alert("박스무게를 입력해주세요.");
+        return;
+    }
     
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     let data = $("form.card-container").serialize();
-
     let resultData = loadPostData({
         url: "/mat/create",
         data: data,
@@ -73,6 +93,7 @@ $(document).on("click",".register-btn",function(e){
     });
     initFormInputValue();
     $(".registered-mat-container").prepend(resultData);
+    alert("등록 되었습니다.")
 });
 
 /**
@@ -83,6 +104,8 @@ const initFormInputValue = function(){
     $("form.card-container input").each(function(index, element){
         $(element).val("");
     });
+    $(`input[name='mat.calcMethod']`).val(0);
+
     $(".input-message").css("display","none");
 
     $("select[name='productId'] option:eq(0)").prop("selected", true);

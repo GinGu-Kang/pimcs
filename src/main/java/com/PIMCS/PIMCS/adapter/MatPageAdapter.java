@@ -30,7 +30,9 @@ public class MatPageAdapter {
         private String matLocation;
         private int productOrderCnt;
         private int boxWeight;
+        private int currentInventory;
         private int battery;
+
     }
 
     @Data

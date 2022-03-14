@@ -1,6 +1,7 @@
 
 const URL_NAV_ITEM_MAPPING = {
     "/": "#inventory-list",
+    "/inout/history": "#in-out-history",
     "/product/category/create": "#category-registration",
     "/company/worker": "#company-worker",
     "/product/create": "#product-registration",

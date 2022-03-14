@@ -122,7 +122,24 @@
 .table-viewer-active{
     background-image: url("/img/table_viewer_active_icon.png");
     background-repeat: no-repeat;
+
 }
+.td-small-image{
+    width: 48px;
+    height: 48px;
+}
+.td-big-image{
+    display: none;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left:0px;
+    top:65px;
+    border-radius: 6px;
+    box-shadow: 0 3px 17px 0 rgb(0 0 0 / 16%);
+    z-index: 9999;
+}
+
 .card-viewer-btn{
     background-image: url("/img/card-viewer-icon.png");
     background-repeat: no-repeat;
@@ -228,12 +245,22 @@
     }
   }
 
+/* A TAG*/
+.a-remove-attr{
+    text-decoration: none;
+    color: #333;
+}
+.a-remove-attr:hover{
+    color: #333;
+}
+
 
 /* TABLE */
 
 .pimcs-table{
     width: 97%;
     margin-top: 2px;
+    display: none;
     
 }
 .pimcs-table thead{
@@ -291,16 +318,27 @@ tbody td{
 /**CARD**/
 
 .pimcs-card{
-    width: 30%;
-    height: 220px;
+    width: 259px;
+    height: 222px;
     border: 1px solid #fff;
     border-radius: 6px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
     padding: 0 11px;
-    margin-right: 10px;
-    margin-top: 20px;
-    float: left;
+    /* margin: 0 auto; */
+    
+    
+} 
+.mobile-pimcs-card-container{
+    width: 100%;;
+    display: none;
 }
+.pimcs-row{
+    width: 100%;
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-around;
+}
+
 .pimcs-card p{
     margin: 0px;    
 }
@@ -320,6 +358,7 @@ tbody td{
 }
 .pimcs-card-head .card-serial-number{
     color: #707070;
+    margin-top: 4px;
 }
 
 .pimcs-card-head > div:last-child{
@@ -334,23 +373,28 @@ tbody td{
 }
 .pimcs-card-body .info-area{
     width: 65%;
+    
+
+}
+.pimcs-card-body .info-area>div{
+    margin-top: 19px;
+    display: flex;
 }
 .pimcs-card-body .img-area{
     width: 35%;
     border: 1px solid #fff;
     border-radius: 4px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-    text-align: center;    
+    
 }
 .pimcs-card-body .img-area img{
-    width: 87%;
-    height: 90%;
-    margin-top: 14%;
+    width: 100%;
+    height: 100%;
+    
 }
 
 .pimcs-card-body .label{
-    display: inline-block;
-    width: 50px;
+    width: 62px;;
     color: #707070;
     font-weight: bold;
 }
@@ -392,7 +436,11 @@ tbody td{
 
 
 .pimcs-table, .pimcs-card-container{
+    
     display: none;
+}
+.pimcs-card-container{
+    margin-left: -23px;
 }
 .content-display{
     display: table; 
@@ -459,18 +507,10 @@ tbody td{
         margin-bottom: 0px;
         margin-right: 3vw;
     }
+   
     /*CARD VIEW*/
     .pimcs-card{
-        width: 42%;
-        margin-right: 10VW;
+        width: 345px;
+        margin: 0 auto;
     }
-
-    .pimcs-card:nth-child(odd){
-        margin-left: 3vw;
-    }
-    .pimcs-card:nth-child(even){
-        margin-right: 3vw;
-    }
-
-
 }

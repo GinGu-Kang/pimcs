@@ -1,4 +1,5 @@
 
+
 /**
  * 테이블 데이터초기화
  * @param page 페이지번호
@@ -8,7 +9,7 @@
     
     //ajax로 mat테이블 데이터 로드
     let tableData = loadTableData({page: page, size: size});
-    
+    $(".inventory-cnt-viewer").text(0);
     //행생성해서 tbody에 삽입
     createTableRow(tableData);
     //매트 테이블 구조 변경
@@ -19,10 +20,11 @@
  * display setting에서 check된 컬럼만 보여주기
  */
 const modifyDisplayColumns = function(){
+    let checked = ($(".all-rows-checked").is(":checked")) ? "checked" : "";
     //thead th태그 생성
     $("thead").empty();
     let trs = `<tr class='text-size-middle'>`;
-    trs += createColumnThTag();
+    trs += createColumnThTag(checked);
     trs += `</tr>`;
     $("thead").append(trs);
 
@@ -38,9 +40,9 @@ const modifyDisplayColumns = function(){
  * thead th태그 생성
  * @returns th태그들을 반환
  */
-const createColumnThTag = function(){
+const createColumnThTag = function(checked){
     let ths = "";
-    ths += `<th><input class='all-rows-checked' type='checkbox'/></th>`
+    ths += `<th><input class='all-rows-checked' ${checked} type='checkbox'/></th>`
     $("#displaySettingModal input:checked").each(function(index, element){
         let elementId = $(element).attr("id");
         let columnText = $(`label[for='${elementId}']`).text();
@@ -48,50 +50,6 @@ const createColumnThTag = function(){
     });
     return ths;
 }
-
-/**
- * 전체행체크시 이벤트 
- */
- 
-$(document).on("change",".all-rows-checked",function(){
-    
-    let isAllChecked = $(this).is(":checked")
-    $(".row-checked").prop("checked", isAllChecked);
-
-    $(".row-checked").each(function(index, element){
-        let id = $(element).attr("data");
-        let mat = getStorageItem(id);
-        setStorage({mat: mat, isChecked: isAllChecked});
-    });
-});
-
-
-/**
- * 체크박스 체크시 발생하는 이벤트
- */
- $(document).on("change",".row-checked",function(){
-    //전체checkbox가 체크되면 전체체크박스 활성화
-    let showItemsCnt = parseInt($(showItemsSelectbox).children("option:selected").val());
-    if($(".row-checked:checked").length == showItemsCnt)
-        $(".all-rows-checked").prop("checked",true);
-    else
-        $(".all-rows-checked").prop("checked",false);
-
-    let id = $(this).attr("data");
-    let isChecked = $(this).is(":checked");
-    let mat = getStorageItem(id);
-    setStorage({mat:mat, isChecked: isChecked})
-
-});
-
-/**
- *  show item per page selectbox 선택시
- */
-$(document).on("change", showItemsSelectbox, function(){
-    let size = parseInt($(this).children("option:selected").val());
-    initTableData({page: 1, size: size});
-});
-
 
 /**
  * 배터리양을 그래프화 
@@ -127,33 +85,51 @@ $(document).on("change", showItemsSelectbox, function(){
  * @param tableData Mat 및 page데이터
  */
  const createTableRow = function(tableData){
+    $("caption").empty();
     $("tbody").empty();
-    let checkedCount = 0; // 몇개행이 체크되었는지
+  
     for(let mat of tableData.data){
         let findMat = getStorageItem(mat.id);
         let isChecked = false;
-        if(findMat != null){ // 로컬저장된 매트데이터가 있으면 저장된 check여부 적용
+        if($(".all-rows-checked").is(":checked")){
+            isChecked = true;
+        }else if(findMat != null){ // 로컬저장된 매트데이터가 있으면 저장된 check여부 적용
             isChecked = findMat.checked;
-            if(findMat.checked) checkedCount += 1;
         }
         setStorage({mat:mat,isChecked: isChecked});
         $("tbody").append(createMatRow(mat));    
     }
-    let showItemsCnt = parseInt($(showItemsSelectbox).children("option:selected").val());
-    //보여지는 행수와 체크된 행수가 같으면 전체체크박스 활상화
-    if(showItemsCnt == checkedCount){
-        $(".all-rows-checked").prop("checked",true);
-    }else{
-        $(".all-rows-checked").prop("checked",false);
-    }
-    // 배터리양 그래프화
-    amountBatteryToGraph();
-
 }
 
 const createMatRow = function(mat){
     const findMat = getStorageItem(mat.id);
-    const checked = (findMat.checked) ? 'checked' : '';
+    let  checked;
+    let calcMethod;
+    let currentInventory;
+    let threshold;
+    let importantInfoColor = "blue";
+
+    if($(".all-rows-checked").is(":checked")){ //전체체크가 되어있으면
+        checked = "checked";
+    }else{
+       checked = (findMat.checked) ? 'checked' : '';
+    }
+    
+    if(mat.calcMethod == 0) {
+        calcMethod = "무게(g)";
+        currentInventory = mat.currentInventory+"g";
+        threshold = mat.threshold +"g";
+    }else{
+        calcMethod = "갯수(개)";
+        currentInventory = mat.currentInventory+"개";
+        threshold = mat.threshold +"개";
+    } 
+
+    if(mat.threshold > mat.currentInventory){
+        importantInfoColor = "red";
+    }
+
+    
 
     let row = `<tr class='text-size-between-middle-samll' data=${mat.id}>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
@@ -161,11 +137,14 @@ const createMatRow = function(mat){
         row +=    `<td columnName='matVersion'>A3</td>`;
         row +=    `<td columnName='productCode'>${mat.product.productCode}</td>`;
         row +=    `<td columnName='productName'>${mat.product.productName}</td>`;
-        row +=    `<td columnName='productImage'>${mat.product.productImage}</td>`;
-        row +=    `<td columnName='inventoryCnt'>${mat.inventoryWeight}</td>`;
-        row +=    `<td columnName='calcMethod'>${mat.calcMethod}</td>`;
-        row +=    `<td class='blue' columnName='threshold'>${mat.threshold}</td>`;
-        row +=    `<td class='blue' columnName='inventoryWeight'>${mat.inventoryWeight}</td>`;
+        row +=    `<td columnName='productImage'>`;
+        row +=       `<img class='td-small-image' src='${mat.product.productImage}'/>`;
+        row +=        `<img class='td-big-image' src='${mat.product.productImage}'/>`;
+        row +=    `</td>`;
+        row +=    `<td columnName='inventoryCnt'>${mat.inventoryWeight}g</td>`;
+        row +=    `<td columnName='calcMethod'>${calcMethod}</td>`;
+        row +=    `<td class='${importantInfoColor}' columnName='threshold'>${threshold}</td>`;
+        row +=    `<td class='${importantInfoColor}' columnName='inventoryWeight'>${currentInventory}</td>`;
         row +=    `<td columnName='matLocation'>${mat.matLocation}</td>`;
         row +=    `<td columnName='productOrderCnt'>${mat.productOrderCnt}</td>`;
         row +=    `<td columnName='boxWeight'>${mat.boxWeight}</td>`;
@@ -181,3 +160,42 @@ const createMatRow = function(mat){
     return row;
 }
 
+/**
+* 전체행체크시 이벤트 
+*/
+$(document).on("change",".all-rows-checked",function(){
+   
+    let isAllChecked = $(this).is(":checked")
+    $(".row-checked").prop("checked", isAllChecked);
+ 
+    if(isAllChecked == true){
+        loadMatAll();
+    }else{
+         let checkedList = getCheckedItems();
+         checkedList.forEach(function(mat){
+                 setStorage({mat: mat, isChecked: false});
+         });
+    }
+    let inventoryCnt = getCheckedItems().length;
+    $(".inventory-cnt-viewer").text(formatKoKr(inventoryCnt));
+ });
+ 
+ 
+ /**
+ * 체크박스 체크시 발생하는 이벤트
+ */
+ $(document).on("change",".row-checked",function(){
+    
+    
+    let id = $(this).attr("data");
+    let isChecked = $(this).is(":checked");
+    let mat = getStorageItem(id);
+    setStorage({mat:mat, isChecked: isChecked})
+    let checkedCnt = getCheckedItems().length;
+    if(checkedCnt == sessionStorage.length)
+        $(".all-rows-checked").prop("checked",true);
+    else
+        $(".all-rows-checked").prop("checked",false);
+     
+     $(".inventory-cnt-viewer").text(formatKoKr(checkedCnt));
+ });

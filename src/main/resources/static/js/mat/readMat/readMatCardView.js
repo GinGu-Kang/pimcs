@@ -6,14 +6,16 @@
 const initCardView = function({page,size}){
 
     let matData = loadTableData({page: page, size: size});
-    console.log(matData);
+    $(".inventory-cnt-viewer").text(0);
     createCardView(matData);
 
 }
 
 const createCardView = function(matData){
-    $(".pimcs-card-container").empty();
-    for(let mat of matData.data){
+    $(".pimcs-card-container > .row").empty();
+    
+    for(let i=0; i<matData.data.length; i++){
+        let mat = matData['data'][i];
         let findMat = getStorageItem(mat.id);
         let isChecked = false;
         if(findMat != null){ // 로컬저장된 매트데이터가 있으면 저장된 check여부 적용
@@ -21,12 +23,19 @@ const createCardView = function(matData){
         }
         setStorage({mat:mat,isChecked: isChecked});
 
-        let cardView = `<div class="pimcs-card">`;
+        let cardView = `<div class="col mb-5 ">`;
+            cardView+=    `<div class="pimcs-card">`
             cardView+=      createCardViewHead(mat);
             cardView+=      createCardViewBody(mat);
             cardView+=      createCardViewFooter(mat);
+            cardView+=     `</div>`;
             cardView+= `</div>`;
-        $(".pimcs-card-container").append(cardView);
+
+        
+        $(".pimcs-card-container > .row").append(cardView);
+        
+
+        
     }
 }
 
@@ -56,7 +65,7 @@ const createCardViewBody = function(mat){
         cardViewBody +=             `<span class="label text-size-middle">상품위치:</span>`;
         cardViewBody +=             `<span class="value text-size-between-middle-samll">${mat.matLocation}</span>`;
         cardViewBody +=         `</div>`;
-        cardViewBody +=         `<div class="d-flex flex-wrap align-content-center">`;
+        cardViewBody +=         `<div>`;
         cardViewBody +=             `<span class="label text-size-middle">제품코드:</span>`;
         cardViewBody +=             `<span class="value dot3 text-size-between-middle-samll">${mat.product.productCode}</span>`;
         cardViewBody +=         `</div>`;
@@ -65,7 +74,7 @@ const createCardViewBody = function(mat){
         cardViewBody +=             `<span class="value text-size-between-middle-samll">A3</span>`;
         cardViewBody +=         `</div>`;
         cardViewBody +=     `</div>`;
-        cardViewBody +=     `<div class="img-area d-flext justify-content-end">`;
+        cardViewBody +=     `<div class="img-area">`;
         cardViewBody +=         `<img src="${mat.product.productImage}"/>`;
         cardViewBody +=     `</div>`;
         cardViewBody +=`</div>`;
@@ -75,7 +84,7 @@ const createCardViewBody = function(mat){
 
 const createCardViewFooter = function(mat){
     let bg = "pimcs-card-bg-green";
-    if(mat.threshold > mat.inventoryWeight){
+    if(mat.threshold > mat.currentInventory){
         bg = "pimcs-card-bg-red";
     }
     let cardViewFooter = `<div class="pimcs-card-footer ${bg} text-size-middle d-flex">`;
@@ -90,4 +99,7 @@ $(document).on("change",".card-checked",function(){
     let isChecked = $(this).is(":checked");
     let mat = getStorageItem(id);
     setStorage({mat:mat, isChecked: isChecked})
+    let checkedCnt = getCheckedItems().length;
+
+    $(".inventory-cnt-viewer").text(formatKoKr(checkedCnt));
 });

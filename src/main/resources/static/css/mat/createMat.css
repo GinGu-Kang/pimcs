@@ -46,9 +46,7 @@
     display: flex;
     justify-content: space-between;
 }
-.pimcs-blue-input{
-    height: 29px;
-}
+
 .input{
     width: 75%;
     height: 29px;

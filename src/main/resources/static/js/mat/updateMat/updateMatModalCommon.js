@@ -19,6 +19,7 @@ $(document).on("click",".update-dropdown-item",function(){
 });
 
 
+
 /**
  * 체크된 매트 시리얼번호와 변경될 값으로 li태그 만듬
  * @param {*} oldKey 변경할 컬럼명
@@ -26,6 +27,10 @@ $(document).on("click",".update-dropdown-item",function(){
  */
 const createCheckedItem = function(oldKey){
     let li = "";
+    if($(".all-rows-checked").is(":checked")){
+        loadMatAll();
+    }
+
     for(let mat of getCheckedItems()){
         
         if(oldKey == "calcMethod"){
@@ -41,6 +46,7 @@ const createCheckedItem = function(oldKey){
     }
     return li;
 }
+
 
 const updateMatFormData = function({columnName, replaceValue}){
     let formData = new FormData();

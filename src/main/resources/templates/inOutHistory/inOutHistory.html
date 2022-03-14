@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+    <head>
+        <title>입・출고 내역</title>
+        <!--datepicker-->
+        <link rel="stylesheet" href="/css/jquery-ui.css">
+        <script src="/js/jquery-ui.min.js"></script>
+
+        <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+        
+        <link rel="stylesheet" href="/css/inOutHistory/inOutHistory.css"/>
+        <script></script>
+        <script>
+            $(function(){
+              $('#start-date').datepicker({
+                dateFormat: 'yy.mm.dd',
+              });
+              $('#end-date').datepicker({
+                dateFormat: 'yy.mm.dd',
+              });
+
+              $("#desktop-pagination").twbsPagination({
+                    totalPages:10,    
+                    visiblePages:5,    
+                    startPage: 1,
+                    initiateStartPageClick:false,
+                    prev:'<',
+                    next:'>',
+                    first:'',
+                    last:'',
+                    onPageClick: function (event, page) {
+                        
+                    }
+                });
+              
+            })
+          </script>
+        
+    </head>
+    <div layout:fragment="content" class="content">
+        <!--HEADER-->
+        <div class="header">
+            <!--ITEM1-->
+            <div class="header-item1">
+                <form class="search-form">
+                    <!--검색 input-->
+                    <div class="input-group-shadow">
+                        <input class="pimcs-bd-group-input text-size-middle" placeholder="Search"/>
+                        <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
+                    </div>
+                    <!--button-->
+                    <button class="rect" style="margin-left:13px;">All</button>
+                    <button class="rect">Day</button>
+                    <button class="rect">WEEK</button>
+                    <button class="rect">MONTH</button>
+                    <!--select date-->
+                    <div class="input-group-shadow datepicker-container">
+                        <span class="input-group-text-shadow"><i class="bi bi-calendar-check"></i></span>
+                        <input id="start-date" class="pimcs-bd-group-input text-size-middle " placeholder="yy.mm.dd"/>
+                        <span class="input-group-text-shadow d-flex justify-content-center">~</span>
+                        <input id="end-date" class="pimcs-bd-group-input text-size-middle" placeholder="yy.mm.dd"/>
+                    </div>
+
+                </form>
+                <!--show items-->
+                <div class="show-item-container">
+                    show
+                    <select class="show-item-select">
+                        <option selected>10</option>
+                        <option>25</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                    items per page
+                </div>
+                
+            </div>
+            <!--ITEM2-->
+            <div class="header-item2">
+                <!--graph-->
+                <div>
+                    <button class="square"><i class="bi bi-graph-up"></i></button>
+                </div>
+                <!--csv download-->
+                <div>
+                    <div class="rect">
+                        <a class="a-remove-attr" href="?belowThreshold=true">CSV Download</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <!--PAGINATION-->
+        <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center">
+            <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+        </div>
+        <!--TABLE-->
+        <div class="pimcs-table-container">
+        
+            <table class="table pimcs-table">
+                <thead>
+                    <tr class="text-size-middle">
+                        <th scope="col col-md-2" >입/출고 시간</th>
+                        <th scope="col col-md-2" >제품 이름</th>
+                        <th scope="col col-md-2" >제품 코드</th>
+                        <th scope="col col-md-2" >장소</th>
+                        <th scope="col col-md-2" >입/출고 상태</th>
+                        <th scope="col col-md-2" >갯수</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-size-between-middle-samll">2021-12-16 09:17</td>
+                        <td class="text-size-between-middle-samll">미숫가루</td>
+                        <td class="text-size-between-middle-samll">AR202</td>
+                        <td class="text-size-between-middle-samll">창고</td>
+                        <td>
+                            <div class="out text-size-between-middle-samll">출고</div>
+                        </td>
+                        <td class="text-size-between-middle-samll">갯수</td>
+                    </tr>
+                    <tr>
+                        <td class="text-size-between-middle-samll">2021-12-16 09:17</td>
+                        <td class="text-size-between-middle-samll">미숫가루</td>
+                        <td class="text-size-between-middle-samll">AR202</td>
+                        <td class="text-size-between-middle-samll">창고</td>
+                        <td>
+                            <div class="in text-size-between-middle-samll">입고</div>
+                        </td>
+                        <td class="text-size-between-middle-samll">갯수</td>
+                    </tr>
+                </tbody>                    
+                
+            </table>
+        </div>
+        
+    </div>
+</html>

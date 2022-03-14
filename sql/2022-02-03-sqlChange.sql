@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`company` (
     `contactPhone` varchar(20) NULL,
     `createdAt` DATETIME NULL,
     `ceoEmail` VARCHAR(60) NULL,
+    `ceoName` VARCHAR(60) NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_company_business_category1_idx` (`businessCategoryId` ASC) VISIBLE,
     CONSTRAINT `fk_company_business_category1`

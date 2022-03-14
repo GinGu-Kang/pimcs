@@ -139,7 +139,10 @@ public class CompanyManagementService {
 
 
 
-    public void saveCompany(Company company) {
+    /*
+    회사 수정
+     */
+    public void updateCompany(Company company) {
         companyRepository.save(company);
     }
 

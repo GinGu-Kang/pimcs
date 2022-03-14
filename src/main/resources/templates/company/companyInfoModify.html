@@ -4,6 +4,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet"  href="/css/company/companyInfoModify.css">
+    <script src="https://kit.fontawesome.com/f55bf8539a.js" crossorigin="anonymous"></script>
 
 
     <meta charset="UTF-8">
@@ -14,10 +15,10 @@
 
     <div class="container">
         <!--Edit Company Imformation-->
-        <form action="">
+        <form th:action="@{/company/info/modify}" method="post">
             <legend>
                 <div class="photo"></div>
-                <div th:class="compnay-name"><input type="text" th:value="${company.getCompanyName}"></input></div>
+                <div th:class="compnay-name"><input required type="text" th:value="${company.getCompanyName}" th:name="companyName"></input></div>
 
                 <!-- <></> -->
             </legend>
@@ -26,33 +27,35 @@
                     <div class="item">
                         <div class="item-inner">
                             <label for="company-code">회사코드</label><br>
-                            <input type="text" id="company-code" th:value="${company.getCompanyCode}"><br>
+                            <i id="copyBtn" class="fa-solid fa-copy" onclick="copyCode()"></i>
+                            <input required type="text" id="company-code" th:name="companyCode" th:value="${company.getCompanyCode}" disabled ><br>
                         </div>
                         <div class="item-inner">
                             <label for="company-addr"></label>회사 주소</label><br>
-                            <input type="text" id="company-addr" th:value="${company.getCompanyAddress}"><br>
+                            <input required type="text" id="company-addr" name="companyAddress" th:value="${company.getCompanyAddress}"><br>
                         </div>
                         <div class="item-inner">
+<!--                            비즈니스 카테고리 추가-->
                             <label for="industry">업종</label><br>
-                            <input type="text" id="industry"><br>
+                            <input type="text" id="industry" ><br>
                         </div>
                     </div>
                     <div class="item">
                         <div class="item-inner">
                             <label for="E-mail" >이메일</label><br>
-                            <input type="text" id="E-mail" th:value="${company.getCeoEmail}"><br>
+                            <input required type="email" id="E-mail" name="ceoEmail" th:value="${company.getCeoEmail}" ><br>
                         </div>
                         <div class="item-inner">
                             <label for="company-number"></label>회사 전화번호</label><br>
-                            <input type="text" id="company-number" th:value="${company.getContactPhone}"><br>
+                            <input required type="text" id="company-number"  name="contactPhone" th:value="${company.getContactPhone}"><br>
                         </div>
                         <div class="item-inner">
                             <label for="CEO">대표 이름</label><br>
-                            <input type="text" id="CEO"><br>
+                            <input required type="text" id="CEO" name="ceoName" th:value="${company.getCeoName}"><br>
                         </div>
                     </div>
             </fieldset>
-            <p><input type="submit" th:value="저장하기"></p>
+            <p><input required type="submit" th:value="저장하기"></p>
         </form>
 
 
@@ -62,5 +65,16 @@
 
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        function copyCode(){
+            let companyCode=$("#company-code");
+            companyCode.attr("disabled",false);
+            companyCode.select()
+            document.execCommand('copy');
+            companyCode.attr("disabled",true);
+            alert("회사 코드가 복사되었습니다. ");
+        }
+
+    </script>
 </div>
 </html>

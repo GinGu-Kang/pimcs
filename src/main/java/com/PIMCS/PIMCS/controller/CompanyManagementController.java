@@ -57,6 +57,7 @@ public class CompanyManagementController {
 
     @PostMapping("registration")
     public String companyRegistration(User ceo, Company company){
+        company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
         companyManagementService.companyRegistration(ceo,company);
         return "user/auth/login";
@@ -72,10 +73,6 @@ public class CompanyManagementController {
     //필터링 조회
     @GetMapping("search")
     public String searchCompanyWorkerManagement(String keyword,String selectOption,Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        System.out.println(keyword);
-        System.out.println(selectOption);
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-
         List<User> companyWorker=companyManagementService.filterMyCompanyWorker(keyword,selectOption,user.getCompany());
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
@@ -107,12 +104,27 @@ public class CompanyManagementController {
         return isEqualCompany;
     }
 
-    @GetMapping("/info/modify")
-    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm user,Model model){
+
+    //회사 정보
+    @GetMapping("/info")
+    public String companyInfo(@AuthenticationPrincipal SecUserCustomForm user,Model model){
         Company company = user.getCompany();
         model.addAttribute(company);
         return "/company/companyInfoModify.html";
     }
+
+    @PostMapping("/info/modify")
+    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm user,Company companyForm){
+        Company userCompany =  user.getCompany();
+        userCompany.setCompanyAddress(companyForm.getCompanyAddress());
+        userCompany.setCompanyName(companyForm.getCompanyName());
+        userCompany.setContactPhone(companyForm.getContactPhone());
+        userCompany.setCeoName(companyForm.getCeoName());
+        userCompany.setCeoEmail(companyForm.getCeoName());
+        companyManagementService.updateCompany(userCompany);
+        return "redirect:/company/info";
+    }
+
 
 
 

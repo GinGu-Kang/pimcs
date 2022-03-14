@@ -33,6 +33,7 @@ public class Company {
 
   private String companyAddress;
 
+  @Column(updatable =false)
   @CreationTimestamp
   private java.sql.Timestamp createdAt;
 
@@ -41,6 +42,8 @@ public class Company {
 
 
   private String ceoEmail;
+  private String ceoName;
+
 
   @OneToMany(mappedBy = "company")
   private List<Product> products = new ArrayList<>();

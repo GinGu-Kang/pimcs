@@ -64,8 +64,19 @@ legend {
     flex-wrap: wrap;
     align-content: space-between;
 }
+#copyBtn{
+    position: absolute;
+    padding-left: 89%;
+    padding-top: 7%;
+    cursor: pointer;
+}
 
-.item-inner{
+
+ .fa-copy:before{
+     color: #dddddd;
+ }
+ .item-inner{
+    position: relative;
     width: 80%;
     height: 82px;
 }
@@ -74,7 +85,7 @@ legend {
     margin-top: 9px;
     border-radius: 5px;
     padding-left: 20px;
-    padding-right: 20px;
+    padding-right: 39px;
     width: 100%;
     height: 36px;
     border-style: solid;

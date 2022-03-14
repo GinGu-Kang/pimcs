@@ -40,7 +40,7 @@ public class CompanyManagementServiceTest {
         company.setCompanyName("rebook");
         company.setContactPhone("sdf");
         company.setCompanyAddress("asdf");
-        companyManagementService.saveCompany(company);
+        companyManagementService.updateCompany(company);
     }
     @Test
     @Commit

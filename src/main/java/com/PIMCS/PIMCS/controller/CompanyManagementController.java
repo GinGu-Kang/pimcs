@@ -107,6 +107,13 @@ public class CompanyManagementController {
         return isEqualCompany;
     }
 
+    @GetMapping("/info/modify")
+    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm user,Model model){
+        Company company = user.getCompany();
+        model.addAttribute(company);
+        return "/company/companyInfoModify.html";
+    }
+
 
 
 

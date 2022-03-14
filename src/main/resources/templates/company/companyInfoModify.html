@@ -1,10 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/company/companyInfoModify.css">
+
+
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<div layout:fragment="content"  class="content">
 
-</body>
+
+    <div class="container">
+        <!--Edit Company Imformation-->
+        <form action="">
+            <legend>
+                <div class="photo"></div>
+                <div th:class="compnay-name"><input type="text" th:value="${company.getCompanyName}"></input></div>
+
+                <!-- <></> -->
+            </legend>
+
+            <fieldset>
+                    <div class="item">
+                        <div class="item-inner">
+                            <label for="company-code">회사코드</label><br>
+                            <input type="text" id="company-code" th:value="${company.getCompanyCode}"><br>
+                        </div>
+                        <div class="item-inner">
+                            <label for="company-addr"></label>회사 주소</label><br>
+                            <input type="text" id="company-addr" th:value="${company.getCompanyAddress}"><br>
+                        </div>
+                        <div class="item-inner">
+                            <label for="industry">업종</label><br>
+                            <input type="text" id="industry"><br>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-inner">
+                            <label for="E-mail" >이메일</label><br>
+                            <input type="text" id="E-mail" th:value="${company.getCeoEmail}"><br>
+                        </div>
+                        <div class="item-inner">
+                            <label for="company-number"></label>회사 전화번호</label><br>
+                            <input type="text" id="company-number" th:value="${company.getContactPhone}"><br>
+                        </div>
+                        <div class="item-inner">
+                            <label for="CEO">대표 이름</label><br>
+                            <input type="text" id="CEO"><br>
+                        </div>
+                    </div>
+            </fieldset>
+            <p><input type="submit" th:value="저장하기"></p>
+        </form>
+
+
+
+
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</div>
 </html>

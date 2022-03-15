@@ -3,9 +3,11 @@ package com.PIMCS.PIMCS.controller;
 
 
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -61,11 +63,6 @@ public class UserAuthController {
         return "user/auth/userUpdate.html";
     }
 
-    @PostMapping("update")
-    private String editUserInfo(User user){
-        userAuthService.userUpdate(user);
-        return "user/auth/userUpdate.html";
-    }
 
     //로그인
     @GetMapping("/login")
@@ -88,6 +85,37 @@ public class UserAuthController {
         return isCompany;
     }
 
+    //유저 정보
+    @GetMapping("/user/info")
+    private String userInfo(Model model,@AuthenticationPrincipal SecUserCustomForm user){
+        model.addAttribute("user",userAuthService.userDetail(user.getUsername()));
+        return "user/auth/userInfo";
+    }
+
+    @PostMapping("/user/info/modify")
+    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
+        User user =  userAuthService.findUser(currentUser.getUsername()).get();
+
+        user.setName(userForm.getName());
+        user.setPhone(userForm.getPhone());
+        user.setDepartment(userForm.getDepartment());
+
+        userAuthService.userUpdate(user);
+        return "/company/companyInfoModify.html";
+    }
+
+    @GetMapping("/pwd/change")
+    public String pwdChangeForm(){
+        return "/user/auth/pwdChange";
+    }
+
+
+    @PostMapping("/pwd/change")
+    public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
+
+        userAuthService.userPwdUpdate(currentUser.getUsername(),password);
+        return "/user/auth/pwdChange";
+    }
 
 
 

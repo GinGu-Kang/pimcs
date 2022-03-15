@@ -114,26 +114,17 @@ public class CompanyManagementController {
     }
 
     @PostMapping("/info/modify")
-    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm user,Company companyForm){
+    public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm user,Company companyForm){
         Company userCompany =  user.getCompany();
         userCompany.setCompanyAddress(companyForm.getCompanyAddress());
         userCompany.setCompanyName(companyForm.getCompanyName());
         userCompany.setContactPhone(companyForm.getContactPhone());
         userCompany.setCeoName(companyForm.getCeoName());
-        userCompany.setCeoEmail(companyForm.getCeoName());
+        userCompany.setCeoEmail(companyForm.getCeoEmail());
         companyManagementService.updateCompany(userCompany);
-        return "redirect:/company/info";
+        model.addAttribute("company",userCompany);
+        return "/company/companyInfoModify.html";
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

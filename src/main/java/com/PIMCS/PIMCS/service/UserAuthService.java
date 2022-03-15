@@ -65,7 +65,10 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         userRepository.deleteByEmail(email);
     }
 
-    public String userUpdate(User user){
+    /*
+     * 유저정보수정
+     */
+    public void userUpdate(User user){
         boolean isUser=userRepository.findByEmail(user.getEmail()).isPresent();
 
         if(isUser){
@@ -73,7 +76,17 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         }else{
             throw new UsernameNotFoundException("존재하지 않는 아이디");
         }
-        return user.getEmail();
+    }
+    /*
+     * 유저 비밀번호 변경
+     */
+    public void userPwdUpdate(String email,String password){
+        User user =userRepository.findByEmail(email).get();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
+        user.setPassword(encoder.encode(password));
+
+        userRepository.save(user);
     }
 
     public void roleUpdate(List<Role> roleList){
@@ -116,9 +129,8 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return isCompany;
     }
 
-
-
-
-
+    public User userDetail(String email){
+        return userRepository.findByEmail(email).get();
+    }
 
 }

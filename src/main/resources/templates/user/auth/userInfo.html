@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/user/userInfo.css">
+    <script src="https://kit.fontawesome.com/f55bf8539a.js" crossorigin="anonymous"></script>
+
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+
+
+    <div class="container">
+        <!--Edit Company Imformation-->
+        <form th:action="@{/auth/user/info/}" method="post">
+            <legend>
+                <div class="photo"></div>
+                <div th:class="user-email"><p th:text="${user.getEmail()}"></p></div>
+
+                <!-- <></> -->
+            </legend>
+
+            <fieldset>
+                <div class="item">
+                    <div class="item-inner">
+                        <label for="company-code">이름</label><br>
+                        <input required type="text" id="company-code" th:name="name" th:value="${user.getName}" ><br>
+                    </div>
+                    <div class="item-inner">
+                        <label for="company-addr"></label>소속 부서</label><br>
+                        <input required type="text" id="company-addr" name="department" th:value="${user.getDepartment}"><br>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="item-inner">
+                        <label for="E-mail" >전화번호</label><br>
+                        <input required type="email" id="E-mail" name="phone" th:value="${user.getPhone}" ><br>
+                    </div>
+                    <div class="item-inner">
+                        <label for="company-number"></label>비밀번호</label><br>
+                        <i id="copyBtn" class="fa-solid fa-copy" onclick="pwdChange()"></i>
+                        <input required type="password" id="company-number"  name="password" value="*************"><br>
+                    </div>
+                </div>
+            </fieldset>
+            <p><input required type="submit" th:value="저장하기"></p>
+        </form>
+
+
+
+
+
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /><br>
+    <script>
+        function pwdChange(){
+
+            popup=window.open("/auth/pwd/change","비밀번호 변경","width=734, height=500, top=10, left=10");
+            popup.addEventListener('beforeunload', function(event) {//패스워드 변경시 로그아웃
+
+                var form = document.createElement("form");
+                form.setAttribute("charset", "UTF-8");
+                form.setAttribute("method", "Post");  //Post 방식
+                form.setAttribute("action", "/home/auth/logout"); //요청 보낼 주소
+
+                var hiddenField = document.createElement("input");
+                var csrfHeader=$( 'meta[name="_csrf_header"]' ).attr( 'content' );
+                var csrfToken=$( 'meta[name="_csrf"]' ).attr( 'content' );
+                console.log(csrfToken);
+                console.log(csrfHeader)
+
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", "_csrf");
+                hiddenField.setAttribute("value", csrfToken);
+                form.appendChild(hiddenField);
+
+                document.body.appendChild(form);
+                form.submit();
+            });
+        }
+    </script>
+
+</div>
+</html>

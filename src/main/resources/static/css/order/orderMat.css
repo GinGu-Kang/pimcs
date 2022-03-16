@@ -1,0 +1,172 @@
+#container{
+    height: 97%;
+}
+
+form{
+    width: 100%;
+}
+.title{
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4282ff;
+}
+.section-content {
+
+    display: flex;
+}
+.input-wrapper{
+    display: flex;
+    justify-content: space-evenly;
+
+}
+/* 기기주문 */
+.container {
+    padding-bottom: 50px;
+    padding-top: 20px;
+    text-align: center;
+    margin-top: 22px;
+    background-color: #fff;
+    width: 400px;
+
+}
+.submit-center{
+    text-align: center;
+    margin-top: 30px;
+}
+.container p{
+    padding: 30px 10px 15px 25px;
+    font-family: Roboto;
+    font-size: 16px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #121212;
+}
+.ordermat-container{
+    overflow-y: auto;
+}
+
+.card01 {
+    margin-top: 22px;
+    width: 20%;
+    height: 462px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    flex-direction: column;
+
+}
+
+.oder-items {
+    width: 310px;
+    height: 332px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.item-inner {
+    width: 314px;
+    height: 88px;
+}
+
+input[type=text],input[type=number],input[type=date] {
+    width: 300px;
+    height: 46px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-left: 10px;
+    border-radius: 5px;
+    border: solid 2px #a8c6ff;
+    background-color: #fff;
+}
+input[type=submit]{
+    margin-bottom: 50px;
+    width: 300px;
+    height: 46px;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    background-color: #4d83f7;
+    color: #ffffff;
+}
+
+#search {
+    width: 204px;
+    height: 46px;
+}
+
+.item-search {
+    display: flex;
+    justify-content: space-between;
+}
+.postcode-section{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.postcode-section-wrapper{
+    display: flex;
+    justify-content: center;
+    width: 300px;
+}
+#post-search-btn{
+    width: 80px;
+    margin-left: 10px;
+    border-radius: 5px;
+    background-color: #4d83f7;
+    color: #ffffff;
+    border: none;
+
+}
+.search-button {
+    -left: 12px;
+    width: 88px;
+    height: 46px;
+}
+
+/* 배송 */
+.delivery {
+    width: 450px;
+    height: 881px;
+}
+
+#postcode{
+    width: 220px;
+    margin-left: 5px;
+}
+
+.card02 {
+    margin-top: 22px;
+    width: 450px;
+    height: 736px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+}
+
+.del-items {
+    width: 310px;
+    height: 576px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+
+.adress {
+    width: 314px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}

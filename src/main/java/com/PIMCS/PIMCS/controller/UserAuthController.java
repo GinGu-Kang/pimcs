@@ -92,16 +92,20 @@ public class UserAuthController {
         return "user/auth/userInfo";
     }
 
+    //개인정보 변경
     @PostMapping("/user/info/modify")
-    public String companyInfoModify(@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
+    public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
         User user =  userAuthService.findUser(currentUser.getUsername()).get();
-
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         user.setName(userForm.getName());
         user.setPhone(userForm.getPhone());
         user.setDepartment(userForm.getDepartment());
 
+
+
         userAuthService.userUpdate(user);
-        return "/company/companyInfoModify.html";
+        model.addAttribute(user);
+        return "/user/auth/userInfo";
     }
 
     @GetMapping("/pwd/change")

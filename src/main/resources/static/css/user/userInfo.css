@@ -20,6 +20,7 @@ button {cursor: pointer;}
 fieldset {
     width: 72vw;
     height: 20vw;
+    min-height: 300px;
     background-color: #fff;
     display: flex;
     justify-content: space-around;
@@ -82,7 +83,7 @@ legend {
 }
 
 
-.fa-copy:before{
+.fa-solid:before{
     color: #dddddd;
 }
 .item-inner{

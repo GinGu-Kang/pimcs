@@ -69,13 +69,8 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
      * 유저정보수정
      */
     public void userUpdate(User user){
-        boolean isUser=userRepository.findByEmail(user.getEmail()).isPresent();
+        userRepository.save(user);
 
-        if(isUser){
-            userRepository.save(user);
-        }else{
-            throw new UsernameNotFoundException("존재하지 않는 아이디");
-        }
     }
     /*
      * 유저 비밀번호 변경

@@ -19,20 +19,20 @@ import java.util.List;
 @Controller
 @RequestMapping("order")
 public class OrderController {
-    private final AdminService adminOrderService;
+    private final AdminService adminService;
     private final OrderService orderService;
 
-    public OrderController(AdminService adminOrderService, OrderService orderService) {
-        this.adminOrderService = adminOrderService;
+    public OrderController(AdminService adminService, OrderService orderService) {
+        this.adminService = adminService;
         this.orderService = orderService;
     }
 
 
     @GetMapping("mat")
     public String orderMat(Model model){
-        List<MatCategory> matCategoryList=adminOrderService.findMatCategory();
+        List<MatCategory> matCategoryList=adminService.findMatCategory();
         model.addAttribute("matCategoryList",matCategoryList);
-        return "order/orderMat";
+        return "order/orderMatForm";
     }
 
     @PostMapping("mat")

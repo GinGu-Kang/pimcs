@@ -32,7 +32,6 @@ public class MatOrder {
   private String deliveryCode;
   @Transient
   private String detailAddress;
-  private String pgOrderId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "userEmail")

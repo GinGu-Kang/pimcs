@@ -36,10 +36,10 @@
             주문자 이름<br>
             <input type="text" name="depositerName"><br>
             <section class="postService">
-                <input type="text" placeholder="우편번호" id="postCode" min="0" name="postCode">
+                <input type="text" placeholder="우편번호" id="postCode" min="0" name="postCode" required>
                 <input type="button" value="우편번호 찾기" onclick="searchPostCode()"><br>
-                <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress">
-                <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress"><br>
+                <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress" required>
+                <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required><br>
             </section>
         </div>
         <input type="submit" th:value="주문완료">

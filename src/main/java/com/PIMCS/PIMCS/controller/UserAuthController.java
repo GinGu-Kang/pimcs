@@ -31,6 +31,7 @@ public class UserAuthController {
     private final UserAuthService userAuthService;
     private final CompanyManagementService companyManagementService;
 
+
     @Autowired
     public UserAuthController(UserAuthService userAuthService, CompanyManagementService companyManagementService) {
         this.userAuthService = userAuthService;
@@ -120,6 +121,14 @@ public class UserAuthController {
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
         return "/user/auth/pwdChange";
     }
+
+    @GetMapping(value = "/email/test")
+    public String emailTest(){
+        System.out.println("오긴와?");
+        return "/user/email";
+    }
+
+
 
 
 

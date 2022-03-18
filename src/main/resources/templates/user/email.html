@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+<textarea class="editor" id="editor" ><주문자에게온 메일 내용 >  2022년 3월 16일 강성수
+------------------------------------------------------------------------------------------------------------
+(주)스마트쇼핑 테크니컬 서포트입니다.
+이번에는 재고 관리 IoT 스마트 매트를 신청 해 주셔서 감사 합니다 .
+디바이스 대수·배송처 주소·배송 예정일은 이하와 같습니다.
+【디바이스 대수】
+A3 사이즈: 6대
+A4 사이즈: 2대
+A5 사이즈: 2 대
+합계: 10 대
+ 【디바이스 배송지】 - 서버에 등록되어 있는 주소
+우편 번호: 28354
+국가명 Korea
+도: chungcheongbuk-do
+도시: cheongju-si
+주소1 : sachen-dong 48-1
+주소2 :
+회사 이름: JUNG-BU CO.,LTD
+부서명:
+이름: testtest
+전화 번호: 821051481062
+배송 예정일: 2022-03-03 ( 이것은 자동 ? : 꼭필요한 내용은 아님 )
+【주문자 정보】: 서버에 이미 등록된 주소
+이메일: 1471kang@gmail.com
+고객 ID: 5001896
+
+주문 정보가 잘못된 부분이 있으면, 아래의 메일 및 주소로 연락 바랍니다.
+[문의]
+(주)스마트쇼핑 테크니컬 서포트
+메일 : support@smartmat.jp ( 영업담당자 메일 주소)
+전화 : *****                 ( 영업담당자 회사 전화 )
+접수 시간：평일 9:00〜18:00
+※본 메일은 송신 전용 주소로부터 보내 드리고 있습니다.
+</textarea>
+
+<textarea class="editor" id="editorTest" ><주문자에게온 메일 내용 >  2022년 3월 16일 강성수
+------------------------------------------------------------------------------------------------------------
+(주)스마트쇼핑 테크니컬 서포트입니다.
+이번에는 재고 관리 IoT 스마트 매트를 신청 해 주셔서 감사 합니다 .
+디바이스 대수·배송처 주소·배송 예정일은 이하와 같습니다.
+【디바이스 대수】
+A3 사이즈: 6대
+A4 사이즈: 2대
+A5 사이즈: 2 대
+합계: 10 대
+ 【디바이스 배송지】 - 서버에 등록되어 있는 주소
+우편 번호: 28354
+국가명 Korea
+도: chungcheongbuk-do
+도시: cheongju-si
+주소1 : sachen-dong 48-1
+주소2 :
+회사 이름: JUNG-BU CO.,LTD
+부서명:
+이름: testtest
+전화 번호: 821051481062
+배송 예정일: 2022-03-03 ( 이것은 자동 ? : 꼭필요한 내용은 아님 )
+【주문자 정보】: 서버에 이미 등록된 주소
+이메일: 1471kang@gmail.com
+고객 ID: 5001896
+
+주문 정보가 잘못된 부분이 있으면, 아래의 메일 및 주소로 연락 바랍니다.
+[문의]
+(주)스마트쇼핑 테크니컬 서포트
+메일 : support@smartmat.jp ( 영업담당자 메일 주소)
+전화 : *****                 ( 영업담당자 회사 전화 )
+접수 시간：평일 9:00〜18:00
+※본 메일은 송신 전용 주소로부터 보내 드리고 있습니다.
+</textarea>
+
+
+
+    <input type="hidden" id="userId" value="rkdwlsrn212@gmail.com">
+    <button onclick="checkTextArea()">텍스트애리아호가인</button>
+
+    <button onclick="emailSend()">뚝딱뽂</button>
+
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+
+    //이메일 발송
+    function emailSend(){
+        var serialNo = "124315";
+        var subject = "chats 회원인증번호 입니다.";
+        var body = $("#editorTest").val();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        console.log("뻐킹")
+
+        console.log("뻐킹")
+        var params = {
+            userId : $("#userId").val()
+            ,subject : subject
+            ,body : body
+        }
+
+        console.log(JSON.stringify(params))
+        $.ajax({
+            url: "/email/sendEmail"
+            ,type: "POST"
+            ,accept: "application/json"
+            ,contentType: "application/json; charset=utf-8"
+            ,data: JSON.stringify(params)
+            ,dataType: "json"
+            , beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                }
+            ,success: function(data) {
+                //시리얼번호 db에 저장
+            },
+            error: function(jqXHR,textStatus,errorThrown) {
+                alert("이메일 전송에 실패하였습니다.");
+            }
+        });
+    }
+
+
+</script>
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+<script>
+    console.log($("#editorTest").val());
+    var myEditor;
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( editor => {
+            console.log( 'Editor was initialized', editor );
+            myEditor = editor;
+        } )
+        .catch( err => {
+            console.error( err.stack );
+        } );
+    function checkTextArea(){
+        console.log(myEditor.getData())
+
+    }
+
+</script>
+</body>
+</html>

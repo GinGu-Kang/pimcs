@@ -32,7 +32,7 @@ public class OrderController {
     public String orderMat(Model model){
         List<MatCategory> matCategoryList=adminService.findMatCategory();
         model.addAttribute("matCategoryList",matCategoryList);
-        return "order/orderMatForm";
+        return "order/orderMat";
     }
 
     @PostMapping("mat")

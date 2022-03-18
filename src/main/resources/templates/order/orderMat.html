@@ -1,71 +1,91 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html" layout:decorate="~{layouts/default}">
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <link rel="stylesheet"  href="/static/css/order/orderMat.css">
+    <link rel="stylesheet"  href="/css/order/orderMat.css">
     <script src="https://kit.fontawesome.com/f55bf8539a.js" crossorigin="anonymous"></script>
 
 
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<div layout:fragment="content"  class="content ordermat-container">
+    <section style="display:flex;">
+        <form name="signUp" th:action="@{/order/mat}" method="post">
+
+            <section th:class="input-wrapper">
+                <div th:class="order-wrapper">
+                <p th:class="title">기기 주문</p>
+
+            <div class="container">
+                <th:block th:each="matCategory,i:${matCategoryList}">
+                        <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
+                        <input th:name="'matCategoryIdList['+${i.index}+']'" type="hidden" th:value="${matCategory.getId()}">
+                        <input th:name="'matCategoryOrderList['+${i.index}+'].orderCnt'" type="number" min="0"><br>
+                </th:block>
+            </div>
 
 
-<section>
-    <h1>회원가입 페이지</h1>
-</section>
+            </div>
+                <div th:class="delivery-wrapper">
+                <p th:class="title">배송</p>
+                <div class="container">
+                <p>희망 배송일</p>
+                <input type="date" id="hopeDate" min="2022-01-0" name="hopeDeliveryDate">
+                <p>주문자 이름</p>
+                <input type="text" name="depositerName">
+                    <p>우편 번호</p>
 
-<section style="display:flex;">
+                        <section class="postcode-section">
+                            <section th:class="postcode-section-wrapper">
+                            <input type="text" placeholder="우편번호" id="postcode" min="0" name="postCode">
+                            <input type="button" id="post-search-btn" value="검색" onclick="searchPostCode()">
+                            </section>
+                        </section>
+                    <p>주소</p>
+                    <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress" required>
+                    <p>상세 주소</p>
+                    <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required>
+                </div>
+                    <p th:class="submit-center"><input type="submit" th:value="주문완료"></p>
 
-    <form name="signUp" th:action="@{/order/mat}" method="post">
-        <div class="order">
-            <section th:each="matCategory,i:${matCategoryList}">
-                <div class="item-inner">
-                <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
-                <input th:name="'matCategoryIdList['+${i.index}+']'" type="hidden" th:value="${matCategory.getId()}">
-                <input th:name="'matCategoryOrderList['+${i.index}+'].orderCnt'" type="number" min="0"><br>
-                    <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
                 </div>
             </section>
-        </div>
-        <div>
-            희망 배송일<br>
-            <input type="date" id="hopeDate" min="2022-01-0" name="hopeDeliveryDate"><br>
-            주문자 이름<br>
-            <input type="text" name="depositerName"><br>
-            <section class="postService">
-                <input type="text" placeholder="우편번호" id="postCode" min="0" name="postCode" required>
-                <input type="button" value="우편번호 찾기" onclick="searchPostCode()"><br>
-                <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress" required>
-                <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required><br>
-            </section>
-        </div>
-        <input type="submit" th:value="주문완료">
-    </form>
 
-</section>
-<section><p id="price">hihi</p><button id="payment-button" onclick="iamport()" >구매</button>
-</section>
 
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        </form>
 
-<script>
-    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-    $("#hopeDate").prop("min",date);
-    function searchPostCode(){
-        new daum.Postcode({
-            oncomplete: function(data) {
-                $("#postCode").prop("value",data.zonecode);
-                $("#deliveryAddress").prop("value",data.address);
-                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-                // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-            }
-        }).open();
+    </section>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-    }
-</script>
+    <script>
+        let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+        $("#hopeDate").prop("min",date);
+        function searchPostCode(){
+            new daum.Postcode({
+                oncomplete: function(data) {
+                    console.log(data)
+                    $("#postcode").prop("value",data.zonecode);
+                    $("#deliveryAddress").prop("value",data.address);
+                    // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+                    // 예제를 참고하여 다양한 활용법을 확인해 보세요.
+                }
+            }).open();
 
-</body>
+        }
+    </script>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
 </html>

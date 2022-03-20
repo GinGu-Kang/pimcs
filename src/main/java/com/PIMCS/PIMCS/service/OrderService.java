@@ -1,15 +1,10 @@
 package com.PIMCS.PIMCS.service;
 
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.MatCategory;
-import com.PIMCS.PIMCS.domain.MatCategoryOrder;
-import com.PIMCS.PIMCS.domain.MatOrder;
+import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.form.MatCategoryAndOrderForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
-import com.PIMCS.PIMCS.repository.MatCategoryOrderRepository;
-import com.PIMCS.PIMCS.repository.MatCategoryRepository;
-import com.PIMCS.PIMCS.repository.MatOrderRepository;
-import com.PIMCS.PIMCS.repository.UserRepository;
+import com.PIMCS.PIMCS.repository.*;
+import org.hibernate.criterion.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,13 +15,16 @@ public class OrderService {
     private final MatCategoryOrderRepository matCategoryOrderRepository;
     private final MatOrderRepository matOrderRepository;
     private final UserRepository userRepository;
+    private final OrderMailRepository orderMailRepository;
 
 
-    public OrderService(MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, UserRepository userRepository) {
+
+    public OrderService(MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, UserRepository userRepository, OrderMailRepository orderMailRepository) {
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
         this.matOrderRepository = matOrderRepository;
         this.userRepository = userRepository;
+        this.orderMailRepository = orderMailRepository;
     }
 
 
@@ -49,6 +47,28 @@ public class OrderService {
 
     public List<MatOrder> findOrder(Company company){
         return matOrderRepository.findByCompany(company);
+    }
+
+
+    /*
+    * 이메일 폼
+     */
+    public OrderMail selectOrderMailForm(){
+
+        OrderMail orderMailForm=orderMailRepository.findById(1).get();
+
+        return orderMailForm;
+    }
+
+    public void insertOrderMail(OrderMail orderMail){
+        orderMailRepository.save(orderMail);
+    }
+    public OrderMail updateOrderMail(String greeting,String managerInfo){
+        OrderMail orderMailForm=orderMailRepository.getOne(1);
+        orderMailForm.setGreeting(greeting);
+        orderMailForm.setManagerInfo(managerInfo);
+        orderMailRepository.save(orderMailForm);
+        return orderMailForm;
     }
 
     /**

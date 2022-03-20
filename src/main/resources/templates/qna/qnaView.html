@@ -16,7 +16,7 @@
     <section class="qa-container">
         <section th:class="question">
             <div th:class="qna-title">
-                <span th:class="qa-icon">Q.</span>
+                <span th:class="qa-icon">Q.</th:block></span>
                 <span th:class="write-value" th:text="${question.getTitle()}"></span>
                 <div th:if="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-true" >답변 완료</div></div>
                 <div th:unless="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-false" >답변 미완료</div></div>

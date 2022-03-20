@@ -41,9 +41,11 @@ public class OrderController {
         return "redirect:/order/mat";
     }
 
-//    public String orderList(){
-//
-//
-//        return
-//    }
+    @GetMapping(value = "/email")
+    public String emailTest(Model model){
+
+        model.addAttribute("orderMailForm",orderService.selectOrderMailForm());
+        return "/user/email";
+    }
+
 }

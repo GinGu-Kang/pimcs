@@ -5,6 +5,7 @@ package com.PIMCS.PIMCS.controller;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
+import com.PIMCS.PIMCS.service.OrderService;
 import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -122,11 +123,6 @@ public class UserAuthController {
         return "/user/auth/pwdChange";
     }
 
-    @GetMapping(value = "/email/test")
-    public String emailTest(){
-        System.out.println("오긴와?");
-        return "/user/email";
-    }
 
 
 

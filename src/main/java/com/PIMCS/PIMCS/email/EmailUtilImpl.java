@@ -16,7 +16,7 @@ public class EmailUtilImpl implements EmailUtil {
     private JavaMailSender sender;
 
     @Override
-    public Map<String, Object> sendEmail(String toAddress, String subject, String body) {
+    public Map<String, Object> sendEmail(String[] toAddress, String subject, String body) {
         Map<String, Object> result = new HashMap<String, Object>();
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);

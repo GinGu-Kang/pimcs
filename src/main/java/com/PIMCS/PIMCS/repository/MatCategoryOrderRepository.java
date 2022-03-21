@@ -34,5 +34,4 @@ public interface MatCategoryOrderRepository extends JpaRepository<MatCategoryOrd
             "INNER JOIN  MatCategory mc on  mco.matCategory = mc " +
             "where co.id = :companyId")
     List<MatCategoryOrder> findByCompanyId(@Param("companyId") Integer companyID);
-
 }

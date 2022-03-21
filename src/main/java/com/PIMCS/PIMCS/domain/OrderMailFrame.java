@@ -8,14 +8,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.Arrays;
 
 @Getter
 @Setter
 @Entity
 @Builder
 @AllArgsConstructor
-public class OrderMail {
+public class OrderMailFrame {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -27,7 +26,7 @@ public class OrderMail {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    public OrderMail() {
+    public OrderMailFrame() {
 
     }
 }

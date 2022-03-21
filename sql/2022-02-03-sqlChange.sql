@@ -346,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`userRole` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`answer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`orderMail` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
                                                 `id` INT NOT NULL AUTO_INCREMENT,
                                                 `greeting` BLOB NULL,
                                                 `managerInfo` BLOB NULL,

@@ -1,9 +1,6 @@
 package com.PIMCS.PIMCS.domain;
 
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -14,6 +11,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
 @NamedEntityGraph(name = "Company.companyWorker",
         attributeNodes = @NamedAttributeNode("companyWorker"))
 public class Company {
@@ -51,4 +50,7 @@ public class Company {
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
   private List<User> companyWorker=new ArrayList<>();
 
+  public Company() {
+
+  }
 }

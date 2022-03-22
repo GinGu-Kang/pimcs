@@ -54,13 +54,19 @@ public class CompanyManagementController {
         return "company/companyRegistration";
     }
 
-
+    //회사 등록
     @PostMapping("registration")
     public String companyRegistration(User ceo, Company company){
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
         companyManagementService.companyRegistration(ceo,company);
         return "user/auth/login";
+    }
+    @GetMapping("registration/verify")
+    public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
+        System.out.println(verifyKey+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        companyManagementService.companyRegistrationVerify(verifyKey);
+        return "redirect:/user/auth/login";
     }
 
     //회사원 전체 조회

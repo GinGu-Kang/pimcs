@@ -54,6 +54,7 @@
             alert("비밀번호를 확인 해주세요.");
             return false
         } else{
+            alert("입력하신 메일로 인증이메일이 전송되었습니다. 이메일을 확인해 인증확인을 눌러주세요.")
             return true
         }
 

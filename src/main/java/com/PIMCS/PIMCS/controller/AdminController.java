@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.Answer;
 import com.PIMCS.PIMCS.domain.MatCategory;
+import com.PIMCS.PIMCS.domain.OrderMailFrame;
 import com.PIMCS.PIMCS.domain.Question;
 import com.PIMCS.PIMCS.service.AdminService;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.annotation.Commit;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,7 +62,7 @@ public class AdminController {
     }
 
     @GetMapping("qna/list")
-    public String watingQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+    public String waitingQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                 Model model){
         Page<Question> questionPage=adminService.findAllQuestion(pageable);
         model.addAttribute("questionPage",questionPage);
@@ -90,5 +92,18 @@ public class AdminController {
         adminService.addAnswer(questionId,answer);
         return "redirect:/admin/qna/list";
     }
+
+    @GetMapping("email/frame/modify")
+    public String emailFrameModifyForm(Model model){
+        model.addAttribute("OrderMailFrame",adminService.selectOrderMailFrame());
+        return "admin/emailFrameModify";
+    }
+    @PostMapping("email/frame/modify")
+    public String emailFrameModify(OrderMailFrame orderMailFrame){
+        System.out.println(orderMailFrame.getGreeting());
+        adminService.updateOrderMailFrame(orderMailFrame);
+        return "redirect:/admin/email/frame/modify";
+    }
+
 
 }

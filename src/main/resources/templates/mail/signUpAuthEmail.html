@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:remove="all">이메일 기본 템플릿</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<p>안녕하세요. <strong th:text="${name}">홍길동</strong>님의 구매안내 메일입니다.</p>
+<h3>구매 내역</h3>
+<table th:remove="all-but-first">
+  <tr th:each="orderItem : ${orderItemList}" th:with="result=${orderItem.price}">
+    <td style="background: #efefef; padding: 10px;">
+      <span th:text="${orderItem.name}" th:remove="tag">치약</span>
+    </td>
+    <td>
+            <span th:text="${#numbers.formatCurrency(orderItem.price)}"
+                  th:remove="tag">￦3,600
+            </span>원
+    </td>
+  </tr>
+  <tr>
+    <td style="background: #efefef; padding: 10px;">
+      <span th:remove="tag">참치</span>
+    </td>
+    <td>￦4,300원</td>
+  </tr>
+</table>
+<p>
+  전체 결제금액
+  <span th:text="${#numbers.formatCurrency(#aggregates.sum(orderItemList.![price]))}"
+        th:remove="tag">￦7,900
+    </span>원
+</p>
+<p>
+  구매일
+  <span th:text="${#dates.format(orderDate, 'yyyy-MM-dd HH:mm:ss')}">
+        2017-01-30 23:59:59
+    </span>
+</p>
+<p>감사합니다.</p>
+</body>
+</html>

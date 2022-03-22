@@ -40,7 +40,7 @@
 
                         <section class="postcode-section">
                             <section th:class="postcode-section-wrapper">
-                            <input type="text" placeholder="우편번호" id="postcode" min="0" name="postCode">
+                            <input type="text" placeholder="우편번호" id="postcode"  name="postCode">
                             <input type="button" id="post-search-btn" value="검색" onclick="searchPostCode()">
                             </section>
                         </section>
@@ -50,7 +50,6 @@
                     <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required>
                 </div>
                     <p th:class="submit-center"><input type="submit" th:value="주문완료"></p>
-
                 </div>
             </section>
 

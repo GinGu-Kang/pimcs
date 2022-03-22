@@ -16,14 +16,14 @@ public class EmailUtilImpl implements EmailUtil {
     private JavaMailSender sender;
 
     @Override
-    public Map<String, Object> sendEmail(String[] toAddress, String subject, String body) {
+    public Map<String, Object> sendEmail(String[] toAddress, String subject, String body, boolean ishtml) {
         Map<String, Object> result = new HashMap<String, Object>();
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
         try {
             helper.setTo(toAddress);
             helper.setSubject(subject);
-            helper.setText(body);
+            helper.setText(body,ishtml);
             result.put("resultCode", 200);
         } catch (MessagingException e) {
             e.printStackTrace();

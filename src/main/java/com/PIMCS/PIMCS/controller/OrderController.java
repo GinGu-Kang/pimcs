@@ -47,26 +47,4 @@ public class OrderController {
         return "redirect:/order/mat";
     }
 
-//    @RequestMapping(value = "/email/sendEmail",method = RequestMethod.POST)
-//    public Map<String, Object> sendEmail(@RequestBody Map<String, Object> params){
-//        log.info("email params={}", params);
-//
-//        return emailUtilImpl.sendEmail(
-//                (String) params.get("userId")
-//                , (String) params.get("subject")
-//                , (String) params.get("body")
-//        );
-//    }
-
-    @GetMapping(value = "/email")
-    public String emailTest(Model model){
-
-        OrderMailForm orderMailForm=orderService.selectOrderMailForm();
-        orderMailForm.getMatOrder().getCreatedAt().toString().substring(0,11);
-        model.addAttribute("orderMailFrame",orderMailForm.getOrderMailFrame());
-        model.addAttribute("matOrder",orderMailForm.getMatOrder());
-        model.addAttribute("matCategoryOrderList",orderMailForm.getMatCategoryOrderList());
-        return "user/email";
-    }
-
 }

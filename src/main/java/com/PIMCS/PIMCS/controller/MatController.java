@@ -1,26 +1,22 @@
 package com.PIMCS.PIMCS.controller;
 
-import com.PIMCS.PIMCS.Utils.MatControllerUtils;
-import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
-import com.PIMCS.PIMCS.form.MatForm;
-import com.PIMCS.PIMCS.form.MatFormList;
-import com.PIMCS.PIMCS.form.SearchForm;
-import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.service.MatService;
-import org.aspectj.bridge.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpHeaders;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.Array;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -29,39 +25,25 @@ public class MatController {
 
     private final MatService matService;
 
+
     @Autowired
     public MatController(MatService matService) {
         this.matService = matService;
+
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        binder.setAutoGrowCollectionLimit(Integer.MAX_VALUE);
     }
 
     /**
      * 매트 조회
      */
     @GetMapping("/")
-    public String readMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                             @PageableDefault(page = 1,size = 10) Pageable pageable,
-                             Model model){
-
-        Page<Mat> mats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
-        model.addAttribute("mats",mats);
-        System.out.println(mats);
+    public String readMat(){
         return "mat/readMat/readMat";
     }
-
-    /**
-     *  ajax로 매트데이터 로드하기
-     *  Mat entity객체 사용하지않고 별도의 객체를 만들어서 response
-     */
-    @GetMapping("/api/mats")
-    @ResponseBody
-    public MatPageAdapter ajaxLoadMatData(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                                           Pageable pageable){
-
-        Page<Mat> pageMats = matService.readMatService(secUserCustomForm.getCompany(),pageable);
-
-        return  new MatControllerUtils().createMatPageAdapter(pageMats,secUserCustomForm.getCompany());
-    }
-
 
     /**
      * 매트생성
@@ -94,13 +76,11 @@ public class MatController {
     /**
      * 매트삭제
      */
-    @GetMapping("/mat/delete")
-    public String deleteMatForm(Model model){
-        return null;
-    }
+
     @PostMapping("/mat/delete")
-    public String deleteMat(Model model){
-        return null;
+    @ResponseBody
+    public HashMap<String,Object> deleteMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
+        return matService.deleteMat(secUserCustomForm.getCompany(), matFormList);
     }
 
     /**
@@ -113,13 +93,15 @@ public class MatController {
     }
 
     /**
-     * 검색(시리얼번호,상품위치,제품코드,기기버전)
+     *  매트 csv다운로드
      */
-    @PostMapping("/mat/search")
-    public String searchMat(SearchForm searchForm, Model model){
-
-        matService.searchMat(searchForm);
-        return null;
+    @PostMapping(value = "/download/mat/csv",  produces = "text/csv")
+    public void downloadMatCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,MatCsvForm matCsvForm ,HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "mat-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+        matService.downloadMatCsvService(secUserCustomForm.getCompany(), matCsvForm, response.getWriter());
     }
 
 

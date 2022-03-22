@@ -1,7 +1,6 @@
-.product-category-container > div{
-    
-    margin-right: 58px;
-    float: left;
+.product-category-container{
+    display: flex;
+    flex-direction: row;
 }
 .product-category-container > div:last-child{
     margin-right: 0px;
@@ -20,6 +19,7 @@
 .product-category-container .card-label{
     font-weight: bold;
     margin-bottom: 29px;
+    color: #4282ff;
 }
 
 .product-category-container .category-name-label{
@@ -37,13 +37,18 @@
 .product-category-container .save-btn{
     width: 70%;
     height: 29px;
+    margin: 0 auto;
     margin-top: 18px;
+}
+.category-list-card{
+    height: 291px !important;
 }
 
 .product-category-container .vertical-line{
     width: 1px;
     height: 155px;
     margin-top: 49px;
+    margin-right: 50px;
     background-color: #d9d9d9;
    
 }
@@ -66,14 +71,22 @@
     margin-top: 9px;
     overflow-x:hidden; 
     overflow-y:auto;
+    padding-left: 25px;
+    padding-right: 25px;
 }
 .categories::-webkit-scrollbar-thumb {background-color: #c7d6ff;}
 .categories::-webkit-scrollbar-track{background-color: #c7d6ff;}
 
 .categories > li{
-    margin-left: 13px;
-    margin-top: 3px;
-    margin-right: 30px;
+    height: 32px;
+    align-items: end;
+    padding: 4px;
+    padding-left: 10px;
+    border-bottom: 1px solid #e0e0e0;
+ 
+}
+.categories > li:hover{
+    background-color: #e0e0e0;
 }
 
 .categories .categories-name-text{
@@ -83,3 +96,9 @@
     cursor: pointer;
 }
 
+
+/*ICON*/
+.bi-search{
+    color: #afafaf;
+    margin-right: 10px;
+}

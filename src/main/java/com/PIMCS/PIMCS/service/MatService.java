@@ -1,14 +1,18 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.MatServiceUtils;
+import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.form.MatCsvForm;
 import com.PIMCS.PIMCS.form.MatForm;
 import com.PIMCS.PIMCS.form.MatFormList;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,13 +40,6 @@ public class MatService {
         this.productRepository = productRepository;
     }
 
-    /**
-     * 매트 조회
-     */
-    public Page<Mat> readMatService(Company company, Pageable pageable){
-        Page<Mat> mats = matRepository.findByCompanyOrderByIdDesc(company, pageable);
-        return mats;
-    }
 
     /**
      * 기기등록폼에 필요한 데이터를 db에서 조회
@@ -67,7 +66,8 @@ public class MatService {
         //prudct와 회사 객체를 mat entity에 추가
         Optional<Product> productOpt = productRepository.findByIdAndCompany(matForm.getProductId(), company);
         if(productOpt.isPresent()){
-            mat.setProduct(productOpt.get());
+            Product product = productOpt.get();
+            mat.setProduct(product);
             mat.setCompany(company);
             matRepository.save(mat);
             return mat;
@@ -120,10 +120,22 @@ public class MatService {
     /**
      * 매트삭제 서비스
      */
-    public String deleteMat(Mat mat){
-
-        matRepository.delete(mat);
-        return mat.getSerialNumber();
+    public HashMap<String, Object> deleteMat(Company company, MatFormList matFormList){
+        List<Mat> findMats = matRepository.findByCompany(company);
+        List<Mat> saveMats = new ArrayList<>();
+        MatServiceUtils matServiceUtils = new MatServiceUtils();
+        for(MatForm matForm : matFormList.getMatForms()){
+            Mat findMat = matServiceUtils.findMat(findMats, matForm.getMat().getId());
+            if(findMat != null)
+                saveMats.add(matForm.getMat());
+            else
+                throw new IllegalStateException("Mat does not exist.");
+        }
+        matRepository.deleteAllInBatch(saveMats);
+        HashMap<String,Object> hashMap = new HashMap<>();
+        hashMap.put("success",true);
+        hashMap.put("message","삭제 완료하였습니다.");
+        return hashMap;
     }
 
     /**
@@ -156,10 +168,10 @@ public class MatService {
         List<Mat> matList = null;
         switch (searchForm.getSearchType()){
             case "serialNumber":
-                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
+//                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
                 break;
             case "matLocation":
-                matList = matRepository.findByMatLocationContaining(searchForm.getSearchQuery());
+                /*matList = matRepository.findByMatLocationContaining(searchForm.getSearchQuery());*/
 
                 break;
             case "productCode":
@@ -173,12 +185,43 @@ public class MatService {
 
                 break;
             case "matVersion":
-                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
+//                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
                 break;
         }
 
         return matList;
     }
 
+    public void downloadMatCsvService(Company company, MatCsvForm matCsvForm, Writer writer) throws IOException{
+        List<String> columns = matCsvForm.getCheckedColumnNames();
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        csvPrinter.printRecord(columns);
+
+        List<Mat> findMats = null;
+        if(matCsvForm.getCheckedMatId() == null){
+            findMats = matRepository.findByCompany(company);
+        }else{
+            findMats = matRepository.findByIdIn(matCsvForm.getCheckedMatId());
+        }
+
+        for(Mat mat : findMats){
+            List<String> record = new ArrayList<>();
+            if(columns.contains("serialNumber")) record.add(mat.getSerialNumber());
+            if(columns.contains("matVersion")) record.add("A3");
+            if(columns.contains("productCode")) record.add(mat.getProduct().getProductCode());
+            if(columns.contains("productName")) record.add(mat.getProduct().getProductName());
+            if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
+            if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
+            if(columns.contains("calcMethod")) record.add((mat.getCalcMethod() == 0) ? "무게(g)" : "갯수(개)");
+            if(columns.contains("threshold")) record.add(String.valueOf(mat.getThreshold()));
+            if(columns.contains("inventoryCnt")) record.add(String.valueOf(mat.getInventoryWeight()));
+            if(columns.contains("matLocation")) record.add(mat.getMatLocation());
+            if(columns.contains("productOrderCnt")) record.add(String.valueOf(mat.getProductOrderCnt()));
+            if(columns.contains("boxWeight")) record.add(String.valueOf(mat.getBoxWeight()));
+            csvPrinter.printRecord(record);
+        }
+
+
+    }
 
 }

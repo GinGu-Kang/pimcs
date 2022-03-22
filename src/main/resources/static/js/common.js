@@ -113,8 +113,12 @@ const loadPostData = function({url,header,data}){
     return resultData;
 }
 
-
-
+/**
+ * 천단위 콤바
+ */
+const formatKoKr = function(str){
+    return str.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
     
     
     

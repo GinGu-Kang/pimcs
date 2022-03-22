@@ -26,6 +26,7 @@ header{
 }
 .header-left-box .logo-icon-box{
     margin-left: 22px;
+    cursor: pointer;
 }
 
 

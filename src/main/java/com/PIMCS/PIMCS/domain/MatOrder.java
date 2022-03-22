@@ -20,7 +20,7 @@ import java.util.List;
 public class MatOrder {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private int id;
   private String deliveryAddress;
   private String postCode;
   private long depositStatus;
@@ -32,7 +32,6 @@ public class MatOrder {
   private String deliveryCode;
   @Transient
   private String detailAddress;
-  private String pgOrderId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "userEmail")

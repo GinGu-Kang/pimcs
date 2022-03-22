@@ -42,12 +42,12 @@ public class Product {
   private int productWeight;
 
   private String productName;
-
+  @Column(updatable =false)
   @CreationTimestamp
-  private java.sql.Timestamp createdAt;
+  private Timestamp createdAt;
 
   @UpdateTimestamp
-  private java.sql.Timestamp updatedate;
+  private Timestamp updatedate;
 
   @OneToMany(mappedBy = "product")
   @JsonBackReference

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/admin/adminQnaList.css">
+    <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <p class="title">
+        관리자 Q&A
+    </p>
+    <div id="paging"></div>
+    <section class="action-btn-container">
+        <form th:action="@{/admin/qna/search}" method="get" >
+            <div class="inquery-mat-header-left-box">
+                <select class="search-select" name="selectOption" >
+                    <option>제목</option>
+                </select>
+                <div class="search-input-container">
+                    <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+                </div>
+            </div>
+        </form>
+
+
+    </section>
+    <!--DESKTOP PAGINATION-->
+    <div aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+    </div>
+    <table class="table pimcs-table">
+        <thead>
+        <th scope="col" class="text-center">번호</th>
+        <th scope="col" class="text-center">제목</th>
+        <th scope="col" class="text-center">비밀글 여부</th>
+        <th scope="col" class="text-center">작성자</th>
+        <th scope="col" class="text-center">등록일</th>
+        <th scope="col" class="text-center">답변여부</th>
+
+        </thead>
+        <tbody id="pimcs-tbody" class="pimcs-tbody">
+
+        <th:block th:each="question,i:${questionList}">
+            <tr class="worker-tr"  th:onclick="|location.href='@{/admin/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
+                <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
+                <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+                <td  th:text="${question.getTitle()}"></td>
+                <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
+                <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
+                <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
+                <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
+                <td th:if="${question.getAnswer()!=null}">완료</td>
+                <td th:unless="${question.getAnswer()!=null}">미완료</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+
+
+    <script >
+
+
+
+        /*<![CDATA[*/
+        let totalPage = "[[${questionPage.getTotalPages()}]]";
+        let size = "[[${questionPage.getSize()}]]";
+        let currentPage = "[[${questionPage.getNumber()}]]";
+        /*]]>*/
+        //파라미터 값 가져오기
+        const searchParams = new URLSearchParams(location.search);
+
+        var keyword = searchParams.get('keyword');
+        var selectOption = searchParams.get('selectOption');
+        console.log(keyword)
+
+
+
+
+        currentPage = parseInt(currentPage) + 1;
+        $("#desktop-pagination").twbsPagination({
+            totalPages:totalPage,
+            visiblePages:size,
+            startPage: currentPage,
+            initiateStartPageClick:false,
+            prev:'<',
+            next:'>',
+            first:'',
+            last:'',
+            onPageClick: function (event, page) {
+                if (keyword!=null)
+                    location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+                else{
+                    location.href=`${location.pathname}?page=${page}&size=${size}`
+                }
+            }
+        });
+    </script>
+</div>
+
+</html>

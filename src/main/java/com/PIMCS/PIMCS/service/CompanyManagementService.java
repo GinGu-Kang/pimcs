@@ -2,18 +2,21 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.CompanyServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
+import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +30,20 @@ public class CompanyManagementService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyRepository companyRepository;
+    private final WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private final EmailUtilImpl emailUtilImpl;
+
 
 
 
     @Autowired
-    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository) {
+    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitingCeoRedisRepository waitingCeoRedisRepository, EmailUtilImpl emailUtilImpl) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyRepository = companyRepository;
+        this.waitingCeoRedisRepository = waitingCeoRedisRepository;
+        this.emailUtilImpl = emailUtilImpl;
     }
 
 
@@ -65,10 +73,10 @@ public class CompanyManagementService {
     * 회사원 들을 불러오고 companyid가 다르다면 정지.
     *
     * */
+    @Transactional(rollbackFor = Exception.class)
     public void companyWorkerDelete(List<String> selectWorkersEmail,Company managerCompany){
         List<User> selectWorker=userRepository.findAllByEmailIn(selectWorkersEmail);
         selectWorker=selectWorker.stream().filter(worker -> worker.getCompany().getCompanyCode().equals(managerCompany.getCompanyCode())).collect(Collectors.toList());
-        System.out.println("가져왔따아다아다아당");
 
         for (User user:selectWorker
              ) {
@@ -77,9 +85,37 @@ public class CompanyManagementService {
         userRepository.deleteAllInBatch(selectWorker);
     }
 
-
-    //회사와 대표 저장 회사코드 : UUID
+    //회사 등록후 이메일 인증 대기
+    @Async
     public void companyRegistration(User ceo, Company company){
+        String[] emailSednList=new String[]{ceo.getEmail()};
+        WaitingCeo waitingCeo=WaitingCeo.builder()
+                .company(company)
+                .user(ceo)
+                .build();
+        waitingCeoRedisRepository.save(waitingCeo);
+
+        String orderMail="<div style='text-align:center;width: 600px;flex-float:column;' >\n" +
+                "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
+                "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
+                "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
+                "<a href='http://localhost:8080/company/registration/verify?verifyKey="+waitingCeo.getId()+"'>인증 확인</a>"+
+//                "    <input style='cursor:pointer;width: 155px;height: 50px;padding: 16px 47px 15px 48px;border-radius: 6px;border: solid 1px #dbdbdb;background-color: #4282ff;text-decoration-line : none;text-decoration : none;color: #ffffff;' type='submit' value='확인'>\n" +
+                "</div>\n";
+//        String orderMail="<span style=\"margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;\">PIMCS</span>\n";
+
+        emailUtilImpl.sendEmail(
+                emailSednList
+                , "PIMCS에서 온 인증 메일입니다."
+                , orderMail
+                ,true
+        );
+    }
+    //회사와 대표 저장 회사코드 : UUID
+    @Transactional(rollbackFor = Exception.class)
+    public void companyRegistrationVerify(String verifyKey){
+        User ceo=waitingCeoRedisRepository.findById(verifyKey).get().getUser();
+        Company company=waitingCeoRedisRepository.findById(verifyKey).get().getCompany();
         List<UserRole> userRoles = new ArrayList<>();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         CompanyServiceUtils companyServiceUtils = new CompanyServiceUtils();
@@ -137,7 +173,10 @@ public class CompanyManagementService {
 
 
 
-    public void saveCompany(Company company) {
+    /*
+    회사 수정
+     */
+    public void updateCompany(Company company) {
         companyRepository.save(company);
     }
 

@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`company` (
     `contactPhone` varchar(20) NULL,
     `createdAt` DATETIME NULL,
     `ceoEmail` VARCHAR(60) NULL,
+    `ceoName` VARCHAR(60) NULL,
     PRIMARY KEY (`id`),
     INDEX `fk_company_business_category1_idx` (`businessCategoryId` ASC) VISIBLE,
     CONSTRAINT `fk_company_business_category1`
@@ -214,7 +215,6 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                  `userEmail` VARCHAR(60) NOT NULL,
                                                  `companyId` INT NOT NULL,
                                                  `deliveryAddress` VARCHAR(60) NULL,
-                                                 `pgOrderId` varchar (60) not null ,
                                                  `postCode` VARCHAR(40) NULL,
                                                  `depositStatus` INT NULL,
                                                  `hopeDeliveryDate` DATETIME NULL,
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`answer` (
                                                 `id` INT NOT NULL AUTO_INCREMENT,
-                                                `answer` BLOB NULL,
+                                                `comment` BLOB NULL,
                                                 `createdAt` DATETIME NULL,
                                                 `questionId` INT NOT NULL,
                                                 PRIMARY KEY (`id`),
@@ -341,6 +341,21 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`userRole` (
     ON DELETE cascade
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `pimcs`.`answer`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
+                                                `id` INT NOT NULL AUTO_INCREMENT,
+                                                `greeting` BLOB NULL,
+                                                `managerInfo` BLOB NULL,
+                                                `createdAt` DATETIME NULL,
+                                                PRIMARY KEY (`id`))
+    ENGINE = InnoDB;
+
+
+
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

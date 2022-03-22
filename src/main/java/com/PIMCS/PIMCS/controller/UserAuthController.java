@@ -3,9 +3,12 @@ package com.PIMCS.PIMCS.controller;
 
 
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
+import com.PIMCS.PIMCS.service.OrderService;
 import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +32,7 @@ public class UserAuthController {
     private final UserAuthService userAuthService;
     private final CompanyManagementService companyManagementService;
 
+
     @Autowired
     public UserAuthController(UserAuthService userAuthService, CompanyManagementService companyManagementService) {
         this.userAuthService = userAuthService;
@@ -47,6 +51,12 @@ public class UserAuthController {
         userAuthService.signUp(user);
         return "redirect:/auth/login";
     }
+    //회원가입 선택
+    @GetMapping("choice/signUp")
+    private String signUpChoice(){
+        return "user/auth/signUpChoice.html";
+    }
+
 
     //회원정보수정
     @GetMapping("update")
@@ -55,11 +65,6 @@ public class UserAuthController {
         return "user/auth/userUpdate.html";
     }
 
-    @PostMapping("update")
-    private String editUserInfo(User user){
-        userAuthService.userUpdate(user);
-        return "user/auth/userUpdate.html";
-    }
 
     //로그인
     @GetMapping("/login")
@@ -81,6 +86,44 @@ public class UserAuthController {
         boolean isCompany = userAuthService.companyCheck(companyCode);
         return isCompany;
     }
+
+    //유저 정보
+    @GetMapping("/user/info")
+    private String userInfo(Model model,@AuthenticationPrincipal SecUserCustomForm user){
+        model.addAttribute("user",userAuthService.userDetail(user.getUsername()));
+        return "user/auth/userInfo";
+    }
+
+    //개인정보 변경
+    @PostMapping("/user/info/modify")
+    public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
+        User user =  userAuthService.findUser(currentUser.getUsername()).get();
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        user.setName(userForm.getName());
+        user.setPhone(userForm.getPhone());
+        user.setDepartment(userForm.getDepartment());
+
+
+
+        userAuthService.userUpdate(user);
+        model.addAttribute(user);
+        return "/user/auth/userInfo";
+    }
+
+    @GetMapping("/pwd/change")
+    public String pwdChangeForm(){
+        return "/user/auth/pwdChange";
+    }
+
+
+    @PostMapping("/pwd/change")
+    public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
+
+        userAuthService.userPwdUpdate(currentUser.getUsername(),password);
+        return "/user/auth/pwdChange";
+    }
+
+
 
 
 

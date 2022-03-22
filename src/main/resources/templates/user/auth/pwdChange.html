@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Cocoon</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/signUp.css" />
+
+
+    <style>
+
+
+    </style>
+</head>
+<body>
+
+
+<div class="workerForm">
+    <img src="/img/logo2.png" ><br>
+    <form id="pwd-change-form" th:action="@{/auth/pwd/change}" method="post">
+        <input class="input" type="password" name="password" id="password" placeholder="비밀번호" required onkeyup="check_password()" ><br><br>
+        <span class="pw-text" id="pw-check-text"></span>
+        <input class="input" type="password" id="password-verify" placeholder="비밀번호 확인" required onkeyup="check_password()"><br><br>
+        <span class="pw-text" id="pw-verify-text"></span>
+
+        <br>
+        <input  class="button" type="button"  value="확인" onclick="pwdChange()">
+
+    </form>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/user/signUp.js" ></script>
+    <script>
+        function pwdChange(){
+            url=$("#pwd-change-form").action;
+            if(checkPwdForm()){
+                $.ajax({ type : "POST",
+                    url : url,
+                    data : $("#pwd-change-form").serialize(),
+                    success : function() {
+                        alert("변경되었습니다.")
+                        close()
+                    },
+                    error : function(request, status, msg) {
+                        alert(msg)
+                    } });
+            }
+        }
+        function checkPwdForm(){
+            if(!check_password()){
+                $('#password').focus();
+                alert("비밀번호를 확인 해주세요.");
+                return false
+            } else{
+                return true
+            }
+        }
+    </script>
+</div>
+
+</body>
+</html>

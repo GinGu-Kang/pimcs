@@ -63,6 +63,7 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
     padding-left: 15px;
 
+
 }
 .search-input{
     padding-left: 20px;
@@ -94,4 +95,13 @@ form{
 
 .unlock-icon{
     padding-left: 4px;
+}
+
+table{
+    table-layout:fixed;
+}
+td{
+    width:130px;
+    overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+    max-width:130px;
 }

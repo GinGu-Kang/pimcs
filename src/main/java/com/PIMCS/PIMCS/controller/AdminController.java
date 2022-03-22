@@ -1,9 +1,17 @@
 package com.PIMCS.PIMCS.controller;
 
 
+import com.PIMCS.PIMCS.domain.Answer;
 import com.PIMCS.PIMCS.domain.MatCategory;
-import com.PIMCS.PIMCS.service.AdminOrderService;
+import com.PIMCS.PIMCS.domain.OrderMailFrame;
+import com.PIMCS.PIMCS.domain.Question;
+import com.PIMCS.PIMCS.service.AdminService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.annotation.Commit;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final AdminOrderService adminOrderService;
+    private final AdminService adminService;
 
-    public AdminController(AdminOrderService adminOrderService) {
-        this.adminOrderService = adminOrderService;
+    public AdminController(AdminService adminService) {
+        this.adminService = adminService;
     }
 
     @GetMapping("/matcategory/add")
@@ -27,14 +35,14 @@ public class AdminController {
 
     @PostMapping("/matcategory/add")
     public String matCategoryAdd(MatCategory matCategory){
-        adminOrderService.addMatCategory(matCategory);
+        adminService.addMatCategory(matCategory);
         return "redirect:/admin/matcategory/read";
     }
 
 
     @GetMapping("matcategory/read")
     public String matCategoryList(Model model){
-        model.addAttribute(adminOrderService.findMatCategory());
+        model.addAttribute(adminService.findMatCategory());
         return "admin/categoryManagement";
     }
 
@@ -42,14 +50,60 @@ public class AdminController {
     @ResponseBody
     public boolean matCategoryModify(MatCategory matCategory){
 
-        adminOrderService.modifyMatCategory(matCategory);
+        adminService.modifyMatCategory(matCategory);
         return true;
     }
 
     @ResponseBody
     @PostMapping("matcategory/remove")
     public boolean matCategoryRemove(Integer DBId){
-        adminOrderService.removeMatCategory(DBId);
+        adminService.removeMatCategory(DBId);
         return true;
     }
+
+    @GetMapping("qna/list")
+    public String waitingQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                Model model){
+        Page<Question> questionPage=adminService.findAllQuestion(pageable);
+        model.addAttribute("questionPage",questionPage);
+        model.addAttribute("questionList",questionPage.getContent());
+
+        return "admin/adminQnaList";
+    }
+    //필터링 조회
+    @GetMapping("qna/search")
+    public String adminSearchQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
+        System.out.println(keyword);
+        Page<Question> questionPage=adminService.filterQuestion(keyword,selectOption,pageable);
+        model.addAttribute("questionPage",questionPage);
+        model.addAttribute("questionList",questionPage.getContent());
+        return "admin/adminQnaList";
+    }
+
+    @GetMapping("qna/view")
+    public String detailAdminQna(Model model,Integer questionId){
+        Question question = adminService.findQuestion(questionId);
+        model.addAttribute(question);
+        return "admin/adminQnaView";
+    }
+
+    @PostMapping("qna/view")
+    public String answerAdd(Answer answer,Integer questionId){
+        adminService.addAnswer(questionId,answer);
+        return "redirect:/admin/qna/list";
+    }
+
+    @GetMapping("email/frame/modify")
+    public String emailFrameModifyForm(Model model){
+        model.addAttribute("OrderMailFrame",adminService.selectOrderMailFrame());
+        return "admin/emailFrameModify";
+    }
+    @PostMapping("email/frame/modify")
+    public String emailFrameModify(OrderMailFrame orderMailFrame){
+        System.out.println(orderMailFrame.getGreeting());
+        adminService.updateOrderMailFrame(orderMailFrame);
+        return "redirect:/admin/email/frame/modify";
+    }
+
+
 }

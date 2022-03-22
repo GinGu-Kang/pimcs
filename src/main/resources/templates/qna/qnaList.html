@@ -35,7 +35,7 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
                         <path id="pen-solid_1_" data-name="pen-solid (1)" d="M10.507,1.115a1.857,1.857,0,0,1,2.625,0l1.141,1.142a1.855,1.855,0,0,1,0,2.623l-1.4,1.4L9.105,2.517Zm1.709,5.822L5.461,13.69a2.54,2.54,0,0,1-1.083.643L.892,15.358a.653.653,0,0,1-.688-.2A.637.637,0,0,1,.028,14.5L1.054,11.01A2.554,2.554,0,0,1,1.7,9.927L8.451,3.172Z" transform="translate(0 -0.572)" fill="#fff"/>
                     </svg>
-                </svg>
+                    </svg>
                 </div>
             </div>
         </div>
@@ -56,59 +56,63 @@
 
         </thead>
         <tbody id="pimcs-tbody" class="pimcs-tbody">
-        <tr class="worker-tr" th:each="question,i:${questionList}" onclick="">
-            <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
-            <td th:class="db-id" th:id="${question.getId()}" th:text="${question.getTitle()}"></td>
-            <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
-            <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
-            <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
-            <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
-            <td th:text="없지롱"></td>
 
-        </tr>
+        <th:block th:each="question,i:${questionList}">
+            <tr class="worker-tr"  th:onclick="|location.href='@{/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
+                <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
+                <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+                <td  th:text="${question.getTitle()}"></td>
+                <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
+                <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
+                <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
+                <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
+                <td th:if="${question.getAnswer()!=null}">완료</td>
+                <td th:unless="${question.getAnswer()!=null}">미완료</td>
+            </tr>
+        </th:block>
         </tbody>
     </table>
 
 
 
-<script >
+    <script >
 
 
 
-    /*<![CDATA[*/
-    let totalPage = "[[${questionPage.getTotalPages()}]]";
-    let size = "[[${questionPage.getSize()}]]";
-    let currentPage = "[[${questionPage.getNumber()}]]";
-    /*]]>*/
-    //파라미터 값 가져오기
-    const searchParams = new URLSearchParams(location.search);
+        /*<![CDATA[*/
+        let totalPage = "[[${questionPage.getTotalPages()}]]";
+        let size = "[[${questionPage.getSize()}]]";
+        let currentPage = "[[${questionPage.getNumber()}]]";
+        /*]]>*/
+        //파라미터 값 가져오기
+        const searchParams = new URLSearchParams(location.search);
 
-    var keyword = searchParams.get('keyword');
-    var selectOption = searchParams.get('selectOption');
-    console.log(keyword)
-
-
+        var keyword = searchParams.get('keyword');
+        var selectOption = searchParams.get('selectOption');
+        console.log(keyword)
 
 
-    currentPage = parseInt(currentPage) + 1;
-    $("#desktop-pagination").twbsPagination({
-        totalPages:totalPage,
-        visiblePages:size,
-        startPage: currentPage,
-        initiateStartPageClick:false,
-        prev:'<',
-        next:'>',
-        first:'',
-        last:'',
-        onPageClick: function (event, page) {
-            if (keyword!=null)
-                location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
-            else{
-                location.href=`${location.pathname}?page=${page}&size=${size}`
+
+
+        currentPage = parseInt(currentPage) + 1;
+        $("#desktop-pagination").twbsPagination({
+            totalPages:totalPage,
+            visiblePages:size,
+            startPage: currentPage,
+            initiateStartPageClick:false,
+            prev:'<',
+            next:'>',
+            first:'',
+            last:'',
+            onPageClick: function (event, page) {
+                if (keyword!=null)
+                    location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+                else{
+                    location.href=`${location.pathname}?page=${page}&size=${size}`
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 </div>
 
 </html>

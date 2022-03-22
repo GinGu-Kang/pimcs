@@ -11,8 +11,7 @@
 <h3 th:inline="text">Your Role: [[${#httpServletRequest.UserPrincipal.Authorities}]]</h3>
 <h3 th:inline="text">Your Session: [[${#httpServletRequest.Session}]]</h3>
 
-
-<form th:action="@{auth/logout}" method="post">
+<form th:action="@{/home/auth/logout}" method="post">
     <input type="submit" value="Sign Out"/>
 </form>
 <h1 sec:authorize="hasRole('ROLE_User')" th:text="hihi"></h1>

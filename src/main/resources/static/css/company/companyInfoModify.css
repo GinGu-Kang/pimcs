@@ -1,0 +1,108 @@
+@charset "utf-8";
+/*Reset Css*/
+* {box-sizing: border-box;}
+html, body {margin: 0; padding: 0;}
+h1, h2, h3, h4, h5, h6 p {margin: 0;}
+ul, ol {margin: 0; padding: 0; list-style: none;}
+a {text-decoration: none;}
+input , button, textarea {outline: none;}
+button {cursor: pointer;}
+
+.container {
+    background-color: #FAFAFA;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+
+fieldset {
+    width: 72vw;
+    height: 30vw;
+    background-color: #fff;
+    display: flex;
+    justify-content: space-around;
+    border-radius: 5px;
+    border: 0 solid ;
+}
+
+
+legend {
+    width: 465px;
+    height: 146px;
+    padding-left: 52px;
+}
+.compnay-name{
+    padding: 18% 0px 0 50%;
+}
+
+.photo {
+    width: 163px;
+    height: 163px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.16);
+    background-color: #fff;
+    position: absolute;
+}
+
+
+.items {
+    width: 1037px;
+    height: 363px;
+    padding-top: 65px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.item{
+    margin-left: 7%;
+    padding-top: 7%;
+    width: 334px;
+    height: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+}
+#copyBtn{
+    position: absolute;
+    padding-left: 89%;
+    padding-top: 7%;
+    cursor: pointer;
+}
+
+
+ .fa-copy:before{
+     color: #dddddd;
+ }
+ .item-inner{
+    position: relative;
+    width: 80%;
+    height: 82px;
+}
+
+.content form input {
+    margin-top: 9px;
+    border-radius: 5px;
+    padding-left: 20px;
+    padding-right: 39px;
+    width: 100%;
+    height: 36px;
+    border-style: solid;
+    border-color: #a8c6ff;
+}
+
+.content form input[type=submit] {
+    width: 240px;
+    height: 60px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
+    margin-top: 20px;
+    background-color: #4282ff;
+    color: #ffffff;
+}
+
+form p{
+    text-align: center;
+}

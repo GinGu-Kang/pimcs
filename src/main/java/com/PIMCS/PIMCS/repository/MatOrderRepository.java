@@ -9,7 +9,4 @@ import java.util.List;
 
 public interface MatOrderRepository extends JpaRepository<MatOrder,Integer> {
     List<MatOrder> findByCompany(Company company);
-
-
-
 }

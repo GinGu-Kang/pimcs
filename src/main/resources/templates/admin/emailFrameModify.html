@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/admin/emailFrameModify.css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <form th:action="@{/admin/email/frame/modify}" method="post">
+        <p th:class="title" >인사말 수정</p>
+        <textarea id="greeting" th:name="greeting" th:text="${OrderMailFrame.getGreeting()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required onkeyup="mailExample()"></textarea>
+        <p th:class="title">매니저 정보 수정</p>
+        <textarea id="managerInfo" th:name="managerInfo" th:text="${OrderMailFrame.getManagerInfo()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required onkeyup="mailExample()"></textarea>
+        <p th:class="title">적용된 메일</p>
+        <textarea id="mail-exam" th:text="'< pimcs 주 문 서> 2022년03월21일 23:54분'
+        +${OrderMailFrame.getGreeting()}+
+'
+【주문 디바이스 정보】
+a4 주문갯수:51대
+a5 주문갯수:51대
+
+【디바이스 배송지】
+우편 번호: 2580
+주소: 충북 청주시 상당구 가덕면 가덕시동길 13
+배송 예정일: 2022-03-24
+
+【주문자 정보】
+이름: 강진구
+전화 번호: 21451212124
+이메일: cheif@naver.com
+회사 이름: gadsg
+부서명: 인공지능소프트웨어전공
+'
+        +${OrderMailFrame.getManagerInfo()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required disabled></textarea>
+
+        <p th:class="submit-center"><input type="submit"></p>
+    </form>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        function mailExample(){
+            let greeting=$("textarea#greeting").val()
+            let managerInfo=$("textarea#managerInfo").val()
+
+            $("textarea#mail-exam").val(
+                '< pimcs 주 문 서> 2022년03월21일 23:54분\n'+
+                greeting+'\n'+
+                '\n【주문 디바이스 정보】\n'+
+                'a4 주문갯수:51대\n'+
+                'a5 주문갯수:51대\n'+
+                '\n【디바이스 배송지】\n'+
+                '우편 번호: 2580\n'+
+                '주소: 충북 청주시 상당구 가덕면 가덕시동길 13\n'+
+                '배송 예정일: 2022-03-24\n'+
+                '\n【주문자 정보】\n'+
+                '이름: 강진구\n'+
+                '전화 번호: 21451212124\n'+
+                '이메일: cheif@naver.com\n'+
+                '회사 이름: gadsg\n'+
+                '부서명: 인공지능소프트웨어전공\n\n'+managerInfo);
+
+
+        }
+
+    </script>
+</div>
+
+</html>

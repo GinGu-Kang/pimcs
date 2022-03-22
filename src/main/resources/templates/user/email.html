@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+
+<pre  rows="10" class="editor" id="editorTest" >
+< pimcs 주 문 서> [[${matOrder.getCreatedAt().toString().substring(0,4)}]]년[[${matOrder.getCreatedAt().toString().substring(5,7)}]]월[[${matOrder.getCreatedAt().toString().substring(8,10)}]]일[[${matOrder.getCreatedAt().toString().substring(10,16)}]]분
+[[${orderMailFrame.getGreeting()}]]
+【디바이스 대수】
+
+<th:block  th:each="matCategory:${matCategoryOrderList}">[[${matCategory.getMatCategory().getMatCategoryName()}]] 주문갯수: [[${matCategory.getOrderCnt()}]]대
+</th:block>
+【디바이스 배송지】 - 서버에 등록되어 있는 주소
+
+우편 번호: [[${matOrder.getDeliveryCode()}]]
+주소 :[[${matOrder.getDeliveryAddress()}]]
+배송 예정일: [[${matOrder.getHopeDeliveryDate()}]]
+
+【주문자 정보】
+이름: [[${matOrder.getUser.getName()}]]
+전화 번호: [[${matOrder.getUser.getPhone()}]]
+이메일: [[${matOrder.getUser.getEmail()}]]
+회사 이름: [[${matOrder.getCompany.getCompanyName()}]]
+부서명: [[${matOrder.getUser.getDepartment()}]]
+
+주문 정보가 잘못된 부분이 있으면, 아래의 메일 및 주소로 연락 바랍니다.
+[문의]
+[[${orderMailFrame.getManagerInfo()}]]
+</pre>
+
+
+
+    <input type="hidden" id="userId" value="ryongho1997@gmail.com">
+    <button onclick="checkTextArea()">텍스트애리아호가인</button>
+
+    <button onclick="emailSend()">뚝딱뽂</button>
+
+
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+
+    //이메일 발송
+    function emailSend(){
+        var serialNo = "124315";
+        var subject = "chats 회원인증번호 입니다.";
+        var body = $("#editorTest").text();
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var params = {
+            userId : $("#userId").val()
+            ,subject : subject
+            ,body : body
+        }
+
+        console.log(body)
+        $.ajax({
+            url: "/email/sendEmail"
+            ,type: "POST"
+            ,accept: "application/json"
+            ,contentType: "application/json; charset=utf-8"
+            ,data: JSON.stringify(params)
+            ,dataType: "json"
+            , beforeSend : function(xhr)
+                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                    xhr.setRequestHeader(header, token);
+                }
+            ,success: function(data) {
+                alert(body)
+                //시리얼번호 db에 저장
+            },
+            error: function(jqXHR,textStatus,errorThrown) {
+                alert("이메일 전송에 실패하였습니다.");
+            }
+        });
+    }
+
+
+</script>
+<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
+<script>
+    console.log($("#editorTest").val());
+    var myEditor;
+    ClassicEditor
+        .create( document.querySelector( '#editor' ) )
+        .then( editor => {
+            console.log( 'Editor was initialized', editor );
+            myEditor = editor;
+        } )
+        .catch( err => {
+            console.error( err.stack );
+        } );
+    function checkTextArea(){
+        console.log(myEditor.getData())
+
+    }
+
+</script>
+</body>
+</html>

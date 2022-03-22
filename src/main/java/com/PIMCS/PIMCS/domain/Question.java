@@ -9,6 +9,9 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Builder
 @AllArgsConstructor
@@ -22,7 +25,7 @@ public class Question {
   private boolean isSecret;
   private String title;
   private String content;
-
+  @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
   @ManyToOne(fetch = FetchType.EAGER)
@@ -30,6 +33,9 @@ public class Question {
   private User user;
   @Transient
   private String radioValue;
+
+  @OneToOne(mappedBy = "question",fetch = FetchType.EAGER)
+  private Answer answer;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "companyId")

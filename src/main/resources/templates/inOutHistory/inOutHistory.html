@@ -5,34 +5,27 @@
         <!--datepicker-->
         <link rel="stylesheet" href="/css/jquery-ui.css">
         <script src="/js/jquery-ui.min.js"></script>
-
+        <!--PAGINATION-->
         <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
-        
+        <!--IN OUT HISTORY-->
         <link rel="stylesheet" href="/css/inOutHistory/inOutHistory.css"/>
-        <script></script>
+        <script src="/js/inOutHistory/inOutHistory.js"></script>
         <script>
             $(function(){
-              $('#start-date').datepicker({
-                dateFormat: 'yy.mm.dd',
-              });
-              $('#end-date').datepicker({
-                dateFormat: 'yy.mm.dd',
-              });
-
-              $("#desktop-pagination").twbsPagination({
-                    totalPages:10,    
-                    visiblePages:5,    
-                    startPage: 1,
-                    initiateStartPageClick:false,
-                    prev:'<',
-                    next:'>',
-                    first:'',
-                    last:'',
-                    onPageClick: function (event, page) {
-                        
-                    }
-                });
               
+                /*<![CDATA[*/
+                    let totalPages = "[[${dynamoResultPage.getTotalPage()}]]";
+                    let page = "[[${dynamoResultPage.getPage()}]]";
+                    let size = "[[${dynamoResultPage.getSize()}]]";
+                /*]]>*/
+                
+                pagination({
+                    page: page,
+                    size: size,
+                    totalPages: totalPages
+                });
+                
+                initDatePicker();
             })
           </script>
         
@@ -48,11 +41,7 @@
                         <input class="pimcs-bd-group-input text-size-middle" placeholder="Search"/>
                         <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
                     </div>
-                    <!--button-->
-                    <button class="rect" style="margin-left:13px;">All</button>
-                    <button class="rect">Day</button>
-                    <button class="rect">WEEK</button>
-                    <button class="rect">MONTH</button>
+                    
                     <!--select date-->
                     <div class="input-group-shadow datepicker-container">
                         <span class="input-group-text-shadow"><i class="bi bi-calendar-check"></i></span>
@@ -79,7 +68,7 @@
             <div class="header-item2">
                 <!--graph-->
                 <div>
-                    <button class="square"><i class="bi bi-graph-up"></i></button>
+                    <button class="square" onclick="location.href='/inout/history/graph'"><i class="bi bi-graph-up"></i></button>
                 </div>
                 <!--csv download-->
                 <div>
@@ -109,26 +98,20 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="text-size-between-middle-samll">2021-12-16 09:17</td>
-                        <td class="text-size-between-middle-samll">미숫가루</td>
-                        <td class="text-size-between-middle-samll">AR202</td>
-                        <td class="text-size-between-middle-samll">창고</td>
-                        <td>
-                            <div class="out text-size-between-middle-samll">출고</div>
-                        </td>
-                        <td class="text-size-between-middle-samll">갯수</td>
-                    </tr>
-                    <tr>
-                        <td class="text-size-between-middle-samll">2021-12-16 09:17</td>
-                        <td class="text-size-between-middle-samll">미숫가루</td>
-                        <td class="text-size-between-middle-samll">AR202</td>
-                        <td class="text-size-between-middle-samll">창고</td>
-                        <td>
+                    <tr th:each="inOutHistory : ${dynamoResultPage.getInOutHistories()}">
+                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getCreatedAt()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getProductName()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getProductCode()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getMatLocation()}"></td>
+                        <td th:if="${inOutHistory.getInOutStatus.toString() == 'IN'}">
                             <div class="in text-size-between-middle-samll">입고</div>
                         </td>
-                        <td class="text-size-between-middle-samll">갯수</td>
+                        <td th:unless="${inOutHistory.getInOutStatus.toString() == 'IN'}">
+                            <div class="out text-size-between-middle-samll">출고</div>
+                        </td>
+                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getUpdateCnt()}"></td>
                     </tr>
+                   
                 </tbody>                    
                 
             </table>

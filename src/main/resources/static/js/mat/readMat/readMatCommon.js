@@ -327,7 +327,7 @@ $(document).on("click",".download-csv-btn",function(){
     });
 
     if($(".all-rows-checked").is(":checked")){
-     $("#csv-download-form").submit();
+      $("#csv-download-form").submit();
     }else{
         
          for(let i=0; i<checkedItems.length; i++){
@@ -338,6 +338,24 @@ $(document).on("click",".download-csv-btn",function(){
     }
 
 });
+
+/**
+ * 그래프버튼 클릭시
+ */
+$(document).on("click",".graph-btn",function(){
+    let checkedItems = getCheckedItems();
+    if(checkedItems.length == 0){
+        alert("매트를 선택해주세요.");
+        return;
+    }
+    for(let i=0; i<checkedItems.length; i++){
+        let mat = checkedItems[i];
+        $("#graphForm").append(`<input type="hidden" name="serialNumberList[${i}]" value="${mat['serialNumber']}"/>`);
+    }
+    $("#graphForm").submit();
+
+});
+
 
 /**
  *  show item per page selectbox 선택시

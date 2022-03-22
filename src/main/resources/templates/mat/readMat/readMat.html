@@ -45,6 +45,7 @@
     <div th:replace="mat/updateMat/updateBoxWeightModal :: boxWeight"></div>
     <!--상품 변경 모달-->
     <div th:replace="mat/updateMat/updateProductModal :: product"></div>
+    
 
     <!--DESKTOP 매트조회 헤더-->
     <div class="inquery-mat-header col-md-12">
@@ -119,7 +120,7 @@
             </div>
 
             
-            <div class="square">
+            <div class="square graph-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
                   </svg>
@@ -161,7 +162,7 @@
                 </ul>
             </div>
 
-            <div class="square">
+            <div class="square graph-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-graph-up" viewBox="0 0 16 16">
                     <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
                   </svg>
@@ -249,6 +250,11 @@
     <form id="csv-download-form" th:action="@{/download/mat/csv}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
+    </form>
+
+    <!--체크된 매트 그래프보내는 폼-->
+    <form id="graphForm" method="post" th:action="@{/inout/history/graph}">
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>
 
 

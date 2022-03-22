@@ -104,17 +104,5 @@ public class MatController {
         matService.downloadMatCsvService(secUserCustomForm.getCompany(), matCsvForm, response.getWriter());
     }
 
-//    @GetMapping("/mat/test")
-//    @ResponseBody
-//    public String matTest(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
-//        List<Mat> findMats = matRepository.findByCompany(secUserCustomForm.getCompany());
-//        List<Mat> mats = new ArrayList<>();
-//        for(Mat mat : findMats){
-//
-//            mat.changeInventoryWeight((int)(Math.random()*100+100));
-//            mats.add(mat);
-//        }
-//        matRepository.saveAll(mats);
-//        return "a";
-//    }
+
 }

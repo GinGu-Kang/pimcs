@@ -19,9 +19,7 @@ import java.util.*;
 @Entity
 @Builder
 @AllArgsConstructor
-//@AllArgsConstructor
-//@NamedEntityGraph(name="User.userRoles",attributeNodes = @NamedAttributeNode("userRoles"))
-public class User implements UserDetails {//implements UserDetails
+public class User implements UserDetails {
     @Id
     private String email;
     @ManyToOne(fetch = FetchType.EAGER)

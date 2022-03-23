@@ -33,7 +33,7 @@ public class MatOrder {
   @Transient
   private String detailAddress;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "userEmail")
   private User user;
   @ManyToOne(fetch = FetchType.LAZY)

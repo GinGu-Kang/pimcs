@@ -44,10 +44,9 @@ public class OrderService {
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
         User user=userRepository.findByEmail(secUserCustomForm.getUsername()).get();
-        String[] emailSednList=new String[]{"rkdwlsrn212@gmail.com","wisp212@gmail.com"};
+        String[] emailSednList=new String[]{secUserCustomForm.getUsername(),"wisp212@gmail.com"};
         String deviceAmount="";
         OrderMailFrame orderMailFrame=orderMailFrameRepository.findById(1).get();
-        System.out.println(matOrder.getPostCode()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
 
         matOrder.setCompany(user.getCompany());
@@ -120,6 +119,10 @@ public class OrderService {
      */
     public List<MatCategoryOrder> findOrderList(Integer companyId){
         return matCategoryOrderRepository.findByCompanyId(companyId);
+    }
+
+    public void deleteMatOrder(int id){
+        matOrderRepository.deleteById(id);
     }
 
 }

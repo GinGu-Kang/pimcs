@@ -1,7 +1,7 @@
 -- MySQL Workbench Forward Engineering
 
-drop database if exists pimcs;
-create database pimcs;
+drop WaitingCeobase if exists pimcs;
+create WaitingCeobase pimcs;
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
@@ -69,8 +69,6 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`user` (
     REFERENCES `pimcs`.`company` (`id`)
     ON DELETE cascade)
     ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `pimcs`.`product_category`
 -- -----------------------------------------------------
@@ -228,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                  CONSTRAINT `fk_matOrder_user1`
                                                      FOREIGN KEY (`userEmail`)
                                                          REFERENCES `pimcs`.`user` (`email`)
-                                                         ON DELETE NO ACTION
+                                                         ON DELETE CASCADE
                                                          ON UPDATE NO ACTION,
                                                  CONSTRAINT `fk_matOrder_company1`
                                                      FOREIGN KEY (`companyId`)

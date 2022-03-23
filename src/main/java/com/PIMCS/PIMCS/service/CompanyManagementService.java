@@ -89,6 +89,7 @@ public class CompanyManagementService {
     @Async
     public void companyRegistration(User ceo, Company company){
         String[] emailSednList=new String[]{ceo.getEmail()};
+        String url="http://localhost:8080/company/registration/verify?verifyKey=";
         WaitingCeo waitingCeo=WaitingCeo.builder()
                 .company(company)
                 .user(ceo)
@@ -99,10 +100,8 @@ public class CompanyManagementService {
                 "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
                 "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
                 "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
-                "<a href='http://localhost:8080/company/registration/verify?verifyKey="+waitingCeo.getId()+"'>인증 확인</a>"+
-//                "    <input style='cursor:pointer;width: 155px;height: 50px;padding: 16px 47px 15px 48px;border-radius: 6px;border: solid 1px #dbdbdb;background-color: #4282ff;text-decoration-line : none;text-decoration : none;color: #ffffff;' type='submit' value='확인'>\n" +
+                "<a href='"+url+waitingCeo.getId()+"'>인증 확인</a>"+
                 "</div>\n";
-//        String orderMail="<span style=\"margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;\">PIMCS</span>\n";
 
         emailUtilImpl.sendEmail(
                 emailSednList

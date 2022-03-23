@@ -34,12 +34,18 @@
     <input class="button" type="submit"  value="로그인">
     <br><br>
     <section class="loginForm-footer">
-        <a href='#' class="text"> 이메일 찾기 </a><span>&nbsp;|&nbsp;</span>
-        <a href='#' class="text"> 비밀번호 찾기 </a><span>&nbsp;|&nbsp;</span>
+        <a href='#' class="text" onclick="pwdChange()"> 비밀번호 찾기 </a><span>&nbsp;|&nbsp;</span>
         <a href='#' class="text"> 회원가입 </a>
     </section>
 </form>
 </section>
 </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script>
+    function pwdChange(){
+
+        popup=window.open("/auth/pwd/find","비밀번호 변경","width=734, height=500, top=10, left=10");
+    }
+</script>
 </html>

@@ -1,22 +1,25 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.Redis.WaitingUser;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
+import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitingUserRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,21 +29,48 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyRepository companyRepository;
+    private final WaitingUserRedisRepository waitingUserRedisRepository;
+    private final EmailUtilImpl emailUtilImpl;
+
 
 
 
 
     @Autowired
-    public UserAuthService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository) {
+    public UserAuthService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitingUserRedisRepository waitingUserRedisRepository, EmailUtilImpl emailUtilImpl) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyRepository = companyRepository;
+        this.waitingUserRedisRepository = waitingUserRedisRepository;
+        this.emailUtilImpl = emailUtilImpl;
     }
 
 
 
-    public User signUp(User user) {
+    //회사 등록후 이메일 인증 대기
+    public void signUp(User user){
+        String[] emailSednList=new String[]{user.getEmail()};
+        String url="http://localhost:8080/auth/signUp/verify?verifyKey=";
+        WaitingUser waitingUser=WaitingUser.builder()
+                .user(user)
+                .build();
+        waitingUserRedisRepository.save(waitingUser);
+        String orderMail="<div style='text-align:center;width: 600px;flex-float:column;' >\n" +
+                "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
+                "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
+                "    <p >인증 확인을 누르면 사원이 등록됩니다.</p>\n" +
+                "<a href='"+url+waitingUser.getId()+"'>인증 확인</a>"+
+                "</div>\n";
+        emailUtilImpl.sendEmail(
+                emailSednList
+                , "PIMCS에서 온 인증 메일입니다."
+                , orderMail
+                ,true
+        );
+    }
+    public User signUpVerify(String verifyKey) {
+        User user = waitingUserRedisRepository.findById(verifyKey).get().getUser();
         Optional<Company> company= companyRepository.findByCompanyCode(user.getCompanyCode());
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
         UserRole userRole =UserRole.builder()
@@ -88,11 +118,11 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         roleRepository.saveAll(roleList);
     }
 
+    //유저권한 생성 메소드
     public void UserRoleSave(String email, String roleName){
-        UserRole userRole=new UserRole();
-        userRole.builder()
+        UserRole userRole=UserRole.builder()
                 .user(userRepository.findByEmail(email).get())
-                .role(roleRepository.findByName(roleName));
+                .role(roleRepository.findByName(roleName)).build();
         userRoleRepository.save(userRole);
     }
 
@@ -126,6 +156,39 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
     public User userDetail(String email){
         return userRepository.findByEmail(email).get();
+    }
+
+
+//   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@여기서시작
+    public boolean pwdFind(String email){
+        Optional<User> user=userRepository.findByEmail(email);
+        String url="http://localhost:8080/auth/email/find/verify?verifyKey=";
+        if(user.isPresent()){
+            WaitingUser waitingUser=WaitingUser.builder()
+                    .user(user.get())
+                    .build();
+            waitingUserRedisRepository.save(waitingUser);;
+//            String[] emailSednList=new String[]{user.get().getEmail()};
+//            String orderMail="<div style='text-align:center;width: 600px;flex-float:column;' >\n" +
+//                    "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
+//                    "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
+//                    "    <p >인증 확인을 비밀번호 변경 페이지로 안내 됩니다.</p>\n" +
+//                    "<a href='"+url+waitingUser.getId()+"'>인증 확인</a>"+
+//                    "</div>\n";
+//            emailUtilImpl.sendEmail(
+//                    emailSednList
+//                    , "PIMCS에서 온 비밀번호 인증 메일입니다."
+//                    , orderMail
+//                    ,true
+//            );
+            return true;
+        }else {
+            return false;
+        }
+
+    }
+    public void pwdFindVerify(String verifyKey){
+
     }
 
 }

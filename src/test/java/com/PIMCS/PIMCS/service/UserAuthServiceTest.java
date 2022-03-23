@@ -45,7 +45,7 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     public void deleteUserTest() {
-        userAuthService.deleteUser("wisp212@gmail.com");
+        userAuthService.deleteUser("rkdwlsrn212@gmail.com");
 //        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
 //        System.out.println(user.isEmpty());
     }
@@ -94,7 +94,11 @@ public class UserAuthServiceTest {
         userAuthService.deleteUserAllRole("rkdwlsrn212@gmail.com");
     }
 
-
+    @Test
+    @Commit
+    void 유저권한생성(){
+        userAuthService.UserRoleSave("rkdwlsrn212@gmail.com","ChiefOfPimcs");
+    }
 
     @Test
     public void findRoleTest(){

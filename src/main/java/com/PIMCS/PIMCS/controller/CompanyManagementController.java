@@ -64,9 +64,8 @@ public class CompanyManagementController {
     }
     @GetMapping("registration/verify")
     public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
-        System.out.println(verifyKey+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         companyManagementService.companyRegistrationVerify(verifyKey);
-        return "redirect:/user/auth/login";
+        return "redirect:/auth/login";
     }
 
     //회사원 전체 조회

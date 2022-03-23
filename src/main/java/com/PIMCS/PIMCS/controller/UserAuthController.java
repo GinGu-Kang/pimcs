@@ -39,16 +39,22 @@ public class UserAuthController {
         this.companyManagementService = companyManagementService;
     }
 
-    //회원 가입
+    //회원 가입폼
     @GetMapping("/signUp")
     private String signUpForm(){
         return "user/auth/signUp.html";
     }
 
 
+    //회원가입 이메일 인증
     @PostMapping("/signUp")
     private String signUp(User user){
         userAuthService.signUp(user);
+        return "redirect:/auth/login";
+    }
+    @GetMapping("signUp/verify")
+    public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
+        userAuthService.signUpVerify(verifyKey);
         return "redirect:/auth/login";
     }
     //회원가입 선택
@@ -98,7 +104,6 @@ public class UserAuthController {
     @PostMapping("/user/info/modify")
     public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
         User user =  userAuthService.findUser(currentUser.getUsername()).get();
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         user.setName(userForm.getName());
         user.setPhone(userForm.getPhone());
         user.setDepartment(userForm.getDepartment());
@@ -113,6 +118,24 @@ public class UserAuthController {
     @GetMapping("/pwd/change")
     public String pwdChangeForm(){
         return "/user/auth/pwdChange";
+    }
+
+    @GetMapping("/pwd/find")
+    public String pwdFindForm(){
+        return "/user/auth/pwdFind";
+    }
+
+    @ResponseBody
+    @PostMapping("/email/find")
+    public boolean pwdFind(String email){
+        Boolean isEmail=userAuthService.pwdFind(email);
+        return isEmail;
+    }
+
+    @GetMapping("/email/find/verify")
+    public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey){
+        userAuthService.signUpVerify(verifyKey);
+        return "redirect:/auth/login";
     }
 
 

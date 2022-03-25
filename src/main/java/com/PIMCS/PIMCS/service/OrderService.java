@@ -9,6 +9,7 @@ import com.PIMCS.PIMCS.repository.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +37,6 @@ public class OrderService {
         this.emailUtilImpl = emailUtilImpl;
 
     }
-
-    @Async
-    @Transactional
     public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();

@@ -14,6 +14,7 @@ import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@EnableAsync
 public class CompanyManagementService {
     private  final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -87,6 +89,7 @@ public class CompanyManagementService {
 
     //회사 등록후 이메일 인증 대기
     @Async
+    @Transactional
     public void companyRegistration(User ceo, Company company){
         String[] emailSednList=new String[]{ceo.getEmail()};
         String url="http://localhost:8080/company/registration/verify?verifyKey=";

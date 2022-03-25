@@ -6,6 +6,7 @@ import com.PIMCS.PIMCS.domain.Redis.WaitingUser;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.Redis.WaitingUserRedisRepository;
+import com.PIMCS.PIMCS.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +16,14 @@ public class RedisRepositoryTest {
 
     @Autowired
     private WaitingUserRedisRepository waitingUserRedisRepository;
-    private WaitingCeoRedisRepository waitingCeoRedisRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void test() {
-        User user = User.builder().email("hi").name("찡꾸").build();
+        User user = userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
+//        user.setCompany(null);
+//        user.setUserRoles(null);
         WaitingUser waitingUser = WaitingUser.builder().user(user).build();
 
 
@@ -38,13 +42,5 @@ public class RedisRepositoryTest {
         System.out.println(waitingUserRedisRepository.count());
 
         // 삭제
-    }
-    @Test
-    void ceoTest() {
-        User user = User.builder().email("hi").name("찡꾸").build();
-        Company company = Company.builder().companyName("hihi").build();
-        WaitingCeo waitingCeo = WaitingCeo.builder().company(company).user(user).build();
-        waitingCeoRedisRepository.save(waitingCeo);
-        System.out.println(waitingCeo.getId());
     }
 }

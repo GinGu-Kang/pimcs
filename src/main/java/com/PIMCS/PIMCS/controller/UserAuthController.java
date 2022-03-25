@@ -2,6 +2,7 @@ package com.PIMCS.PIMCS.controller;
 
 
 
+import com.PIMCS.PIMCS.domain.Redis.FindPwdVO;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
@@ -12,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * user_author
@@ -120,28 +123,39 @@ public class UserAuthController {
         return "/user/auth/pwdChange";
     }
 
+
+
+
+
     @GetMapping("/pwd/find")
     public String pwdFindForm(){
         return "/user/auth/pwdFind";
     }
 
     @ResponseBody
-    @PostMapping("/email/find")
-    public boolean pwdFind(String email){
+    @PostMapping("/pwd/find")
+    public Boolean pwdFind(String email){
         Boolean isEmail=userAuthService.pwdFind(email);
         return isEmail;
     }
 
-    @GetMapping("/email/find/verify")
-    public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey){
-        userAuthService.signUpVerify(verifyKey);
-        return "redirect:/auth/login";
+    @GetMapping("/pwd/find/verify")
+    public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey,Model model){
+        model.addAttribute("verifyKey",verifyKey);
+        return "/user/auth/pwdFindVerify";
     }
+
+    //인증키 만료 처리
+    @ResponseBody
+    @PostMapping("/pwd/verify/change")
+    public boolean pwdVerifyChange(String verifyKey,String password){
+        return userAuthService.pwdFindVerify(verifyKey,password);
+    }
+
 
 
     @PostMapping("/pwd/change")
     public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
-
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
         return "/user/auth/pwdChange";
     }

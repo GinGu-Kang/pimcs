@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Cocoon</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/pwdFindVerify.css" />
+
+
+    <style>
+
+
+    </style>
+</head>
+<body>
+
+
+<div class="workerForm">
+    <img src="/img/logo2.png" ><br>
+    <p class="title">비밀번호 재설정</p>
+    <form id="pwd-change-form" th:action="@{/auth/pwd/verify/change}" method="post">
+        <input type="hidden" name="verifyKey" th:value="${verifyKey}">
+        <input class="input" type="password" name="password" id="password" placeholder="비밀번호" required onkeyup="check_password()" ><br><br>
+        <span class="pw-text" id="pw-check-text"></span>
+        <input class="input" type="password" id="password-verify" placeholder="비밀번호 확인" required onkeyup="check_password()"><br><br>
+        <span class="pw-text" id="pw-verify-text"></span>
+        <br>
+        <input  class="button" type="button"  value="확인" onclick="pwdChange()">
+    </form>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="/js/user/signUp.js" ></script>
+    <script>
+        history.replaceState({},null,location.pathname);
+
+        function pwdChange(){
+            url="/auth/pwd/verify/change";
+            if(checkPwdForm()){
+                $.ajax({ type : "POST",
+                    url : url,
+                    data : $("#pwd-change-form").serialize(),
+                    success : function(isExpiration) {
+                        if(isExpiration){
+                            alert("변경되었습니다.")
+                            window.location.href = '/auth/login';
+                        }else {
+                            alert("인증키의 유효기간이 만료되었습니다. 로그인 화면에서 비밀번호 찾기 재요청 바랍니다.")
+                        }
+                    },
+                    error : function(request, status, msg) {
+                        alert("에러입니다.")
+                    } });
+            }
+        }
+        function checkPwdForm(){
+            if(!check_password()){
+                $('#password').focus();
+                alert("비밀번호를 확인 해주세요.");
+                return false
+            } else{
+                return true
+            }
+        }
+    </script>
+</div>
+
+</body>
+</html>

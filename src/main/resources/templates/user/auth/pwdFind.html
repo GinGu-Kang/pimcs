@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Cocoon</title>
@@ -31,7 +31,7 @@
     <script src="/js/user/signUp.js" ></script>
     <script>
         function emailCheck(){
-            var url="/auth/email/find"
+            var url="/auth/pwd/find"
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             $.ajax({ type : "POST",

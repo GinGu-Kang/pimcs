@@ -8,6 +8,7 @@ import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import com.PIMCS.PIMCS.service.OrderService;
 import com.PIMCS.PIMCS.service.UserAuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ import java.util.Optional;
  *     5.개인정보수정: UserInfoModify
  *     6.이메일 인증: EmailCertification
  */
-
+@Slf4j
 @Controller
 @RequestMapping("/auth")
 public class UserAuthController {
@@ -57,6 +58,8 @@ public class UserAuthController {
     }
     @GetMapping("signUp/verify")
     public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
+        log.info("오긴오니");
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         userAuthService.signUpVerify(verifyKey);
         return "redirect:/auth/login";
     }

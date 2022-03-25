@@ -19,25 +19,24 @@
 
 
 <div class="workerForm">
-    <img src="/img/logo2.png" ><br>
+    <a href="/auth/login"><img src="/img/logo2.png" ></a><br>
     <form id="signUp" name="signUp" th:action="@{/auth/signUp}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /><br>
         <input type="hidden" name="enabled" value="true" /><br>
 
-        <input type="text" id = "company" name="companyCode" placeholder="회사 코드"  onblur="checkCompany()" required /><br><br>
+        <input type="text" id = "company" name="companyCode" placeholder="회사 코드"  onblur="checkCompany()" required><br><br>
         <span class="company_ok">확인되었습니다.</span>
         <span class="company_already">존재하지 않는 회사코드입니다.</span><br>
 
         <input  type="text" name="name" placeholder="이름" required><br><br>
 
-        <input  type="text" id="phone" name="phone" placeholder="전화번호" pattern=".{11,11}" title="11자리 휴대폰 번호를 입력해주세요." onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" required><br><br>
+        <input  type="text" id="phone" name="phone" placeholder="전화번호" maxlength="11" title="11자리 휴대폰 번호를 입력해주세요." onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required><br><br>
 
         <input  type="text" name="department" placeholder="소속 부서" required><br><br>
 
         <input type="email" id = "email" name="email" placeholder="이메일" onblur="checkEmail()" required /><br><br>
         <span class="email_ok">사용 가능한 아이디입니다.</span>
         <span class="email_already">누군가 이 아이디를 사용하고 있어요.</span>
-
 
 
 

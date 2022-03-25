@@ -80,7 +80,7 @@ public class OrderService {
         log.info(orderMail);
         emailUtilImpl.sendEmail(
                 emailSednList
-                , "주문 메일입니다라디라라"
+                , "PIMCS 기기 주문서 입니다."
                 , orderMail
                 ,false
         );

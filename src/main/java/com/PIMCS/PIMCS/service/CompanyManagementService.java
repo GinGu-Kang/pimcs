@@ -124,6 +124,7 @@ public class CompanyManagementService {
 
         ceo.setPassword(encoder.encode(ceo.getPassword()));
         company.setCompanyCode(companyServiceUtils.UUIDgeneration().substring(0,30));
+        company.setCompanyAddress(company.getCompanyAddress().concat(company.getCompanyAddressdetail()));
         ceo.setCompany(company);
 
         for (Role role:roleRepository.findAll()

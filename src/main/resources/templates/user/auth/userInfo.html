@@ -37,7 +37,7 @@
                 <div class="item">
                     <div class="item-inner">
                         <label for="phone" >전화번호</label><br>
-                        <input  type="text" id="phone" name="phone" placeholder="전화번호"  maxlength="11" title="11자리 휴대폰 번호를 입력해주세요." onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" th:value="${user.getPhone}" required><br><br>
+                        <input  type="text" id="phone" name="phone" placeholder="전화번호"   title="11자리 휴대폰 번호를 입력해주세요." maxlength="11" onKeyup="this.value=this.value.replace(/[^-0-9]/g,'');" th:value="${user.getPhone}" required><br><br>
                     </div>
                     <div class="item-inner">
                         <label for="company-number"></label>비밀번호</label><br>

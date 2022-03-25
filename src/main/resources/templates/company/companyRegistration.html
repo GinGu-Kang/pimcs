@@ -17,7 +17,7 @@
 
 <section>
     <div class="companyForm">
-        <img src="/img/logo2.png" ><br>
+        <a href="/auth/login"><img src="/img/logo2.png" ></a><br>
 
         <form name="signUp" th:action="@{/company/registration}" method="post"  onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
@@ -26,11 +26,11 @@
         <input type="text" name="companyName" placeholder="회사 이름"  required><br>
         <input type="text" name="companyAddress" placeholder="회사 주소" required><br>
         <input type="text" name="companyAddressdetail" placeholder="상세 주소" required><br>
-        <input type="text" name="contactPhone" placeholder="회사 전화번호" ><br>
+        <input type="text" name="contactPhone" placeholder="회사 전화번호" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"><br>
         <input type="text" name="businessCategoryName" placeholder="업종" required><br>
 
         <input type="text"   name="name" placeholder="이름" required><br>
-        <input type="text" name="phone" placeholder="핸드폰 번호" required><br><br><br>
+        <input type="text" name="phone" placeholder="핸드폰 번호" maxlength="11" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required><br><br><br>
             <span class="email-guide" >인증을 받을수 있는 수신 가능한 이메일을 입력해주세요.</span>
         <input type="email" id = "email" name="ceoEmail" placeholder="이메일" required onblur="checkEmail()"/><br><br>
         <span class="email_ok">사용 가능한 아이디입니다.</span>

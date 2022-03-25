@@ -45,7 +45,7 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     public void deleteUserTest() {
-        userAuthService.deleteUser("rkdwlsrn212@gmail.com");
+        userAuthService.deleteUser("wisp212@gmail.com");
 //        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
 //        System.out.println(user.isEmpty());
     }

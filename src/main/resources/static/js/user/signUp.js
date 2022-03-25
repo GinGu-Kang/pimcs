@@ -5,7 +5,7 @@
         var verifyText=$('#pw-verify-text');
         var password =$('#password').val();
         var passwordVerify =$('#password-verify').val();
-        var eng = password.search(/[a-z]/g);
+        var eng = password.search(/[a-zA-Z]/g);
         var spe=password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/g);
         var num=password.search(/[0-9]/g);
 

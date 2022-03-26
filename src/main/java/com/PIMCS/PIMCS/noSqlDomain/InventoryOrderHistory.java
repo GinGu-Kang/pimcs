@@ -41,10 +41,8 @@ public class InventoryOrderHistory {
     private Integer updateWeight;
 
     @DynamoDBAttribute
-    private Integer updateCnt;
+    private Integer currentCnt;
 
-    @DynamoDBAttribute
-    private String inOutStatus;
 
     @DynamoDBAttribute
     @DynamoDBIndexRangeKey(globalSecondaryIndexName = "byConpanyId")

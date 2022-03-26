@@ -45,7 +45,7 @@ public class InOutHistory {
     private String inOutStatus;
 
     @DynamoDBAttribute
-    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "byConpanyId")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "id")
     @DynamoDBTypeConverted(converter = AWSConfig.LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 

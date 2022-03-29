@@ -1,11 +1,5 @@
 
 
-    //자기 자신 tr 삭제
-    var myEamil=$('#myEmail').val()
-    var myTr=$('#'+myEamil).parent('tr')
-    var checkbox=myTr.find('.check-worker')
-    checkbox.attr('name','uncheck-worker')
-    myTr.remove()
 
     //체크시 tr색 변환
     $('.check-worker').change(function (){

@@ -17,6 +17,7 @@ public class MatCategory {
   private int id;
 
   private String matCategoryName;
+  private String mappingSerialCode;
   private int matPrice;
   private String matInformation;
   private int maxWeight;

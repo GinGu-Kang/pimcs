@@ -62,7 +62,15 @@ input[type=button]:hover,input[type=submit]:hover{
 
 }
 
+input[type="checkbox"]{
+    border-radius: 50%;
+    vertical-align:-0.1vmax;
+    width: 1vmax; /*Desired width*/
 
+    height: 1vmax; /*Desired height*/
+
+
+}
 .workerForm{
     display: inline-block;
     height: 1450px;
@@ -71,10 +79,13 @@ input[type=button]:hover,input[type=submit]:hover{
     margin: 0;
     vertical-align: middle;
     margin-top: 5%;
+
 }
 .companyAdrres{
     display: flex;
     justify-content: space-between;
+
+
 }
 
 
@@ -133,7 +144,19 @@ input[type=button]:hover,input[type=submit]:hover{
 
 
 
-
+.title{
+    width: 188px;
+    height: 5%;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4282ff;
+}
 .icon{
     width: 153px;
     height: 92px;
@@ -154,4 +177,10 @@ input[type=button]:hover,input[type=submit]:hover{
     height: 21px; /*Desired height*/
 
 
+}
+.email-guide{
+    text-align: left;
+    font-size: 16px;
+    color: #4282ff;
+    font-family: Roboto;
 }

@@ -9,6 +9,7 @@ import com.PIMCS.PIMCS.repository.*;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,18 +37,14 @@ public class OrderService {
         this.emailUtilImpl = emailUtilImpl;
 
     }
-
-    @Async
-    @Transactional
     public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
         User user=userRepository.findByEmail(secUserCustomForm.getUsername()).get();
-        String[] emailSednList=new String[]{"rkdwlsrn212@gmail.com","wisp212@gmail.com"};
+        String[] emailSednList=new String[]{secUserCustomForm.getUsername(),"wisp212@gmail.com"};
         String deviceAmount="";
         OrderMailFrame orderMailFrame=orderMailFrameRepository.findById(1).get();
-        System.out.println(matOrder.getPostCode()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
 
         matOrder.setCompany(user.getCompany());
@@ -83,7 +80,7 @@ public class OrderService {
         log.info(orderMail);
         emailUtilImpl.sendEmail(
                 emailSednList
-                , "주문 메일입니다라디라라"
+                , "PIMCS 기기 주문서 입니다."
                 , orderMail
                 ,false
         );
@@ -120,6 +117,10 @@ public class OrderService {
      */
     public List<MatCategoryOrder> findOrderList(Integer companyId){
         return matCategoryOrderRepository.findByCompanyId(companyId);
+    }
+
+    public void deleteMatOrder(int id){
+        matOrderRepository.deleteById(id);
     }
 
 }

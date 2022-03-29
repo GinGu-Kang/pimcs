@@ -26,6 +26,7 @@ public class MatOrder {
   private long depositStatus;
   private Date hopeDeliveryDate;
   private String depositerName;
+  @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
   private int deliveryStatus;
@@ -33,7 +34,7 @@ public class MatOrder {
   @Transient
   private String detailAddress;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "userEmail")
   private User user;
   @ManyToOne(fetch = FetchType.LAZY)

@@ -42,5 +42,11 @@ public class OrderServiceTest {
         orderService.insertOrderMailFrame(orderMailFrame);
     }
 
+    @Test
+    @Commit
+    public void deleteTest(){
+        orderService.deleteMatOrder(20);
+    }
+
 
 }

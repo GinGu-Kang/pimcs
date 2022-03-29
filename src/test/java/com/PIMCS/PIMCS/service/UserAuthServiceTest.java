@@ -68,7 +68,6 @@ public class UserAuthServiceTest {
     @Commit
     public void insertRoleTest() {
         List<Role> roleList= new ArrayList<>();
-
         roleList.add(Role.builder().name("UserManagement").build());
         roleList.add(Role.builder().name("User").build());
         roleList.add(Role.builder().name("InventoryManagement").build());
@@ -94,7 +93,11 @@ public class UserAuthServiceTest {
         userAuthService.deleteUserAllRole("rkdwlsrn212@gmail.com");
     }
 
-
+    @Test
+    @Commit
+    void 유저권한생성(){
+        userAuthService.UserRoleSave("wisp212@gmail.com","ChiefOfPimcs");
+    }
 
     @Test
     public void findRoleTest(){

@@ -16,7 +16,6 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @RedisHash(value = "waitingCeo", timeToLive = 600)
 public class WaitingCeo {
-
     @Id
     private String id;
     private User user;

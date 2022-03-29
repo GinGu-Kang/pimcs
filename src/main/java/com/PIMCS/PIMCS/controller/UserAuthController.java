@@ -2,16 +2,20 @@ package com.PIMCS.PIMCS.controller;
 
 
 
+import com.PIMCS.PIMCS.domain.Redis.FindPwdVO;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import com.PIMCS.PIMCS.service.OrderService;
 import com.PIMCS.PIMCS.service.UserAuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * user_author
@@ -24,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
  *     5.개인정보수정: UserInfoModify
  *     6.이메일 인증: EmailCertification
  */
-
+@Slf4j
 @Controller
 @RequestMapping("/auth")
 public class UserAuthController {
@@ -39,16 +43,24 @@ public class UserAuthController {
         this.companyManagementService = companyManagementService;
     }
 
-    //회원 가입
+    //회원 가입폼
     @GetMapping("/signUp")
     private String signUpForm(){
         return "user/auth/signUp.html";
     }
 
 
+    //회원가입 이메일 인증
     @PostMapping("/signUp")
     private String signUp(User user){
         userAuthService.signUp(user);
+        return "redirect:/auth/login";
+    }
+    @GetMapping("signUp/verify")
+    public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
+        log.info("오긴오니");
+        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        userAuthService.signUpVerify(verifyKey);
         return "redirect:/auth/login";
     }
     //회원가입 선택
@@ -98,7 +110,6 @@ public class UserAuthController {
     @PostMapping("/user/info/modify")
     public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm currentUser,User userForm){
         User user =  userAuthService.findUser(currentUser.getUsername()).get();
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         user.setName(userForm.getName());
         user.setPhone(userForm.getPhone());
         user.setDepartment(userForm.getDepartment());
@@ -116,9 +127,38 @@ public class UserAuthController {
     }
 
 
+
+
+
+    @GetMapping("/pwd/find")
+    public String pwdFindForm(){
+        return "/user/auth/pwdFind";
+    }
+
+    @ResponseBody
+    @PostMapping("/pwd/find")
+    public Boolean pwdFind(String email){
+        Boolean isEmail=userAuthService.pwdFind(email);
+        return isEmail;
+    }
+
+    @GetMapping("/pwd/find/verify")
+    public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey,Model model){
+        model.addAttribute("verifyKey",verifyKey);
+        return "/user/auth/pwdFindVerify";
+    }
+
+    //인증키 만료 처리
+    @ResponseBody
+    @PostMapping("/pwd/verify/change")
+    public boolean pwdVerifyChange(String verifyKey,String password){
+        return userAuthService.pwdFindVerify(verifyKey,password);
+    }
+
+
+
     @PostMapping("/pwd/change")
     public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
-
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
         return "/user/auth/pwdChange";
     }

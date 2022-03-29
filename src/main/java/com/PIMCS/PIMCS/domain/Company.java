@@ -31,6 +31,8 @@ public class Company {
 
 
   private String companyAddress;
+  @Transient
+  private String companyAddressdetail;
 
   @Column(updatable =false)
   @CreationTimestamp

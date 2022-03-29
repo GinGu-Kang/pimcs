@@ -13,17 +13,17 @@
 </head>
 <div layout:fragment="content"  class="content ordermat-container">
     <section style="display:flex;">
-        <form name="signUp" th:action="@{/order/mat}" method="post">
+        <form name="signUp" th:action="@{/order/mat}" method="post" onsubmit="alert('등록되어있는 이메일로 주문서가 발송되었습니다. 이메일을 확인하여 주세요.')">
 
             <section th:class="input-wrapper">
                 <div th:class="order-wrapper">
                 <p th:class="title">기기 주문</p>
 
             <div class="container">
-                <th:block th:each="matCategory,i:${matCategoryList}">
+                <th:block th:each="matCategory,i:${matCategoryList}" >
                         <p style="margin-bottom: 0px" th:text="${matCategory.getMatCategoryName()}+'&nbsp&nbsp' + ${matCategory.getMatInformation()}"></p>
-                        <input th:name="'matCategoryIdList['+${i.index}+']'" type="hidden" th:value="${matCategory.getId()}">
-                        <input th:name="'matCategoryOrderList['+${i.index}+'].orderCnt'" type="number" min="0"><br>
+                        <input required  th:name="'matCategoryIdList['+${i.index}+']'" type="hidden" th:value="${matCategory.getId()}">
+                        <input required th:name="'matCategoryOrderList['+${i.index}+'].orderCnt'" type="number" min="0"><br>
                 </th:block>
             </div>
 
@@ -33,21 +33,21 @@
                 <p th:class="title">배송</p>
                 <div class="container">
                 <p>희망 배송일</p>
-                <input type="date" id="hopeDate" min="2022-01-0" name="hopeDeliveryDate">
+                <input required type="date" id="hopeDate" min="2022-01-0" name="hopeDeliveryDate">
                 <p>주문자 이름</p>
-                <input type="text" name="depositerName">
+                <input required type="text" name="depositerName">
                     <p>우편 번호</p>
 
                         <section class="postcode-section">
                             <section th:class="postcode-section-wrapper">
-                            <input type="text" placeholder="우편번호" id="postcode"  name="postCode">
+                            <input required type="text" placeholder="우편번호" id="postcode"  name="postCode">
                             <input type="button" id="post-search-btn" value="검색" onclick="searchPostCode()">
                             </section>
                         </section>
                     <p>주소</p>
-                    <input type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress" required>
+                    <input  type="text" placeholder="주소" id="deliveryAddress" min="0" name="deliveryAddress" required>
                     <p>상세 주소</p>
-                    <input type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required>
+                    <input  type="text" placeholder="상세 주소" id="detailAddress" name="detailAddress" required>
                 </div>
                     <p th:class="submit-center"><input type="submit" th:value="주문완료"></p>
                 </div>

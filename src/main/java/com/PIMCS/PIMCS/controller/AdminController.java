@@ -1,10 +1,7 @@
 package com.PIMCS.PIMCS.controller;
 
 
-import com.PIMCS.PIMCS.domain.Answer;
-import com.PIMCS.PIMCS.domain.MatCategory;
-import com.PIMCS.PIMCS.domain.OrderMailFrame;
-import com.PIMCS.PIMCS.domain.Question;
+import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.service.AdminService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -103,6 +100,19 @@ public class AdminController {
         System.out.println(orderMailFrame.getGreeting());
         adminService.updateOrderMailFrame(orderMailFrame);
         return "redirect:/admin/email/frame/modify";
+    }
+
+    /*
+    *주문 목록
+     */
+    @GetMapping("/order/list")
+    public String qnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                          Model model){
+        Page<MatOrder> questionPage=adminService.findAllOrder(pageable);
+        model.addAttribute("matOrderPage",questionPage);
+        model.addAttribute("matOrderList",questionPage.getContent());
+
+        return "/admin/orderList";
     }
 
 

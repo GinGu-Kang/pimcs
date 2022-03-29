@@ -16,14 +16,16 @@
         <script>
             $(function(){
                 /*<![CDATA[*/
-                    let serialNumberList = "[[${matSerialNumberList}]]";
+                    let serialNumberList = "[[${matGraphForm}]]";
                 /*]]>*/
                 
                 setCheckedData(serialNumberList);
 
                 lazyLoadGraph.observe(document.querySelector('.scroll-detecting'));
 
-
+                // let graphData = loadGraphData("/inout/history/graph/day",4);
+                // //일별그래프 생성
+                // createGraphDay(graphData);
             });
         </script>
 
@@ -33,29 +35,28 @@
         <!--HEADER-->
         <div class="header-item1">
             <form class="search-form">
-                <!--검색 input-->
-                <div class="input-group-shadow">
-                    <input class="pimcs-bd-group-input text-size-middle" placeholder="Search"/>
-                    <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
-                </div>
+                
                 <!--button-->
-                <button class="rect">HOUR</button>
-                <button class="rect active">DAY</button>
-                <button class="rect">WEEK</button>
-                <button class="rect">MONTH</button>
+                <button class="rect time-dimension" id="hour-btn">HOUR</button>
+                <button class="rect time-dimension" id="day-btn">DAY</button>
+                <button class="rect time-dimension" id="week-btn">WEEK</button>
+                <button class="rect time-dimension" id="month-btn">MONTH</button>
                 <!--select date-->
                 <div class="input-group-shadow datepicker-container">
-                    <span class="input-group-text-shadow"><i class="bi bi-calendar-check"></i></span>
-                    <input id="start-date" class="pimcs-bd-group-input text-size-middle " placeholder="yy.mm.dd"/>
+                    <input id="start-date" type="date" class="pimcs-bd-group-input text-size-middle"/>
                     <span class="input-group-text-shadow d-flex justify-content-center">~</span>
-                    <input id="end-date" class="pimcs-bd-group-input text-size-middle" placeholder="yy.mm.dd"/>
+                    <input id="end-date" type="date" class="pimcs-bd-group-input text-size-middle"/>
                 </div>
+
+                <button class="pimcs-blue-btn inquiry-btn">조회</button>
             </form>
         </div>
+        
         <!--HEADER END-->
         <div class="graph-container">
-            <canvas id="myChart"></canvas>
-            
+            <div class="canvas-container">
+
+            </div>
             <div class="scroll-detecting" style="width: 5px; height: 5px;"></div>
             <div class="d-flex justify-content-center mt-3" >
                 <div class="loading-spinner spinner-border text-primary" role="status" style="display:none;">
@@ -63,44 +64,5 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            /*<![CDATA[*/
-                
-
-            /*]]>*/
-            // console.log(labels);
-
-            labels = [
-                'January',
-                // 'February',
-                // 'March',
-                // 'April',
-                // 'May',
-                // 'June',
-            ];
-
-            const data = {
-                labels: labels,
-                datasets: [{
-                label: 'My First dataset',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: '#209cee',
-                // data: [0, 10, 5, 2, 20, 30, 45],
-                data: [10],
-                }]
-            };
-
-            const config = {
-                type: 'line',
-                data: data,
-                options: {}
-            };
-            new Chart(
-                document.getElementById('myChart'),
-                config
-            );
-            
-        </script>
     </div>
 </html>

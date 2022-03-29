@@ -4,7 +4,6 @@ import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.config.AWSConfig;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.form.MatSerialNumberForm;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.MatRepository;
@@ -25,6 +24,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -62,29 +62,52 @@ public class AWSDynamoTest {
                 .matLocation("화상실")
                 .productCode("code_1644298216412")
                 .productName("컴퓨터1644298216412")
+//                .productName("전룡호")
                 .updateWeight(100)
                 .updateCnt(10)
+                .updateCurrentInventory(30)
                 .inOutStatus("IN")
-                .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()))
+                .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.of(15,00)))
+//                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
                 .build();
         dynamoDBMapper.save(inOutHistory);
-        Assertions.assertThat(inOutHistory.getId()).isNotEmpty();
+    /*    Assertions.assertThat(inOutHistory.getMatSerialNumber()).isNotEmpty();*/
     }
 
     @Test
-    public void loadData(){
+    public void kdopkpd(){
+        for(int i=0; i<50; i++){
+            InOutHistory inOutHistory = InOutHistory.builder()
+                    .companyId(18)
+                    .matSerialNumber("s")
+                    .matLocation("화상실")
+                    .productCode("code_1644298216412")
+                    .productName("컴퓨터1644298216412")
+//                .productName("전룡호")
+                    .updateWeight(100)
+                    .updateCnt(10)
+                    .updateCurrentInventory(30)
+                    .inOutStatus("IN")
+                    .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()))
+//                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
+                    .build();
+            dynamoDBMapper.save(inOutHistory);
+        }
+    }
+    @Test
+    public void inOutHistoryServiceTest(){
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         eav.put(":v1",new AttributeValue().withN("18"));
 
         DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
                 .withIndexName("byConpanyId")
-                .withConsistentRead(false)
+                .withConsistentRead(true)
                 .withKeyConditionExpression("companyId = :v1")
                 .withExpressionAttributeValues(eav);
 
 
-        QueryResultPage<InOutHistory> inOutHistoryQueryResultPage = dynamoDBMapper.queryPage(InOutHistory.class, queryExpression);
-        for(InOutHistory inOutHistory : inOutHistoryQueryResultPage.getResults()){
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        for(InOutHistory inOutHistory : inOutHistories){
             System.out.println(inOutHistory.toString());
         }
 //        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
@@ -96,6 +119,28 @@ public class AWSDynamoTest {
 //            System.out.println(in.toString());
 //            System.out.println("=======");
 //        }
+
+    }
+
+    @Test
+    public void graphServiceTest(){
+        LocalDateTime start = LocalDateTime.of(LocalDate.of(2022,3,14), LocalTime.now());
+        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.now());
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1",new AttributeValue().withS("s"));
+        eav.put(":start",new AttributeValue().withS("2022-03-01"));
+        eav.put(":end",new AttributeValue().withS("2022-03-28"));
+
+
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withKeyConditionExpression("matSerialNumber = :v1 AND createdAt BETWEEN :start AND :end")
+                .withExpressionAttributeValues(eav);
+
+
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        for(InOutHistory inOutHistory : inOutHistories){
+            System.out.println(inOutHistory.toString());
+        }
 
     }
 
@@ -123,13 +168,13 @@ public class AWSDynamoTest {
         LocalDate curDate = LocalDate.now();
         LocalDate startDate = LocalDate.of(curDate.getYear(),curDate.getMonth(),1);
         Company company = companyRepository.findById(18).get();
-        MatSerialNumberForm matSerialNumberForm = new MatSerialNumberForm();
-        List<String> arr = new ArrayList<>();
-        arr.add("s");
-        matSerialNumberForm.setSerialNumberList(arr);
-
-
-        inOutHistoryService.inOutHistoryDayGraphService(company,matSerialNumberForm);
+//        MatSerialNumberForm matSerialNumberForm = new MatSerialNumberForm();
+//        List<String> arr = new ArrayList<>();
+//        arr.add("s");
+//        matSerialNumberForm.setSerialNumberList(arr);
+//
+//
+//        inOutHistoryService.inOutHistoryDayGraphService(company,matSerialNumberForm);
 
     }
 
@@ -137,9 +182,13 @@ public class AWSDynamoTest {
     public void testDate(){
         LocalDate curDate = LocalDate.now();
 //        int startMonth  = Integer.parseInt(curDate.getMonth().toString()) - 1;
-        LocalDate startDate = LocalDate.of(curDate.getYear(),curDate.getMonth(),1);
-        startDate = startDate.minusMonths(1);
-        System.out.println(startDate.toString());
+//        LocalDate startDate = LocalDate.of(curDate.getYear(),curDate.getMonth(),1);
+//        startDate = startDate.minusMonths(1);
+//        System.out.println(startDate.toString());
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-ddThh:mm");
+        System.out.println(dateTimeFormatter.format(localDateTime));
     }
 
 
@@ -151,13 +200,37 @@ public class AWSDynamoTest {
 //        arr.add("a");
 //        arr.add("b");
 
-        AWSConfig.LocalDateTimeConverter converter = new AWSConfig.LocalDateTimeConverter();
-        /*arr.stream().filter(o -> o.equals("a")).skip();;
-        System.out.println(a.skip(a.count() - 1).findFirst().get());*/
-        System.out.println("================");
-        System.out.println(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
-        System.out.println(converter.convert(LocalDateTime.of(LocalDate.now(), LocalTime.now())));
-        System.out.println("===========");
+        LocalDate localDate = LocalDate.of(2022,2,1);
+        localDate = localDate.plusMonths(1);
+        System.out.println("=======");
+        System.out.println(localDate.toString());
+        System.out.println(localDate.getMonthValue());
+        System.out.println(localDate.lengthOfMonth());
+        System.out.println("=======");
+    }
+
+    @Test
+    public void like(){
+
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf("18")));
+        eav.put(":productName",new AttributeValue().withS("호"));
+
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("companyId = :companyId")
+                .withFilterExpression("contains (productName, :productName)")
+                .withScanIndexForward(false)
+                .withExpressionAttributeValues(eav);
+
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        System.out.println("============");
+        System.out.println(inOutHistories.size());
+        for(InOutHistory in : inOutHistories){
+            System.out.println(in.toString());
+        }
+
     }
 }
 

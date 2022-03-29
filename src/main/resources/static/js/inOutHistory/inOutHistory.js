@@ -9,6 +9,7 @@ const initDatePicker = function(){
 }
 
 const pagination = function({page,size,totalPages}){
+    console.log(`page: ${page}, totalPages: ${totalPages}`);
     $("#desktop-pagination").twbsPagination({
         totalPages: parseInt(totalPages),    
         visiblePages: 5,    
@@ -19,8 +20,10 @@ const pagination = function({page,size,totalPages}){
         first:'',
         last:'',
         onPageClick: function (event, clickedPage) {
-            if(page != clickedPage)
+            if(page != clickedPage){
                 location.href=`/inout/history?page=${clickedPage}&size=${size}`;
+            }
+                
         }
     });
 }

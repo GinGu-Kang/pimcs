@@ -8,8 +8,6 @@ import java.util.List;
 
 
 public class ResultGraph {
-
-
     private String productName;
     private List<String> labels = new ArrayList<>();
     private List<Integer> data = new ArrayList<>();

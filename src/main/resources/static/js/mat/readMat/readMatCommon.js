@@ -351,7 +351,9 @@ $(document).on("click",".graph-btn",function(){
     for(let i=0; i<checkedItems.length; i++){
         let mat = checkedItems[i];
         $("#graphForm").append(`<input type="hidden" name="serialNumberList[${i}]" value="${mat['serialNumber']}"/>`);
+        $("#graphForm").append(`<input type="hidden" name="productNameList[${i}]" value="${mat['product']['productName']}"/>`);
     }
+    
     $("#graphForm").submit();
 
 });

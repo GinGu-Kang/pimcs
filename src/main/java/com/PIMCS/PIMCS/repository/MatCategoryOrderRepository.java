@@ -28,7 +28,7 @@ public interface MatCategoryOrderRepository extends JpaRepository<MatCategoryOrd
      * @return
      * 회사별 주문 조회
      */
-    @Query("select mco,mc,mo,co from MatCategoryOrder mco " +
+    @Query(value = "select mco,mc,mo,co from MatCategoryOrder mco " +
             "INNER JOIN  MatOrder mo on mco.matOrder = mo " +
             "INNER JOIN  Company co on mo.company = co " +
             "INNER JOIN  MatCategory mc on  mco.matCategory = mc " +

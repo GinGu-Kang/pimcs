@@ -26,6 +26,7 @@ public class MatOrder {
   private long depositStatus;
   private Date hopeDeliveryDate;
   private String depositerName;
+  @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
   private int deliveryStatus;

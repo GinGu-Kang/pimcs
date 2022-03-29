@@ -1,0 +1,39 @@
+.title{
+    width: 188px;
+    height: 40px;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4282ff;
+}
+input{
+    width: 80%;
+    height: 40px;
+}
+
+.label{
+    padding: 10px 10px 10px 0px;
+}
+
+input[type=submit]{
+    margin: 30px 10px 10px 0;
+    border-radius: 6px;
+    border: solid 1px #dbdbdb;
+    background-color: #4282ff;
+    text-decoration-line : none;
+    text-decoration : none;
+    color: #ffffff;
+}
+
+.add-category-wrapper{
+    width: 400px;
+}
+.content{
+    display: flex;
+    justify-content: center;
+}

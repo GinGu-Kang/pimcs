@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/qna/qnaList.css">
+    <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <input type="hidden" th:value="${matOrderPage.getTotalElements()}" id="totalData">
+    <input type="hidden" th:value="${matOrderPage.getSize()}" id="dataPerPage">
+
+    <p class="title">
+        Q&A
+    </p>
+    <div id="paging"></div>
+    <section class="action-btn-container">
+        <form th:action="@{/qna/search}" method="get" >
+            <div class="inquery-mat-header-left-box">
+                <select class="search-select" name="selectOption" >
+                    <option>제목</option>
+                </select>
+                <div class="search-input-container">
+                    <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+                </div>
+            </div>
+        </form>
+        <div class="inquery-mat-header-right-box">
+            <div class="action-btn-left-container d-flex">
+                <div class="square" onclick="location.href='/qna/matOrder'">
+                    <span>글쓰기</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path id="pen-solid_1_" data-name="pen-solid (1)" d="M10.507,1.115a1.857,1.857,0,0,1,2.625,0l1.141,1.142a1.855,1.855,0,0,1,0,2.623l-1.4,1.4L9.105,2.517Zm1.709,5.822L5.461,13.69a2.54,2.54,0,0,1-1.083.643L.892,15.358a.653.653,0,0,1-.688-.2A.637.637,0,0,1,.028,14.5L1.054,11.01A2.554,2.554,0,0,1,1.7,9.927L8.451,3.172Z" transform="translate(0 -0.572)" fill="#fff"/>
+                    </svg>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!--DESKTOP PAGINATION-->
+    <div aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+    </div>
+    <table class="table pimcs-table">
+        <thead>
+            <th scope="col" class="text-center">주문일자</th>
+            <th scope="col" class="text-center">주문자 이메일</th>
+            <th scope="col" class="text-center">주문자 회사</th>
+            <th scope="col" class="text-center">우편번호</th>
+            <th scope="col" class="text-center">주소</th>
+            <th scope="col" class="text-center">입금 상태</th>
+            <th scope="col" class="text-center">주문희망 일자</th>
+            <th scope="col" class="text-center">받는 사람</th>
+            <th scope="col" class="text-center">배송 상태</th>
+        </thead>
+        <tbody id="pimcs-tbody" class="pimcs-tbody">
+
+        <th:block th:each="matOrder,i:${matOrderList}">
+            <tr class="matOrder-tr">
+                <td class="text-center" th:text="matOrder.getCreatedAt()">주문일자</td>
+                <td class="text-center" th:text="matOrder.getUser().getEmail()">주문자 이메일</td>
+                <td class="text-center" th:text="matOrder.getCompany().getCompanyName()">주문자 회사</td>
+                <td class="text-center" th:text="matOrder.getPostCode()">우편번호</td>
+                <td class="text-center" th:text="matOrder.getDeliveryAddress()">주소</td>
+                <td class="text-center" th:text="matOrder.getDepositStatus()">입금 상태</td>
+                <td class="text-center" th:text="matOrder.getHopeDeliveryDate()">주문희망 일자</td>
+                <td class="text-center" th:text="matOrder.getDepositerName()">받는 사람</td>
+                <td class="text-center" th:text="matOrder.getDeliveryStatus()">배송 상태</td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+
+
+    <script >
+
+
+
+        /*<![CDATA[*/
+        let totalPage = "[[${matOrderPage.getTotalPages()}]]";
+        let size = "[[${matOrderPage.getSize()}]]";
+        let currentPage = "[[${matOrderPage.getNumber()}]]";
+        /*]]>*/
+        //파라미터 값 가져오기
+        const searchParams = new URLSearchParams(location.search);
+
+        var keyword = searchParams.get('keyword');
+        var selectOption = searchParams.get('selectOption');
+        console.log(keyword)
+
+
+
+
+        currentPage = parseInt(currentPage) + 1;
+        $("#desktop-pagination").twbsPagination({
+            totalPages:totalPage,
+            visiblePages:size,
+            startPage: currentPage,
+            initiateStartPageClick:false,
+            prev:'<',
+            next:'>',
+            first:'',
+            last:'',
+            onPageClick: function (event, page) {
+                if (keyword!=null)
+                    location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+                else{
+                    location.href=`${location.pathname}?page=${page}&size=${size}`
+                }
+            }
+        });
+    </script>
+</div>
+
+</html>

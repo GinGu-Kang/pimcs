@@ -1,0 +1,16 @@
+.title{
+    width: 188px;
+    height: 40px;
+    font-family: Roboto;
+    font-size: 22px;
+    font-weight: bold;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #4282ff;
+}
+input{
+    width: 100%;
+}

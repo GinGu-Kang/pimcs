@@ -1,37 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
 <head>
-    <meta charset="utf-8"/>
-    <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <style>
+    <link rel="stylesheet"  href="/css/admin/addMatCategory.css">
 
-    </style>
+
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
-<body>
+<div layout:fragment="content"  class="content">
 
 
-<section>
-</section>
 
-<section>
-
-
+<section class="add-category-wrapper">
+    <p class="title">
+        매트 카테고리 등록
+    </p>
     <form name="signUp" th:action="@{/admin/matcategory/add}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-
-        <p>제품명 입력</p>
-        <input type="text" name="matCategoryName">
-        <p>제품 가격</p>
-        <input type="number" name="matPrice">
-        <p>제품 정보</p>
-        <input type="text" name="matInformation">
-        <p>제품 무게</p>
-        <input type="number" name="maxWeight" min="0" max="500000">
+        <p class="label">기기명 입력</p>
+        <input type="text" name="matCategoryName"  required>
+        <p class="label">매칭 시리얼 코드 입력</p>
+        <input type="text" name="mappingSerialCode"  required>
+        <p class="label">기기 가격(원)</p>
+        <input type="number" name="matPrice" required>
+        <p class="label">기기 정보</p>
+        <input type="text" name="matInformation" required>
+        <p class="label">기기 최대 무게(g)</p>
+        <input type="number" name="maxWeight" min="0" max="500000" required><br>
         <input type="submit" value="submit">
     </form>
 </section>
-
-</body>
+</div>
 </html>

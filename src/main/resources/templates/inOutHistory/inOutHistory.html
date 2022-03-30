@@ -16,15 +16,14 @@
                     let page = "[[${dynamoResultPage.getPage()}]]";
                     let size = "[[${dynamoResultPage.getSize()}]]";
                 /*]]>*/
-                
-                console.log(page);
+
                 pagination({
                     page: page,
                     size: size,
                     totalPages: totalPages
                 });
-                
-                
+            
+                initShowItems();
             })
           </script>
         
@@ -39,12 +38,12 @@
                     <input type="hidden" name="size" th:value="${dynamoResultPage.getSize()}"/>
                     <!--검색 input-->
                     <div class="input-group-shadow">
-                        <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != null}" 
+                        <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
                                class="pimcs-bd-group-input text-size-middle" 
                                th:value="${inOutHistorySearchForm.getQuery()}"
                                name="query"
                               />
-                        <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != null}" 
+                        <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
                                class="pimcs-bd-group-input text-size-middle" 
                                name="query"  
                                placeholder="Search by product name"
@@ -65,6 +64,7 @@
                             type="date" 
                             id="start-date"  
                             class="pimcs-bd-group-input text-size-middle" 
+                            placeholder="Search by product name"
                             name="startDate" 
                         />
 
@@ -74,7 +74,7 @@
                                 id="end-date" 
                                 class="pimcs-bd-group-input text-size-middle" 
                                 name="endDate" 
-                                th:value="inOutHistorySearchForm.getEndDate()"
+                                th:value="${inOutHistorySearchForm.getEndDate()}"
                             />
                         <input  th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
                                 type="date" 
@@ -100,8 +100,8 @@
             </div>
             <!--ITEM2-->
             <div class="header-item2 d-flex justify-content-end">
-                <div class="rect">
-                    <a class="a-remove-attr" href="?belowThreshold=true">CSV Download</a>
+                <div class="rect csv-download-btn">
+                    <a class="a-remove-attr" >CSV Download</a>
                 </div>
             </div>
             

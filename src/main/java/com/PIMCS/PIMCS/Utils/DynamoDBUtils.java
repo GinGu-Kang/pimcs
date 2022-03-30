@@ -47,6 +47,25 @@ public class DynamoDBUtils {
 
         return createPagination(inOutHistories,pageable);
     }
+
+    /**
+     * 회사 id로 입출고데이터 로드
+     */
+    public List<InOutHistory> loadByCompany(Company company){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("companyId = :companyId")
+                .withScanIndexForward(false)
+                .withExpressionAttributeValues(eav);
+
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        return inOutHistories;
+    }
+
+
     /**
      * 입출고 내역 검색
      */
@@ -79,6 +98,34 @@ public class DynamoDBUtils {
         List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
         System.out.println(inOutHistories.size());
         return createPagination(inOutHistories,pageable);
+    }
+
+    public List<InOutHistory> searchInOutHistory(
+            Company company,
+            InOutHistorySearchForm inOutHistorySearchForm){
+        String dynamodbQuery = "";
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+        eav.put(":query", new AttributeValue().withS(inOutHistorySearchForm.getQuery()));
+        //startDate와 endDate null 아니면
+        if(inOutHistorySearchForm.getStartDate() != null && inOutHistorySearchForm.getStartDate() != null){
+            LocalDate endDate = inOutHistorySearchForm.getEndDate().plusDays(1);
+            eav.put(":start", new AttributeValue().withS(inOutHistorySearchForm.getStartDate().toString()));
+            eav.put(":end", new AttributeValue().withS(endDate.toString()));
+            dynamodbQuery = "companyId = :companyId AND createdAt BETWEEN :start AND :end";
+        }else{ // startDate와 endDate null이면 검색쿼리에 포함된 모든데이터 조회
+            dynamodbQuery = "companyId = :companyId";
+        }
+
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression(dynamodbQuery)
+                .withFilterExpression("contains (productName, :query)")
+                .withScanIndexForward(false)
+                .withExpressionAttributeValues(eav);
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        return inOutHistories;
     }
 
 
@@ -120,21 +167,7 @@ public class DynamoDBUtils {
         return dynamoResultPage;
     }
 
-    /**
-     * 회사id로 입출고내역 가져오기
-     */
-    public List<InOutHistory> loadByCompany(Company company){
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
 
-        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-                .withIndexName("byConpanyId")
-                .withConsistentRead(false)
-                .withKeyConditionExpression("companyId = :companyId")
-                .withScanIndexForward(false)
-                .withExpressionAttributeValues(eav);
-        return null;
-    }
 
     /**
      * 회사id,시리얼번호, 날짜범위로 입출고내역 가져오기

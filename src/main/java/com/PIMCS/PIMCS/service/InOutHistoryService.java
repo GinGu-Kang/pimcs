@@ -7,6 +7,8 @@ import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +16,13 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -257,4 +262,37 @@ public class InOutHistoryService {
         return resultGraphs;
     }
 
+    /**
+     * 입출고 내역 csv 다운로드 서비스
+     */
+    public void downloadInOutHistoryCsvService(Company company, InOutHistorySearchForm inOutHistorySearchForm,  Writer writer) throws IOException{
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        String[] columns = {"입/출고시간","제품이름","제품코드","장소","입/출고 상태","갯수"};
+        csvPrinter.printRecord(columns);
+
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        List<InOutHistory> inOutHistories = null;
+        //입출고 내역 조회내용있으면 조회된 내역만 다운로드
+        if(inOutHistorySearchForm.getQuery() != "" || (inOutHistorySearchForm.getStartDate() != null && inOutHistorySearchForm.getEndDate() != null)){
+            inOutHistories = dynamoDBUtils.searchInOutHistory(company, inOutHistorySearchForm);
+        }else { // 전제데이터 다운로드
+            inOutHistories = dynamoDBUtils.loadByCompany(company);
+        }
+
+        HashMap<String,String> inoutStatus = new HashMap<>();
+        inoutStatus.put("IN","입고");
+        inoutStatus.put("OUT","출고");
+
+        for(InOutHistory inOutHistory : inOutHistories){
+            List<String> record = new ArrayList<>();
+            record.add(inOutHistory.getCreatedAt().toString());
+            record.add(inOutHistory.getProductName());
+            record.add(inOutHistory.getProductCode());
+            record.add(inOutHistory.getMatLocation());
+            record.add(inoutStatus.get(inOutHistory.getInOutStatus()));
+            record.add(inOutHistory.getUpdateCnt().toString());
+            csvPrinter.printRecord(record);
+        }
+
+    }
 }

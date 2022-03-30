@@ -57,7 +57,6 @@ public class AWSDynamoTest {
     @Test
     public void putItemTest(){
         InOutHistory inOutHistory = InOutHistory.builder()
-                .id("24522c98-8f03-4a35-b594-d06c1b012e9a")
                 .companyId(24)
                 .matSerialNumber("ss")
                 .matLocation("화상실")

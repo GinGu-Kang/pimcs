@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -159,4 +161,19 @@ public class InOutHistoryController {
         return inOutHistoryService.inOutHistoryMonthGraphService(secUserCustomForm.getCompany(), matGraphForm);
     }
 
+    /**
+     * 입출고 내역 csv 다운로드
+     */
+    @GetMapping("/download/inout/history/csv")
+    public void downloadInOutHistoryCsv(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            InOutHistorySearchForm inOutHistorySearchForm,
+            HttpServletResponse response) throws IOException {
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "InOutHistory-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+        inOutHistoryService.downloadInOutHistoryCsvService(secUserCustomForm.getCompany(), inOutHistorySearchForm, response.getWriter());
+    }
 }

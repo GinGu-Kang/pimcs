@@ -37,10 +37,12 @@ public class OrderService {
         this.emailUtilImpl = emailUtilImpl;
 
     }
+    @Transactional
     public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
+        Integer totalPrice=0;
         User user=userRepository.findByEmail(secUserCustomForm.getUsername()).get();
         String[] emailSednList=new String[]{secUserCustomForm.getUsername(),"wisp212@gmail.com"};
         String deviceAmount="";
@@ -49,16 +51,22 @@ public class OrderService {
 
         matOrder.setCompany(user.getCompany());
         matOrder.setUser(user);
-        matOrderRepository.save(matOrder);
 
         for(int i=0;i<matCategoryOrderList.size();i++){
-            matCategoryOrderList.get(i).setMatOrder(matOrder);
-            matCategoryOrderList.get(i).setMatCategory(matCategoryList.get(i));
-            deviceAmount=deviceAmount.concat(matCategoryOrderList.get(i).getMatCategory().getMatCategoryName()+" 주문갯수:"+matCategoryOrderList.get(i).getOrderCnt()+"대\n");
+            MatCategoryOrder matCategoryOrder =matCategoryOrderList.get(i);
+            MatCategory matCategory=matCategoryList.get(i);
+
+            matCategoryOrder.setMatOrder(matOrder);
+            matCategoryOrder.setMatCategory(matCategory);
+
+            totalPrice+=matCategoryOrder.getOrderCnt()*matCategory.getMatPrice();
+            deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+"대\n" +
+                    matCategoryOrder.getMatCategory().getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
         }
         System.out.println(deviceAmount);
-
-        matCategoryOrderRepository.saveAll(matCategoryOrderList);
+        matOrder.setMatCategoryOrderList(matCategoryOrderList);
+        matOrder.setTotalPrice(totalPrice);
+        matOrderRepository.save(matOrder);
 
         //이메일 전송
         String orderMail=
@@ -66,10 +74,12 @@ public class OrderService {
                 orderMailFrame.getGreeting()+"\n"+
                 "\n【주문 디바이스 정보】\n" +
                 deviceAmount+"\n"+
+                "총 주문 가격: " +totalPrice+"\n"+
                 "\n【디바이스 배송지】\n" +
                 "우편 번호: " +matOrder.getPostCode()+"\n"+
                 "주소: " +matOrder.getDeliveryAddress()+"\n"+
                 "배송 예정일: " +matOrder.getHopeDeliveryDate()+"\n"+
+                "입금자 이름: " +matOrder.getDepositerName()+"\n"+
                 "\n【주문자 정보】" +"\n"+
                 "이름: " +user.getName()+"\n"+
                 "전화 번호: " +user.getPhone()+"\n"+

@@ -20,7 +20,7 @@ public class MatCategoryOrder {
   private int orderCnt;
 
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "orderId")
   private MatOrder matOrder;
 

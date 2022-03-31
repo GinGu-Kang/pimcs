@@ -96,7 +96,10 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     void 유저권한생성(){
-        userAuthService.UserRoleSave("wisp212@gmail.com","ChiefOfPimcs");
+        userAuthService.UserRoleSave("wisp212@gmail.com","UserManagement");
+//        userAuthService.UserRoleSave("wisp212@gmail.com","User");
+        userAuthService.UserRoleSave("wisp212@gmail.com","InventoryManagement");
+//        userAuthService.UserRoleSave("wisp212@gmail.com","ChiefOfPimcs");
     }
 
     @Test

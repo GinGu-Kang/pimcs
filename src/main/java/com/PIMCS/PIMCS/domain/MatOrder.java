@@ -21,6 +21,7 @@ public class MatOrder {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
+  private int totalPrice;
   private String deliveryAddress;
   private String postCode;
   private long depositStatus;
@@ -41,7 +42,7 @@ public class MatOrder {
   @JoinColumn(name="companyId")
   private Company company;
 
-  @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
   private List<MatCategoryOrder> matCategoryOrderList;
 
 

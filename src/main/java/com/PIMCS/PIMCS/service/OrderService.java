@@ -60,7 +60,7 @@ public class OrderService {
             matCategoryOrder.setMatCategory(matCategory);
 
             totalPrice+=matCategoryOrder.getOrderCnt()*matCategory.getMatPrice();
-            deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+"대\n" +
+            deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+" 대\n" +
                     matCategoryOrder.getMatCategory().getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
         }
         System.out.println(deviceAmount);
@@ -73,7 +73,7 @@ public class OrderService {
                 "< pimcs 주 문 서> "+matOrder.getCreatedAt().toString().substring(0,4)+"년"+matOrder.getCreatedAt().toString().substring(5,7)+"월"+matOrder.getCreatedAt().toString().substring(8,10)+"일"+matOrder.getCreatedAt().toString().substring(10,16)+"분\n" +
                 orderMailFrame.getGreeting()+"\n"+
                 "\n【주문 디바이스 정보】\n" +
-                deviceAmount+"\n"+
+                deviceAmount+
                 "총 주문 가격: " +totalPrice+"\n"+
                 "\n【디바이스 배송지】\n" +
                 "우편 번호: " +matOrder.getPostCode()+"\n"+

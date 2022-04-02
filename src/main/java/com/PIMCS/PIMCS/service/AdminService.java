@@ -113,5 +113,15 @@ public class AdminService {
         return matOrderRepository.findAll(pageable);
     }
 
+    //주문 필터링 검색
+    public Page<MatOrder> filterOrder(String keyword,Integer totalPriceStart,Integer totalPriceEnd, Pageable pageable){
+
+        Page<MatOrder> searchOrders =  null ;
+
+        searchOrders =matOrderRepository.findByDepositerNameLikeAndTotalPriceBetween("%"+keyword+"%",totalPriceStart,totalPriceEnd,pageable);
+
+        return searchOrders;
+    }
+
 
 }

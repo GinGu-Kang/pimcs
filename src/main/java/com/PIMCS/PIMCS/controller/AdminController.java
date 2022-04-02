@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.annotation.Commit;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +58,7 @@ public class AdminController {
     }
 
     @GetMapping("qna/list")
-    public String waitingQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+    public String adminQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                 Model model){
         Page<Question> questionPage=adminService.findAllQuestion(pageable);
         model.addAttribute("questionPage",questionPage);
@@ -106,13 +105,25 @@ public class AdminController {
     *주문 목록
      */
     @GetMapping("/order/list")
-    public String qnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-                          Model model){
-        Page<MatOrder> questionPage=adminService.findAllOrder(pageable);
-        model.addAttribute("matOrderPage",questionPage);
-        model.addAttribute("matOrderList",questionPage.getContent());
+    public String orderList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable, Model model){
+        Page<MatOrder> matOrderPage=adminService.findAllOrder(pageable);
+        model.addAttribute("matOrderPage",matOrderPage);
+        model.addAttribute("matOrderList",matOrderPage.getContent());
 
-        return "/admin/orderList";
+        return "admin/orderList";
+    }
+
+    @GetMapping("order/search")
+    public String adminOrderQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,Integer totalPriceStart,Integer totalPriceEnd,Model model){
+        System.out.println( "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        System.out.println(totalPriceEnd);
+        System.out.println(totalPriceStart);
+
+        System.out.println(keyword);
+        Page<MatOrder> matOrderPage=adminService.filterOrder(keyword,totalPriceStart,totalPriceEnd,pageable);
+        model.addAttribute("matOrderPage",matOrderPage);
+        model.addAttribute("matOrderList",matOrderPage.getContent());
+        return "admin/orderList";
     }
 
 

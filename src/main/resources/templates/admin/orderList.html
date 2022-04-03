@@ -24,10 +24,10 @@
                     <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="입금자 이름" />
                 </div>
                 <div class="search-input-container">
-                    <input name="totalPriceStart" type="number" id="search2" class="search-input text-size-middle" placeholder="시작 가격" />
+                    <input name="totalPriceStart" type="number" id="search2" class="search-input text-size-middle" th:value="0" placeholder="시작 가격" required/>
                 </div>
                 <div class="search-input-container">
-                    <input name="totalPriceEnd" type="number" id="search3" class="search-input text-size-middle" placeholder="끝 가격" />
+                    <input name="totalPriceEnd" type="number" id="search3" class="search-input text-size-middle"  th:value="9999999" placeholder="끝 가격" required/>
                 </div>
             </div>
 

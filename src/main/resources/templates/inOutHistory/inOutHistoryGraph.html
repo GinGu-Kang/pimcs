@@ -43,15 +43,19 @@
                 <button class="rect time-dimension" id="month-btn">MONTH</button>
                 <!--select date-->
                 <div class="input-group-shadow datepicker-container">
-                    <input id="start-date" type="date" class="pimcs-bd-group-input text-size-middle"/>
+                    <input id="start-date" type="date" class="pimcs-bd-group-input text-size-middle start-date"/>
                     <span class="input-group-text-shadow d-flex justify-content-center">~</span>
-                    <input id="end-date" type="date" class="pimcs-bd-group-input text-size-middle"/>
+                    <input id="end-date" type="date" class="pimcs-bd-group-input text-size-middle end-date"/>
                 </div>
 
                 <button class="pimcs-blue-btn inquiry-btn">조회</button>
             </form>
         </div>
-        
+        <div class="header-item2 d-flex justify-content-end">
+            <div class="rect csv-download-btn">
+                <a class="a-remove-attr" >CSV Download</a>
+            </div>
+        </div>
         <!--HEADER END-->
         <div class="graph-container">
             <div class="canvas-container">
@@ -64,5 +68,15 @@
                 </div>
             </div>
         </div>
+        <!--csv download form-->
+        <form th:action="@{/download/inout/history/graph/csv}" style="display: none;" id="csv-download-form" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <input name="startDate" type="date" class="start-date"/>
+            <input name="endDate" type="date" class="end-date"/>
+            <input name="timeDimension" type="text"/>
+            <div id="csv-form-dynamic-append-container">
+
+            </div>
+        </form>
     </div>
 </html>

@@ -3,7 +3,16 @@
 .header-item1{
     display: flex;
 }
+.header-item2{
+    width: 93%;
+    margin-right: 124px;
+    margin-top: 16px;
+}
+.header-item2 .rect{
+    width: 93px;
+    height: 30px;
 
+}
 /*SEARCH FORM*/
 .header-item1 .search-form{
     display: flex;
@@ -91,4 +100,7 @@ button{
 
 canvas{
     margin-top: 17px;
+    margin-bottom: 26px;
 }
+
+

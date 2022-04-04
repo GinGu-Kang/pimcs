@@ -176,4 +176,20 @@ public class InOutHistoryController {
         response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
         inOutHistoryService.downloadInOutHistoryCsvService(secUserCustomForm.getCompany(), inOutHistorySearchForm, response.getWriter());
     }
+
+    /**
+     * 그래프 데이터 csv다운로드
+     */
+    @PostMapping("/download/inout/history/graph/csv")
+    public void downloadInOutHistoryGraphCsv(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            MatGraphForm matGraphForm,
+            HttpServletResponse response) throws IOException {
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "graph-data-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+        inOutHistoryService.downloadInOutHistoryGraphCsvService(secUserCustomForm.getCompany(), matGraphForm, response.getWriter());
+    }
 }

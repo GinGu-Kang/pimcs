@@ -264,12 +264,15 @@ $(document).on("click",".inquiry-btn",function(e){
     
     if(startDate > endDate){
         alert("시작날짜가 종료날짜보다 큽니다.");
+        return;
     }
     if(startDate > curDate){
         alert("시작날짜가 현재날짜보다 큽니다.")
+        return;
     }
     if(endDate > curDate){
         alert("종료날짜가 현재날짜보다 큽니다.")
+        return;
     }
     let resultData;
     if($(".time-dimension.active").text() == "HOUR"){
@@ -310,15 +313,15 @@ $(document).on("click",".time-dimension",function(e){
 
     let timeDimension = $(this).text();
     if(timeDimension == "HOUR"){
-        $("#start-date").attr("type","date");
-        $("#end-date").attr("type","date");
+        $(".start-date").attr("type","date");
+        $(".end-date").attr("type","date");
         let curDate = new Date();
         $("#end-date").val(curDate.toISOString().split('T')[0]);
         $("#start-date").val(curDate.toISOString().split('T')[0]);
 
     }else if(timeDimension == "DAY"){
-        $("#start-date").attr("type","date");
-        $("#end-date").attr("type","date");
+        $(".start-date").attr("type","date");
+        $(".end-date").attr("type","date");
 
         let curDate = new Date();
         $("#end-date").val(curDate.toISOString().split('T')[0]);
@@ -326,16 +329,16 @@ $(document).on("click",".time-dimension",function(e){
         $("#start-date").val(curDate.toISOString().split('T')[0]);
 
     }else if(timeDimension == "WEEK"){
-        $("#start-date").attr("type","month");
-        $("#end-date").attr("type","month");
+        $(".start-date").attr("type","month");
+        $(".end-date").attr("type","month");
         
         let start = new Date();
         start.setMonth(start.getMonth()-1);
         $("#start-date").val(toISOMonth(start));
         $("#end-date").val(toISOMonth(new Date()));
     }else if(timeDimension == "MONTH"){
-        $("#start-date").attr("type","month");
-        $("#end-date").attr("type","month");
+        $(".start-date").attr("type","month");
+        $(".end-date").attr("type","month");
 
         let end = new Date();
         let start = new Date(end.getFullYear(),0);
@@ -354,3 +357,36 @@ const toISOMonth = function(date){
     }
     return `${year}-${month}`;
 }
+
+/**
+ * csv 다운로드 클릭시
+ */
+$(document).on("click",".csv-download-btn",function(){
+    $("#csv-form-dynamic-append-container").empty();
+    let startDate = $("#start-date").val();
+    let endDate = $("#end-date").val();
+    let timeDimension = $(".time-dimension.active").text();
+    let matGraphForms = getLocalStorage(CHECKED_MAT_STORAGE_KEY);
+    if(matGraphForms == null) return;
+
+    let productNames = matGraphForms['productNameList'];
+    let serialnumbers = matGraphForms['serialNumberList'];
+    
+    if(productNames.length != serialnumbers.length) alert("에러");    
+
+    $("#csv-download-form input[name='startDate']").val(startDate);
+    $("#csv-download-form input[name='endDate']").val(endDate);
+    $("#csv-download-form input[name='timeDimension']").val(timeDimension);
+
+    //csv다운로드폼에 상품명과 serialnumber 추가
+    for(let i=0; i<productNames.length; i++){
+        let inputStr = `<input name='serialNumberList[${i}]' value='${serialnumbers[i]}'/>`;
+        inputStr += `<input name='productNameList[${i}]' value='${productNames[i]}'/>`;
+        $("#csv-form-dynamic-append-container").append(inputStr);
+    }
+
+    $("#csv-download-form").submit();
+
+    
+});
+

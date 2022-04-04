@@ -294,6 +294,15 @@ thead th:last-child {
   position: relative;
 }
 
+/*REMOVE A_TAG ATTRIBUTE*/
+.a-remove-attr {
+  text-decoration: none;
+  color: #333;
+}
+.a-remove-attr:hover{
+  color: #333;
+}
+
 /* Long text ... processing*/
 .dot3{
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;

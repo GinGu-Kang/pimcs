@@ -133,9 +133,6 @@ public class InOutHistoryService {
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm.getSerialNumberList(), queryDate, endDate);
 
-        System.out.println("===========");
-        System.out.println(inOutHistories.size());
-        System.out.println("===========");
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
         List<String> productNameList = matGraphForm.getProductNameList();
@@ -147,6 +144,9 @@ public class InOutHistoryService {
             ResultGraph resultGraph = new ResultGraph();
             resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
+            //startDate, endDate 초기
+            startDate = matGraphForm.getStartDate();
+            endDate = matGraphForm.getEndDate();
 
             while(startDate.isBefore(endDate) || startDate.isEqual(endDate)){ //startDate <= endDate
                 InOutHistory inOutHistoryDay = InOutHistory.findByLocalDate(inOutHistories,startDate,serialNumber);
@@ -193,7 +193,9 @@ public class InOutHistoryService {
             ResultGraph resultGraph = new ResultGraph();
             resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
-
+            //startDate, endDate초기화
+            startDate = LocalDate.of(matGraphForm.getStartDate().getYear(), matGraphForm.getStartDate().getMonth(), 7);
+            endDate = matGraphForm.getEndDate();
             while(startDate.isBefore(endDate) || startDate.isEqual(endDate)){
                 InOutHistory inOutHistoryDay = InOutHistory.findByLocalDate(inOutHistories,startDate,serialNumber);
                 //queryDate 보다 이전날짜의 채워넣을 마지막값 검색
@@ -241,6 +243,10 @@ public class InOutHistoryService {
             ResultGraph resultGraph = new ResultGraph();
             resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
+            //startDate, endDate 초기화
+            startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.lengthOfMonth());
+            endDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), endDate.lengthOfMonth());
+
             while(startDate.isBefore(endDate) || startDate.isEqual(endDate)){ // startDate <= endDate
 
                 InOutHistory inOutHistoryDay = InOutHistory.findByLocalDate(inOutHistories,startDate,serialNumber);
@@ -267,6 +273,7 @@ public class InOutHistoryService {
      */
     public void downloadInOutHistoryCsvService(Company company, InOutHistorySearchForm inOutHistorySearchForm,  Writer writer) throws IOException{
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
         String[] columns = {"입/출고시간","제품이름","제품코드","장소","입/출고 상태","갯수"};
         csvPrinter.printRecord(columns);
 
@@ -291,6 +298,48 @@ public class InOutHistoryService {
             record.add(inOutHistory.getMatLocation());
             record.add(inoutStatus.get(inOutHistory.getInOutStatus()));
             record.add(inOutHistory.getUpdateCnt().toString());
+            csvPrinter.printRecord(record);
+        }
+
+    }
+
+    /**
+     * 그래프 데이터 csv다운로드
+     */
+    public void downloadInOutHistoryGraphCsvService(Company company, MatGraphForm matGraphForm,  Writer writer) throws IOException{
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+        List<ResultGraph> resultGraphs = null;
+        if(matGraphForm.getTimeDimension().equals("HOUR"))
+            resultGraphs = inOutHistoryHourGraphService(company, matGraphForm);
+        else if(matGraphForm.getTimeDimension().equals("DAY"))
+            resultGraphs = inOutHistoryDayGraphService(company, matGraphForm);
+        else if(matGraphForm.getTimeDimension().equals("WEEK"))
+            resultGraphs = inOutHistoryWeekGraphService(company, matGraphForm);
+        else if(matGraphForm.getTimeDimension().equals("MONTH"))
+            resultGraphs = inOutHistoryMonthGraphService(company, matGraphForm);
+
+        //csv컬럼 만들고 삽입
+        List<String> columns = new ArrayList<>();
+        columns.add("");
+        for(ResultGraph resultGraph : resultGraphs){
+            columns.add(resultGraph.getProductName());
+        }
+        csvPrinter.printRecord(columns);
+
+        //데이터 삽입
+        if(resultGraphs.isEmpty()) return;
+        int dateLength = resultGraphs.get(0).getLabels().size();
+        for(int i=0; i<dateLength; i++){
+            ArrayList<Object> record = new ArrayList<>();
+            for(int j=0; j<resultGraphs.size(); j++){
+                ResultGraph resultGraph = resultGraphs.get(j);
+                List<String> labels = resultGraph.getLabels();
+                List<Integer> data = resultGraph.getData();
+                if(j == 0) // label 한번만 추가
+                    record.add(labels.get(i));
+                record.add(data.get(i));
+            }
             csvPrinter.printRecord(record);
         }
 

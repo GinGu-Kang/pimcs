@@ -24,10 +24,10 @@
                     <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="입금자 이름" />
                 </div>
                 <div class="search-input-container">
-                    <input name="totalPriceStart" type="number" id="search2" class="search-input text-size-middle" th:value="0" placeholder="시작 가격" required/>
+                    <input name="totalPriceStart" type="number" id="search2" class="search-input text-size-middle" max="999999999" placeholder="시작 가격" required/>
                 </div>
                 <div class="search-input-container">
-                    <input name="totalPriceEnd" type="number" id="search3" class="search-input text-size-middle"  th:value="9999999" placeholder="끝 가격" required/>
+                    <input name="totalPriceEnd" type="number" id="search3" class="search-input text-size-middle" max="999999999" placeholder="끝 가격" required/>
                 </div>
             </div>
 
@@ -51,13 +51,13 @@
             <th scope="col" class="text-center">총 주문 금액</th>
             <th scope="col" class="text-center">입금 상태</th>
             <th scope="col" class="text-center">주문희망 일자</th>
-            <th scope="col" class="text-center">받는 사람</th>
+            <th scope="col" class="text-center">입금자 이름</th>
             <th scope="col" class="text-center">배송 상태</th>
         </thead>
         <tbody id="pimcs-tbody" class="pimcs-tbody">
 
         <th:block th:each="matOrder,i:${matOrderList}">
-            <tr class="matOrder-tr">
+            <tr class="matOrder-tr" th:onclick="|location.href='@{/admin/order/view/?matId={matId}(matId=${matOrder.getId()})}'|">
                 <td class="text-center" th:text="${matOrder.getCreatedAt()}"></td>
                 <td class="text-center" th:text="${matOrder.getUser().getEmail()}"></td>
                 <td class="text-center" th:text="${matOrder.getCompany().getCompanyName()}"></td>
@@ -86,7 +86,9 @@
         const searchParams = new URLSearchParams(location.search);
 
         var keyword = searchParams.get('keyword');
-        var selectOption = searchParams.get('selectOption');
+        var totalPriceStart = searchParams.get('totalPriceStart');
+        var totalPriceEnd = searchParams.get('totalPriceEnd');
+        console.log(keyword)
         console.log(keyword)
 
 
@@ -104,7 +106,7 @@
             last:'',
             onPageClick: function (event, page) {
                 if (keyword!=null)
-                    location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+                    location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&totalPriceStart=${totalPriceStart}&totalPriceEnd=${totalPriceEnd}`;
                 else{
                     location.href=`${location.pathname}?page=${page}&size=${size}`
                 }

@@ -116,6 +116,7 @@ public class AdminController {
     @GetMapping("order/search")
     public String adminOrderQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,Integer totalPriceStart,Integer totalPriceEnd,Model model){
         System.out.println( "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+        System.out.println(keyword);
         System.out.println(totalPriceEnd);
         System.out.println(totalPriceStart);
 
@@ -125,6 +126,20 @@ public class AdminController {
         model.addAttribute("matOrderList",matOrderPage.getContent());
         return "admin/orderList";
     }
+
+    @GetMapping("order/view")
+    public String detailOrder(Model model,Integer matId){
+        MatOrder matOrder = adminService.findOrder(matId);
+        User orderer=matOrder.getUser();
+        Company orderCompany=matOrder.getCompany();
+        model.addAttribute(matOrder);
+        model.addAttribute(orderer);
+        model.addAttribute(orderCompany);
+        return "admin/orderView";
+    }
+
+
+
 
 
 }

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link rel="stylesheet"  href="/css/admin/orderView.css">
+
+
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+  <p class="title">
+    주문정보
+  </p>
+  <section class="qa-container">
+    <section th:class="question">
+      <p class="sub-title">
+        주문자 정보
+      </p>
+      <div th:class="qna-title">
+        <span th:class="write-label" >주문자 메일</th:block></span>
+        <span th:class="write-value" th:text="${matOrder.getUser().getEmail()}"></span>
+<!--        <div th:if="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-true" >답변 완료</div></div>-->
+<!--        <div th:unless="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-false" >답변 미완료</div></div>-->
+      </div>
+      <hr>
+      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="${matOrder.getUser().getName()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">주문회사</span><span th:class="write-value" th:text="${matOrder.getCompany().getCompanyName()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="${matOrder.getCreatedAt().toString().replace('-','.').substring(0,10)}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">희망 배송일</span><span th:class="write-value" th:text="${matOrder.getHopeDeliveryDate().toString().replace('-','.').substring(0,10)}"></span></p>
+      <p class="sub-title">
+        배송지 정보
+      </p>
+      <p ><span th:class="write-label">우편 번호</span><span th:class="write-value" th:text="${matOrder.getPostCode()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">배송 주소</span><span th:class="write-value" th:text="${matOrder.getDeliveryAddress()}"></span></p>
+      <hr>
+      <p class="sub-title">
+        가격 정보
+      </p>
+      <th:block th:each="matCategoryOrder:${matOrder.getMatCategoryOrderList()}">
+        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 주문갯수'"></span><span th:class="write-value" th:text="${matCategoryOrder.getOrderCnt()}"></span></p>
+        <hr>
+        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 기기가격'"></span><span th:class="write-value" th:text="${matCategoryOrder.getMatCategory().getMatPrice()}"></span></p>
+        <hr>
+        <br>
+      </th:block>
+      <p><span th:class="write-label" id="totalPrice">총 금액</span><span th:class="write-value" th:text="${matOrder.getTotalPrice()}"></span></p>
+    </section>
+  </section>
+  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a></p>
+</div>
+</html>

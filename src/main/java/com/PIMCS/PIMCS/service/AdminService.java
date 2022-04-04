@@ -123,5 +123,9 @@ public class AdminService {
         return searchOrders;
     }
 
+    public MatOrder findOrder(Integer questionId){
+        return matOrderRepository.findById(questionId).get();
+    }
+
 
 }

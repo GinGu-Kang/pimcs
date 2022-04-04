@@ -14,7 +14,7 @@
     <section class="qa-container">
         <section th:class="question">
             <div th:class="qna-title">
-                <span th:class="qa-icon">Q.</span>
+                <span th:class="qa-icon">제목</span>
                 <span th:class="write-value" th:text="${question.getTitle()}"></span>
 <!--                <div th:if="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-true" >답변 완료</div></div>-->
 <!--                <div th:unless="${question.getAnswer().getId()}!=0" th:class="isAnswer-wrraper"><div th:class="isAnswer-false" >답변 미완료</div></div>-->
@@ -23,6 +23,12 @@
             <p ><span th:class="write-label">작성자</span><span th:class="write-value" th:text="${question.getUser().getName()}"></span></p>
             <hr>
             <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></span></p>
+        </section>
+        <section th:class="question-container">
+            <span th:class="qa-icon">Q.</span>
+            <section th:class="answer-text">
+                <pre th:text="${question.getContent()}"></pre>
+            </section>
         </section>
         <form th:action="@{/admin/qna/view}" method="post" >
         <section th:class="answer-container">

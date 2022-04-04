@@ -1,10 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+    <head>
+        <title>제품 목록</title>
+        <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+        <link rel="stylesheet" href="/css/product/readProduct.css" />
+        <script src="/js/product/readProduct.js"></script>
+        <script>
+            jQuery(function ($) {
+                //seesion storage전체데이터 삭제
+                sessionStorage.clear();
+                initProductsData({
+                    page: 1,
+                    size: 10,
+                })
+            
+            
+            });
+        </script>
+    </head>
+    <div layout:fragment="content" class="content">
+        <!--header-->
+        <div class="header">
+            <div class="header-child">
+                <!--header left box-->
+                <form class="search-form header-child-left">
+                    <select class="pimcs-select-shadow text-size-middle" name="searchType" onchange="changeSearchType(this)">
+                        <option value="serialNumber">시리얼 번호</option>
+                        <option value="matLocation">매트 위치</option>
+                        <option value="productCode">제품 코드</option>
+                        <option value="productName">제품명</option>
+                        <option value="matVersion">기기버전</option>
+                    </select>
+                    <!--검색 input-->
+                    <div class="input-group-shadow">
+                        <input class="pimcs-bd-group-input text-size-middle" name="query"/>
+                        <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
+                    </div>
+                </form>
+                <!--header right box-->
+                <div class="header-child-right">
+                    <!--show items-->
+                    <div class="show-item-container">
+                        show
+                        <select class="show-item-select">
+                            <option selected>10</option>
+                            <option>25</option>
+                            <option>50</option>
+                            <option>100</option>
+                        </select>
+                        items per page
+                    </div>
+                </div>
+            </div>
+            <div class="header-child mt-3">
+                <div class="header-child-left">
+                    <!--수정버튼-->
+                    <div class="square modify-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff"  class="bi bi-wrench" viewBox="0 0 16 16">
+                            <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
+                        </svg><br>
+                        <ul class="dropdown-menu modify-dropdown">
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="product" target="productModal">상품 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="calcMethod" target="calcMethodModal">계산방식 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="threshold" target="thresholdModal">임계값 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="matLocation" target="locationModal">매트위치 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
+                        </ul>
+                    </div>
+                    <!--삭제버튼-->
+                    <div class="square delete-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#4282ff" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                            <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                        </svg>
+                    </div>
+        
+                    <p class="inventory-cnt-viewer-container text-size-middle">
+                        선택된 재고: <span class="inventory-cnt-viewer">0</span>
+                    </p>
+                </div>
+                <div class="header-child-right">
+                    <div class="rect download-csv-btn">CSV</div>
+                </div>
+            </div>
+        </div>
+        <!--PAGINATION-->
+        <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center mt-3">
+            <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+        </div>
+        
+        <!--TABLE-->
+        <div class="pimcs-table-container mt-3">
+        
+            <table class="table pimcs-table w-100">
+                <caption></caption>
+                <thead>
+                    <tr class="text-size-middle">
+                        <th scope="col"><input class="all-rows-checked" type="checkbox"/></th>
+                        <th scope="col">제품 코드</th>
+                        <th scope="col">제품명</th>
+                        <th scope="col">제품 카테고리</th>
+                        <th scope="col">제품 이미지</th>
+                        <th scope="col">제품 무게</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+                
+            </table>
+        </div>
+        <!--TABLE END-->
+    </div>
 </html>

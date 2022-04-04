@@ -51,6 +51,16 @@ public class ProductController {
     }
 
     /**
+     * 제품 목록
+     */
+    @GetMapping("/read")
+    public String read(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
+        List<Product> products = productService.readProductService(secUserCustomForm.getCompany());
+        model.addAttribute("products",products);
+        return "product/readProduct";
+    }
+
+    /**
      * 제품 이미지 로드
      * @param fileName
      * @return 이미지를 byte[]로 return
@@ -70,19 +80,6 @@ public class ProductController {
             return new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
         }
 
-    }
-
-
-    /**
-     * 상품읽기
-     */
-    @GetMapping("/read")
-    public String readForm(){
-        return null;
-    }
-    @PostMapping("/read")
-    public String read(){
-        return null;
     }
 
     /**

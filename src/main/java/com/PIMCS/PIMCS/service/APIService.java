@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.Utils.APIServiceUtils;
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
+import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
@@ -30,11 +31,23 @@ public class APIService {
         this.matRepository = matRepository;
     }
 
-
+    /**
+     * 회사에 등록된 전체제품 로드
+     */
     public List<ProductJsonAdapter> loadProductsService(Company company){
         APIServiceUtils apiServiceUtils = new APIServiceUtils();
         List<Product> products =productRepository.findByCompany(company);
         return apiServiceUtils.creteProductJsonAdapter(products);
+    }
+
+    /**
+     * 회사에 등록된 제품 Page 로드
+     */
+    public ProductPageJsonAdapter loadPageProductsService(Company company, Pageable pageable){
+        APIServiceUtils apiServiceUtils = new APIServiceUtils();
+        Page<Product> pageProducts = productRepository.findByCompanyOrderByCreatedAtDesc(company,pageable);
+
+        return apiServiceUtils.creteProductPageJsonAdapter(pageProducts);
     }
 
     public MatPageAdapter searchMatsService(SearchForm searchForm, Company company, Pageable pageable){

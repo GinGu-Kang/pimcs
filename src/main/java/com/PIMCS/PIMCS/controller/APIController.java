@@ -2,11 +2,13 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
+import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,19 @@ public class APIController {
     @ResponseBody
     public List<ProductJsonAdapter> loadProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
         return apiService.loadProductsService(secUserCustomForm.getCompany());
+    }
+    /**
+     * 회사에 등록된 제품 page형태로 응답
+     */
+    @GetMapping("/api/page/products")
+    @ResponseBody
+    public ProductPageJsonAdapter loadPageProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                                                   @PageableDefault(size=10) Pageable pageable){
+        ProductPageJsonAdapter productPageJsonAdapter = apiService.loadPageProductsService(secUserCustomForm.getCompany(), pageable);
+        System.out.println("=======");
+        System.out.println(productPageJsonAdapter.getData().size());
+        System.out.println("========");
+        return productPageJsonAdapter;
     }
 
     /**

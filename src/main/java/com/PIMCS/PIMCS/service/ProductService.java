@@ -69,8 +69,9 @@ public class ProductService {
     /**
      * 상품읽기 서비스
      */
-    public List<Product> readProduct(){
-        return productRepository.findAll();
+    public List<Product> readProductService(Company company){
+        List<Product> products = productRepository.findByCompany(company);
+        return products;
     }
 
     /**

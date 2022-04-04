@@ -2,12 +2,14 @@ package com.PIMCS.PIMCS.Utils;
 
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
+import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.BusinessCategory;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.parameters.P;
 
 import javax.persistence.FetchType;
@@ -52,6 +54,48 @@ public class APIServiceUtils {
         }
 
         return result;
+    }
+
+    public ProductPageJsonAdapter creteProductPageJsonAdapter(Page<Product> pageProducts){
+        List<ProductPageJsonAdapter.Product> result = new ArrayList<>();
+        for(Product product : pageProducts){
+            //Company 객체 생성
+            ProductPageJsonAdapter.Company company = ProductPageJsonAdapter.Company.builder()
+                    .id(product.getCompany().getId())
+                    .companyCode(product.getCompany().getCompanyCode())
+                    .companyName(product.getCompany().getCompanyName())
+                    .companyAddress(product.getCompany().getCompanyAddress())
+                    .contactPhone(product.getCompany().getContactPhone())
+                    .ceoEmail(product.getCompany().getCeoEmail())
+                    .build();
+
+            ProductPageJsonAdapter.ProductCategory productCategory = ProductPageJsonAdapter.ProductCategory.builder()
+                    .id(product.getProductCategory().getId())
+                    .categoryName(product.getProductCategory().getCategoryName())
+                    .build();
+
+            ProductPageJsonAdapter.Product product1 = ProductPageJsonAdapter.Product.builder()
+                    .id(product.getId())
+                    .company(company)
+                    .productCategory(productCategory)
+                    .productCode(product.getProductCode())
+                    .productImage(product.getProductImage())
+                    .productWeight(product.getProductWeight())
+                    .productName(product.getProductName())
+                    .createdAt(product.getCreatedAt())
+                    .updatedate(product.getUpdatedate())
+                    .build();
+
+
+            result.add(product1);
+        }
+        ProductPageJsonAdapter productPageJsonAdapter = ProductPageJsonAdapter.builder()
+                .pageNumber(pageProducts.getNumber() + 1)
+                .pageSize(pageProducts.getSize())
+                .totalPages(pageProducts.getTotalPages())
+                .data(result)
+                .build();
+        return productPageJsonAdapter;
     }
 
     /**

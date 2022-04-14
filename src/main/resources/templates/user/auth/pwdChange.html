@@ -16,8 +16,6 @@
     </style>
 </head>
 <body>
-
-
 <div class="workerForm">
     <img src="/img/logo2.png" ><br>
     <form id="pwd-change-form" th:action="@{/auth/pwd/change}" method="post">
@@ -33,6 +31,9 @@
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/js/user/signUp.js" ></script>
     <script>
+
+
+
         function pwdChange(){
             url=$("#pwd-change-form").action;
             if(checkPwdForm()){
@@ -48,6 +49,7 @@
                     } });
             }
         }
+        //벨리데이션 체크
         function checkPwdForm(){
             if(!check_password()){
                 $('#password').focus();

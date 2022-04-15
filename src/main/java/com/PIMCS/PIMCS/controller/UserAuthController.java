@@ -56,18 +56,24 @@ public class UserAuthController {
         userAuthService.signUp(user);
         return "redirect:/auth/login";
     }
+
     @GetMapping("signUp/verify")
     public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
-        log.info("오긴오니");
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         userAuthService.signUpVerify(verifyKey);
-        return "redirect:/auth/login";
+        return "redirect:/auth/signUp/success";
     }
+    //회원가입 완료
+    @GetMapping("/signUp/success")
+    private String signUpSuccess(){
+        return "user/auth/signUpSuccess.html";
+    }
+
     //회원가입 선택
     @GetMapping("choice/signUp")
     private String signUpChoice(){
         return "user/auth/signUpChoice.html";
     }
+
 
 
     //회원정보수정

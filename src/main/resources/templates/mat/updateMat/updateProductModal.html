@@ -49,6 +49,11 @@
          */
         const createProductItemModal = function(products){
             let option = "";
+            console.log("products")
+            if(products == undefined){
+                alert("오류발생했습니다. 다시시도해주세요.");
+                return;
+            }
             for(let product of products){
                 option += `<option value="${product.id}">${product.productName}</option>`;
             }

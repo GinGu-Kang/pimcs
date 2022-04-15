@@ -2,7 +2,6 @@ package com.PIMCS.PIMCS.domain;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +12,7 @@ import java.util.List;
 @Entity
 @Builder
 @AllArgsConstructor
-@NamedEntityGraph(name = "Company.companyWorker",
-        attributeNodes = @NamedAttributeNode("companyWorker"))
+@NamedEntityGraph(name = "Company.companyWorker", attributeNodes = @NamedAttributeNode("companyWorker"))
 public class Company {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

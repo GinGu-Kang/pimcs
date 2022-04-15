@@ -45,7 +45,7 @@ public interface MatRepository extends JpaRepository<Mat,String> {
 
      //임계값 미달 조회
      @Query(
-             value = "SELECT m FROM Mat m JOIN FETCH m.product WHERE m.company=:company AND m.threshold > m.currentInventory",
+             value = "SELECT m FROM Mat m LEFT JOIN  m.product WHERE m.company=:company AND m.threshold > m.currentInventory",
              countQuery = "SELECT COUNT(m) FROM Mat m WHERE m.company=:company AND m.threshold > m.currentInventory"
      )
      Page<Mat> findMatsBelowThreshold(@Param("company") Company company,Pageable pageable);

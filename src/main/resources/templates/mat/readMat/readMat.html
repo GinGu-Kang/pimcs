@@ -16,13 +16,10 @@
 
     <script type="text/javascript" th:inline="javascript">
         jQuery(function ($) {
-            
-            
-            // 초기화 
+            //초기화 
             init();
             //테이블 데이터 초기화
             initTableData({page:1, size:10});
-            
             initSearchMatForm();
         });
     </script>
@@ -59,9 +56,12 @@
                 <option value="productName">제품명</option>
                 <option value="matVersion">기기버전</option>
             </select>
-            <div class="search-input-container">
-                <input class="search-input text-size-middle" name="searchQuery" placeholder="Search by serial number"/>
+            <!--검색 input-->
+            <div class="input-group-shadow search-input-container" style="width: 206px;">
+                <input class="pimcs-bd-group-input text-size-middle search-input" name="searchQuery" placeholder="Search by serial number"/>
+                <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
             </div>
+            
         </form>
         
         <!--DESKTOP header right box-->
@@ -86,12 +86,18 @@
     <!--DESKTOP 매트조회 헤더-->
     <div class="mobile-inquery-mat-header col-md-12">
         <div class="d-flex">
-            <select class="pimcs-select text-size-middle">
-                <option>Search</option>
-                <option>시리얼 번호</option>
+            
+            <select class="pimcs-select-shadow text-size-middle" name="searchType" onchange="changeSearchType(this)">
+                <option value="serialNumber">시리얼 번호</option>
+                <option value="matLocation">매트 위치</option>
+                <option value="productCode">제품 코드</option>
+                <option value="productName">제품명</option>
+                <option value="matVersion">기기버전</option>
             </select>
-            <div class="search-input-container">
-                <input class="search-input text-size-middle" placeholder="Search All"/>
+            
+            <div class="input-group-shadow search-input-container">
+                <input class="pimcs-bd-group-input text-size-middle search-input" name="searchQuery" placeholder="Search by serial number"/>
+                <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
             </div>
         </div>
         <div class="viewer-btn-container d-flex">
@@ -154,11 +160,12 @@
                     <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
                 </svg>
                 <ul class="dropdown-menu mobile-modify-dropdown">
-                    <li><a class="dropdown-item" href="#">Action</a></li>
-                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                    <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Separated link</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="product" target="productModal">상품 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="calcMethod" target="calcMethodModal">계산방식 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="threshold" target="thresholdModal">임계값 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="matLocation" target="locationModal">매트위치 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
                 </ul>
             </div>
 
@@ -178,7 +185,9 @@
             </p>
         </div>
         <div class="action-btn-right-container d-flex">
-            <div class="rect">임계 값미달</div>
+            <div class="rect">
+                <a class="a-remove-attr" href="?belowThreshold=true">임계 값미달</a>
+            </div>
             <div class="rect download-csv-btn">CSV</div>
             <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Setting</div>
         </div>

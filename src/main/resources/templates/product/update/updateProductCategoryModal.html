@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="productCategory" class="modal fade update-mat-modal" id="productCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">제품카테고리 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+            <div class="modal-body">
+            <div class="target-container">
+                <h5 class="pimcs-bold">변경할 제품명/제품카테고리</h5>
+                <ul class="target-list-container"></ul>
+            </div>
+            <div class="replace-container">
+                <h5 class="pimcs-bold">변경 값</h5>
+                <div class="d-flex justify-content-between mt-2">
+                    <select class="pimcs-blue-input" style="height: 34px;" name="productCategory">
+                    </select>
+                </div>
+            </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="onClickedChangeProductCategory();">변경</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        
+        let resultProductCategories;
+
+        /**
+         * 모달 show시 전체 제품카테고리 로드
+         */
+        $('#productCategoryModal').on('show.bs.modal', function (e) {
+            resultProductCategories = loadGetData({
+                url: "/api/product/category",
+                data: null
+            });
+
+
+            $("select[name='productCategory']").empty();
+            $("select[name='productCategory']").append(createProductCategoryOptionTAG(resultProductCategories));
+
+        });
+
+        /**
+         *  로드된 제품카테고리들을 option태그로 만든다
+         */
+        const createProductCategoryOptionTAG = function(productCategories){
+            let option = "";
+            if(productCategories == undefined){
+                alert("오류발생했습니다. 다시시도해주세요.");
+                return;
+            }
+            for(let productCategory of productCategories){
+                option += `<option value='${productCategory.id}'>${productCategory.categoryName}</option>`;
+            }
+            return option;
+        }
+
+        const findProductCategory = function(id){
+            for(let productCategory of resultProductCategories){
+                if(productCategory.id == id) return productCategory;
+            }
+            return null;
+        }
+        /**
+         * 변경버튼 클릭시
+         */
+        const onClickedChangeProductCategory = function(){
+            let selectedId =$("select[name='productCategory'] option:selected").val();
+            let productCategory = findProductCategory(selectedId);
+            if(productCategory == null){
+                alert("오류");
+                return;
+            }
+            
+            let token = $("meta[name='_csrf']").attr("content");
+            let header = $("meta[name='_csrf_header']").attr("content");
+
+            let formData = updateFormData({
+                columnName: "productCategory",
+                replaceValue: productCategory
+            });
+
+            let queryString = new URLSearchParams(formData).toString();
+            
+            let resultData = loadPostData({
+                url: "/product/update",
+                data: queryString,
+                header: {
+                    'header': header,
+                    'token': token
+                }
+            });
+
+            if(resultData != undefined){
+            
+                alert(resultData.message);
+                if(resultData.isSuccess){
+                    let size = $(".show-item-select option:selected").val();
+                    let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                    location.href=`?page=${page}&size=${size}`;
+                }
+            }
+        }
+
+    </script>
+</div>
+</html>

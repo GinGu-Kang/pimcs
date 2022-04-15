@@ -131,6 +131,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
                                              `recentlyNoticeDate` DATETIME NULL,
                                              `isSendEmail` TINYINT(1) NULL,
                                              `matLocation` VARCHAR(45) NULL,
+                                             `currentInventory` int not null default 0,
                                              `productOrderCnt` INT NULL,
                                              `boxWeight` INT NULL,
                                              `battery` INT NULL,

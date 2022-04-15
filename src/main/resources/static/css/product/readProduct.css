@@ -73,7 +73,7 @@
 
 .modify-btn.hover{
     width: 160px;
-    height: 234px;
+    height: 194px;
     align-items: start;
     transition: all ease 0.5s;
     
@@ -145,6 +145,30 @@
 .td-small-image {
     width: 48px;
     height: 48px;
+}
+
+.td-big-image{
+    display: none;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left:0px;
+    top:65px;
+    border-radius: 6px;
+    box-shadow: 0 3px 17px 0 rgb(0 0 0 / 16%);
+    z-index: 9999;
+}
+
+.td-big-image-last{
+    display: none;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left:0px;
+    top:-200px;
+    border-radius: 6px;
+    box-shadow: 0 3px 17px 0 rgb(0 0 0 / 16%);
+    z-index: 9999;
 }
 
 @keyframes slideIn {

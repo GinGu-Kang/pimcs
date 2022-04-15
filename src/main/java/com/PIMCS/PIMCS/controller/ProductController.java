@@ -2,10 +2,8 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.domain.ProductCategory;
-import com.PIMCS.PIMCS.form.ProductForm;
-import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.service.ProductService;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -85,24 +85,34 @@ public class ProductController {
     /**
      * 상품수정
      */
-    @GetMapping("/update")
-    public String updateForm(Model model){
-        return null;
-    }
     @PostMapping("/update")
-    public String update(){
-
-        return null;
+    @ResponseBody
+    public HashMap<String, Object> update(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, UpdateProductFormList updateProductFormList){
+        return productService.updateProduct(secUserCustomForm.getCompany(), updateProductFormList);
     }
 
     /**
      * 상품삭제
      */
     @PostMapping("/delete")
-    public String delete(){
-        return null;
+    @ResponseBody
+    public HashMap<String, Object> delete(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductFormList productFormList){
+        return productService.deleteProduct(secUserCustomForm.getCompany(), productFormList);
     }
 
+
+    /**
+     * 체크된 제품 csv download
+     */
+    @PostMapping(value = "/download/csv",  produces = "text/csv")
+    public void downloadProductCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductCsvForm productCsvForm , HttpServletResponse response) throws IOException {
+
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "product-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+        productService.downloadProductCsvService(secUserCustomForm.getCompany(), productCsvForm, response.getWriter());
+    }
 
 
 

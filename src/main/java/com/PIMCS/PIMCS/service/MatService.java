@@ -160,37 +160,7 @@ public class MatService {
         return hashMap;
     }
 
-    /**
-     * 검색(serialNumber,matLocation,productCode,matVersion) 서비스
-     */
-    public List<Mat> searchMat(SearchForm searchForm){
 
-        List<Mat> matList = null;
-        switch (searchForm.getSearchType()){
-            case "serialNumber":
-//                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
-                break;
-            case "matLocation":
-                /*matList = matRepository.findByMatLocationContaining(searchForm.getSearchQuery());*/
-
-                break;
-            case "productCode":
-
-                List<Product> products =productRepository.findByProductCodeContaining(searchForm.getSearchQuery());
-                List<Mat> finalMatList =  new ArrayList<>();
-                products.forEach(p ->{
-                    finalMatList.addAll(p.getMats());
-                });
-                matList = finalMatList;
-
-                break;
-            case "matVersion":
-//                matList = matRepository.findBySerialNumberContaining(searchForm.getSearchQuery());
-                break;
-        }
-
-        return matList;
-    }
 
     public void downloadMatCsvService(Company company, MatCsvForm matCsvForm, Writer writer) throws IOException{
         List<String> columns = matCsvForm.getCheckedColumnNames();

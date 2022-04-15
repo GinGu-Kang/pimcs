@@ -1,64 +1,65 @@
 <!DOCTYPE html> <html xmlns:th="http://www.thymeleaf.org">
 <nav th:fragment="navigationFragment">
-    <details>
-        <summary class="summary text-size-middle">Inventory Management</summary>
-               
-        <div markdown="1">
-            <div id="in-out-history" class="detail-item">
-                <a class="text-size-between-middle-samll" href="/inout/history">입・출고 내역</a>
-            </div>
-            <div id="inventory-list" class="detail-item text-size-between-middle-samll">
-                <a href="/">재고 목록</a>
-            </div>
-            <div id="product-list" class="detail-item text-size-between-middle-samll">
-                <a href="/product/read">제품 목록</a>
-            </div>
-            <details>
-                <summary class="sub-summary detail-item  text-size-between-middle-samll">재고등록</summary>
-                <div markdown="1">
-                    <div id="category-registration" class="detail-sub-item">
-                        <a class="text-size-between-middle-samll" href="/product/category/create">카테고리 등록</a>
-                    </div>
-                    <div id="product-registration" class="detail-sub-item">
-                        <a class="text-size-between-middle-samll" href="/product/create">제품 등록</a>
-                    </div>
-                    <div id="mat-registration" class="detail-sub-item">
-                        <a class="text-size-between-middle-samll" href="/mat/create">기기 등록</a>
-                    </div>
+    <div>
+        <details>
+            <summary class="summary text-size-middle">Inventory Management</summary>
+                
+            <div markdown="1">
+                <div id="in-out-history" class="detail-item">
+                    <a class="text-size-between-middle-samll" href="/inout/history">입・출고 내역</a>
                 </div>
-            </details>
-        </div>
-    </details>
-
-    <details>
-        <summary class="summary text-size-middle">Order</summary>
-        <div markdown="1">   
-            <div class="detail-item text-size-between-middle-samll">발주 내역</div>    
-            <div class="detail-item text-size-between-middle-samll">발주 통계</div>
-        </div>
-    </details>
-    
-    <details>
-        <summary class="summary text-size-middle">Company Information</summary>
-        <div markdown="1">       
-            <div class="detail-item text-size-between-middle-samll">회사 정보 수정</div>
-            <div class="detail-item text-size-between-middle-samll">승인 대기 목록</div>
-            <div class="detail-item" id="company-worker">
-                <a href="/company/worker" class="text-size-between-middle-samll"> 사원 목록 및 권한</a>
+                <div id="inventory-list" class="detail-item text-size-between-middle-samll">
+                    <a href="/">재고 목록</a>
+                </div>
+                <div id="product-list" class="detail-item text-size-between-middle-samll">
+                    <a href="/product/read">제품 목록</a>
+                </div>
+                <details>
+                    <summary class="sub-summary detail-item  text-size-between-middle-samll">재고등록</summary>
+                    <div markdown="1">
+                        <div id="category-registration" class="detail-sub-item">
+                            <a class="text-size-between-middle-samll" href="/product/category/create">카테고리 등록</a>
+                        </div>
+                        <div id="product-registration" class="detail-sub-item">
+                            <a class="text-size-between-middle-samll" href="/product/create">제품 등록</a>
+                        </div>
+                        <div id="mat-registration" class="detail-sub-item">
+                            <a class="text-size-between-middle-samll" href="/mat/create">기기 등록</a>
+                        </div>
+                    </div>
+                </details>
             </div>
-            
-        </div>
-    </details>
+        </details>
 
-    <details>
-        <summary class="summary text-size-middle">Other</summary>
-        <div markdown="1">       
-            <div class="detail-item text-size-between-middle-samll">기기 배송 현황</div>
-            <div class="detail-item text-size-between-middle-samll">기기 주문</div>
-            <div class="detail-item text-size-between-middle-samll">Q&A</div>
-            
-        </div>
-    </details>
+        <details>
+            <summary class="summary text-size-middle">Order</summary>
+            <div markdown="1">   
+                <div class="detail-item text-size-between-middle-samll">발주 내역</div>    
+                <div class="detail-item text-size-between-middle-samll">발주 통계</div>
+            </div>
+        </details>
+        
+        <details>
+            <summary class="summary text-size-middle">Company Information</summary>
+            <div markdown="1">       
+                <div class="detail-item text-size-between-middle-samll">회사 정보 수정</div>
+                <div class="detail-item text-size-between-middle-samll">승인 대기 목록</div>
+                <div class="detail-item" id="company-worker">
+                    <a href="/company/worker" class="text-size-between-middle-samll"> 사원 목록 및 권한</a>
+                </div>
+                
+            </div>
+        </details>
 
-    
+        <details>
+            <summary class="summary text-size-middle">Other</summary>
+            <div markdown="1">       
+                <div class="detail-item text-size-between-middle-samll">기기 배송 현황</div>
+                <div class="detail-item text-size-between-middle-samll">기기 주문</div>
+                <div class="detail-item text-size-between-middle-samll">Q&A</div>
+                
+            </div>
+        </details>
+
+    </div>
 </nav>

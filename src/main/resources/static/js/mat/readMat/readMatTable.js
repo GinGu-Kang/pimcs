@@ -97,11 +97,11 @@ const createColumnThTag = function(checked){
             isChecked = findMat.checked;
         }
         setStorage({mat:mat,isChecked: isChecked});
-        $("tbody").append(createMatRow(mat));    
+        $("tbody").append(createMatRow(mat, tableData.data.length));    
     }
 }
 
-const createMatRow = function(mat){
+const createMatRow = function(mat, length){
     const findMat = getStorageItem(mat.id);
     let  checked;
     let calcMethod;
@@ -129,17 +129,21 @@ const createMatRow = function(mat){
         importantInfoColor = "red";
     }
 
+    let bigImgClass = 'td-big-image';
+    if(length >= 10 && length-4 <= $("tbody > tr").length){
+        bigImgClass = 'td-big-image-last';
+    }
     
 
     let row = `<tr class='text-size-between-middle-samll' data=${mat.id}>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
         row +=    `<td columnName='serialNumber'>${mat.serialNumber}</td>`;
         row +=    `<td columnName='matVersion'>A3</td>`;
-        row +=    `<td columnName='productCode'>${mat.product.productCode}</td>`;
-        row +=    `<td columnName='productName'>${mat.product.productName}</td>`;
+        row +=    `<td columnName='productCode'>${(mat.product != null ? mat.product.productCode : 'N/A')}</td>`;
+        row +=    `<td columnName='productName'>${(mat.product != null ? mat.product.productName : 'N/A')}</td>`;
         row +=    `<td columnName='productImage'>`;
-        row +=       `<img class='td-small-image' src='${mat.product.productImage}'/>`;
-        row +=        `<img class='td-big-image' src='${mat.product.productImage}'/>`;
+        row +=       `<img class='td-small-image' src='${mat.product != null ? mat.product.productImage : null}'/>`;
+        row +=        `<img class='${bigImgClass}' src='${mat.product != null ? mat.product.productImage : null}'/>`;
         row +=    `</td>`;
         row +=    `<td columnName='inventoryCnt'>${mat.inventoryWeight}g</td>`;
         row +=    `<td columnName='calcMethod'>${calcMethod}</td>`;

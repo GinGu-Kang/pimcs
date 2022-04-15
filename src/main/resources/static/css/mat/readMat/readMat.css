@@ -140,6 +140,18 @@
     z-index: 9999;
 }
 
+.td-big-image-last{
+    display: none;
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    left:0px;
+    top:-200px;
+    border-radius: 6px;
+    box-shadow: 0 3px 17px 0 rgb(0 0 0 / 16%);
+    z-index: 9999;
+}
+
 .card-viewer-btn{
     background-image: url("/img/card-viewer-icon.png");
     background-repeat: no-repeat;
@@ -152,6 +164,13 @@
 .card-viewer-active{
     background-image: url("/img/card_viewer_active_icon.png");
     background-repeat: no-repeat;
+}
+
+
+
+.bi-search {
+    color: #afafaf;
+    margin-right: 10px;
 }
 
 /*PAGINATION*/
@@ -167,17 +186,25 @@
     
 }
 /* DROPDOWN */
-.modify-btn{
+.modify-btn, .mobile-modify-btn{
     position: relative;
     transition: all ease 0.5s;
 
 }
+ 
 .modify-btn.hover{
     width: 160px;
     height: 234px;
     align-items: start;
     transition: all ease 0.5s;
     
+}
+.mobile-modify-btn.hover{
+    width: 160px;
+    height: 234px;
+    align-items: start;
+    position: absolute;
+    transition: all ease 0.5s;
 }
 
 .inquery-mat-container .dropdown-menu{
@@ -191,7 +218,20 @@
     animation-name: slideIn;
     animation-duration: 0.5s;
 }
-
+.inquery-mat-container .mobile-modify-dropdown{
+    display: none;
+    
+    position: absolute;
+    left: -2px;
+    top: 26px;
+    border-radius: 0;
+    border: 0;
+    animation-name: slideIn;
+    animation-duration: 0.5s;
+}
+/* .inquery-mat-container .mobile-modify-dropdown .dropdown-item{
+    width: 100%;
+} */
 .inquery-mat-container .dropdown-item{
     color: #555555;
     font-weight: 0;

@@ -9,4 +9,3 @@ public class PimcsApplication {
 		SpringApplication.run(PimcsApplication.class, args);
 	}
 }
-

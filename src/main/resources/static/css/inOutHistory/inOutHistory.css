@@ -11,7 +11,7 @@
 }
 /*search input*/
 .header-item1 .input-group-shadow{
-    width: 26%;
+    width: 30%;
     height: 25px;
 }
 .header-item1 .bi-search,
@@ -42,14 +42,14 @@
 
 
 
-.header-item1 .show-item-container{
+.show-item-container{
     display: flex;
     align-items: center;
     font-size: 12px;
 }
 
 
-.header-item1 .show-item-select {
+.show-item-select {
     width: 45px;
     height: 24px;
     border: 2px solid #ffffff;
@@ -60,6 +60,7 @@
     font-size: 12px;
     margin: 0 5px;
 }
+
 
 /*button*/
 button{
@@ -136,4 +137,37 @@ button{
     margin-left: 20px;
 }
 
+.mobile-pagination-container{
+    display: none !important;
+}
 
+
+
+@media (max-width: 768px) {
+    .desktop-show-item-container{
+        display: none !important;
+    }    
+    .pagination-container{
+        display: none !important;
+    }
+    .mobile-pagination-container{
+        display: flex !important;
+        margin-right: 4%;
+    }
+    #mobile-pagination{
+        margin-right: 12px;
+    }
+    .search-form{
+        width: 100%;
+        flex-direction: column;
+        margin: 0 auto;
+    }
+    .datepicker-container{
+        margin-left: 0px;
+    }
+    .input-group-shadow {
+        width: 254px !important;
+        margin-bottom: 16px;
+    }
+
+}

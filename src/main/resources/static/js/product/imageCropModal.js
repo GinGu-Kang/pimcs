@@ -10,10 +10,11 @@ jQuery(function ($) {
     	
     	let canvas = image.cropper('getCroppedCanvas');
     	result.attr('src',canvas.toDataURL("image/jpg"));
-        imageCropModal.hide();
+
+        $("#close-image-cropmodal").click();
     });
 
     $(document).on("click",".modal-cancel-btn", function(){
-
+        $("#close-image-cropmodal").click();
     });
 });

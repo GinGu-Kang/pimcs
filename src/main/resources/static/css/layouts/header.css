@@ -18,6 +18,7 @@ header{
 }
 .header-left-box .menu-icon-box{
     margin-left: 29px;
+    cursor: pointer;
 }
 .header-left-box .menu-icon-box > svg{
     width: 24px;

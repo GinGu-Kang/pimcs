@@ -1,8 +1,6 @@
 package com.PIMCS.PIMCS.domain;
 
-
 import lombok.Data;
-
 import javax.persistence.*;
 
 @Entity

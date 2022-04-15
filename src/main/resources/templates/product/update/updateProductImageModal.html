@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="productImage" class="modal fade update-mat-modal" id="productImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">제품이미지 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+            <div class="modal-body" style="height: 370px">
+            <div class="target-container" style="height: 55%;">
+                <h5 class="pimcs-bold">변경할 제품명/제품이미지</h5>
+                <ul class="target-list-container"></ul>
+            </div>
+            <div class="replace-container">
+                <h5 class="pimcs-bold">변경 값</h5>
+                <div class="d-flex justify-content-center mt-2">
+                    <label for="product-img-file" class="img-view text-size-between-middle-samll">
+                        이미지를 끌어다 놓으세요
+                    </label>
+                    <input type="file" style="display: none;" id="product-img-file" name="productImage" class="product-img-file" />
+                </div>
+            </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="onClickedChangeImage()">변경</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        $('#productImageModal').on('show.bs.modal', function (e) {
+            $('#productImageModal .img-view').empty();
+            $('#productImageModal .img-view').text("이미지를 끌어다 놓으세요");
+        });
+
+        const onClickedChangeImage = function(){
+            let canvas = $("#edit-img").cropper('getCroppedCanvas');
+            // let result = $("#preview-img").attr("src",canvas.toDataURL("image/jpeg"));
+            
+            if($("#productImageModal .img-view #preview-img").length == 0){
+                alert("이미지를 선택해주세요.");
+                return; 
+            } 
+                
+            canvas.toBlob(function(blob){
+                console.log(blob)
+                let formData = updateFormData({
+                    columnName: "productImage",
+                    replaceValue: blob
+                });
+                let token = $("meta[name='_csrf']").attr("content");
+                let header = $("meta[name='_csrf_header']").attr("content");
+                let resultData = loadPostMultipartData({
+                    url: "/product/update",
+                    data: formData,
+                    header: {
+                        'header': header,
+                        'token': token
+                    }
+                });
+
+                if(resultData != undefined){
+                
+                    alert(resultData.message);
+                    if(resultData.isSuccess){
+                        let size = $(".show-item-select option:selected").val();
+                        let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                        location.href=`?page=${page}&size=${size}`;
+                    }
+                }
+            
+            });
+            
+            
+        }
+    </script>
+</div>
+</html>

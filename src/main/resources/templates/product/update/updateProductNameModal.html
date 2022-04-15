@@ -1,59 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="threshold" class="modal fade update-mat-modal" id="thresholdModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:fragment="productName" class="modal fade update-mat-modal" id="productNameModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="thresholdModal">임계값 변경</h5>
+          <h5 class="modal-title">제품명 변경</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form method="post" >
             <div class="modal-body">
             <div class="target-container">
-                <h5 class="pimcs-bold">변경할 시리얼번호/임계값</h5>
+                <h5 class="pimcs-bold">변경할 제품명</h5>
                 <ul class="target-list-container"></ul>
             </div>
             <div class="replace-container">
                 <h5 class="pimcs-bold">변경 값</h5>
                 <div class="d-flex justify-content-between mt-2">
-                    <div class="input-group">
-                        <input type="number" style="height: 33px;" required name="mat.threshold" class="pimcs-blue-input input"/>
-                        <span class="input-group-text text-size-between-middle-samll">g/개</span>
-                    </div>
+                    <input type="text" name="productName" class="pimcs-blue-input" placeholder="변경할 제품명을 입력해주세요."/>
                 </div>
-                
             </div>
                 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                <button type="button" class="btn btn-primary" onclick="onClickedUpdateThreshold()">변경</button>
+                <button type="button" class="btn btn-primary" onclick="onClickedChangeProductName();">변경</button>
             </div>
         </form>
       </div>
     </div>
     <script>
-        
-        /**
-         * 변경 버튼클릭시 
-         */
-        const onClickedUpdateThreshold = function(){
-            if($("input[name='mat.threshold']").val() == ""){
-                alert("임계값을 입력해주세요.");
+        $('#productNameModal').on('show.bs.modal', function (e) {
+            $("input[name='productName']").val("");
+        });
+        const onClickedChangeProductName = function(){
+            if($("input[name='productName']").val() == ""){
+                alert("제품명를 입력해주세요.");
                 return;
             }
-
             let token = $("meta[name='_csrf']").attr("content");
             let header = $("meta[name='_csrf_header']").attr("content");
-            let formData = updateMatFormData({
-                columnName: "threshold",
-                replaceValue: $("input[name='mat.threshold']").val()
+
+            let formData = updateFormData({
+                columnName: "productName",
+                replaceValue: $("input[name='productName']").val()
             });
             let queryString = new URLSearchParams(formData).toString();
-            
             let resultData = loadPostData({
-                url: "/mat/update",
+                url: "/product/update",
                 data: queryString,
                 header: {
                     'header': header,
@@ -62,16 +56,16 @@
             });
 
             if(resultData != undefined){
-                
-                updateMat({
-                    columnName: "threshold",
-                    replaceValue: $("input[name='mat.threshold']").val()
-                });
-                $(`[data-bs-dismiss="modal"]`).click();
+               
                 alert(resultData.message);
+                if(resultData.isSuccess){
+                    let size = $(".show-item-select option:selected").val();
+                    let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                    location.href=`?page=${page}&size=${size}`;
+                }
             }
         }
-       
+
     </script>
 </div>
 </html>

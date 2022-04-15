@@ -29,7 +29,7 @@
         
     </head>
     <div layout:fragment="content" class="content">
-        <!--HEADER-->
+        <!--DESKTOP HEADER-->
         <div class="header">
             <!--ITEM1-->
             <div class="header-item1">
@@ -50,43 +50,45 @@
                                />
                         <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
                     </div>
-                    
-                    <!--select date-->
-                    <div class="input-group-shadow datepicker-container">
-                        <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
+                    <div class="d-flex">
+                        <!--select date-->
+                        <div class="input-group-shadow datepicker-container">
+                            <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
+                                    type="date" 
+                                    id="start-date"  
+                                    class="pimcs-bd-group-input text-size-middle" 
+                                    name="startDate" 
+                                    th:value="${inOutHistorySearchForm.getStartDate()}"
+                                    />
+                            <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
                                 type="date" 
                                 id="start-date"  
                                 class="pimcs-bd-group-input text-size-middle" 
+                                placeholder="Search by product name"
                                 name="startDate" 
-                                th:value="${inOutHistorySearchForm.getStartDate()}"
-                                />
-                        <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
-                            type="date" 
-                            id="start-date"  
-                            class="pimcs-bd-group-input text-size-middle" 
-                            placeholder="Search by product name"
-                            name="startDate" 
-                        />
+                            />
 
-                        <span class="input-group-text-shadow d-flex justify-content-center">~</span>
-                        <input  th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
-                                type="date" 
-                                id="end-date" 
-                                class="pimcs-bd-group-input text-size-middle" 
-                                name="endDate" 
-                                th:value="${inOutHistorySearchForm.getEndDate()}"
-                            />
-                        <input  th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
-                                type="date" 
-                                id="end-date" 
-                                class="pimcs-bd-group-input text-size-middle" 
-                                name="endDate" 
-                            />
+                            <span class="input-group-text-shadow d-flex justify-content-center">~</span>
+                            <input  th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
+                                    type="date" 
+                                    id="end-date" 
+                                    class="pimcs-bd-group-input text-size-middle" 
+                                    name="endDate" 
+                                    th:value="${inOutHistorySearchForm.getEndDate()}"
+                                />
+                            <input  th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
+                                    type="date" 
+                                    id="end-date" 
+                                    class="pimcs-bd-group-input text-size-middle" 
+                                    name="endDate" 
+                                />
+                        </div>
+                        <input type="submit" class="pimcs-blue-btn inquiry-btn" value="조회"/>
                     </div>
-                    <input type="submit" class="pimcs-blue-btn inquiry-btn" value="조회"/>
                 </form>
+
                 <!--show items-->
-                <div class="show-item-container">
+                <div class="show-item-container desktop-show-item-container">
                     show
                     <select class="show-item-select">
                         <option selected>10</option>
@@ -98,6 +100,7 @@
                 </div>
                 
             </div>
+
             <!--ITEM2-->
             <div class="header-item2 d-flex justify-content-end">
                 <div class="rect csv-download-btn">
@@ -106,9 +109,27 @@
             </div>
             
         </div>
+
+
         <!--PAGINATION-->
         <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center">
             <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+        </div>
+
+        <!--MOBLIE PAGINATION-->
+        <div class="mobile-pagination-container d-flex justify-content-end">
+            
+            <ul id="mobile-pagination" class="pagination text-size-between-middle-samll"></ul>
+            <div class="show-item-container d-flex align-items-end">
+                show
+                <select class="show-item-select">
+                    <option selected>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                items per page
+            </div>
         </div>
         <!--TABLE-->
         <div class="pimcs-table-container">

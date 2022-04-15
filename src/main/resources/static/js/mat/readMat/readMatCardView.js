@@ -45,7 +45,7 @@ const createCardViewHead = function(mat){
     const checked = (findMat.checked) ? 'checked' : '';
     let cardViewHead = `<div class="pimcs-card-head d-flex">`;
         cardViewHead +=     `<div>`;
-        cardViewHead +=         `<p class="card-product-name text-size-middle dot3">${mat.product.productName}</p>`;
+        cardViewHead +=         `<p class="card-product-name text-size-middle dot3">${getProductAttribute(mat, 'productName')}</p>`;
         cardViewHead +=         `<p class="card-serial-number text-size-between-middle-samll dot3">${mat.serialNumber}</p>`;
         cardViewHead +=     `</div>`;
         cardViewHead +=     `<div class="d-flex justify-content-end">`;
@@ -67,7 +67,7 @@ const createCardViewBody = function(mat){
         cardViewBody +=         `</div>`;
         cardViewBody +=         `<div>`;
         cardViewBody +=             `<span class="label text-size-middle">제품코드:</span>`;
-        cardViewBody +=             `<span class="value dot3 text-size-between-middle-samll">${mat.product.productCode}</span>`;
+        cardViewBody +=             `<span class="value dot3 text-size-between-middle-samll">${getProductAttribute(mat, 'productCode')}</span>`;
         cardViewBody +=         `</div>`;
         cardViewBody +=         `<div>`;
         cardViewBody +=             `<span class="label text-size-middle">기기버전:</span>`;
@@ -75,11 +75,21 @@ const createCardViewBody = function(mat){
         cardViewBody +=         `</div>`;
         cardViewBody +=     `</div>`;
         cardViewBody +=     `<div class="img-area">`;
-        cardViewBody +=         `<img src="${mat.product.productImage}"/>`;
+        cardViewBody +=         `<img src="${getProductAttribute(mat,'productImage')}"/>`;
         cardViewBody +=     `</div>`;
         cardViewBody +=`</div>`;
         return cardViewBody;
 
+}
+
+
+const getProductAttribute= function(mat, attrName){
+    if(mat.product != null){
+        return mat.product[attrName];
+    }else{
+        
+        return (attrName == 'productImage') ? null: 'N/A';
+    }
 }
 
 const createCardViewFooter = function(mat){

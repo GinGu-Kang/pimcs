@@ -14,6 +14,7 @@ const init = function(){
 
 const initSearchMatForm = function(){
     const params = isSearchMat();
+
     if(params != null){
         $("select[name='searchType']").val(params['searchType']).attr("selected", "selected");
         $("input[name='searchQuery']").val(params['searchQuery']);
@@ -229,6 +230,7 @@ const isBelowThreshold = function(){
         success:function(response){
             resultData = response;    
             
+            console.log(resultData);
             //페이지네이션 생성 및 재생성
             pagination({
                 totalPages: resultData.totalPages,
@@ -278,9 +280,18 @@ $(document).on("mouseover",".modify-btn",function(){
     $(this).addClass("hover");
 });
 
+$(document).on("mouseover",".mobile-modify-btn",function(){
+    $(".mobile-modify-dropdown").css("display","block");
+    $(this).addClass("hover");
+});
+
 $(document).on("mouseleave",".modify-btn",function(){
      $(".modify-dropdown").css("display","none");
      $(this).removeClass("hover");
+});
+$(document).on("mouseleave",".mobile-modify-btn",function(){
+    $(".mobile-modify-dropdown").css("display","none");
+    $(this).removeClass("hover");
 });
 
 $(document).on("mouseover",".td-small-image",function(){
@@ -410,11 +421,12 @@ $(document).on("click",".graph-btn",function(){
  * 매트 삭제버튼 클릭시
  */
 $(document).on("click",".delete-btn",function(){
-    if(!confirm("삭제하겠습니까?")) return;
     if(getCheckedItems().length == 0){
         alert("매트를 체크해주세요.");
         return;
     }
+    if(!confirm(`${getCheckedItems().length}개 매트를 삭제하겠습니까?`)) return;
+    
     let formData = getDeleteMatForm();
     let queryString = new URLSearchParams(formData).toString();
     let token = $("meta[name='_csrf']").attr("content");

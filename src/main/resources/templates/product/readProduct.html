@@ -2,38 +2,65 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
     <head>
         <title>제품 목록</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
         <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
         <link rel="stylesheet" href="/css/product/readProduct.css" />
         <script src="/js/product/readProduct.js"></script>
+        <!--cropper-->
+        <link rel="stylesheet" type="text/css" href="https://fengyuanchen.github.io/cropperjs/css/cropper.css">
+        <script src="https://fengyuanchen.github.io/cropper/js/cropper.js"></script>
+        
+        <!--prudct update-->
+        <script src="/js/product/updateProductCommon.js"></script>
+        <link rel="stylesheet" href="/css/product/updateProductCommon.css" />
+        <!--modal-->
+        <link rel="stylesheet" href="/css/product/imageCropModal.css"/>
+        <script src="/js/product/imageCropModal.js"></script>
         <script>
             jQuery(function ($) {
                 //seesion storage전체데이터 삭제
                 sessionStorage.clear();
+                //table데이터 초기화
+                let params = new URLSearchParams(location.search);
                 initProductsData({
-                    page: 1,
-                    size: 10,
+                    page: params.get('page') != null ? params.get('page') : 1,
+                    size: params.get('size') != null ? params.get('size') : 10,
                 })
-            
-            
+                
+                //검색 input값 초기화
+                initSearchForm();
             });
         </script>
     </head>
     <div layout:fragment="content" class="content">
+        
+        <!--image crop modal-->
+        <th:block th:replace="product/createProduct/modal/imageCropModal :: imageCropModal"></th:block>
+        <!--제품코드 변경 모달-->
+        <div th:replace="product/update/updateProductCodeModal :: productCode"></div>
+        <!--제품명 변경 모달-->
+        <div th:replace="product/update/updateProductNameModal :: productName"></div>
+        <!--제품카테고리 변경 모달-->
+        <div th:replace="product/update/updateProductCategoryModal :: productCategory"></div>
+        <!--제품이미지 변경 모달-->
+        <div th:replace="product/update/updateProductImageModal :: productImage"></div>
+        <!--제품무게 변경 모달-->
+        <div th:replace="product/update/updateProductWeightModal :: productWeight"></div>
+        
         <!--header-->
         <div class="header">
             <div class="header-child">
                 <!--header left box-->
-                <form class="search-form header-child-left">
+                <form method="get" class="search-form header-child-left">
                     <select class="pimcs-select-shadow text-size-middle" name="searchType" onchange="changeSearchType(this)">
-                        <option value="serialNumber">시리얼 번호</option>
-                        <option value="matLocation">매트 위치</option>
                         <option value="productCode">제품 코드</option>
                         <option value="productName">제품명</option>
-                        <option value="matVersion">기기버전</option>
+                        <option value="productCategory">제품 카테고리</option>
                     </select>
                     <!--검색 input-->
                     <div class="input-group-shadow">
-                        <input class="pimcs-bd-group-input text-size-middle" name="query"/>
+                        <input class="pimcs-bd-group-input text-size-middle" name="searchQuery" placeholder="Search by product code"/>
                         <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
                     </div>
                 </form>
@@ -60,12 +87,11 @@
                             <path d="M.102 2.223A3.004 3.004 0 0 0 3.78 5.897l6.341 6.252A3.003 3.003 0 0 0 13 16a3 3 0 1 0-.851-5.878L5.897 3.781A3.004 3.004 0 0 0 2.223.1l2.141 2.142L4 4l-1.757.364L.102 2.223zm13.37 9.019.528.026.287.445.445.287.026.529L15 13l-.242.471-.026.529-.445.287-.287.445-.529.026L13 15l-.471-.242-.529-.026-.287-.445-.445-.287-.026-.529L11 13l.242-.471.026-.529.445-.287.287-.445.529-.026L13 11l.471.242z"/>
                         </svg><br>
                         <ul class="dropdown-menu modify-dropdown">
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="product" target="productModal">상품 변경</a></li>
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="calcMethod" target="calcMethodModal">계산방식 변경</a></li>
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="threshold" target="thresholdModal">임계값 변경</a></li>
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="matLocation" target="locationModal">매트위치 변경</a></li>
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
-                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productCode" target="productCodeModal">제품코드 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productName" target="productNameModal">제품명 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productCategory" target="productCategoryModal">제픔카테고리 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productImage" target="productImageModal">제품이미지 변경</a></li>
+                            <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productWeight" target="productWeightModal">제품무게 변경</a></li>
                         </ul>
                     </div>
                     <!--삭제버튼-->
@@ -112,5 +138,14 @@
             </table>
         </div>
         <!--TABLE END-->
+        
+        
+        <!--csv download form -->
+        <form id="csv-download-form" th:action="@{/product/download/csv}" method="post">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            
+        </form>
+        
+        
     </div>
 </html>

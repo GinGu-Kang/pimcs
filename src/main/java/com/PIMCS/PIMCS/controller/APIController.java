@@ -1,8 +1,10 @@
 package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
+import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
+import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.service.APIService;
@@ -55,8 +57,18 @@ public class APIController {
     public MatPageAdapter searchMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                      SearchForm searchForm,
                                      Pageable pageable){
-
         return apiService.searchMatsService(searchForm, secUserCustomForm.getCompany(), pageable);
+    }
+
+    /**
+     *  product 검색 api
+     */
+    @GetMapping("/api/search/products")
+    @ResponseBody
+    public ProductPageJsonAdapter searchProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                                                 SearchForm searchForm,
+                                                 Pageable pageable){
+        return apiService.searchProductsService(searchForm, secUserCustomForm.getCompany(), pageable);
     }
 
 
@@ -81,5 +93,13 @@ public class APIController {
 
     }
 
+    /**
+     *  제품카테고리 api
+     */
+    @GetMapping("/api/product/category")
+    @ResponseBody
+    public List<ProductCategoryJsonAdapter> productCategoryAPI(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
+        return apiService.productCategoryAPIService(secUserCustomForm.getCompany());
+    }
 
 }

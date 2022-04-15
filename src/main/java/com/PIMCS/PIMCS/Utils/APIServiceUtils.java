@@ -1,12 +1,10 @@
 package com.PIMCS.PIMCS.Utils;
 
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
+import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
-import com.PIMCS.PIMCS.domain.BusinessCategory;
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.domain.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,14 +58,17 @@ public class APIServiceUtils {
         List<ProductPageJsonAdapter.Product> result = new ArrayList<>();
         for(Product product : pageProducts){
             //Company 객체 생성
-            ProductPageJsonAdapter.Company company = ProductPageJsonAdapter.Company.builder()
-                    .id(product.getCompany().getId())
-                    .companyCode(product.getCompany().getCompanyCode())
-                    .companyName(product.getCompany().getCompanyName())
-                    .companyAddress(product.getCompany().getCompanyAddress())
-                    .contactPhone(product.getCompany().getContactPhone())
-                    .ceoEmail(product.getCompany().getCeoEmail())
-                    .build();
+//            ProductPageJsonAdapter.Company company = null;
+//            if(product.getCompany() != null) {
+//                company = ProductPageJsonAdapter.Company.builder()
+//                        .id(product.getCompany().getId())
+//                        .companyCode(product.getCompany().getCompanyCode())
+//                        .companyName(product.getCompany().getCompanyName())
+//                        .companyAddress(product.getCompany().getCompanyAddress())
+//                        .contactPhone(product.getCompany().getContactPhone())
+//                        .ceoEmail(product.getCompany().getCeoEmail())
+//                        .build();
+//            }
 
             ProductPageJsonAdapter.ProductCategory productCategory = ProductPageJsonAdapter.ProductCategory.builder()
                     .id(product.getProductCategory().getId())
@@ -76,7 +77,7 @@ public class APIServiceUtils {
 
             ProductPageJsonAdapter.Product product1 = ProductPageJsonAdapter.Product.builder()
                     .id(product.getId())
-                    .company(company)
+                    .company(null)
                     .productCategory(productCategory)
                     .productCode(product.getProductCode())
                     .productImage(product.getProductImage())
@@ -106,13 +107,17 @@ public class APIServiceUtils {
         //Entity 객체 사용하지않고 adapter 클래스를 만들어서 json 직렬화
         for (Mat mat : pageMats) {
             // adapter 상품데이터 추가
-            MatPageAdapter.Product mProduct = MatPageAdapter.Product.builder()
-                    .id(mat.getProduct().getId())
-                    .productCode(mat.getProduct().getProductCode())
-                    .productImage(mat.getProduct().getProductImage())
-                    .productWeight(mat.getProduct().getProductWeight())
-                    .productName(mat.getProduct().getProductName())
-                    .build();
+            MatPageAdapter.Product mProduct = null;
+            if(mat.getProduct() != null){
+                mProduct = MatPageAdapter.Product.builder()
+                        .id(mat.getProduct().getId())
+                        .productCode(mat.getProduct().getProductCode())
+                        .productImage(mat.getProduct().getProductImage())
+                        .productWeight(mat.getProduct().getProductWeight())
+                        .productName(mat.getProduct().getProductName())
+                        .build();
+            }
+
             // adapter 회사데이터 추가
             MatPageAdapter.Company mCompany = MatPageAdapter.Company.builder()
                     .id(company.getId())
@@ -147,5 +152,29 @@ public class APIServiceUtils {
                 .data(resultMats)
                 .build();
         return matPageAdapter;
+    }
+
+    public List<ProductCategoryJsonAdapter> createProductCategoryJsonAdapter(List<ProductCategory> productCategories, Company company){
+        List<ProductCategoryJsonAdapter> productCategoryJsonAdapters = new ArrayList<>();
+
+        for(ProductCategory productCategory : productCategories){
+            ProductCategoryJsonAdapter.Company pcjaCompany = ProductCategoryJsonAdapter.Company.builder()
+                    .id(company.getId())
+                    .companyCode(company.getCompanyCode())
+                    .companyName(company.getCompanyName())
+                    .companyAddress(company.getCompanyAddress())
+                    .contactPhone(company.getContactPhone())
+                    .ceoEmail(company.getCeoEmail())
+                    .build();
+
+            ProductCategoryJsonAdapter productCategoryJsonAdapter = ProductCategoryJsonAdapter.builder()
+                    .id(productCategory.getId())
+                    .categoryName(productCategory.getCategoryName())
+                    .company(pcjaCompany)
+                    .build();
+            productCategoryJsonAdapters.add(productCategoryJsonAdapter);
+        }
+
+        return productCategoryJsonAdapters;
     }
 }

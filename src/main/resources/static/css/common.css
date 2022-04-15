@@ -81,17 +81,7 @@
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
   background-color: #fff;
 }
-.search-input-container::after{
-  background: url("/img/search.png") no-repeat 0px 0px;  
-  content: "";
-  display: inline-block;
-  width: 27px;
-  height: 16px;
-  margin-left: 9px;
-  margin-top: 4px;
-  
-  
-}
+
 
 .search-input{
   border: none; 

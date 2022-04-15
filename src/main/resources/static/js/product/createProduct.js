@@ -8,7 +8,7 @@ jQuery(function ($) {
      *  파일을 로드하면 모달을 show해서 이미지 편집 
      */
     $(document).on("change",".product-img-file",function(event){
-        // $('.modal-body').empty().append('<img id="edit-img" style="display:block; max-width:100%;" src="">');
+        $('.modal-body').empty().append('<img id="edit-img" style="display:block; max-width:100%;" src="">');
         var image = $('#edit-img');
         var imgFile = $(this).val();
         
@@ -16,7 +16,7 @@ jQuery(function ($) {
         if(imgFile.match(IMG_EXT_REG)) { //유효한 이미지 확장자이면
         	var reader = new FileReader(); 
         	reader.onload = function(event) { 
-        		// image.attr("src", event.target.result);
+        		image.attr("src", event.target.result);
         		createCopper(image);
                 imageCropModal.show();
                 
@@ -37,11 +37,7 @@ jQuery(function ($) {
         console.log(`width: ${width}, height: ${height}`);
         let cropper = image.cropper( {
             aspectRatio: 115 / 137,
-            // highlight: false,
-            // cropBoxMovable: false,
-            // cropBoxResizable: false,
             dragMode: 'move',
-            
             autoCropArea: 0.6,
             restore: false,
             guides: true,
@@ -50,7 +46,6 @@ jQuery(function ($) {
             cropBoxMovable: false,
             cropBoxResizable: false,
             toggleDragModeOnDblclick: false,
-       
             minContainerWidth: $(".modal-body").innerWidth(),
             minContainerHeight: $(".modal-body").innerHeight(),
    

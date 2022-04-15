@@ -1,9 +1,16 @@
 
+#imageCropModal{
+    z-index: 999999;
+}
+
 #imageCropModal .modal-body, #imageCropModal .modal-content{
     width: 66vw;
     height: 60vh;
     padding: 0;
+    
 }
+
+
 .modal-dialog{
     margin: 1.75rem 16%;
 }

@@ -65,8 +65,14 @@ public class CompanyManagementController {
     @GetMapping("registration/verify")
     public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
         companyManagementService.companyRegistrationVerify(verifyKey);
-        return "redirect:/auth/login";
+        return "redirect:/company/registration/success";
     }
+    //회사등록 완료
+    @GetMapping("registration/success")
+    private String signUpSuccess(){
+        return "company/companyRegistrationSuccess.html";
+    }
+
 
     //회사원 전체 조회
     @GetMapping("worker")
@@ -130,6 +136,8 @@ public class CompanyManagementController {
         model.addAttribute("company",userCompany);
         return "/company/companyInfoModify.html";
     }
+
+
 
 
 }

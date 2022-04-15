@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Cocoon</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/signUpSuccess.css" />
+
+
+    <style>
+    </style>
+</head>
+<body>
+
+    <div class="workerForm">
+        <img src="/img/logo2.png" ><br>
+        <div >
+            <p class="success-message">성공적으로 <span class="success-message-blue">사원 등록</span>이 완료 되었습니다.</p>
+            <input  class="button" type="button"  value="로그인 페이지로 바로가기" onclick="location.href='/auth/login';">
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -12,7 +12,6 @@
 <div layout:fragment="content"  class="content">
     <input type="hidden" th:value="${matOrderPage.getTotalElements()}" id="totalData">
     <input type="hidden" th:value="${matOrderPage.getSize()}" id="dataPerPage">
-
     <p class="title">
         주문 조회
     </p>
@@ -30,7 +29,6 @@
                     <input name="totalPriceEnd" type="number" id="search3" class="search-input text-size-middle" max="999999999" placeholder="끝 가격" required/>
                 </div>
             </div>
-
             <div class="inquery-mat-header-right-box">
                 <div class="action-btn-left-container d-flex">
                     <input type="submit" class="square" th:value="검색">
@@ -70,8 +68,6 @@
         </th:block>
         </tbody>
     </table>
-
-
 
     <script >
 

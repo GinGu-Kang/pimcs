@@ -45,7 +45,7 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     public void deleteUserTest() {
-        userAuthService.deleteUser("rkdwlsrn212@gmail.com");
+        userAuthService.deleteUser("wisp212@gmail.com");
 //        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
 //        System.out.println(user.isEmpty());
     }
@@ -96,9 +96,9 @@ public class UserAuthServiceTest {
     @Test
     @Commit
     void 유저권한생성(){
-        userAuthService.UserRoleSave("wisp212@gmail.com","UserManagement");
+        userAuthService.UserRoleSave("rkdwlsrn212@gmail.com","ChiefOfPimcs");
 //        userAuthService.UserRoleSave("wisp212@gmail.com","User");
-        userAuthService.UserRoleSave("wisp212@gmail.com","InventoryManagement");
+//        userAuthService.UserRoleSave("wisp212@gmail.com","InventoryManagement");
 //        userAuthService.UserRoleSave("wisp212@gmail.com","ChiefOfPimcs");
     }
 

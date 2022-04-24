@@ -30,8 +30,13 @@ $(document).on("focusout","input[name='mat.serialNumber']",function(){
  */
 $(document).on("click",".calc-method-btn",function(){
     $(".calc-method-btn").removeClass("active");
-    $("input[name='mat.calcMethod']").val($(this).attr("data"));
+    let data = $(this).attr("data");
+    $("input[name='mat.calcMethod']").val(data);
     $(this).addClass("active");
+
+    $(".threshold-unit").text(
+        (data == 0) ? "g" : "개"
+    );
 });
 
 
@@ -83,6 +88,7 @@ $(document).on("click",".register-btn",function(e){
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
     let data = $("form.card-container").serialize();
+
     let resultData = loadPostData({
         url: "/mat/create",
         data: data,

@@ -27,9 +27,14 @@
             </div>
             
             <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton1">
-                <li><a class="dropdown-item text-size-between-middle-samll" href="#">로그아웃</a></li>
-                <li><a class="dropdown-item text-size-between-middle-samll" href="#">개인 정보 수정</a></li>
-                <li><a class="dropdown-item text-size-between-middle-samll" href="#">회사정보</a></li>
+                <li>
+                    <form style="margin: 0" th:action="@{/home/auth/logout}" method="post">
+                        <input class="dropdown-item text-size-between-middle-samll" type="submit" value="로그아웃"/>
+                    </form>
+                </li>
+
+                <li><a class="dropdown-item text-size-between-middle-samll" href="/auth/user/info">개인 정보 수정</a></li>
+                <li></li>
             </ul>
             
         </div>    
@@ -41,5 +46,8 @@
         
     </div>
     <div class="close-container"></div>
+
+
+
 </header>
 

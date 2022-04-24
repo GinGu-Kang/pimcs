@@ -8,8 +8,18 @@ const URL_NAV_ITEM_MAPPING = {
     "/product/category/create": "#category-registration",
     "/company/worker": "#company-worker",
     "/product/create": "#product-registration",
-    "/mat/create": "#mat-registration"
-
+    "/mat/create": "#mat-registration",
+    "/company/info": "#companyInfo",
+    "/company/info/modify": "#companyInfo",
+    "/order/mat": "#orderMat",
+    "/qna/list": "#QnA",
+    "/qna/question": "#QnA",
+    "/qna/view": "#QnA",
+    "/admin/qna/list": "#adminQnA",
+    "/admin/order/list": "#adminOrderMat",
+    "/admin/email/frame/modify": "#emailFrame",
+    "/admin/matcategory/add": "#matCategory",
+    "/admin/matcategory/read": "#matCategoryRead",
 
 }
 jQuery(function ($) {

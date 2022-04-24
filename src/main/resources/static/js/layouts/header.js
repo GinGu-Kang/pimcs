@@ -26,8 +26,9 @@ $(document).on("click",".menu-icon-box", function(){
     }
 });
 
-$(document).on("click","nav",function(){
-    if($(document).width() <= MOBILE_WIDTH){
+$(document).on("click","nav",function(e){
+
+    if(e.target.tagName == "NAV" && $(document).width() <= MOBILE_WIDTH){
         closeNavigation();
     }
 });

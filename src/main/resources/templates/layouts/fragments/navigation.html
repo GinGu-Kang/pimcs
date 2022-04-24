@@ -1,4 +1,6 @@
-<!DOCTYPE html> <html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <nav th:fragment="navigationFragment">
     <div>
         <details>
@@ -42,8 +44,9 @@
         <details>
             <summary class="summary text-size-middle">Company Information</summary>
             <div markdown="1">       
-                <div class="detail-item text-size-between-middle-samll">회사 정보 수정</div>
-                <div class="detail-item text-size-between-middle-samll">승인 대기 목록</div>
+                <div id="companyInfo" class="detail-item text-size-between-middle-samll">
+                    <a class="text-size-between-middle-samll" href="/company/info">회사 정보</a>
+                </div>
                 <div class="detail-item" id="company-worker">
                     <a href="/company/worker" class="text-size-between-middle-samll"> 사원 목록 및 권한</a>
                 </div>
@@ -53,13 +56,37 @@
 
         <details>
             <summary class="summary text-size-middle">Other</summary>
-            <div markdown="1">       
-                <div class="detail-item text-size-between-middle-samll">기기 배송 현황</div>
-                <div class="detail-item text-size-between-middle-samll">기기 주문</div>
-                <div class="detail-item text-size-between-middle-samll">Q&A</div>
+            <div markdown="1">
+                <div id="orderMat" class="detail-item text-size-between-middle-samll">
+                    <a  href="/order/mat" class="text-size-between-middle-samll">기기 주문</a>
+                </div>
+                <div id="QnA" class="detail-item text-size-between-middle-samll">
+                    <a href="/qna/list" class="text-size-between-middle-samll">Q&A</a>
+                </div>
                 
             </div>
         </details>
+
+            <details sec:authorize="hasRole('ROLE_ChiefOfPimcs')">
+            <summary class="summary text-size-middle">관리자</summary>
+            <div markdown="1">
+                <div id="adminOrderMat" class="detail-item text-size-between-middle-samll">
+                    <a  href="/admin/order/list" class="text-size-between-middle-samll">기기 주문 관리</a>
+                </div>
+                <div id="adminQnA" class="detail-item text-size-between-middle-samll">
+                    <a href="/admin/qna/list" class="text-size-between-middle-samll">관리자 Q&A</a>
+                </div>
+                <div id="emailFrame" class="detail-item text-size-between-middle-samll">
+                    <a href="/admin/email/frame/modify" class="text-size-between-middle-samll">이메일 프레임 수정</a>
+                </div>
+                <div id="matCategory" class="detail-item text-size-between-middle-samll">
+                    <a href="/admin/matcategory/add" class="text-size-between-middle-samll">매트 카테고리 생성</a>
+                </div>
+                <div id="matCategoryRead" class="detail-item text-size-between-middle-samll">
+                    <a href="/admin/matcategory/read" class="text-size-between-middle-samll">매트 카테고리 수정</a>
+                </div>
+            </div>
+            </details>
 
     </div>
 </nav>

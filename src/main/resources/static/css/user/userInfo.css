@@ -114,9 +114,10 @@ legend {
     color: #ffffff;
 }
 
-form p{
+.content form p{
     text-align: center;
+    margin-left: 60px;
 }
-form{
+.content form{
     margin-top: 60px;
 }

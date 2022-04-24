@@ -29,16 +29,16 @@
         <!--임계값-->
         <div class="form-group">
             <p class="text-size-middle input-label">임계값</p>
-            <div class="input-group">
-                <input type="number"  name="mat.threshold" readonly th:value="${mat.getThreshold()}" class="pimcs-gray-input input"/>
+            <div class="input-group-gray">
+                <input type="number"  name="mat.threshold" readonly th:value="${mat.getThreshold()}" class="pimcs-blue-input input"/>
                 <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">g/개</span>
             </div>
         </div>
         <!--상품 주문 갯수-->
         <div class="form-group">
             <p class="text-size-middle input-label">상품 주문 갯수</p>
-            <div class="input-group">
-                <input type="number"  name="mat.productOrderCnt" readonly th:value="${mat.getProductOrderCnt()}" class="pimcs-gray-input input"/>
+            <div class="input-group-gray">
+                <input type="number"  name="mat.productOrderCnt" readonly th:value="${mat.getProductOrderCnt()}" class="pimcs-blue-input input"/>
                 <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">개</span>
             </div>
 
@@ -46,8 +46,8 @@
         <!--박스 무게-->
         <div class="form-group">
             <p class="text-size-middle input-label">박스 무게</p>
-            <div class="input-group">
-                <input type="number" name="mat.boxWeight" th:value="${mat.getBoxWeight()}" class="pimcs-gray-input input"/>
+            <div class="input-group-gray">
+                <input type="number" name="mat.boxWeight" th:value="${mat.getBoxWeight()}" class="pimcs-blue-input input"/>
                 <span class="input-group-text input-group-bd-gray text-size-between-middle-samll">g</span>
             </div>
         </div>
@@ -59,10 +59,10 @@
             <p class="text-size-middle input-label">계산방식</p>
             <div class="fgc-justify-between">
 
-                <div th:if="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll active calc-method-btn" data="0">무게(g)</div>
-                <div th:unless="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll calc-method-btn" data="0">무게(g)</div>
-                <div th:if="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll active calc-method-btn" data="1">갯수(개)</div>
-                <div th:unless="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll calc-method-btn" data="1">갯수(개)</div>
+                <div th:if="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll active " data="0">무게(g)</div>
+                <div th:unless="${mat.getCalcMethod() == 0}" class="pimcs-bd-blue-btn text-size-between-middle-samll " data="0">무게(g)</div>
+                <div th:if="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll active" data="1">갯수(개)</div>
+                <div th:unless="${mat.getCalcMethod() == 1}" class="pimcs-bd-blue-btn text-size-between-middle-samll" data="1">갯수(개)</div>
 <!--                <input type="hidden" name="mat.calcMethod" value="0"/>-->
             </div>
         </div>

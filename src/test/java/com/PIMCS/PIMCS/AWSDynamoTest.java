@@ -51,17 +51,20 @@ public class AWSDynamoTest {
 
     @Test
     public void putItemTest(){
+        List<Mat> mats = matRepository.findAll();
+        Mat mat=mats.get(mats.size()-1);
+
         InOutHistory inOutHistory = InOutHistory.builder()
-                .companyId(24)
-                .matSerialNumber("ss")
-                .matLocation("화상실")
-                .productCode("code_1644298216412")
-                .productName("컴퓨터1644298216412")
+                .companyId(mat.getCompany().getId())
+                .matSerialNumber(mat.getSerialNumber())
+                .matLocation(mat.getMatLocation())
+                .productCode(mat.getProduct().getProductCode())
+                .productName(mat.getProduct().getProductName())
 //                .productName("전룡호")
                 .updateWeight(100)
                 .updateCnt(10)
                 .updateCurrentInventory(30)
-                .inOutStatus("IN")
+                .inOutStatus(((int)(Math.random()*2) == 0) ? "IN" : "OUT")
                 .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.of(15,00)))
 //                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
                 .build();
@@ -71,21 +74,23 @@ public class AWSDynamoTest {
 
     @Test
     public void kdopkpd(){
+        List<Mat> mats = matRepository.findAll();
+        Mat mat=mats.get(mats.size()-1);
+
         for(int i=0; i<50; i++){
             InOutHistory inOutHistory = InOutHistory.builder()
-                    .companyId(18)
-                    .matSerialNumber("serial")
-                    .matLocation("화상실")
-                    .productId(23)
-                    .productCode("asdf2")
-                    .productName("칸초")
+                    .companyId(mat.getCompany().getId())
+                    .matSerialNumber(mat.getSerialNumber())
+                    .matLocation(mat.getMatLocation())
+                    .productCode(mat.getProduct().getProductCode())
+                    .productName(mat.getProduct().getProductName())
 //                .productName("전룡호")
                     .updateWeight(100)
                     .updateCnt(10)
                     .updateCurrentInventory(30)
-                    .inOutStatus("IN")
+                    .inOutStatus(((int)(Math.random()*2) == 0) ? "IN" : "OUT")
                     .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()))
-//                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
+    //                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
                     .build();
             dynamoDBMapper.save(inOutHistory);
         }

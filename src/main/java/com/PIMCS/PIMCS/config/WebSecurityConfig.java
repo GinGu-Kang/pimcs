@@ -42,8 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/home/hello","/home","auth/update","/order/**","/qna/**","/auth/user/info/**","/auth/pwd/change").hasRole("User")
-                .antMatchers("/mat/create","/mat/update","/mat/delete").hasRole("MatManagement")
-                .antMatchers("/product/create","/product/update","/product/delete").hasRole("MatManagement")
+                .antMatchers("/mat/create","/mat/update","/mat/delete").hasRole("InventoryManagement")
+                .antMatchers("/product/create","/product/update","/product/delete").hasRole("InventoryManagement")
                 .antMatchers( "/auth/**","/company/registration/**","/auth/idCheck","/email/**").permitAll() //permitAll이 있을시 로그인없이도 접근가능
                 .antMatchers("/company/**").hasRole("UserManagement")
                 .antMatchers("/admin/**").hasRole("ChiefOfPimcs")
@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/auth/login")
-                .defaultSuccessUrl("/home/hello")
+                .defaultSuccessUrl("/")
                 .usernameParameter("email")
                 .permitAll()
 //                    .successHandler();

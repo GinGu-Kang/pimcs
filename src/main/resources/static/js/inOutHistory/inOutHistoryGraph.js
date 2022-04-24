@@ -17,7 +17,6 @@ const setCheckedData = function(matGraphForms){
         
         $(".time-dimension").removeClass("active");
         switch(matGraphForms['timeDimension']){
-            
             case 'HOUR':
                 
                 $("#hour-btn").addClass("active");
@@ -171,11 +170,11 @@ const createGraphDay = function(graphDataArr){
     for(let i=0; i<graphDataArr.length; i++){
         let graphData = graphDataArr[i];
         const config = getGraphConfig({
-            label: graphData['productName'],
+            label: graphData['title'],
             labels: graphData['labels'],
             graphData: graphData['data']
         })     
-    
+        console.log(graphData);
         const uuid = getUUID();
         let canvas = `<canvas id="${uuid}"></canvas>`
         $(".canvas-container").append(canvas);

@@ -52,4 +52,11 @@ public class Product {
   @OneToMany(mappedBy = "product")
   @JsonBackReference
   List<Mat> mats = new ArrayList<>();
+
+  public static Product findByProductId(List<Product> products, int productId){
+    return products.stream()
+            .filter(product -> productId == product.getId())
+            .findAny()
+            .orElse(null);
+  }
 }

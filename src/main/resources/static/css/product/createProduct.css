@@ -9,6 +9,9 @@
     /* overflow-x:hidden; 
     overflow-y:auto;  */
 }
+.create-product-container{
+    overflow: auto;
+}
 .create-product-container .card{
     width: 74%;
     border: 1px solid #fff;
@@ -22,6 +25,7 @@
     padding-left: 36px;
     padding-right: 56px;
     flex-direction: row;
+    
 }
 
 .input-section{
@@ -110,18 +114,8 @@
     margin-top: 3px;
 }
 
-/*FORM*/
-.product-weight-input{
-    width: 83%;
-    height: 29px !important;
-    border-right: 0px;
-    outline: none;
-}
-.input-group-text{
-    width: 17%;
-    height: 29px;
-    
-}
+
+
 @media (max-width: 1000px) {
     .card{
         flex-direction: column-reverse !important;

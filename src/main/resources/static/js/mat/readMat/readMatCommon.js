@@ -77,6 +77,15 @@ const getCheckedItems = function(){
     return checkedItems;
 }
 
+const getProductAttribute= function(mat, attrName){
+    if(mat.product != null){
+        return mat.product[attrName];
+    }else{
+        
+        return (attrName == 'productImage') ? null: 'N/A';
+    }
+}
+
 /**
  * 
  * @param columnName

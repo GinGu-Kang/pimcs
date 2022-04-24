@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @ToString(exclude = {"company","product"})
@@ -44,18 +45,13 @@ public class Mat {
     @UpdateTimestamp
     private Timestamp updatedate;
 
-    /**
-     * 현재무게 변경하면서 현재재고도 같이 변경
-     */
-    public void changeInventoryWeight(int inventoryWeight){
 
-        setInventoryWeight(inventoryWeight);
-
-        if(calcMethod == 1){
-            setCurrentInventory(Math.round(inventoryWeight / product.getProductWeight()));
-        }else{
-            setCurrentInventory(inventoryWeight);
+    public static Mat findBySerialNumber(List<Mat> mats, String serialNumber){
+        for(Mat mat : mats){
+            if(mat.getSerialNumber().equals(serialNumber)){
+                return mat;
+            }
         }
-
+        return null;
     }
 }

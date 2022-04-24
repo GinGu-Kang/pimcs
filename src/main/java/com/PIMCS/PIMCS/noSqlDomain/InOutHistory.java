@@ -21,10 +21,15 @@ public class InOutHistory {
 
     @DynamoDBAttribute
     @DynamoDBIndexHashKey(globalSecondaryIndexName = "byConpanyId")
+    @DynamoDBIndexRangeKey(globalSecondaryIndexName = "byProductId")
     private Integer companyId;
 
     @DynamoDBAttribute
     private String matLocation;
+
+    @DynamoDBAttribute
+    @DynamoDBIndexHashKey(globalSecondaryIndexName = "byProductId")
+    private int productId;
 
     @DynamoDBAttribute
     private String productCode;
@@ -90,4 +95,15 @@ public class InOutHistory {
         }
         return result;
     }
+
+    public static InOutHistory findByProductCode(String productCode, List<InOutHistory> inOutHistories){
+
+        for(InOutHistory inOutHistory : inOutHistories){
+            if(productCode.equals(inOutHistory.getProductCode())){
+                return inOutHistory;
+            }
+        }
+        return null;
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.PIMCS.PIMCS;
 
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
-import com.PIMCS.PIMCS.config.AWSConfig;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
@@ -10,23 +9,19 @@ import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.service.InOutHistoryService;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Index;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
+import com.amazonaws.services.dynamodbv2.xspec.M;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Stream;
 
 @SpringBootTest
 public class AWSDynamoTest {
@@ -79,10 +74,11 @@ public class AWSDynamoTest {
         for(int i=0; i<50; i++){
             InOutHistory inOutHistory = InOutHistory.builder()
                     .companyId(18)
-                    .matSerialNumber("s")
+                    .matSerialNumber("serial")
                     .matLocation("화상실")
-                    .productCode("code_1644298216412")
-                    .productName("컴퓨터1644298216412")
+                    .productId(23)
+                    .productCode("asdf2")
+                    .productName("칸초")
 //                .productName("전룡호")
                     .updateWeight(100)
                     .updateCnt(10)
@@ -94,6 +90,32 @@ public class AWSDynamoTest {
             dynamoDBMapper.save(inOutHistory);
         }
     }
+    @Test
+    public void updateItem(){
+        Company company = companyRepository.findById(18).get();
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+
+        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompany(company);
+        for(InOutHistory inOutHistory : inOutHistories){
+            inOutHistory.setInOutStatus("OUT");
+        }
+        dynamoDBMapper.batchSave(inOutHistories);
+
+
+
+
+    }
+
+
+    @Test
+    public void abc(){
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        for(int i=0; i<100000; i++){
+//            dynamoDBUtils.loadByCompany()
+        }
+    }
+
+
     @Test
     public void inOutHistoryServiceTest(){
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
@@ -231,6 +253,17 @@ public class AWSDynamoTest {
             System.out.println(in.toString());
         }
 
+    }
+
+    @Test
+    public void updateMatDynamodbTest(){
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        Mat mat = matRepository.findBySerialNumber("serial_skjoij").get();
+        mat.setMatLocation("창고");
+        List<Mat> mats = new ArrayList<>();
+        mats.add(mat);
+
+        dynamoDBUtils.updateMat(mats);
     }
 }
 

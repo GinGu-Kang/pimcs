@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.parameters.P;
 
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ public interface ProductRepository extends JpaRepository<Product,String> {
     Optional<Product> findById(int id);
 
     Optional<Product> findByIdAndCompany(int id,Company company);
+    Optional<Product> findByProductNameAndCompany(String productName, Company company);
+    Optional<Product> findByProductCodeAndCompany(String productCode, Company company);
 
     List<Product> findAll();
     @EntityGraph(attributePaths = {"company","productCategory"})

@@ -30,6 +30,9 @@ header{
     cursor: pointer;
 }
 
+.header-right-box{
+    margin-right: 10px;
+}
 
 .header-right-box  p{
     color: white;
@@ -48,18 +51,19 @@ header{
 }
 /** DROP DOWN MENU **/
 .header-right-box .profile-icon-box{
-    margin-right: 53px;
+    /* margin-right: 53px; */
 }
-.header-right-box .profile-icon-box svg:first-child{
+.header-right-box .profile-icon-box svg{
     width: 24px;
     height: 24px;
     line-height: 24px;
+    margin-right: 10px;
 }
-.header-right-box .profile-icon-box svg:last-child{
+/* .header-right-box .profile-icon-box svg:last-child{
     width: 14px;
     height: 12px;
     line-height: 10px;    
-}
+} */
 
 header .dropdown-menu{
     background-color: #4d83f7;
@@ -83,16 +87,28 @@ header .mobile{
     display: none;
 }
 
+header .close-container{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: none;
+    z-index: 100;
+    margin-top: 57px;
+    
+}
+
 @media (max-width: 768px) {
-    header .desktop { display: none;}
-    header .mobile {display: block;}   
+    
     header .dropdown-menu{
         width: 100vw;
-        height: 100vh;
+        height: auto;
     }
     header .dropdown-item{
         text-align: start;
         padding-left: 41px;
+    }
+    header .close-container{
+        background-color: rgba(0, 0, 0, 0.4);
     }
     
 }

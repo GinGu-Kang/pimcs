@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.Utils.FileUtils;
 import com.PIMCS.PIMCS.Utils.ProductServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
@@ -8,15 +9,14 @@ import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.lang.model.element.ModuleElement;
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -30,11 +30,13 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final DynamoDBMapper dynamoDBMapper;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
+        this.dynamoDBMapper = dynamoDBMapper;
     }
 
     /**
@@ -55,18 +57,22 @@ public class ProductService {
 
         //파일 저장
         String productImagePath = null;
-        try {
-            productImagePath = FileUtils.uploadFile(productForm.getProductImage());
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to upload file.");
+        if(productForm.getProductImage() != null) {
+            try {
+                productImagePath = FileUtils.uploadFile(productForm.getProductImage());
+            } catch (Exception e) {
+                throw new IllegalStateException("Failed to upload file.");
+            }
         }
-
         //제품정보 저장, 만약카테고리 존재하지 않으면 IllegalStateException 발생
         if(optProductCategory.isPresent()){
             Product product = productForm.getProduct();
             product.setProductCategory(optProductCategory.get());
             product.setCompany(company);
-            product.setProductImage("/product/image/"+productImagePath);
+            if(productImagePath != null)
+                product.setProductImage("/product/image/"+productImagePath);
+            else
+                product.setProductImage("null");
             productRepository.save(product);
             return product;
         }else{
@@ -87,6 +93,7 @@ public class ProductService {
      * 상품수정 서비스
      */
     public HashMap<String,Object> updateProduct(Company company, UpdateProductFormList updateProductFormList){
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         List<Product> findProducts = productRepository.findByCompany(company);
         ProductCategory updateProductCategory = null;
         if(updateProductFormList.getUpdateTargetColumn().equals("productCategory")){
@@ -153,7 +160,11 @@ public class ProductService {
             saveProducts.add(product);
 
         }
+        //RDBMS에 제품 업데이트
         productRepository.saveAll(saveProducts);
+        //dynamodb 제품 업데이트
+        dynamoDBUtils.updateProduct(company, saveProducts);
+
         return result;
     }
 
@@ -221,4 +232,42 @@ public class ProductService {
             csvPrinter.printRecord(record);
         }
     }
+
+    /**
+     * 제품명 체크
+     */
+    public HashMap<String,Object> checkProductNameService(Company company,String productName){
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        Optional<Product> productOpt = productRepository.findByProductNameAndCompany(productName, company);
+        if(productOpt.isPresent()){
+            hashMap.put("result",false);
+            hashMap.put("message", "사용할 수 없는 제품명입니다.");
+        }else{
+            hashMap.put("result", true);
+            hashMap.put("message", "사용할 수 있는 제품명입니다.");
+        }
+
+        return hashMap;
+    }
+
+    /**
+     * 제품코드 체크
+     */
+    public HashMap<String, Object> checkProductCodeSerivice(Company company, String productCode){
+        HashMap<String, Object> hashMap = new HashMap<>();
+
+        Optional<Product> productOpt = productRepository.findByProductCodeAndCompany(productCode, company);
+
+        if(productOpt.isPresent()){
+            hashMap.put("result",false);
+            hashMap.put("message", "사용할 수 없는 제품코드입니다.");
+        }else{
+            hashMap.put("result", true);
+            hashMap.put("message", "사용할 수 있는 제품코드입니다.");
+        }
+
+        return hashMap;
+    }
+
 }

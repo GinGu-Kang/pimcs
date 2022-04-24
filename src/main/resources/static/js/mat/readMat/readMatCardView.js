@@ -83,15 +83,6 @@ const createCardViewBody = function(mat){
 }
 
 
-const getProductAttribute= function(mat, attrName){
-    if(mat.product != null){
-        return mat.product[attrName];
-    }else{
-        
-        return (attrName == 'productImage') ? null: 'N/A';
-    }
-}
-
 const createCardViewFooter = function(mat){
     let bg = "pimcs-card-bg-green";
     if(mat.threshold > mat.currentInventory){

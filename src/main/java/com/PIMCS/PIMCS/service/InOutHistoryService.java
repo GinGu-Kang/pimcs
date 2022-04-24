@@ -68,7 +68,7 @@ public class InOutHistoryService {
         //dynamodb 쿼리 실행
         LocalDate queryDate = startDate.minusMonths(1);
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm.getSerialNumberList(), queryDate, endDate);
+        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm, queryDate, endDate);
 
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
@@ -81,8 +81,8 @@ public class InOutHistoryService {
 
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
-            resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
+            resultGraph.setTitle(productNameList.get(i));
             LocalDateTime startLocalDateTime = LocalDateTime.of(
                     startDate,
                     LocalTime.of(00,00)
@@ -131,7 +131,7 @@ public class InOutHistoryService {
         //dynamodb 쿼리 실행
         LocalDate queryDate = startDate.minusMonths(1);
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm.getSerialNumberList(), queryDate, endDate);
+        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm, queryDate, endDate);
 
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
@@ -142,8 +142,8 @@ public class InOutHistoryService {
 
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
-            resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
+            resultGraph.setTitle(productNameList.get(i));
             //startDate, endDate 초기
             startDate = matGraphForm.getStartDate();
             endDate = matGraphForm.getEndDate();
@@ -187,12 +187,13 @@ public class InOutHistoryService {
         //dynamodb 쿼리 실행
         LocalDate queryDate = startDate.minusMonths(1);
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm.getSerialNumberList(), queryDate, endDate);
+        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm, queryDate, endDate);
 
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
-            resultGraph.setProductName(productNameList.get(i));
+
             String serialNumber = serialNumberList.get(i);
+            resultGraph.setTitle(productNameList.get(i));
             //startDate, endDate초기화
             startDate = LocalDate.of(matGraphForm.getStartDate().getYear(), matGraphForm.getStartDate().getMonth(), 7);
             endDate = matGraphForm.getEndDate();
@@ -237,12 +238,12 @@ public class InOutHistoryService {
         //dynamodb 쿼리 실행
         LocalDate queryDate = startDate.minusMonths(1);
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm.getSerialNumberList(), queryDate, endDate);
+        List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm, queryDate, endDate);
 
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
-            resultGraph.setProductName(productNameList.get(i));
             String serialNumber = serialNumberList.get(i);
+            resultGraph.setTitle(productNameList.get(i));
             //startDate, endDate 초기화
             startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.lengthOfMonth());
             endDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), endDate.lengthOfMonth());
@@ -323,7 +324,7 @@ public class InOutHistoryService {
         List<String> columns = new ArrayList<>();
         columns.add("");
         for(ResultGraph resultGraph : resultGraphs){
-            columns.add(resultGraph.getProductName());
+            columns.add(resultGraph.getTitle());
         }
         csvPrinter.printRecord(columns);
 

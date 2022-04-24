@@ -114,6 +114,21 @@ public class ProductController {
         productService.downloadProductCsvService(secUserCustomForm.getCompany(), productCsvForm, response.getWriter());
     }
 
+    /**
+     * 제품명 체크
+     */
+    @GetMapping("/check/name")
+    @ResponseBody
+    public HashMap<String, Object> checkProductName(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("productName") String productName){
+        return productService.checkProductNameService(secUserCustomForm.getCompany(), productName);
+    }
 
-
+    /**
+     * 제품명 코드
+     */
+    @GetMapping("/check/code")
+    @ResponseBody
+    public HashMap<String, Object> checkProductCode(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("productCode") String productCode){
+        return productService.checkProductCodeSerivice(secUserCustomForm.getCompany(), productCode);
+    }
 }

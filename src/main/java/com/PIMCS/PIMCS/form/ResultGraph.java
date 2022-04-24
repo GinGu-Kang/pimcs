@@ -8,16 +8,16 @@ import java.util.List;
 
 
 public class ResultGraph {
-    private String productName;
+    private String title;
     private List<String> labels = new ArrayList<>();
     private List<Integer> data = new ArrayList<>();
 
-    public String getProductName() {
-        return productName;
+    public String getTitle() {
+        return title;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setLabels(String label){

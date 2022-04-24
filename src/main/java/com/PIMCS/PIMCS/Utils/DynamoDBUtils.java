@@ -2,13 +2,12 @@ package com.PIMCS.PIMCS.Utils;
 
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
+import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.DynamoResultPage;
 import com.PIMCS.PIMCS.form.InOutHistorySearchForm;
+import com.PIMCS.PIMCS.form.MatGraphForm;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,12 +15,13 @@ import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class DynamoDBUtils {
-
+    private final int SCAN_LIMIT_SIZE = 50;
     private DynamoDBMapper dynamoDBMapper;
 
 
@@ -172,31 +172,38 @@ public class DynamoDBUtils {
     /**
      * 회사id,시리얼번호, 날짜범위로 입출고내역 가져오기
      */
-    public List<InOutHistory> loadByCompanyAndSerialNumberAndDate(Company company,List<String> serialNumberList, LocalDate startDate, LocalDate endDate){
+    public List<InOutHistory> loadByCompanyAndSerialNumberAndDate(Company company, MatGraphForm matGraphForm, LocalDate startDate, LocalDate endDate){
+        List<String> serialNumberList = matGraphForm.getSerialNumberList();
+        List<String> productNames = matGraphForm.getProductNameList();
+
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         endDate = endDate.plusDays(1);
         eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
         eav.put(":start",new AttributeValue().withS(startDate.toString()));
         eav.put(":end", new AttributeValue().withS(endDate.toString()));
 
-        String filter = "companyId=:companyId AND createdAt BETWEEN :start AND :end AND (";
+        String filter = "companyId=:companyId AND createdAt BETWEEN :start AND :end AND ";
+        if(serialNumberList.size() > 1) filter += "(";
         for(int i=0; i<serialNumberList.size(); i++){
-            filter += "matSerialNumber=:"+i;
+
+            filter += "(matSerialNumber=:"+i+" AND productName=:productName"+i+")";
             if(i != serialNumberList.size()-1) filter += " or ";
             eav.put(":"+i,new AttributeValue().withS(serialNumberList.get(i)));
+            eav.put(":productName"+i, new AttributeValue().withS(productNames.get(i)));
         }
-        filter += ")";
+        if(serialNumberList.size() > 1) filter += ")";
 
-        System.out.println("=========");
-        System.out.println(endDate.toString());
+        System.out.println("===========");
         System.out.println(filter);
-        System.out.println("=========");
-        DynamoDBScanExpression queryExpression = new DynamoDBScanExpression()
+        System.out.println("===========");
+
+        DynamoDBScanExpression queryExpression2 = new DynamoDBScanExpression()
                 .withIndexName("byConpanyId")
                 .withFilterExpression(filter)
-                .withExpressionAttributeValues(eav);
+                .withExpressionAttributeValues(eav)
+                .withLimit(SCAN_LIMIT_SIZE);
 
-        List<InOutHistory> inOutHistories = dynamoDBMapper.scan(InOutHistory.class, queryExpression);
+        List<InOutHistory> inOutHistories = mapperInOutHistoryScanPage(queryExpression2);
         return inOutHistories;
     }
 
@@ -220,6 +227,79 @@ public class DynamoDBUtils {
     }
 
 
+    public List<InOutHistory> mapperInOutHistoryScanPage(DynamoDBScanExpression scanExpression){
+        List<InOutHistory> result = new ArrayList<>();
 
+        do {
+            ScanResultPage<InOutHistory> scanPage = dynamoDBMapper.scanPage(InOutHistory.class, scanExpression);
+            scanPage.getResults().forEach(inOutHistory -> result.add(inOutHistory));
+            scanExpression.setExclusiveStartKey(scanPage.getLastEvaluatedKey());
 
+        } while (scanExpression.getExclusiveStartKey() != null);
+        return result;
+    }
+
+    public void updateMat(List<Mat> mats){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        String query = "";
+        for(int i=0; i<mats.size(); i++){
+            Mat mat = mats.get(i);
+            eav.put(":serialNumber"+i,new AttributeValue().withS(mat.getSerialNumber()));
+            query += "matSerialNumber = :serialNumber"+i;
+            if(i != mats.size()-1) query += " or ";
+        }
+        System.out.println("========");
+        System.out.println(query);
+        System.out.println("========");
+
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withKeyConditionExpression(query)
+                .withExpressionAttributeValues(eav);
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        System.out.println(inOutHistories.size());
+
+        List<InOutHistory> result = new ArrayList<>();
+        for(InOutHistory inOutHistory : inOutHistories){
+            Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
+            inOutHistory.setMatLocation(mat.getMatLocation());
+            result.add(inOutHistory);
+        }
+        dynamoDBMapper.batchSave(result);
+    }
+
+    public void updateProduct(Company company, List<Product> products){
+
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+        String query = "companyId = :companyId AND ( ";
+        for(int i=0; i<products.size(); i++){
+            Product product = products.get(i);
+            eav.put(":productId"+i, new AttributeValue().withN(String.valueOf(product.getId())));
+            query += "productId = :productId"+i;
+            if(i != products.size()-1) query += " or ";
+        }
+        query += " )";
+
+        System.out.println("========");
+        System.out.println(query);
+        System.out.println("========");
+
+    DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byProductId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression(query)
+                .withExpressionAttributeValues(eav);
+
+        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        List<InOutHistory> result = new ArrayList<>();
+
+        for(InOutHistory inOutHistory : inOutHistories){
+            Product product = Product.findByProductId(products, inOutHistory.getProductId());
+            inOutHistory.setProductCode(product.getProductCode());
+            inOutHistory.setProductName(product.getProductName());
+            result.add(inOutHistory);
+        }
+
+        dynamoDBMapper.batchSave(result);
+    }
 }

@@ -1,21 +1,19 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.Utils.MatServiceUtils;
-import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.MatCsvForm;
 import com.PIMCS.PIMCS.form.MatForm;
 import com.PIMCS.PIMCS.form.MatFormList;
-import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,12 +30,13 @@ import java.util.Optional;
 public class MatService {
     private final MatRepository matRepository;
     private final ProductRepository productRepository;
-
+    private final DynamoDBMapper dynamoDBMapper;
 
     @Autowired
-    public MatService(MatRepository matRepository, ProductRepository productRepository) {
+    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper) {
         this.matRepository = matRepository;
         this.productRepository = productRepository;
+        this.dynamoDBMapper = dynamoDBMapper;
     }
 
 
@@ -112,6 +111,10 @@ public class MatService {
         }
 
         matRepository.saveAll(saveMats);
+
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        dynamoDBUtils.updateMat(saveMats);
+
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");
         return hashMap;

@@ -39,7 +39,7 @@ const createCheckedItem = function(oldKey){
             li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${calcMthodStr}</li>`;
 
         }else if(oldKey == "product"){
-            li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${mat.product.productName}</li>`;
+            li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${getProductAttribute(mat,"productName")}</li>`;
         }else {
             li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${mat[oldKey]}</li>`;
         }
@@ -47,6 +47,8 @@ const createCheckedItem = function(oldKey){
     }
     return li;
 }
+
+
 
 
 const updateMatFormData = function({columnName, replaceValue}){

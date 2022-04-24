@@ -59,24 +59,59 @@ jQuery(function ($) {
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
 
-        let canvas = $("#edit-img").cropper('getCroppedCanvas');
-        let result = $("#preview-img").attr("src",canvas.toDataURL("image/jpeg"));
         let formData = getFormInputValue();
-        canvas.toBlob(function(blob){
+
+        let pass = true;
+        if($("input[name='product.productName']").val() == ''){
+            showMessage({element:$("input[name='product.productName']"), message: "제품명을 입력해주세요.", isError: true});
+            pass = false;
+        }
+        if($("input[name='product.productName']").attr("data") != 'true'){
+            pass = false;
+        }
+        if($("input[name='product.productCode']").val() == ''){
+            showMessage({element:$("input[name='product.productCode']"), message: "제품코드를 입력해주세요.", isError: true});
+            pass = false;
+        }
+        if($("input[name='product.productCode']").attr("data") != 'true'){
+            pass = false;
+        }
+        if($("input[name='product.productWeight']").val() == ''){
             
-            formData.append( "productImage", blob);
+            showMessage({element:$("input[name='product.productWeight']").parent(".input-group"), message: "제품무게를 입력해주세요.", isError: true});
+            pass = false;
+        }
+
+        if(!pass) return;
+
+        if($("[name='productImage']").val() != ''){ // 이미지파일 있으면
+            let canvas = $("#edit-img").cropper('getCroppedCanvas');
+            canvas.toBlob(function(blob){
+                
+                formData.append( "productImage", blob);
+                let resultData = loadPostMultipartData({
+                                    url: "/product/create",
+                                    data: formData,
+                                    header: {
+                                        'header': header,
+                                        'token': token
+                                    }
+                                });
+                appendRegisteredContainer(resultData);
+                initFormInputValue();
+            });
+        }else{
             let resultData = loadPostMultipartData({
-                                url: "/product/create",
-                                data: formData,
-                                header: {
-                                    'header': header,
-                                    'token': token
-                                }
-                            });
-            console.log(resultData);
+                url: "/product/create",
+                data: formData,
+                header: {
+                    'header': header,
+                    'token': token
+                }
+            });
             appendRegisteredContainer(resultData);
             initFormInputValue();
-        });
+        }
         
         
         
@@ -109,7 +144,83 @@ jQuery(function ($) {
             $(element).val("");
         });
         $("form.card-container select option").prop("selected", false);
+        $(".input-message").css("display","none");
+        $(".card-container .img-view").empty();
+        $(".card-container .img-view").text("이미지를 선택해주세요");
     }        
+    
+
+    $("input[name='product.productName']").focusout(function(){
+        
+        if($(this).val() == ""){
+            showMessage({
+                element: $(this),
+                message: "제품명을 입력해주세요.",
+                isError: true,
+            })
+            return;
+        }
+        hideMessage($(this));
+
+        let response = loadGetData({
+            url: "/product/check/name",
+            data: {"productName": $(this).val()}
+        });
+
+        showMessage({
+            element: $(this),
+            message: response.message,
+            isError: !response.result,
+        });
+        
+        $(this).attr("data", response.result);
+    });
+
+
+    $("input[name='product.productCode']").focusout(function(){
+
+        if($(this).val() == ""){
+            showMessage({element: $(this), message: "제품코드를 입력해주세요.", isError: true});
+            return;
+        }
+        hideMessage($(this));
+        let response = loadGetData({
+            url: "/product/check/code",
+            data: {"productCode": $(this).val()}
+        });
+        showMessage({
+            element: $(this),
+            message: response.message,
+            isError: !response.result,
+        });
+        $(this).attr("data", response.result);
+    });
+
+    $("input[name='product.productWeight']").focusout(function(){
+        if($(this).val() == ""){
+            
+            showMessage({element: $(this).parent(".input-group"), message: "제품무게를 입력해주세요.", isError: true});
+            return;
+        }
+        hideMessage($(this).parent(".input-group"));
+    });
+
+
+
+    const showMessage = function({element, message, isError}){
+        let color = (isError) ? "rgb(255, 0, 62)" : "#a8c6ff";
+        $(element).next(".input-message").css({
+            "display": "block",
+            "color": color
+        });
+        $(element).next(".input-message").text(message);
+        $(element).css("border-color",color);
+    }
+
+    const hideMessage = function(element){
+        $(element).next(".input-message").css("display","none");
+        $(element).css("border-color","#a8c6ff");
+    }
 
 });
 

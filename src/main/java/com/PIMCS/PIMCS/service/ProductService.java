@@ -157,6 +157,7 @@ public class ProductService {
             System.out.println(product.getId());
             System.out.println(product.getProductCode());
             product.setCompany(company);
+            System.out.println();
             saveProducts.add(product);
 
         }

@@ -116,7 +116,9 @@ public class CompanyManagementService {
     //회사와 대표 저장 회사코드 : UUID
     @Transactional(rollbackFor = Exception.class)
     public void companyRegistrationVerify(String verifyKey){
+        System.out.println(waitingCeoRedisRepository.findById(verifyKey).isPresent());
         User ceo=waitingCeoRedisRepository.findById(verifyKey).get().getUser();
+
         Company company=waitingCeoRedisRepository.findById(verifyKey).get().getCompany();
         List<UserRole> userRoles = new ArrayList<>();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -126,10 +128,11 @@ public class CompanyManagementService {
         company.setCompanyCode(companyServiceUtils.UUIDgeneration().substring(0,30));
         company.setCompanyAddress(company.getCompanyAddress().concat(company.getCompanyAddressdetail()));
         ceo.setCompany(company);
-
+        System.out.println("====================@@@@@@@@@@@");
         for (Role role:roleRepository.findAll()
         ) {
             if(!role.getName().equals("ChiefOfPimcs")){
+                System.out.println(role.getName());
                 UserRole userRole=new UserRole();
                 userRole.setUser(ceo);
                 userRole.setRole(role);
@@ -139,6 +142,7 @@ public class CompanyManagementService {
 
         companyRepository.save(company);
         userRepository.save(ceo);
+        System.out.println("====================@@@@@@@@@@@");
         userRoleRepository.saveAll(userRoles);
     }
 

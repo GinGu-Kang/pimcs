@@ -46,6 +46,9 @@ public class AWSDynamoTest {
                         .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
                         .withProjection(new Projection().withProjectionType("ALL"))
         );
+
+        //System.out.println(createTableRequest.toString());
+        System.out.println(amazonDynamoDB);
         Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
     }
 

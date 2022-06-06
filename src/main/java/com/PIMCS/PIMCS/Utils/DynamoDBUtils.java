@@ -301,6 +301,8 @@ public class DynamoDBUtils {
             Product product = Product.findByProductId(products, inOutHistory.getProductId());
             inOutHistory.setProductCode(product.getProductCode());
             inOutHistory.setProductName(product.getProductName());
+            inOutHistory.setProductWeight(product.getProductWeight());
+
             result.add(inOutHistory);
         }
 

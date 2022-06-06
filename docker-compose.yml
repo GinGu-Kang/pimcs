@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  db-mysql:
+    image: mysql:8.0.27
+    container_name: db-mysql
+    environment:
+      MYSQL_DATABASE: pimcs
+      MYSQL_ROOT_PASSWORD: 11111111
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - 3306:3306
+    networks:
+      - springboot-mysql-net
+  some-redis:
+    image: redis:alpine
+    command: redis-server --port 6379
+    container_name: redis_boot
+    hostname: redis_boot
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - 6379:6379
+  dynamodb:
+    image: amazon/dynamodb-local
+    container_name: my-dynamodb
+    hostname: dynamodb
+    restart: always
+    ports:
+      - 8000:8000
+#    depends_on:
+#      - db-mysql
+#    networks:
+#      - springboot-mysql-net
+networks:
+  springboot-mysql-net:
+    driver: bridge

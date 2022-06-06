@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                  `productCode` VARCHAR(45) NOT NULL,
                                                  `productCategoryId` INT  NULL,
-                                                 `companyId` INT NOT NULL,
+                                                 `companId` INT NOT NULL,
                                                  `productImage` VARCHAR(255) NULL,
                                                  `productWeight` INT NULL,
                                                  `productName` VARCHAR(45) NULL,

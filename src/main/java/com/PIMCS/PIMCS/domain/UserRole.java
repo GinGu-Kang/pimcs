@@ -18,11 +18,11 @@ public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne(fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)//,cascade=CascadeType.ALL
     @JoinColumn(name = "roleId")
     private Role role;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne()//cascade=CascadeType.ALL
     @JoinColumn(name = "userEmail")
     private User user;
 

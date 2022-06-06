@@ -64,6 +64,7 @@ public class AWSDynamoTest {
                 .updateWeight(100)
                 .updateCnt(10)
                 .updateCurrentInventory(30)
+                .updateWeight(10)
                 .inOutStatus(((int)(Math.random()*2) == 0) ? "IN" : "OUT")
                 .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.of(15,00)))
 //                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))

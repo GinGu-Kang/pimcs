@@ -72,13 +72,10 @@
             });
 
             if(resultData != undefined){
-                
-                updateMat({
-                    columnName: "calcMethod",
-                    replaceValue: $("input[name='mat.calcMethod']").val()
-                });
-                $(`[data-bs-dismiss="modal"]`).click();
                 alert(resultData.message);
+                let size = $(".show-item-select option:selected").val();
+                let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                location.href=`?page=${page}&size=${size}`;
             }
         }
     </script>

@@ -239,7 +239,12 @@ public class DynamoDBUtils {
         return result;
     }
 
+    /**
+     * rdbms 수정시
+     * dynamodb 매트위치 및 박스무게 수정
+     */
     public void updateMat(List<Mat> mats){
+        //요청 쿼리 만들기
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         String query = "";
         for(int i=0; i<mats.size(); i++){
@@ -248,22 +253,21 @@ public class DynamoDBUtils {
             query += "matSerialNumber = :serialNumber"+i;
             if(i != mats.size()-1) query += " or ";
         }
-        System.out.println("========");
-        System.out.println(query);
-        System.out.println("========");
 
+        //select 쿼리실행
         DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
                 .withKeyConditionExpression(query)
                 .withExpressionAttributeValues(eav);
         List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
-        System.out.println(inOutHistories.size());
-
         List<InOutHistory> result = new ArrayList<>();
+        //dynamodb mat위치 및 박스무게 수정
         for(InOutHistory inOutHistory : inOutHistories){
             Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
             inOutHistory.setMatLocation(mat.getMatLocation());
+            inOutHistory.setBoxWeight(mat.getBoxWeight());
             result.add(inOutHistory);
         }
+        //update 쿼리실행
         dynamoDBMapper.batchSave(result);
     }
 

@@ -9,7 +9,7 @@ const displaySettingDefaultCheckedColumnNames = [
     "threshold", //임계값
     "inventoryCnt", // 현재재고
     "inventoryWeight",//현재무게
-    "battery", //잔여배터리
+//    "battery", //잔여배터리
 
 ]
 
@@ -22,7 +22,7 @@ const initDisplaySettingModal = function(){
     
     if(values != null) columnNames = JSON.parse(values);
     else columnNames = displaySettingDefaultCheckedColumnNames;
-    
+
     columnNames.forEach(function(element){
         $(`input[columnName=${element}]`).prop("checked",true);
     });

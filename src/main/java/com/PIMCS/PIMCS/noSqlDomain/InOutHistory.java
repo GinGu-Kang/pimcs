@@ -47,6 +47,9 @@ public class InOutHistory {
     private Integer updateCnt;
 
     @DynamoDBAttribute
+    private Integer boxWeight;
+
+    @DynamoDBAttribute
     private String inOutStatus;
 
     @DynamoDBAttribute

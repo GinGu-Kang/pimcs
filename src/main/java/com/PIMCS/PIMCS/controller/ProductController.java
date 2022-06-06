@@ -70,7 +70,7 @@ public class ProductController {
     public ResponseEntity<byte[]> loadProductImage(@PathVariable String fileName)  {
 
         try {
-            InputStream imageStream = new FileInputStream("/Users/gangjingu/Desktop/JG/workspace/media/" + fileName);
+            InputStream imageStream = new FileInputStream("/Users/gamdodo/Documents/java_workspace/media/" + fileName);
             byte[] imageByteArray = new byte[0];
             imageByteArray = imageStream.readAllBytes();
             imageStream.close();

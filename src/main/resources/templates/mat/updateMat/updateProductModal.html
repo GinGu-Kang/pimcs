@@ -17,7 +17,7 @@
             <div class="replace-container">
                 <h5 class="pimcs-bold">변경 값</h5>
                 <div class="d-flex justify-content-between mt-2">
-                    <select class="pimcs-blue-input" name="matForms.productId">
+                    <select class="pimcs-blue-input" name="matForms.productId" style="height:37px;">
                         
                     </select>
                 </div>
@@ -102,12 +102,10 @@
 
             if(resultData != undefined){
                 
-                updateMat({
-                    columnName: "product",
-                    replaceValue: product
-                });
-                $(`[data-bs-dismiss="modal"]`).click();
                 alert(resultData.message);
+                let size = $(".show-item-select option:selected").val();
+                let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                location.href=`?page=${page}&size=${size}`;
             }
         }
        

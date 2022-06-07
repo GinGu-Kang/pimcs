@@ -7,6 +7,7 @@ import com.PIMCS.PIMCS.form.DynamoResultPage;
 import com.PIMCS.PIMCS.form.InOutHistorySearchForm;
 import com.PIMCS.PIMCS.form.MatGraphForm;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -178,6 +180,7 @@ public class DynamoDBUtils {
 
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         endDate = endDate.plusDays(1);
+
         eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
         eav.put(":start",new AttributeValue().withS(startDate.toString()));
         eav.put(":end", new AttributeValue().withS(endDate.toString()));
@@ -259,12 +262,16 @@ public class DynamoDBUtils {
                 .withKeyConditionExpression(query)
                 .withExpressionAttributeValues(eav);
         List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+
         List<InOutHistory> result = new ArrayList<>();
         //dynamodb mat위치 및 박스무게 수정
         for(InOutHistory inOutHistory : inOutHistories){
             Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
             inOutHistory.setMatLocation(mat.getMatLocation());
             inOutHistory.setBoxWeight(mat.getBoxWeight());
+            inOutHistory.setCalcMethod(mat.getCalcMethod());
+            inOutHistory.setThreshold(mat.getThreshold());
+
             result.add(inOutHistory);
         }
         //update 쿼리실행
@@ -284,9 +291,7 @@ public class DynamoDBUtils {
         }
         query += " )";
 
-        System.out.println("========");
-        System.out.println(query);
-        System.out.println("========");
+
 
     DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
                 .withIndexName("byProductId")
@@ -308,4 +313,60 @@ public class DynamoDBUtils {
 
         dynamoDBMapper.batchSave(result);
     }
+
+
+    /**
+     * 주문메일을 dynamodb에 insert
+     */
+    public OrderMailRecipients putOrderMailRecipients(Mat mat, List<String> mailRecipients){
+        OrderMailRecipients orderMailRecipients = new OrderMailRecipients();
+
+        orderMailRecipients.setMatSerialNumber(mat.getSerialNumber());
+        orderMailRecipients.setMailRecipients(mailRecipients);
+        orderMailRecipients.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+
+        dynamoDBMapper.save(orderMailRecipients);
+
+
+        return orderMailRecipients;
+    }
+
+    public List<OrderMailRecipients> loadOrderMailRecipients(List<String> serialNumbers){
+
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        String query = "(";
+        for(int i=0; i<serialNumbers.size(); i++){
+            String serialNumber = serialNumbers.get(i);
+            eav.put(":serialNumber"+i,new AttributeValue().withS(serialNumber));
+            query += "matSerialNumber = :serialNumber"+i;
+            if(i != serialNumbers.size()-1) query += " or ";
+        }
+        query +=")";
+        System.out.println(query);
+
+        //select 쿼리실행
+        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
+                .withKeyConditionExpression(query)
+                .withExpressionAttributeValues(eav);
+
+        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
+
+    }
+
+
+    public void updateOrderMailRecipients(List<OrderMailRecipients> list){
+        List<String> serialNumbers = OrderMailRecipients.getSerialNumberList(list);
+        List<OrderMailRecipients> findMailRecipients = loadOrderMailRecipients(serialNumbers);
+        List<OrderMailRecipients> save = new ArrayList<>();
+
+        for(OrderMailRecipients o : findMailRecipients ){
+            OrderMailRecipients find = OrderMailRecipients.findBySerialNumber(o.getMatSerialNumber(), list);
+            o.setMailRecipients(find.getMailRecipients());
+            save.add(o);
+        }
+
+        dynamoDBMapper.batchSave(save);
+    }
+
+
 }

@@ -256,7 +256,7 @@ const createForm = function(serialNumberSubList, productNameSubList){
  */
 $(document).on("click",".inquiry-btn",function(e){
     e.preventDefault();
-    let startDate = new Date($("#start-date").val());
+    let startDate = new Date($("#start-date").val()+"T00:00:00");
     let endDate = new Date($("#end-date").val());
     let curDate = new Date();
 

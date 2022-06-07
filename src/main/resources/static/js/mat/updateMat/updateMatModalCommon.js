@@ -5,6 +5,9 @@
  *  클릭한 버튼에 매칭된 modal 보여주기 
  */
 $(document).on("click",".update-dropdown-item",function(){
+    if($(".all-rows-checked").is(":checked")){
+        loadMatAll();
+    }
 
     let items = createCheckedItem($(this).attr("data"));
     if(items == ""){
@@ -28,9 +31,7 @@ $(document).on("click",".update-dropdown-item",function(){
  */
 const createCheckedItem = function(oldKey){
     let li = "";
-    if($(".all-rows-checked").is(":checked")){
-        loadMatAll();
-    }
+    
 
     for(let mat of getCheckedItems()){
         
@@ -63,13 +64,15 @@ const updateMatFormData = function({columnName, replaceValue}){
         formData.append(`matForms[${i}].mat.serialNumber`, mat.serialNumber);
         formData.append(`matForms[${i}].mat.calcMethod`, mat.calcMethod);
         formData.append(`matForms[${i}].mat.threshold`, mat.threshold);
+        formData.append(`matForms[${i}].mat.inventoryWeight`, mat.inventoryWeight);
         formData.append(`matForms[${i}].mat.matLocation`, mat.matLocation);
+        formData.append(`matForms[${i}].mat.currentInventory`, mat.currentInventory);
         formData.append(`matForms[${i}].mat.productOrderCnt`, mat.productOrderCnt);
         formData.append(`matForms[${i}].mat.boxWeight`, mat.boxWeight);
 
+
     }
-    console.log("form")
-    console.log(formData)
+    
     return formData;
 }
 

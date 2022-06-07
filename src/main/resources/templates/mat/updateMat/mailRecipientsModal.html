@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="mailRecipients" class="modal fade update-mat-modal" id="mailRecipientsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">주문이메일 변경</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="post" >
+            <div class="modal-body">
+                <div class="target-container h-100" style="overflow-y: auto;">
+                    
+                    
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="changeOrderEmailRecipients()">변경</button>
+            </div>
+        </form>
+      </div>
+    </div>
+    <script>
+        let token = $("meta[name='_csrf']").attr("content");
+        let header = $("meta[name='_csrf_header']").attr("content");
+        $('#mailRecipientsModal').on('show.bs.modal', function (e) {
+            $("#mailRecipientsModal .target-container").empty();
+
+            
+            
+            const data = new FormData();
+            
+            for(const mat of getCheckedItems()){
+                data.append("serialNumbers",mat.serialNumber);
+            }
+            const queryString = new URLSearchParams(data).toString()
+            const result = loadPostData({
+                    url: "/api/email/recipients",
+                    data: queryString,
+                    header: {
+                        'header': header,
+                        'token': token
+                    }
+                });
+                
+            for(let i=0; i<result.length; i++){
+                let html = "";
+
+                html += `<label>${result[i]['matSerialNumber']}</label>`;
+                html += `<input id="${result[i]['matSerialNumber']}" class="pimcs-blue-input mail-recipients-input" value="${result[i]['mailRecipients']}"/><br>`;
+                html += `<input type="hidden" class="serialNumber" value="${result[i]['matSerialNumber']}"/>`;
+                $("#mailRecipientsModal .target-container").append(html);
+            }
+            
+        });
+
+        const changeOrderEmailRecipients = function(){
+            const data = new FormData();
+
+            for(let i=0; i<$("input.serialNumber").length; i++){
+                let serialNumber = $("input.serialNumber")[i].value;
+                let mailRecipients = $(`#${serialNumber}`).val().split(",");
+                let validation = validate(mailRecipients);
+               if(validation.isError){
+                    alert(validation.message);
+                    $(this).addClass("pimcs-error-input");
+                    return;
+               }else{
+                    data.append(`mailRecipients[${i}].matSerialNumber`, serialNumber);
+                    for(let j=0; j<mailRecipients.length; j++){
+                        data.append(`mailRecipients[${i}].mailRecipients[${j}]`, mailRecipients[j].trim());
+                    }
+               }
+            }
+
+            const queryString = new URLSearchParams(data).toString();
+            const result = loadPostData({
+                    url: "/mat/update/email",
+                    data: queryString,
+                    header: {
+                        'header': header,
+                        'token': token
+                    }
+                });
+                
+                if(result != undefined){
+
+                    alert(result.message);
+
+                    let size = $(".show-item-select option:selected").val();
+                    let page = $("#desktop-pagination").data().twbsPagination.options.startPage;
+                    location.href=`?page=${page}&size=${size}`;
+
+                }
+
+        }
+        const validate = function(mailRecipients){
+
+            if(mailRecipients.length == 1 && mailRecipients[0].trim() == "") return {isError:true, message:"이메일을 입력해주세요."};
+
+            const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+            
+            for(let i=0; i<mailRecipients.length; i++){
+                let email = mailRecipients[i];
+                if(email.trim() == ""){
+                    continue;
+                }
+                if(!regEmail.test(email.trim())){
+                    
+                    return {
+                        isError: true,
+                        message: `'${email}' 형식에 맞지않는 이메일입니다.`
+                    };
+                }
+            }
+
+            return {
+                isError: false,
+                message: '',
+                
+            }
+        }
+
+        
+        $(document).on("focusout",".mail-recipients-input", function(){
+            const validation = validate($(this).val().split(","));
+            if(validation.isError){
+                alert(validation.message);
+                $(this).addClass("pimcs-error-input");
+            }else{
+                $(this).removeClass("pimcs-error-input")
+            }
+        });
+       
+    </script>
+</div>
+</html>

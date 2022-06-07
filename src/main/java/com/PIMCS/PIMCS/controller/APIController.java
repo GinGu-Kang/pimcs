@@ -7,14 +7,14 @@ import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -102,4 +102,12 @@ public class APIController {
         return apiService.productCategoryAPIService(secUserCustomForm.getCompany());
     }
 
+    /**
+     *  주문이메일 api
+     */
+    @PostMapping("/api/email/recipients")
+    @ResponseBody
+    public List<OrderMailRecipients> emailRecipientsAPI(@RequestParam List<String> serialNumbers){
+        return apiService.emailRecipientsAPIService(serialNumbers);
+    }
 }

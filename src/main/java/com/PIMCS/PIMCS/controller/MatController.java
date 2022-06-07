@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.controller;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.service.MatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,11 @@ public class MatController {
     public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm, Model model){
 
         Mat mat = matService.createMat(matForm,secUserCustomForm.getCompany());
+
+        String mailRecipientsStr = String.join(",",matForm.getMailRecipients());
+
         model.addAttribute("mat",mat);
+        model.addAttribute("mailRecipientsStr", mailRecipientsStr);
         return "mat/createMat/fragment/registeredCardView.html";
     }
 
@@ -72,6 +77,17 @@ public class MatController {
 
         return matService.updateMat(secUserCustomForm.getCompany(),matFormList);
     }
+
+    /**
+     * 주문이메일 변경
+     */
+    @PostMapping("/mat/update/email")
+    @ResponseBody
+    public HashMap<String, String> updateMatEmail(MailRecipientsForm mailRecipientsForm){
+        System.out.println(mailRecipientsForm.toString());
+        return matService.updateMatEmailService(mailRecipientsForm.getMailRecipients());
+    }
+
 
     /**
      * 매트삭제

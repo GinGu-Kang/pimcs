@@ -12,7 +12,6 @@
         <h4 class="text-size-between-large-middle page-title">기기 등록</h4>
         <form class="card-container">
             <div class="card d-flex">
-                <!--첫번째 행-->
                 <div class="form-group-container">
                     <!--시리얼 번호-->
                     <div class="form-group">
@@ -35,7 +34,6 @@
                         <input name="mat.matLocation" required class="pimcs-blue-input"/>
                     </div>
                 </div>
-                <!--두번째 행-->
                 <div class="form-group-container form-group-container-mt">
                     <!--임계값-->
                     <div class="form-group">
@@ -63,7 +61,16 @@
                         </div>
                     </div>
                 </div>
-                <!--세번째행-->
+
+                <div class="form-group-container form-group-container-mt">
+                    <div class="form-group w-50">
+                        <p class="text-size-middle input-label">주문이메일</p>
+                        <p class="text-size-small mb-2" style="color:#999999;">다중이메일 입력시 ","로 구분해주세요.</p>
+                        <input name="mailRecipients" required class="pimcs-blue-input"/>
+
+                    </div>
+                </div>
+
                 <div class="form-group-container form-group-container-mt">
                     <!--계산방식-->
                     <div class="form-group">

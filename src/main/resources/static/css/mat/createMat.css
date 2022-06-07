@@ -1,5 +1,7 @@
 .create-mat-container{
+    height: auto;
     padding-top: 41px;
+    overflow-y: auto;
 }
 
 .page-title{
@@ -81,7 +83,7 @@
 
 /* RESGISTERED MAT SECTION*/
 .registered-mat-section{
-    height: 36%;
-    overflow-y:auto; 
+    
     margin-top: 34px;
+    margin-bottom: 30px;
 }

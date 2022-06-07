@@ -134,7 +134,8 @@ const createMatRow = function(mat, length){
         bigImgClass = 'td-big-image-last';
     }
 
-
+    console.log("----")
+    console.log()
 
     let row = `<tr class='text-size-between-middle-samll' data=${mat.id}>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
@@ -148,8 +149,9 @@ const createMatRow = function(mat, length){
         row +=    `</td>`;
 
         row +=    `<td class='${importantInfoColor}' columnName='inventoryCnt'>${currentInventory}</td>`;
-        row +=    `<td columnName='calcMethod'>${calcMethod}</td>`;
         row +=    `<td class='${importantInfoColor}' columnName='threshold'>${threshold}</td>`;
+        row +=    `<td columnName='calcMethod'>${calcMethod}</td>`;
+        row +=    `<td columnName='productWeight'>${(mat.product != null ? mat.product.productWeight+"g" : 'N/A')}</td>`
         row +=    `<td  columnName='inventoryWeight'>${mat.inventoryWeight}g</td>`;
         row +=    `<td columnName='matLocation'>${mat.matLocation}</td>`;
         row +=    `<td columnName='productOrderCnt'>${mat.productOrderCnt}</td>`;

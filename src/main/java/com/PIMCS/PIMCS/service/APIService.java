@@ -1,6 +1,7 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.APIServiceUtils;
+import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
@@ -10,9 +11,11 @@ import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.SearchForm;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -28,12 +32,14 @@ public class APIService {
     private final ProductRepository productRepository;
     private final MatRepository matRepository;
     private final ProductCategoryRepository productCategoryRepository;
+    private final DynamoDBMapper dynamoDBMapper;
 
     @Autowired
-    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository) {
+    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper) {
         this.productRepository = productRepository;
         this.matRepository = matRepository;
         this.productCategoryRepository = productCategoryRepository;
+        this.dynamoDBMapper = dynamoDBMapper;
     }
 
     /**
@@ -126,5 +132,10 @@ public class APIService {
     public List<ProductCategoryJsonAdapter> productCategoryAPIService(Company company){
         List<ProductCategory> productCategories = productCategoryRepository.findByCompany(company);
         return new APIServiceUtils().createProductCategoryJsonAdapter(productCategories, company);
+    }
+
+    public List<OrderMailRecipients> emailRecipientsAPIService(List<String> serialNumbers){
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        return dynamoDBUtils.loadOrderMailRecipients(serialNumbers);
     }
 }

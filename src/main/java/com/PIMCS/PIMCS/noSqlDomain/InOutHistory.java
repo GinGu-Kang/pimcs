@@ -41,7 +41,9 @@ public class InOutHistory {
     private Integer productWeight;
 
     @DynamoDBAttribute
-    private Integer updateWeight; // 수정무게, 계산방식 무게일때
+    private Integer currentWeight;
+
+
 
     @DynamoDBAttribute
     private Integer updateCurrentInventory; // 매트에서 받은 현재 무게
@@ -56,7 +58,10 @@ public class InOutHistory {
     private int threshold;
 
     @DynamoDBAttribute
-    private Integer boxWeight;
+    private Integer isSendEmail;
+
+    @DynamoDBAttribute
+    private Integer calcMethod; //계산방식(0이면 무게, 1이면 갯수)
 
     @DynamoDBAttribute
     private String inOutStatus;

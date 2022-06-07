@@ -84,14 +84,46 @@ $(document).on("click",".register-btn",function(e){
         alert("박스무게를 입력해주세요.");
         return;
     }
+
+    const mailRecipientsStr = $(`input[name='mailRecipients']`).val();
+    if(mailRecipientsStr == ""){
+        alert("주문이메일을 주소를 입력해주세요.");
+        return;
+    }
+    const regEmail = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+    
+    const mailRecipients = mailRecipientsStr.split(",");
+    for(const email of mailRecipients){
+        if(email.trim() == ""){
+            continue;
+        }
+        if(!regEmail.test(email.trim())){
+            alert(`'${email}' 형식에 맞지않는 이메일입니다.`);
+            return;
+        }
+    }
+
     
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
-    let data = $("form.card-container").serialize();
+    
 
+    const data = new FormData();
+    data.append("mat.serialNumber",$(`input[name='mat.serialNumber']`).val());
+    data.append("productId",$("select[name='productId']").val());
+    data.append("mat.matLocation", $(`input[name='mat.matLocation']`).val());
+    data.append("mat.threshold",$(`input[name='mat.threshold']`).val());
+    data.append("mat.productOrderCnt",$(`input[name='mat.productOrderCnt']`).val());
+    data.append("mat.boxWeight",$(`input[name='mat.boxWeight']`).val());
+    data.append("mat.calcMethod", $(`input[name='mat.calcMethod']`).val());
+
+    for(let i=0; i<mailRecipients.length; i++){
+        data.append(`mailRecipients[${i}]`, mailRecipients[i].trim());
+    }
+    const queryString = new URLSearchParams(data).toString()
     let resultData = loadPostData({
         url: "/mat/create",
-        data: data,
+        data: queryString,
         header: {
             'header': header,
             'token': token

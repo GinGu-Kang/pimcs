@@ -8,6 +8,7 @@ import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.MatCsvForm;
 import com.PIMCS.PIMCS.form.MatForm;
 import com.PIMCS.PIMCS.form.MatFormList;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -69,6 +70,10 @@ public class MatService {
             mat.setProduct(product);
             mat.setCompany(company);
             matRepository.save(mat);
+
+            DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+            dynamoDBUtils.putOrderMailRecipients(mat, matForm.getMailRecipients());
+
             return mat;
         }else{
             throw new IllegalStateException("Product does not exist.");
@@ -104,6 +109,8 @@ public class MatService {
             if(findProduct != null && findMat != null){
                 saveMat.setProduct(findProduct);
                 saveMat.setCompany(company);
+                saveMat.setCreatedAt(findMat.getCreatedAt());
+
                 saveMats.add(saveMat);
             }else{
                 throw new IllegalStateException("Product or Mat does not exist.");
@@ -112,9 +119,17 @@ public class MatService {
 
         matRepository.saveAll(saveMats);
 
+
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         dynamoDBUtils.updateMat(saveMats);
 
+        HashMap<String, String> hashMap =new HashMap<>();
+        hashMap.put("message","수정 완료했습니다.");
+        return hashMap;
+    }
+    public HashMap<String,String> updateMatEmailService(List<OrderMailRecipients> orderMailRecipients){
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        dynamoDBUtils.updateOrderMailRecipients(orderMailRecipients);;
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");
         return hashMap;

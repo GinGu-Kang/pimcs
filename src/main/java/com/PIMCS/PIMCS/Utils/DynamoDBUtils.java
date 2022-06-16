@@ -242,13 +242,26 @@ public class DynamoDBUtils {
         return result;
     }
 
+    public List<InOutHistory> mapperQueryPage(DynamoDBQueryExpression queryExpression){
+        List<InOutHistory> result = new ArrayList<>();
+        do {
+            QueryResultPage<InOutHistory> queryPage = dynamoDBMapper.queryPage(InOutHistory.class, queryExpression);
+            queryPage.getResults().forEach(inOutHistory -> result.add(inOutHistory));
+            queryExpression.setExclusiveStartKey(queryPage.getLastEvaluatedKey());
+
+        } while (queryExpression.getExclusiveStartKey() != null);
+        return result;
+
+    }
+
     /**
      * rdbms 수정시
      * dynamodb 매트위치 및 박스무게 수정
      */
-    public void updateMat(List<Mat> mats){
+    public void updateMat(List<Mat> mats, Company company){
         //요청 쿼리 만들기
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
         String query = "";
         for(int i=0; i<mats.size(); i++){
             Mat mat = mats.get(i);
@@ -259,9 +272,15 @@ public class DynamoDBUtils {
 
         //select 쿼리실행
         DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-                .withKeyConditionExpression(query)
-                .withExpressionAttributeValues(eav);
-        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("companyId = :companyId")
+                .withFilterExpression(query)
+                .withExpressionAttributeValues(eav)
+                .withLimit(SCAN_LIMIT_SIZE);
+
+
+        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
 
         List<InOutHistory> result = new ArrayList<>();
         //dynamodb mat위치 및 박스무게 수정
@@ -282,7 +301,7 @@ public class DynamoDBUtils {
 
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
         eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
-        String query = "companyId = :companyId AND ( ";
+        String query = "( ";
         for(int i=0; i<products.size(); i++){
             Product product = products.get(i);
             eav.put(":productId"+i, new AttributeValue().withN(String.valueOf(product.getId())));
@@ -294,12 +313,16 @@ public class DynamoDBUtils {
 
 
     DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-                .withIndexName("byProductId")
+                .withIndexName("byConpanyId")
                 .withConsistentRead(false)
-                .withKeyConditionExpression(query)
-                .withExpressionAttributeValues(eav);
+                .withKeyConditionExpression("companyId=:companyId")
+                .withFilterExpression(query)
+                .withExpressionAttributeValues(eav)
+                .withLimit(SCAN_LIMIT_SIZE);
 
-        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+
+        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
+
         List<InOutHistory> result = new ArrayList<>();
 
         for(InOutHistory inOutHistory : inOutHistories){

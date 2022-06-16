@@ -70,9 +70,10 @@ public class APIServiceUtils {
 //                        .build();
 //            }
 
+
             ProductPageJsonAdapter.ProductCategory productCategory = ProductPageJsonAdapter.ProductCategory.builder()
-                    .id(product.getProductCategory().getId())
-                    .categoryName(product.getProductCategory().getCategoryName())
+                    .id((product.getProductCategory() != null) ? product.getProductCategory().getId() : -1)
+                    .categoryName((product.getProductCategory() != null) ? product.getProductCategory().getCategoryName() : "N/A")
                     .build();
 
             ProductPageJsonAdapter.Product product1 = ProductPageJsonAdapter.Product.builder()
@@ -140,7 +141,7 @@ public class APIServiceUtils {
                     .matLocation(mat.getMatLocation())
                     .productOrderCnt(mat.getProductOrderCnt())
                     .boxWeight(mat.getBoxWeight())
-                    .battery(mat.getBattery())
+                    .communicationStatus(mat.getCommunicationStatus())
                     .currentInventory(mat.getCurrentInventory())
                     .build();
             resultMats.add(matPageAdapter);

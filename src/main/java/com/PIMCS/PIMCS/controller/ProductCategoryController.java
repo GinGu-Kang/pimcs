@@ -10,7 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -36,6 +38,13 @@ public class ProductCategoryController {
         productCategory.setCompany(secUserCustomForm.getCompany());
         productCategoryService.createProductCategoryService(productCategory);
         return "redirect:/product/category/create";
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public HashMap<String, String> deleteProductCategory(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductCategory productCategory){
+
+        return productCategoryService.deleteProductCategoryService(secUserCustomForm.getCompany(), productCategory);
     }
 
 }

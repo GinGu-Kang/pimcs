@@ -134,6 +134,11 @@ const createMatRow = function(mat, length){
         bigImgClass = 'td-big-image-last';
     }
 
+    let communicationStatus = `<i class="bi bi-wifi" style="font-size:20px; color:#4282ff"></i>`
+    if(mat.communicationStatus == 0){
+        communicationStatus = `<i class="bi bi-wifi-off" style="font-size:20px; color:red"></i>`
+    }
+
     console.log("----")
     console.log()
 
@@ -156,14 +161,7 @@ const createMatRow = function(mat, length){
         row +=    `<td columnName='matLocation'>${mat.matLocation}</td>`;
         row +=    `<td columnName='productOrderCnt'>${mat.productOrderCnt}</td>`;
         row +=    `<td columnName='boxWeight'>${mat.boxWeight}</td>`;
-        row +=    `<td class='amountBattery' columnName='battery' data=${mat.battery}>`;
-        row +=          `<div class='battery-small-rect'></div>`;
-        row +=          `<div class='battery-small-rect'></div>`;
-        row +=          `<div class='battery-small-rect'></div>`;
-        row +=          `<div class='battery-small-rect'></div>`;
-        row +=          `<div class='battery-small-rect'></div>`;
-        row +=     `<td>`;
-        row += `</tr>`
+        row +=    `<td columnName='communicationStatus'>${communicationStatus}</td>`
        
     return row;
 }

@@ -153,11 +153,7 @@ public class ProductService {
                 product.setProductCategory(findProduct.getProductCategory());
             }
 
-            System.out.println("===");
-            System.out.println(product.getId());
-            System.out.println(product.getProductCode());
-            product.setCompany(company);
-            System.out.println();
+           product.setCompany(company);
             saveProducts.add(product);
 
         }

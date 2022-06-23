@@ -11,7 +11,7 @@ import java.util.UUID;
 public class FileUtils {
 
     public static String uploadFile(MultipartFile multipartFile) throws Exception{
-        final String UPLOAD_PATH ="/Users/gamdodo/Documents/java_workspace/media";
+        final String UPLOAD_PATH ="/Users/gangjingu/Desktop/JG/workspace/media";
 
         UUID uuid = UUID.randomUUID();
         String savedName = uuid.toString()+"_"+multipartFile.getOriginalFilename();

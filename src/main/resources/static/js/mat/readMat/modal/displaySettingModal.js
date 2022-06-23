@@ -6,6 +6,7 @@ const displaySettingDefaultCheckedColumnNames = [
     "serialNumber", //시리얼 번호
     "matVersion",  // 기기 버전
     "productName", //제품명
+    "productImage",
     "threshold", //임계값
     "inventoryCnt", // 현재재고
     "productWeight",

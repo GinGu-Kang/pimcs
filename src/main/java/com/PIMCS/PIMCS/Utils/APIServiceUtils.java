@@ -5,6 +5,8 @@ import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.*;
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -103,8 +105,10 @@ public class APIServiceUtils {
     /**
      * mat 데이터를 json 직렬하기 편한 객체로 만들어준다
      */
-    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company) {
+    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company, DynamoDBMapper dynamoDBMapper) {
         List<MatPageAdapter.Mat> resultMats = new ArrayList<>();
+
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         //Entity 객체 사용하지않고 adapter 클래스를 만들어서 json 직렬화
         for (Mat mat : pageMats) {
             // adapter 상품데이터 추가
@@ -128,6 +132,10 @@ public class APIServiceUtils {
                     .contactPhone(company.getContactPhone())
                     .ceoEmail(company.getCeoEmail())
                     .build();
+
+
+            List<OrderMailRecipients> orderMailRecipients = dynamoDBUtils.readMailBySerialNumber(mat.getSerialNumber());
+
             // adapter mat데이터 추가
             MatPageAdapter.Mat matPageAdapter = MatPageAdapter.Mat.builder()
                     .id(mat.getId())
@@ -143,9 +151,11 @@ public class APIServiceUtils {
                     .boxWeight(mat.getBoxWeight())
                     .communicationStatus(mat.getCommunicationStatus())
                     .currentInventory(mat.getCurrentInventory())
+                    .orderMailRecipients(orderMailRecipients)
                     .build();
             resultMats.add(matPageAdapter);
         }
+
         MatPageAdapter matPageAdapter = MatPageAdapter.builder()
                 .pageNumber(pageMats.getNumber() + 1)
                 .pageSize(pageMats.getSize())

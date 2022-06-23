@@ -391,5 +391,15 @@ public class DynamoDBUtils {
         dynamoDBMapper.batchSave(save);
     }
 
+    public List<OrderMailRecipients> readMailBySerialNumber(String serialNumber){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":serialNumber", new AttributeValue().withS(serialNumber));
+        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
+                .withKeyConditionExpression("matSerialNumber=:serialNumber")
+                .withExpressionAttributeValues(eav)
+                .withScanIndexForward(false);
+        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
+    }
+
 
 }

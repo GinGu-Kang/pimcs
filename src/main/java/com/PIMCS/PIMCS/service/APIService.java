@@ -72,19 +72,19 @@ public class APIService {
             case "serialNumber":
             case "matVersion":
                 Page<Mat> pageMats = matRepository.findByCompanyAndSerialNumberContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats, company);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper);
                 break;
             case "matLocation":
                 Page<Mat> pageMats2 = matRepository.findByCompanyAndMatLocationContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats2, company);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats2, company, dynamoDBMapper);
                 break;
             case "productCode":
                 Page<Mat> pageMats3 = matRepository.findByCompanyAndProductProductCodeContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats3, company);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats3, company, dynamoDBMapper);
                 break;
             case "productName":
                 Page<Mat> pageMats4 = matRepository.findByCompanyAndProductProductNameContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats4, company);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats4, company, dynamoDBMapper);
                 break;
 
             default:
@@ -120,13 +120,13 @@ public class APIService {
     public MatPageAdapter loadPageMatsService(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findByCompanyOrderByIdDesc(company, pageable);
 
-        return new APIServiceUtils().createMatPageAdapter(pageMats,company);
+        return new APIServiceUtils().createMatPageAdapter(pageMats,company, dynamoDBMapper);
     }
 
     public MatPageAdapter belowThresholdMats(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findMatsBelowThreshold(company,pageable);
         System.out.println(pageMats);
-        return new APIServiceUtils().createMatPageAdapter(pageMats, company);
+        return new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper);
     }
 
     public List<ProductCategoryJsonAdapter> productCategoryAPIService(Company company){

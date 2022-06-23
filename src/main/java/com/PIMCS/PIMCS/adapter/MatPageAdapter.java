@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.adapter;
 
+import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,8 +33,10 @@ public class MatPageAdapter {
         private int boxWeight;
         private int currentInventory;
         private int communicationStatus;
+        List<OrderMailRecipients> orderMailRecipients;
 
     }
+
 
     @Data
     @Builder

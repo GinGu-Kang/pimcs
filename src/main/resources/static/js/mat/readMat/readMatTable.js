@@ -9,6 +9,7 @@
     
     //ajax로 mat테이블 데이터 로드
     let tableData = loadTableData({page: page, size: size});
+    console.log(tableData);
     $(".inventory-cnt-viewer").text(0);
     //행생성해서 tbody에 삽입
     createTableRow(tableData);
@@ -162,9 +163,19 @@ const createMatRow = function(mat, length){
         row +=    `<td columnName='productOrderCnt'>${mat.productOrderCnt}</td>`;
         row +=    `<td columnName='boxWeight'>${mat.boxWeight}</td>`;
         row +=    `<td columnName='communicationStatus'>${communicationStatus}</td>`
+
+        row +=    `<td columnName='mailRecipients'>${getArrayToString(mat.orderMailRecipients)}</td>`
        
     return row;
 }
+
+const getArrayToString = (array)=>{
+    for(const o of array){
+        return o.mailRecipients.toString();
+    }
+    return "N/A";
+}
+
 
 /**
 * 전체행체크시 이벤트 

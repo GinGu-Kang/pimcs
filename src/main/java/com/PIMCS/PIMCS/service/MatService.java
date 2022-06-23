@@ -184,7 +184,12 @@ public class MatService {
     public void downloadMatCsvService(Company company, MatCsvForm matCsvForm, Writer writer) throws IOException{
         List<String> columns = matCsvForm.getCheckedColumnNames();
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+
+        columns.remove("communicationStatus");
         csvPrinter.printRecord(columns);
+
+
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
 
         List<Mat> findMats = null;
         if(matCsvForm.getCheckedMatId() == null){
@@ -200,17 +205,26 @@ public class MatService {
             if(columns.contains("productCode")) record.add(mat.getProduct().getProductCode());
             if(columns.contains("productName")) record.add(mat.getProduct().getProductName());
             if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
-            if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
+            //if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
             if(columns.contains("calcMethod")) record.add((mat.getCalcMethod() == 0) ? "무게(g)" : "갯수(개)");
             if(columns.contains("threshold")) record.add(String.valueOf(mat.getThreshold()));
             if(columns.contains("inventoryCnt")) record.add(String.valueOf(mat.getInventoryWeight()));
             if(columns.contains("matLocation")) record.add(mat.getMatLocation());
             if(columns.contains("productOrderCnt")) record.add(String.valueOf(mat.getProductOrderCnt()));
             if(columns.contains("boxWeight")) record.add(String.valueOf(mat.getBoxWeight()));
+            if(columns.contains("mailRecipients")){
+                for(OrderMailRecipients o : dynamoDBUtils.readMailBySerialNumber(mat.getSerialNumber())){
+                    record.add(o.getMailRecipients().toString());
+                    break;
+                }
+            }
+
             csvPrinter.printRecord(record);
         }
 
 
     }
+
+
 
 }

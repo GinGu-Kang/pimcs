@@ -262,7 +262,9 @@
     <!--csv download form -->
     <form id="csv-download-form" th:action="@{/download/mat/csv}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+        <div id="csv-download-form-data">
 
+        </div>
     </form>
 
     <!--체크된 매트 그래프보내는 폼-->

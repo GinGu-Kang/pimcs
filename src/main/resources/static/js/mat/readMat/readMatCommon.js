@@ -333,17 +333,20 @@ const serialize = function(obj) {
 * 다운로드 csv버튼 클릭시
 */
 $(document).on("click",".download-csv-btn",function(){
+    $("#csv-download-form-data").empty();
     let checkedItems = getCheckedItems();
     if(checkedItems.length == 0){
         alert("매트를 선택해주세요.");
         return;
     }
 
+
+
     let checkedColumnName = {};
     let checkedMatId = {};
     $("#displaySettingModal input[type='checkbox']:checked").each(function(index, element){
         checkedColumnName[`checkedColumnNames[${index}]`] = $(element).attr('columnname');
-        $("#csv-download-form").append(`<input type="hidden" name="checkedColumnNames[${index}]" value="${$(element).attr('columnname')}"/>`);
+        $("#csv-download-form-data").append(`<input type="hidden" name="checkedColumnNames[${index}]" value="${$(element).attr('columnname')}"/>`);
     });
 
     if($(".all-rows-checked").is(":checked")){
@@ -352,7 +355,7 @@ $(document).on("click",".download-csv-btn",function(){
         
          for(let i=0; i<checkedItems.length; i++){
               let mat = checkedItems[i];
-               $("#csv-download-form").append(`<input type="hidden" name="checkedMatId[${i}]" value="${mat['id']}"/>`);
+               $("#csv-download-form-data").append(`<input type="hidden" name="checkedMatId[${i}]" value="${mat['id']}"/>`);
          }
          $("#csv-download-form").submit();
     }

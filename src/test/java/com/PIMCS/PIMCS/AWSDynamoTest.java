@@ -73,8 +73,8 @@ public class AWSDynamoTest {
 
     @Test
     public void putItemTest(){
-        List<Mat> mats = matRepository.findAll();
-        Mat mat=mats.get(mats.size()-1);
+        Mat mat= matRepository.findBySerialNumber("WS01E210011").get();
+
 
         InOutHistory inOutHistory = InOutHistory.builder()
                 .companyId(mat.getCompany().getId())
@@ -82,13 +82,11 @@ public class AWSDynamoTest {
                 .matLocation(mat.getMatLocation())
                 .productCode(mat.getProduct().getProductCode())
                 .productName(mat.getProduct().getProductName())
-//                .productName("전룡호")
-//                .updateWeight(100)
                 .updateCnt(10)
-                .updateCurrentInventory(30)
+                .updateCurrentInventory(130)
 //                .updateWeight(10)
                 .inOutStatus(((int)(Math.random()*2) == 0) ? "IN" : "OUT")
-                .createdAt(LocalDateTime.of(LocalDate.now(), LocalTime.of(15,00)))
+                .createdAt(LocalDateTime.of(LocalDate.of(2022,6,10), LocalTime.of(15,00)))
 //                .createdAt(LocalDateTime.of(LocalDate.of(2022,3,15), LocalTime.now()))
                 .build();
         dynamoDBMapper.save(inOutHistory);

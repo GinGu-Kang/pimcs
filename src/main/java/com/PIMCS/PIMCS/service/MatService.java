@@ -183,6 +183,12 @@ public class MatService {
 
     public void downloadMatCsvService(Company company, MatCsvForm matCsvForm, Writer writer) throws IOException{
         List<String> columns = matCsvForm.getCheckedColumnNames();
+        System.out.println(columns.toString());
+
+        for(int i=0; i<columns.size(); i++){
+            if(columns.get(i).equals("productImage")) columns.remove(i);
+        }
+
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
         columns.remove("communicationStatus");
@@ -205,10 +211,12 @@ public class MatService {
             if(columns.contains("productCode")) record.add(mat.getProduct().getProductCode());
             if(columns.contains("productName")) record.add(mat.getProduct().getProductName());
             if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
-            //if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
-            if(columns.contains("calcMethod")) record.add((mat.getCalcMethod() == 0) ? "무게(g)" : "갯수(개)");
+            if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
+            if(columns.contains("inventoryCnt")) record.add(String.valueOf(mat.getCurrentInventory()));
             if(columns.contains("threshold")) record.add(String.valueOf(mat.getThreshold()));
-            if(columns.contains("inventoryCnt")) record.add(String.valueOf(mat.getInventoryWeight()));
+            if(columns.contains("calcMethod")) record.add((mat.getCalcMethod() == 0) ? "무게(g)" : "갯수(개)");
+            if(columns.contains("productWeight")) record.add(String.valueOf(mat.getProduct().getProductWeight()));
+            if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
             if(columns.contains("matLocation")) record.add(mat.getMatLocation());
             if(columns.contains("productOrderCnt")) record.add(String.valueOf(mat.getProductOrderCnt()));
             if(columns.contains("boxWeight")) record.add(String.valueOf(mat.getBoxWeight()));

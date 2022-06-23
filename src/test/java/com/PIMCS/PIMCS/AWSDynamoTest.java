@@ -158,30 +158,32 @@ public class AWSDynamoTest {
     @Test
     public void inOutHistoryServiceTest(){
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":v1",new AttributeValue().withN("18"));
+        eav.put(":v1",new AttributeValue().withN("1"));
+        eav.put(":serial1",new AttributeValue().withS("WS01E210001"));
+        eav.put(":serial2",new AttributeValue().withS("WS01E210002"));
 
+        /*new Condition().withAttributeValueList()*/
         DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
                 .withIndexName("byConpanyId")
-                .withConsistentRead(true)
+                .withConsistentRead(false)
                 .withKeyConditionExpression("companyId = :v1")
-                .withExpressionAttributeValues(eav);
+                .withFilterExpression("matSerialNumber=:serial1 or matSerialNumber=:serial2")
+                .withExpressionAttributeValues(eav)
+                .withLimit(3);
 
 
-        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
+        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+        List<InOutHistory> inOutHistories =  dynamoDBUtils.mapperQueryPage(queryExpression);
+
         for(InOutHistory inOutHistory : inOutHistories){
             System.out.println(inOutHistory.toString());
+//            System.out.println(inOutHistory.);
         }
-//        List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
 
-//        Assertions.assertThat(inOutHistories.size()).isEqualTo(1);
-//        System.out.println(inOutHistories.size());
-//        for(InOutHistory in : inOutHistories){
-//            System.out.println("=====");
-//            System.out.println(in.toString());
-//            System.out.println("=======");
-//        }
 
     }
+
+
 
     @Test
     public void graphServiceTest(){
@@ -302,7 +304,7 @@ public class AWSDynamoTest {
         List<Mat> mats = new ArrayList<>();
         mats.add(mat);
 
-        dynamoDBUtils.updateMat(mats);
+//        dynamoDBUtils.updateMat(mats);
     }
 }
 

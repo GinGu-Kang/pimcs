@@ -61,3 +61,32 @@ const createCategoryTag = function(category){
         return html;
 }
 
+
+
+$(document).on("click",".delete-category-btn", function(){
+
+    if (!confirm("삭제하시겠습니까?")) {
+        return;
+    } 
+   
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+
+    const data = new FormData();
+    data.append("id",$(this).attr("data"));
+
+    let resultData = loadPostData({
+        url: "/product/category/delete",
+        data: new URLSearchParams(data).toString(),
+        header: {
+            'header': header,
+            'token': token
+        }
+    });
+
+    if(resultData != undefined){
+        alert(resultData.message);
+        window.location.reload();
+    }
+    
+});

@@ -131,7 +131,9 @@ $(document).on("click",".register-btn",function(e){
     });
     initFormInputValue();
     $(".registered-mat-container").prepend(resultData);
-    alert("등록 되었습니다.")
+    if(resultData != undefined){
+        alert("등록 되었습니다.")
+    }
 });
 
 /**
@@ -148,6 +150,8 @@ const initFormInputValue = function(){
 
     $("select[name='productId'] option:eq(0)").prop("selected", true);
 
-    $(".calc-method-btn").removeClass("active");
-    $(".calc-method-btn").first().addClass("active");
+//    $(".calc-method-btn").removeClass("active");
+//    $(".calc-method-btn").first().addClass("active");
+
+    $(".calc-method-btn").first().click();
 }

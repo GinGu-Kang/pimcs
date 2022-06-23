@@ -69,6 +69,7 @@ public class MatService {
             Product product = productOpt.get();
             mat.setProduct(product);
             mat.setCompany(company);
+            mat.setCommunicationStatus(0);
             matRepository.save(mat);
 
             DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
@@ -121,7 +122,7 @@ public class MatService {
 
 
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        dynamoDBUtils.updateMat(saveMats);
+        dynamoDBUtils.updateMat(saveMats, company);
 
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");

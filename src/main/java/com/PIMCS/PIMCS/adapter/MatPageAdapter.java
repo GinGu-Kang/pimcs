@@ -31,7 +31,7 @@ public class MatPageAdapter {
         private int productOrderCnt;
         private int boxWeight;
         private int currentInventory;
-        private int battery;
+        private int communicationStatus;
 
     }
 

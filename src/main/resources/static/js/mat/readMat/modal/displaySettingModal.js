@@ -11,6 +11,7 @@ const displaySettingDefaultCheckedColumnNames = [
     "inventoryCnt", // 현재재고
     "productWeight",
     "inventoryWeight",//현재무게
+    "communicationStatus"
 //    "battery", //잔여배터리
 
 ]

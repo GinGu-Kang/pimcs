@@ -31,6 +31,8 @@
       <hr>
       <p ><span th:class="write-label">주문회사</span><span th:class="write-value" th:text="${matOrder.getCompany().getCompanyName()}"></span></p>
       <hr>
+      <p ><span th:class="write-label">회사 코드</span><span th:class="write-value" th:text="${matOrder.getCompany().getCompanyCode()}"></span></p>
+      <hr>
       <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="${matOrder.getCreatedAt().toString().replace('-','.').substring(0,10)}"></span></p>
       <hr>
       <p ><span th:class="write-label">희망 배송일</span><span th:class="write-value" th:text="${matOrder.getHopeDeliveryDate().toString().replace('-','.').substring(0,10)}"></span></p>
@@ -52,10 +54,36 @@
         <br>
       </th:block>
       <p><span th:class="write-label" id="totalPrice">총 금액</span><span th:class="write-value" th:text="${matOrder.getTotalPrice()}"></span></p>
+      <p class="sub-title">
+        배송된 기기
+      </p>
+      <th:block th:each="matCategoryOrder:${matOrder.getMatCategoryOrderList()}">
+        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 주문갯수'"></span><span th:class="write-value" th:text="${matCategoryOrder.getOrderCnt()}"></span></p>
+        <hr>
+        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 기기가격'"></span><span th:class="write-value" th:text="${matCategoryOrder.getMatCategory().getMatPrice()}"></span></p>
+        <hr>
+        <br>
+      </th:block>
     </section>
   </section>
   <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a></p>
   <script>
+    function deliverySave(){
+      let result = confirm("배송된 기기의 시리얼이 일치 합니까?");
+      let duplicateCheck = 0;
+      if(result){
+        if(duplicateCheck){
+          alert("저장되었습니다.");
+        }else {
+          alert("중복된 기기가 존재합니다.(WS@)!@))");
+        }
+
+      //  orderview로 새로고침 이후 맨 밑에 배송된 기기들 보여주기 이메일 전송하기
+      } else {
+        alert("취소되었습니다.");
+      }
+
+    }
 
     function inputFormChange(){
       let changeButton=$("#form-change-button")

@@ -18,16 +18,18 @@ public class AdminService {
     private final MatOrderRepository matOrderRepository;
     private final QuestionRepository questionRepository;
     private final OrderMailFrameRepository orderMailFrameRepository;
+    private final CompanyRepository companyRepository;
 
 
     @Autowired
-    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
         this.matOrderRepository = matOrderRepository;
         this.questionRepository = questionRepository;
         this.orderMailFrameRepository = orderMailFrameRepository;
+        this.companyRepository = companyRepository;
     }
 
 
@@ -65,6 +67,11 @@ public class AdminService {
 
         answer.setQuestion(question);
         answerRepository.save(answer);
+    }
+
+    /*회사 조회*/
+    public Page<Company> findAllCompany(Pageable pageable){
+        return companyRepository.findAll(pageable);
     }
 
     public Page<Question> findAllQuestion(Pageable pageable){

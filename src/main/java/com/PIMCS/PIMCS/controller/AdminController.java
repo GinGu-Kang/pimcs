@@ -56,6 +56,33 @@ public class AdminController {
         adminService.removeMatCategory(DBId);
         return true;
     }
+    /*회사 관리*/
+    @GetMapping("company/list")
+    public String companyList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                               Model model){
+        Page<Company> questionPage=adminService.findAllCompany(pageable);
+        model.addAttribute("questionPage",questionPage);
+        model.addAttribute("questionList",questionPage.getContent());
+
+        return "admin/companyList";
+    }
+    //필터링 조회
+    @GetMapping("company/search")
+    public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
+        System.out.println(keyword);
+        Page<Question> questionPage=adminService.filterQuestion(keyword,selectOption,pageable);
+        model.addAttribute("questionPage",questionPage);
+        model.addAttribute("questionList",questionPage.getContent());
+        return "admin/adminQnaList";
+    }
+    /*회사 상세 보기*/
+    @GetMapping("company/view")
+    public String companyDetail(Model model,Integer questionId){
+        Question question = adminService.findQuestion(questionId);
+        model.addAttribute(question);
+        return "admin/adminQnaView";
+    }
+
 
     @GetMapping("qna/list")
     public String adminQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,

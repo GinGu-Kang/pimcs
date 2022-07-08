@@ -11,14 +11,15 @@
 </head>
 <div layout:fragment="content"  class="content">
   <p class="title">
-    관리자 Q&A
+    회사 관리
   </p>
   <div id="paging"></div>
   <section class="action-btn-container">
-    <form th:action="@{/admin/qna/search}" method="get" >
+    <form th:action="@{/admin/company/search}" method="get" >
       <div class="inquery-mat-header-left-box">
         <select class="search-select" name="selectOption" >
-          <option>제목</option>
+          <option>회사 이름</option>
+          <option>회사 코드</option>
         </select>
         <div class="search-input-container">
           <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
@@ -35,26 +36,26 @@
   <table class="table pimcs-table">
     <thead>
     <th scope="col" class="text-center">번호</th>
-    <th scope="col" class="text-center">제목</th>
-    <th scope="col" class="text-center">비밀글 여부</th>
-    <th scope="col" class="text-center">작성자</th>
-    <th scope="col" class="text-center">등록일</th>
-    <th scope="col" class="text-center">답변여부</th>
+    <th scope="col" class="text-center">설립 일자</th>
+    <th scope="col" class="text-center">회사 이름</th>
+    <th scope="col" class="text-center">회사 코드</th>
+    <th scope="col" class="text-center">대표 이름</th>
+    <th scope="col" class="text-center">대표 이메일</th>
+    <th scope="col" class="text-center">전화 번호</th>
 
     </thead>
     <tbody id="pimcs-tbody" class="pimcs-tbody">
 
-    <th:block th:each="question,i:${questionList}">
-      <tr class="worker-tr"  th:onclick="|location.href='@{/admin/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
-        <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
-        <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
-        <td  th:text="${question.getTitle()}"></td>
-        <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
-        <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
-        <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
-        <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
-        <td th:if="${question.getAnswer()!=null}">완료</td>
-        <td th:unless="${question.getAnswer()!=null}">미완료</td>
+    <th:block th:each="company,i:${companyList}">
+      <tr class="worker-tr"  th:onclick="|location.href='@{/admin/company/view/?companyId={companyId}(companyId=${company.getId()})}'|">
+        <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
+        <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
+        <td  th:text="${company.getCreatedAt()}"></td>
+        <td  th:text="${company.getCompanyName()}"></td>
+        <td  th:text="${company.getCompanyCode()}"></td>
+        <td  th:text="${company.getCeoName()}"></td>
+        <td  th:text="${company.getCeoEmail()}"></td>
+        <td  th:text="${company.getContactPhone()}"></td>
       </tr>
     </th:block>
     </tbody>
@@ -67,9 +68,9 @@
 
 
     /*<![CDATA[*/
-    let totalPage = "[[${questionPage.getTotalPages()}]]";
-    let size = "[[${questionPage.getSize()}]]";
-    let currentPage = "[[${questionPage.getNumber()}]]";
+    let totalPage = "[[${companyPage.getTotalPages()}]]";
+    let size = "[[${companyPage.getSize()}]]";
+    let currentPage = "[[${companyPage.getNumber()}]]";
     /*]]>*/
     //파라미터 값 가져오기
     const searchParams = new URLSearchParams(location.search);

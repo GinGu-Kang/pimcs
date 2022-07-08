@@ -73,6 +73,22 @@ public class AdminService {
     public Page<Company> findAllCompany(Pageable pageable){
         return companyRepository.findAll(pageable);
     }
+    //회사 검색
+    public Page<Company> filterCompany(String keyword,String selectOption,Pageable pageable){
+
+        Page<Company> searchCompanys =  null ;
+
+        switch (selectOption){
+            case "회사 코드":
+                searchCompanys =companyRepository.findByCompanyCodeLike("%"+keyword+"%",pageable);
+                break;
+            default:
+                searchCompanys =companyRepository.findByCompanyNameLike("%"+keyword+"%",pageable);
+                break;
+        };
+
+        return searchCompanys;
+    }
 
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);

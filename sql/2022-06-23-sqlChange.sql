@@ -353,8 +353,34 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
                                                         PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
+-- 기기 소유확인 테이블
+CREATE TABLE IF NOT EXISTS `pimcs`.`ownDevice` (
+                                                         `id` INT NOT NULL AUTO_INCREMENT,
+                                                         `createdAt` DATETIME NULL,
+                                                         `serialNumber` VARCHAR(45) NULL,
+                                                         `companyId` INT NOT NULL,
+                                                         PRIMARY KEY (`id`),
+                                                         INDEX `fk_ownDevice_company1_idx` (`companyId` ASC) VISIBLE,
+                                                         INDEX `fk_ownDevice_serialNumber_company1_idx` (`serialNumber` ASC) VISIBLE,
+                                                         CONSTRAINT `fk_ownDevice_company1`
+                                                             FOREIGN KEY (`companyId`)
+                                                                 REFERENCES `pimcs`.`company` (`id`)
+                                                                 ON DELETE cascade)
 
+    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `pimcs`.`sendHistory` (
+                                                         `id` INT NOT NULL AUTO_INCREMENT,
+                                                         `createdAt` DATETIME NULL,
+                                                         `history` BLOB NULL,
+                                                         `matOrderId` INT NOT NULL,
+                                                         PRIMARY KEY (`id`),
+                                                         INDEX `fk_matOrderId_company1_idx` (`matOrderId` ASC) VISIBLE,
+                                                         CONSTRAINT `fk_matOrderId_company1`
+                                                             FOREIGN KEY (`matOrderId`)
+                                                                 REFERENCES `pimcs`.`matOrder` (`id`)
+                                                                 ON DELETE cascade)
 
+    ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

@@ -43,10 +43,11 @@
         <span th:class="write-value" th:text="ads"></span>
       </div>
       <hr>
-      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsa"></span><button type="button" class="delete close">X</button></p>
+      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsa"></span><i class="bi bi-x-lg delete"></i></p>
       <hr>
     </section>
   </section>
+  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/company/list}">회사 목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">매트 추가</a></p>
 </div>
 </div>
 </html>

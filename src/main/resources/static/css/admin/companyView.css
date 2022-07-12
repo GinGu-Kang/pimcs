@@ -194,4 +194,7 @@ pre{
 .company .delete{
     position: absolute;
     right: 0px;
+    line-height: 20px;
+    right: 10px;
+    cursor: pointer;
 }

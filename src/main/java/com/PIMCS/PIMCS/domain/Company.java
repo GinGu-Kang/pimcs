@@ -50,6 +50,9 @@ public class Company {
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
   private List<User> companyWorker=new ArrayList<>();
 
+  @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+  private List<OwnDevice> ownDeviceList=new ArrayList<>();
+
   public Company() {
 
   }

@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -44,6 +43,9 @@ public class MatOrder {
 
   @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
   private List<MatCategoryOrder> matCategoryOrderList;
+
+  @OneToOne(mappedBy = "matOrder",fetch = FetchType.EAGER)
+  private SendHistory sendHistory;
 
 
 

@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 public class SendHistory {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,9 +24,10 @@ public class SendHistory {
     @CreationTimestamp
     private Timestamp createdAt;
 
-    private String histroy;
+    private String history;
 
-    @OneToOne(mappedBy = "sendHistory",fetch = FetchType.EAGER)
+    @OneToOne
+    @JoinColumn(name="matOrderId")
     private MatOrder matOrder;
 
 

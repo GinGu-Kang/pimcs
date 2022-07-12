@@ -25,6 +25,10 @@ public class OwnDevice {
     private Timestamp createdAt;
     private String serailNumber;
 
+    @ManyToOne
+    @JoinColumn(name = "compnayId")
+    private Company company;
+
 
 
     public OwnDevice() {

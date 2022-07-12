@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface CompanyRepository extends JpaRepository<Company,Integer> {
 
 //    @EntityGraph(value = "User.userRoles")
-    @EntityGraph(attributePaths = {"ownDevice"})
-    Optional<Company> findByCompanyId(Integer companyId);
+//    @EntityGraph(attributePaths = {"ownDevice"})
+//    Optional<Company> findByCompanyId(Integer companyId);
     @EntityGraph(value = "Company.companyWorker")
     Optional<Company> findByCompanyCode(String companyCode);
     Page<Company> findByCompanyCodeLike(String companyCode, Pageable pageable);

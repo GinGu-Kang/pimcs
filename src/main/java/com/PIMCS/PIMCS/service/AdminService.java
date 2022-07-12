@@ -146,8 +146,20 @@ public class AdminService {
         return searchOrders;
     }
 
-    public MatOrder findOrder(Integer questionId){
-        return matOrderRepository.findById(questionId).get();
+    public MatOrder findOrder(Integer orderId){
+        return matOrderRepository.findById(orderId).get();
+    }
+
+    public MatOrder modifyDeposit(Integer orderId,Boolean isDeposit){
+        MatOrder matOrder=matOrderRepository.getOne(orderId);
+
+        if(isDeposit){
+            matOrder.setDepositStatus(1);
+        }else{
+            matOrder.setDepositStatus(0);
+        }
+
+        return matOrderRepository.save(matOrder);
     }
 
 

@@ -9,10 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -86,6 +83,7 @@ public class AdminController {
     }
 
 
+
     @GetMapping("qna/list")
     public String adminQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                 Model model){
@@ -156,14 +154,28 @@ public class AdminController {
         return "admin/orderList";
     }
 
-    @GetMapping("order/view")
-    public String detailOrder(Model model,Integer matId){
-        MatOrder matOrder = adminService.findOrder(matId);
+    @GetMapping("order/view/{orderId}")
+    public String detailOrder(Model model,@PathVariable Integer orderId){
+        MatOrder matOrder = adminService.findOrder(orderId);
         User orderer=matOrder.getUser();
         Company orderCompany=matOrder.getCompany();
         model.addAttribute(matOrder);
         model.addAttribute(orderer);
         model.addAttribute(orderCompany);
+        return "admin/orderView";
+    }
+
+    @PutMapping("order/deposit/{orderId}")
+    public String depositModify(Model model,@PathVariable Integer orderId,Boolean isDeposit){
+        MatOrder matOrder = adminService.modifyDeposit(orderId,isDeposit);
+
+        User orderer=matOrder.getUser();
+        Company orderCompany=matOrder.getCompany();
+
+        model.addAttribute(matOrder);
+        model.addAttribute(orderer);
+        model.addAttribute(orderCompany);
+
         return "admin/orderView";
     }
 

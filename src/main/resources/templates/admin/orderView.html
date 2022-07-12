@@ -68,6 +68,7 @@
   </section>
   <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a></p>
   <script>
+
     function deliverySave(){
       let result = confirm("배송된 기기의 시리얼이 일치 합니까?");
       let duplicateCheck = 0;
@@ -84,6 +85,8 @@
       }
 
     }
+
+
 
     function inputFormChange(){
       let changeButton=$("#form-change-button")
@@ -116,6 +119,37 @@
         alert("취소되었습니다");
       }
     }
+    function depositChange(){
+
+
+
+      /*<![CDATA[*/
+      let matOrderId = "/order/deposit/"+"[[${matOrder.getId()}]]";
+      /*]]>*/
+
+      $.ajax({
+        url:matOrderId,
+        type:'put',
+        data:{email:email},
+        beforeSend : function(xhr)
+        {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+          xhr.setRequestHeader(header, token);
+        },
+        success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다
+          if(isEmail){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+            $('.email_already').css("display", "none");
+            $('.email_ok').css("display","inline-block");
+
+          } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+            $('.email_already').css("display","inline-block");
+            $('.email_ok').css("display", "none");
+          }
+        },
+        error:function(){
+          alert("에러입니다");
+        }
+      });
+    };
   </script>
 </div>
 

@@ -55,7 +55,7 @@
         <tbody id="pimcs-tbody" class="pimcs-tbody">
 
         <th:block th:each="matOrder,i:${matOrderList}">
-            <tr class="matOrder-tr" th:onclick="|location.href='@{/admin/order/view/?matId={matId}(matId=${matOrder.getId()})}'|">
+            <tr class="matOrder-tr" th:onclick="'location.href=\''+ @{/admin/order/view/{id}(id=${matOrder.getId()})} + '\''">
                 <td class="text-center" th:text="${matOrder.getCreatedAt()}"></td>
                 <td class="text-center" th:text="${matOrder.getUser().getEmail()}"></td>
                 <td class="text-center" th:text="${matOrder.getCompany().getCompanyName()}"></td>

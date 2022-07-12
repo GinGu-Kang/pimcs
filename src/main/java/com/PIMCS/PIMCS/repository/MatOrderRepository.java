@@ -15,4 +15,5 @@ public interface MatOrderRepository extends JpaRepository<MatOrder,Integer> {
     List<MatOrder> findByCompany(Company company);
     Page<MatOrder> findAll(Pageable pageable);
     Page<MatOrder> findByDepositerNameLikeAndTotalPriceBetween(String depositerName,Integer totalPriceStart,Integer totalPriceEnd,Pageable pageable);
+    MatOrder getOne(Integer id);
 }

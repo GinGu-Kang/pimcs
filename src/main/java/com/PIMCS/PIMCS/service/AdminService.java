@@ -19,10 +19,11 @@ public class AdminService {
     private final QuestionRepository questionRepository;
     private final OrderMailFrameRepository orderMailFrameRepository;
     private final CompanyRepository companyRepository;
+    private final OwnDeviceRepository ownDeviceRepository;
 
 
     @Autowired
-    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
@@ -30,6 +31,7 @@ public class AdminService {
         this.questionRepository = questionRepository;
         this.orderMailFrameRepository = orderMailFrameRepository;
         this.companyRepository = companyRepository;
+        this.ownDeviceRepository = ownDeviceRepository;
     }
 
 
@@ -160,6 +162,14 @@ public class AdminService {
         }
 
         return matOrderRepository.save(matOrder);
+    }
+
+    /*회사 기기 매핑*/
+    //csv 형태로 그냥 저장
+    //wjw
+    public void addOwnDevice(String ownDeviceCsvList){
+        System.out.println(ownDeviceCsvList);
+//        return ownDeviceRepository.saveAll(ownDeviceList);
     }
 
 

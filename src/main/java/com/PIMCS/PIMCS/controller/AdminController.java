@@ -164,18 +164,10 @@ public class AdminController {
         model.addAttribute(orderCompany);
         return "admin/orderView";
     }
-
+    @ResponseBody
     @PutMapping("order/deposit/{orderId}")
-    public String depositModify(Model model,@PathVariable Integer orderId,Boolean isDeposit){
+    public String depositModify(@PathVariable Integer orderId,Boolean isDeposit){
         MatOrder matOrder = adminService.modifyDeposit(orderId,isDeposit);
-
-        User orderer=matOrder.getUser();
-        Company orderCompany=matOrder.getCompany();
-
-        model.addAttribute(matOrder);
-        model.addAttribute(orderer);
-        model.addAttribute(orderCompany);
-
         return "admin/orderView";
     }
 

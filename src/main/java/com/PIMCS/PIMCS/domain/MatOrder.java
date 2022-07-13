@@ -21,6 +21,7 @@ public class MatOrder {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private int totalPrice;
+  private int totalCnt;
   private String deliveryAddress;
   private String postCode;
   private long depositStatus;
@@ -43,6 +44,9 @@ public class MatOrder {
 
   @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
   private List<MatCategoryOrder> matCategoryOrderList;
+
+
+
 
   @OneToOne(mappedBy = "matOrder",fetch = FetchType.EAGER)
   private SendHistory sendHistory;

@@ -187,3 +187,8 @@ pre{
 
     text-align: -webkit-center;
 }
+
+/*입금상태*/
+.depositState{
+    color: greenyellow;
+}

@@ -22,20 +22,7 @@
                     </div>
                     <div class="self-input-section" id="self-input">
                         <strong>직접 입력:</strong>
-                        <div class="self-input-item">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
-                            <input th:type="text" class="form-control" placeholder="시리얼을 입력하세요">
+                        <div id="self-input-item" class="self-input-item">
                         </div>
                     </div>
                     <div class="input-result-section">
@@ -68,8 +55,8 @@
                     입금이 완료되었습니까?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">예</button>
-                    <button type="button" class="btn btn-primary">아니오</button>
+                    <button id="depositComplete" type="button" class=" btn btn-secondary" data-bs-dismiss="modal">예</button>
+                    <button id="depositIncomplete" type="button" class="btn btn-primary">아니오</button>
                 </div>
             </div>
         </div>

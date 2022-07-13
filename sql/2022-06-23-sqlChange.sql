@@ -215,6 +215,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `userEmail` VARCHAR(60) NOT NULL,
                                                   `companyId` INT NULL,
+                                                  `totalCnt` Int NULL,
                                                   `totalPrice` Int NULL,
                                                   `deliveryAddress` VARCHAR(60) NULL,
                                                   `postCode` VARCHAR(40) NULL,

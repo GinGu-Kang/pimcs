@@ -28,7 +28,7 @@ html{
     width: 50%;
     display: none;
 }
-.self-input-item{
+.self-input-item, .input-device{
     height: 400px;
     overflow: auto;
     margin-top: 10px;
@@ -37,7 +37,6 @@ html{
     width: 50%;
 }
 .input-device{
-    margin-top: 14px;
 }
 .input-device p{
     margin-bottom: 10px;

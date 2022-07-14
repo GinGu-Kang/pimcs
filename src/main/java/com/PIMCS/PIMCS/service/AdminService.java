@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -167,9 +169,23 @@ public class AdminService {
     /*회사 기기 매핑*/
     //csv 형태로 그냥 저장
     //wjw
-    public void addOwnDevice(String ownDeviceCsvList){
-        System.out.println(ownDeviceCsvList);
-//        return ownDeviceRepository.saveAll(ownDeviceList);
+    public boolean addOwnDeviceAndSendHistory(Integer orderId, List<String> deviceSerialList , Integer companyId){
+        List<OwnDevice> ownDeviceList = new ArrayList<OwnDevice>();
+        for (String deviceSerial:deviceSerialList
+             ) {
+            OwnDevice ownDevice = OwnDevice.builder()
+                    .serailNumber(deviceSerial)
+                    .company(companyRepository.getOne(companyId))
+                    .build();
+            ownDeviceList.add(ownDevice);
+        }
+        for (OwnDevice ownDevice:ownDeviceList){
+            System.out.println(ownDevice.getSerailNumber());    
+        }
+
+//        ownDeviceRepository.saveAll()
+
+        return true;
     }
 
 

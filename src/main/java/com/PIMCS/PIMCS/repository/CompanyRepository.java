@@ -18,4 +18,5 @@ public interface CompanyRepository extends JpaRepository<Company,Integer> {
     Optional<Company> findByCompanyCode(String companyCode);
     Page<Company> findByCompanyCodeLike(String companyCode, Pageable pageable);
     Page<Company> findByCompanyNameLike(String companyName, Pageable pageable);
+    Company getOne(Integer companyId);
 }

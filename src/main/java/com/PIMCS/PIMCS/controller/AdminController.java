@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
@@ -169,6 +172,14 @@ public class AdminController {
     public String depositModify(@PathVariable Integer orderId,Boolean isDeposit){
         MatOrder matOrder = adminService.modifyDeposit(orderId,isDeposit);
         return "admin/orderView";
+    }
+
+    @ResponseBody
+    @PostMapping("order/{orderId}/owndevice")
+    public Boolean ownDeviceAndSendHistorySave(@PathVariable Integer orderId, @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList , Integer companyId){
+        adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
+
+        return true;
     }
 
 

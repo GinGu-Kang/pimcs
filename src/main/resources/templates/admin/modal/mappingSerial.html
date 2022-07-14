@@ -14,30 +14,30 @@
 
                     <div class="img-section text-right csv-input" id="csv-input">
                         <strong>CSV 입력:</strong>
-
                         <label for="product-img-file" class="img-view text-size-between-middle-small text-center">
                             <span>파일을 입력해주세요</span>
                         </label>
                         <input type="file" style="display: none;" id="product-img-file" name="productImage" class="product-img-file" />
                     </div>
+
                     <div class="self-input-section" id="self-input">
-                        <strong>직접 입력:</strong>
+                        <strong>직접 입력<br><br><br></strong>
                         <div id="self-input-item" class="self-input-item">
                         </div>
                     </div>
+
                     <div class="input-result-section">
-                        <div class="img-section text-right csv-input">
-                            <strong >입력된 기기:</strong>
-                            <section class="input-device">
-                                <p><mark >ws1010</mark></p>
-                                <p><mark >ws1010</mark></p>
-                            </section>
+                        <div class="img-section text-right">
+                            <strong >입력된 기기<br><br>
+                                총 주문 대수: <span class="orderCnt"></span></strong>
+                            <form id="input-device" class="input-device">
+                            </form >
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
 <!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"></button>-->
-                    <button id="form-change-button" type="button" class="btn btn-primary" onclick="inputFormChange()">직접 입력</button>
+                    <button id="form-change-button" type="button" class="btn btn-primary" onclick="inputFormChange()" >직접 입력</button>
                     <button type="button" class="btn btn-primary" onclick="deliverySave()">저장</button>
                 </div>
             </div>

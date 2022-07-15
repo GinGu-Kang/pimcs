@@ -191,3 +191,7 @@ pre{
 .depositState{
     color: greenyellow;
 }
+
+.sendHistory{
+    display: initial;
+}

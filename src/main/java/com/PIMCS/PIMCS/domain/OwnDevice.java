@@ -23,10 +23,10 @@ public class OwnDevice {
     @Column(updatable =false)
     @CreationTimestamp
     private Timestamp createdAt;
-    private String serailNumber;
+    private String serialNumber;
 
     @ManyToOne
-    @JoinColumn(name = "compnayId")
+    @JoinColumn(name = "companyId")
     private Company company;
 
 

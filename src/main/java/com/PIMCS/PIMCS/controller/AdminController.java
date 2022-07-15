@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -176,10 +177,10 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("order/{orderId}/owndevice")
-    public Boolean ownDeviceAndSendHistorySave(@PathVariable Integer orderId, @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList , Integer companyId){
-        adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
+    public HashMap<String,String> ownDeviceAndSendHistorySave(@PathVariable Integer orderId, @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList , Integer companyId){
+        HashMap<String,String> resultMap = adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
 
-        return true;
+        return resultMap;
     }
 
 

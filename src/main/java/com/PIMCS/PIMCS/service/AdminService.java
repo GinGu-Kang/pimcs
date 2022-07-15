@@ -6,9 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,10 +23,11 @@ public class AdminService {
     private final OrderMailFrameRepository orderMailFrameRepository;
     private final CompanyRepository companyRepository;
     private final OwnDeviceRepository ownDeviceRepository;
+    private final SendHistoryRepository sendHistoryRepository;
 
 
     @Autowired
-    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository, SendHistoryRepository sendHistoryRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
@@ -34,6 +36,7 @@ public class AdminService {
         this.orderMailFrameRepository = orderMailFrameRepository;
         this.companyRepository = companyRepository;
         this.ownDeviceRepository = ownDeviceRepository;
+        this.sendHistoryRepository = sendHistoryRepository;
     }
 
 
@@ -166,26 +169,73 @@ public class AdminService {
         return matOrderRepository.save(matOrder);
     }
 
+
     /*회사 기기 매핑*/
     //csv 형태로 그냥 저장
-    //wjw
-    public boolean addOwnDeviceAndSendHistory(Integer orderId, List<String> deviceSerialList , Integer companyId){
+    //sendHistory 중복체크
+    @Transactional
+    public HashMap<String,String> addOwnDeviceAndSendHistory(Integer orderId, List<String> deviceSerialList , Integer companyId){
         List<OwnDevice> ownDeviceList = new ArrayList<OwnDevice>();
-        for (String deviceSerial:deviceSerialList
-             ) {
-            OwnDevice ownDevice = OwnDevice.builder()
-                    .serailNumber(deviceSerial)
-                    .company(companyRepository.getOne(companyId))
+        List<OwnDevice> ownDeviceDuplicationCheckList = new ArrayList<OwnDevice>();
+        String ownDeviceListCsv ="";
+        String message="";
+        HashMap<String,String> resultMap = new HashMap<String,String>();
+        MatOrder matOrder= matOrderRepository.getById(orderId);
+        //기기 중복 체크
+        ownDeviceDuplicationCheckList=ownDeviceRepository.findAllBySerialNumberIn(deviceSerialList);
+
+        //sendHistory 중복 체크
+        if(matOrder.getSendHistory()!=null){
+
+            message="이미 배송이 완료되었습니다.";
+
+            resultMap.put("message",message);
+            resultMap.put("isError","true");
+
+        }else if (ownDeviceDuplicationCheckList.size()!=0){
+
+            message="기기가 중복되었습니다. \n중복된 기기: ";
+
+            for (OwnDevice duplicateDevice:ownDeviceDuplicationCheckList
+            ) {
+                message+=duplicateDevice.getSerialNumber()+",";
+            }
+
+            resultMap.put("message",message);
+            resultMap.put("isError","true");
+
+        }else{
+            message="저장이 완료 되었습니다.";
+            ownDeviceListCsv=String.join(",",deviceSerialList);
+            //배송된 기기 내역
+            SendHistory sendHistory = SendHistory
+                    .builder()
+                    .matOrder(matOrder)
+                    .history(ownDeviceListCsv)
                     .build();
-            ownDeviceList.add(ownDevice);
-        }
-        for (OwnDevice ownDevice:ownDeviceList){
-            System.out.println(ownDevice.getSerailNumber());    
+
+            //회사와 구매한 기기 매핑
+            for (String deviceSerial:deviceSerialList
+            ) {
+                OwnDevice ownDevice = OwnDevice.builder()
+                        .serialNumber(deviceSerial)
+                        .company(companyRepository.getOne(companyId))
+                        .build();
+                ownDeviceList.add(ownDevice);
+            }
+
+            matOrder.setDeliveryStatus(1);
+            matOrderRepository.save(matOrder);
+            sendHistoryRepository.save(sendHistory);
+            ownDeviceRepository.saveAll(ownDeviceList);
+            resultMap.put("message",message);
+            resultMap.put("isError","false");
         }
 
-//        ownDeviceRepository.saveAll()
 
-        return true;
+
+
+        return resultMap;
     }
 
 

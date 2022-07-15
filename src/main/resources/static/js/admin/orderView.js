@@ -24,12 +24,17 @@ function deliverySave(){
             {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
                 xhr.setRequestHeader(header, token);
             },
-            success:function(){
-                alert("저장되었습니다.");
+            success:function(resultMap){
 
-                location.reload();
+                if(resultMap['isError']=="true"){
+                    alert(resultMap['message']);
+                }else{
+                    alert(resultMap['message']);
+                    location.reload();
+                }
+
             },
-            error:function(msg){
+            error:function(){
                 alert("에러입니다");
             }
         });
@@ -42,7 +47,7 @@ function deliverySave(){
 //모달 직접입력 창 밑 입력된 기기 시리얼 input 창 동적생성
 for(let i = 0; i < totalCnt; i++){
     $("#self-input-item").append($('<span>'+(i+1)+'번 </span><input  id=self-device-'+i+' th:type="text" class="form-control self-device-item" placeholder="시리얼을 입력하세요">'));
-    $("#input-device").append($('<span>'+(i+1)+'번 </span> <input id=input-device-'+i+' name="input-device-item" th:type="text" class="form-control input-device-item" placeholder="시리얼을 입력하세요" >'));
+    $("#input-device").append($('<span>'+(i+1)+'번 </span> <input id=input-device-'+i+' name="input-device-item" th:type="text" class="form-control input-device-item" placeholder="시리얼을 입력하세요" required>'));
 }
 //직접입력시 입력된 기기 input에 serial 입력
 $(".self-device-item").keyup(function (){

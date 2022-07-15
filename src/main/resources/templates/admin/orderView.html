@@ -53,16 +53,15 @@
         <br>
       </th:block>
       <p><span th:class="write-label" id="totalPrice">총 금액</span><span th:class="write-value" th:text="${matOrder.getTotalPrice()}"></span></p>
-      <p class="sub-title">
-        배송된 기기
-      </p>
-      <th:block th:each="matCategoryOrder:${matOrder.getMatCategoryOrderList()}">
-        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 주문갯수'"></span><span class="write-value cnt" th:text="${matCategoryOrder.getOrderCnt()} "></span></p>
-        <input class="orderCnt" type="hidden" th:value="${matCategoryOrder.getOrderCnt()}">
-        <hr>
-        <p ><span th:class="write-label" th:text="${matCategoryOrder.getMatCategory().getMatCategoryName()}+' 기기가격'"></span><span th:class="write-value" th:text="${matCategoryOrder.getMatCategory().getMatPrice()}"></span></p>
-        <hr>
-        <br>
+
+      <th:block th:if="${matOrder.getSendHistory()}!=null">
+        <p class="sub-title">
+          배송된 내역
+        </p>
+        <th:block  th:each="sendDevice,i:${matOrder.getSendHistory().getHistory().split(',')}">
+          <span th:text="${i.count}+'.'"></span> <span th:text="${sendDevice}"></span>
+          <hr>
+        </th:block>
       </th:block>
       <p class="sub-title">
         입금 상태 :

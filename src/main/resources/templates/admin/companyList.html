@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link rel="stylesheet"  href="/css/admin/adminQnaList.css">
+  <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+  <p class="title">
+    회사 관리
+  </p>
+  <div id="paging"></div>
+  <section class="action-btn-container">
+    <form th:action="@{/admin/company/search}" method="get" >
+      <div class="inquery-mat-header-left-box">
+        <select class="search-select" name="selectOption" >
+          <option>회사 이름</option>
+          <option>회사 코드</option>
+        </select>
+        <div class="search-input-container">
+          <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+        </div>
+      </div>
+    </form>
+
+
+  </section>
+  <!--DESKTOP PAGINATION-->
+  <div aria-label="Page navigation" class="d-flex justify-content-center">
+    <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+  </div>
+  <table class="table pimcs-table">
+    <thead>
+    <th scope="col" class="text-center">번호</th>
+    <th scope="col" class="text-center">설립 일자</th>
+    <th scope="col" class="text-center">회사 이름</th>
+    <th scope="col" class="text-center">회사 코드</th>
+    <th scope="col" class="text-center">대표 이름</th>
+    <th scope="col" class="text-center">대표 이메일</th>
+    <th scope="col" class="text-center">전화 번호</th>
+
+    </thead>
+    <tbody id="pimcs-tbody" class="pimcs-tbody">
+
+    <th:block th:each="company,i:${companyList}">
+      <tr class="worker-tr"  th:onclick="|location.href='@{/admin/company/view/?companyId={companyId}(companyId=${company.getId()})}'|">
+        <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
+        <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
+        <td  th:text="${company.getCreatedAt()}"></td>
+        <td  th:text="${company.getCompanyName()}"></td>
+        <td  th:text="${company.getCompanyCode()}"></td>
+        <td  th:text="${company.getCeoName()}"></td>
+        <td  th:text="${company.getCeoEmail()}"></td>
+        <td  th:text="${company.getContactPhone()}"></td>
+      </tr>
+    </th:block>
+    </tbody>
+  </table>
+
+
+
+  <script >
+
+
+
+    /*<![CDATA[*/
+    let totalPage = "[[${companyPage.getTotalPages()}]]";
+    let size = "[[${companyPage.getSize()}]]";
+    let currentPage = "[[${companyPage.getNumber()}]]";
+    /*]]>*/
+    //파라미터 값 가져오기
+    const searchParams = new URLSearchParams(location.search);
+
+    var keyword = searchParams.get('keyword');
+    var selectOption = searchParams.get('selectOption');
+    console.log(keyword)
+
+    currentPage = parseInt(currentPage) + 1;
+    $("#desktop-pagination").twbsPagination({
+      totalPages:totalPage,
+      visiblePages:size,
+      startPage: currentPage,
+      initiateStartPageClick:false,
+      prev:'<',
+      next:'>',
+      first:'',
+      last:'',
+      onPageClick: function (event, page) {
+        if (keyword!=null)
+          location.href=`${location.pathname}?page=${page}&size=${size}&keyword=${keyword}&selectOption=${selectOption}`;
+        else{
+          location.href=`${location.pathname}?page=${page}&size=${size}`
+        }
+      }
+    });
+  </script>
+</div>
+
+</html>

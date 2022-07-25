@@ -152,6 +152,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
     }
     public boolean emailCheck(String email) {
+        System.out.println("asdfasdf");
         boolean isEmail = userRepository.findByEmail(email).isEmpty();
         return isEmail;
     }

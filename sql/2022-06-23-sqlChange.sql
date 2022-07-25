@@ -131,12 +131,13 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
                                              `recentlyNoticeDate` DATETIME NULL,
                                              `isSendEmail` TINYINT(1) NULL,
                                              `matLocation` VARCHAR(45) NULL,
-                                             `currentInventory` int not null default 0,
                                              `productOrderCnt` INT NULL,
                                              `boxWeight` INT NULL,
                                              `battery` INT NULL,
+                                             `communicationStatus` INT default 1,
                                              `createdAt` DATETIME NULL,
                                              `updatedate` DATETIME NULL,
+
                                              PRIMARY KEY (`id`),
                                              UNIQUE INDEX `serial_number_UNIQUE` (`serialNumber` ASC) VISIBLE,
                                              INDEX `fk_mat_product1_idx` (`productId` ASC) VISIBLE,
@@ -214,6 +215,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `userEmail` VARCHAR(60) NOT NULL,
                                                   `companyId` INT NULL,
+                                                  `totalCnt` Int NULL,
                                                   `totalPrice` Int NULL,
                                                   `deliveryAddress` VARCHAR(60) NULL,
                                                   `postCode` VARCHAR(40) NULL,
@@ -344,9 +346,6 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`userRole` (
     ENGINE = InnoDB;
 
 
--- -----------------------------------------------------
--- Table `pimcs`.`answer`
--- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
                                                         `id` INT NOT NULL AUTO_INCREMENT,
                                                         `greeting` BLOB NULL,
@@ -355,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
                                                         PRIMARY KEY (`id`))
     ENGINE = InnoDB;
 
-
+-- 기기 소유확인 테이블
 CREATE TABLE IF NOT EXISTS `pimcs`.`ownDevice` (
                                                          `id` INT NOT NULL AUTO_INCREMENT,
                                                          `createdAt` DATETIME NULL,

@@ -59,6 +59,7 @@ public class OrderService {
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
         Integer totalPrice=0;
+        Integer totalCnt=0;
         User user=userRepository.findByEmail(secUserCustomForm.getUsername()).get();
         String[] emailSednList=new String[]{secUserCustomForm.getUsername(),"wisp212@gmail.com"};
         String deviceAmount="";
@@ -75,12 +76,14 @@ public class OrderService {
             matCategoryOrder.setMatOrder(matOrder);
             matCategoryOrder.setMatCategory(matCategory);
 
+            totalCnt+=matCategoryOrder.getOrderCnt();
             totalPrice+=matCategoryOrder.getOrderCnt()*matCategory.getMatPrice();
             deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+" 대\n" +
                     matCategoryOrder.getMatCategory().getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
         }
         System.out.println(deviceAmount);
         matOrder.setMatCategoryOrderList(matCategoryOrderList);
+        matOrder.setTotalCnt(totalCnt);
         matOrder.setTotalPrice(totalPrice);
         matOrderRepository.save(matOrder);
 

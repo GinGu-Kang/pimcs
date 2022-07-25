@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns="http://www.w3.org/1999/html" layout:decorate="~{layouts/default}">
+<head>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+  <link rel="stylesheet"  href="/css/admin/companyView.css">
+
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+</head>
+<div layout:fragment="content"  class="content">
+
+  <p class="title">
+    회사 상세 정보
+  </p>
+  <section class="qa-container">
+    <section th:class="company">
+      <p class="sub-title">
+        회사 정보
+      </p>
+      <div th:class="qna-title">
+        <span th:class="write-label" >주문자 메일</span>
+        <span th:class="write-value" th:text="asd"></span>
+      </div>
+      <hr>
+      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsadsa"></span></p>
+      <hr>
+      <p ><span th:class="write-label">주문회사</span><span th:class="write-value" th:text="dsa"></span></p>
+      <hr>
+      <p ><span th:class="write-label">회사 코드</span><span th:class="write-value" th:text="dsa"></span></p>
+      <hr>
+      <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="ads"></span></p>
+      <hr>
+      <p ><span th:class="write-label">희망 배송일</span><span th:class="write-value" th:text="dsa"></span></p>
+
+      <p class="sub-title">
+        구매 기기
+      </p>
+      <div th:class="qna-title">
+        <span th:class="write-label" >주문자 메일</span>
+        <span th:class="write-value" th:text="ads"></span>
+      </div>
+      <hr>
+      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsa"></span><i class="bi bi-x-lg delete"></i></p>
+      <hr>
+    </section>
+  </section>
+  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/company/list}">회사 목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">매트 추가</a></p>
+</div>
+</div>
+</html>
+<!--  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a></p>-->
+<!--  <script>-->
+<!--    function deliverySave(){-->
+<!--      let result = confirm("배송된 기기의 시리얼이 일치 합니까?");-->
+<!--      let duplicateCheck = 0;-->
+<!--      if(result){-->
+<!--        if(duplicateCheck){-->
+<!--          alert("저장되었습니다.");-->
+<!--        }else {-->
+<!--          alert("중복된 기기가 존재합니다.(WS@)!@))");-->
+<!--        }-->
+
+<!--        //  orderview로 새로고침 이후 맨 밑에 배송된 기기들 보여주기 이메일 전송하기-->
+<!--      } else {-->
+<!--        alert("취소되었습니다.");-->
+<!--      }-->
+
+<!--    }-->
+
+<!--    function inputFormChange(){-->
+<!--      let changeButton=$("#form-change-button")-->
+<!--      if(changeButton.text()=="CSV 입력"){-->
+<!--        $("#csv-input").css("display","block")-->
+<!--        $("#self-input").css("display","none")-->
+<!--        changeButton.text("직접 입력")-->
+<!--      }-->
+<!--      else{-->
+<!--        $("#csv-input").css("display","none")-->
+<!--        $("#self-input").css("display","block")-->
+<!--        changeButton.text("CSV 입력")-->
+<!--      }-->
+
+
+<!--    }-->
+
+
+<!--    function isDeposit(){-->
+<!--      let isChange = confirm("입금상태를 변경 하시겠습니까?");-->
+<!--      let result = 0;-->
+<!--      if(isChange){-->
+<!--        result = confirm("확인을 누르시면 입금완료상태로 변경 됩니다.")-->
+<!--        if(result){-->
+<!--          alert("입금 완료 상태로 변경되었습니다.");-->
+<!--        }else {-->
+<!--          alert("입금 미완료 상태로 변경되었습니다.");-->
+<!--        }-->
+<!--      }else {-->
+<!--        alert("취소되었습니다");-->
+<!--      }-->
+<!--    }-->
+<!--  </script>-->
+</div>
+
+
+
+</div>
+
+</html>

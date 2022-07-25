@@ -9,10 +9,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -56,6 +57,36 @@ public class AdminController {
         adminService.removeMatCategory(DBId);
         return true;
     }
+    /*회사 관리*/
+    @GetMapping("company/list")
+    public String companyList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                               Model model){
+        Page<Company> companyPage=adminService.findAllCompany(pageable);
+        model.addAttribute("companyPage",companyPage);
+        model.addAttribute("companyList",companyPage.getContent());
+
+        return "admin/companyList";
+    }
+    //회사 조회
+    @GetMapping("company/search")
+    public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
+        System.out.println(keyword);
+        Page<Company> companyPage=adminService.filterCompany(keyword,selectOption,pageable);
+        model.addAttribute("companyPage",companyPage);
+        model.addAttribute("companyList",companyPage.getContent());
+        return "admin/companyList";
+    }
+
+    /*회사 상세 보기*/
+    @GetMapping("company/view")
+    public String companyDetail(Model model,Integer companyId){
+        System.out.println(companyId+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+//        Question question = adminService.findQuestion(companyId);
+//        model.addAttribute(question);
+        return "admin/companyView";
+    }
+
+
 
     @GetMapping("qna/list")
     public String adminQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
@@ -127,15 +158,29 @@ public class AdminController {
         return "admin/orderList";
     }
 
-    @GetMapping("order/view")
-    public String detailOrder(Model model,Integer matId){
-        MatOrder matOrder = adminService.findOrder(matId);
+    @GetMapping("order/view/{orderId}")
+    public String detailOrder(Model model,@PathVariable Integer orderId){
+        MatOrder matOrder = adminService.findOrder(orderId);
         User orderer=matOrder.getUser();
         Company orderCompany=matOrder.getCompany();
         model.addAttribute(matOrder);
         model.addAttribute(orderer);
         model.addAttribute(orderCompany);
         return "admin/orderView";
+    }
+    @ResponseBody
+    @PutMapping("order/deposit/{orderId}")
+    public String depositModify(@PathVariable Integer orderId,Boolean isDeposit){
+        MatOrder matOrder = adminService.modifyDeposit(orderId,isDeposit);
+        return "admin/orderView";
+    }
+
+    @ResponseBody
+    @PostMapping("order/{orderId}/owndevice")
+    public HashMap<String,String> ownDeviceAndSendHistorySave(@PathVariable Integer orderId, @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList , Integer companyId){
+        HashMap<String,String> resultMap = adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
+
+        return resultMap;
     }
 
 

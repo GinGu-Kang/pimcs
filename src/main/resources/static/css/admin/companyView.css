@@ -28,7 +28,7 @@ html{
     width: 50%;
     display: none;
 }
-.self-input-item, .input-device{
+.self-input-item{
     height: 400px;
     overflow: auto;
     margin-top: 10px;
@@ -37,6 +37,7 @@ html{
     width: 50%;
 }
 .input-device{
+    margin-top: 14px;
 }
 .input-device p{
     margin-bottom: 10px;
@@ -187,11 +188,13 @@ pre{
     text-align: -webkit-center;
 }
 
-/*입금상태*/
-.depositState{
-    color: greenyellow;
+.company p{
+    position: relative;
 }
-
-.sendHistory{
-    display: initial;
+.company .delete{
+    position: absolute;
+    right: 0px;
+    line-height: 20px;
+    right: 10px;
+    cursor: pointer;
 }

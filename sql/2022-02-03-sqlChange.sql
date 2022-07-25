@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
                                              `productOrderCnt` INT NULL,
                                              `boxWeight` INT NULL,
                                              `battery` INT NULL,
-                                             `communicationStatus` INT default 1,
+--                                             `communicationStatus` INT default 1,
                                              `createdAt` DATETIME NULL,
                                              `updatedate` DATETIME NULL,
 

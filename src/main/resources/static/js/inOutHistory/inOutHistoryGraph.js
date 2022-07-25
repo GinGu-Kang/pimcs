@@ -6,6 +6,9 @@ const CHECKED_MAT_STORAGE_KEY = "checkedMat";
  *  체크된 매트값 설정
  */
 const setCheckedData = function(matGraphForms){
+
+    console.log("setCheckedData");
+    console.log(matGraphForms);
     matGraphForms = JSON.parse(matGraphForms.replaceAll("&quot;","\""));
     //GET방시 로드시
     if(matGraphForms['serialNumberList'] == null && matGraphForms['productNameList'] == null){
@@ -63,6 +66,11 @@ const setCheckedData = function(matGraphForms){
         
     }
     
+    setCsvDate(
+        $("#start-date").val(),
+        $("#end-date").val(),
+        matGraphForms['timeDimension']
+    )
 
     localStorage.removeItem(CHECKED_MAT_STORAGE_KEY);
     setLocalStorage(CHECKED_MAT_STORAGE_KEY,matGraphForms);
@@ -90,7 +98,7 @@ const lazyLoadGraph = new IntersectionObserver(entries => {
         
         if($(".time-dimension.active").text() == "HOUR"){
             resultData = loadGraphData("/inout/history/graph/hour",2, true);
-    
+
         }else if($(".time-dimension.active").text() == "DAY"){
             resultData = loadGraphData("/inout/history/graph/day",2, true);
         }else if($(".time-dimension.active").text() == "WEEK"){
@@ -145,7 +153,7 @@ const loadGraphData = function(url,size,isLazyLoad){
         productNameList.slice(nextIndex, nextIndex+size)
     )
     let queryString = new URLSearchParams(formData).toString();
-    
+    console.log(queryString);
     $(".loading-spinner").show();
     let resultData = loadPostData({
         url: url,
@@ -166,7 +174,7 @@ const loadGraphData = function(url,size,isLazyLoad){
  */
 const createGraphDay = function(graphDataArr){
     console.log(graphDataArr);
-    $(".canvas-container").empty();
+    // $(".canvas-container").empty();
     for(let i=0; i<graphDataArr.length; i++){
         let graphData = graphDataArr[i];
         const config = getGraphConfig({
@@ -292,14 +300,29 @@ $(document).on("click",".inquiry-btn",function(e){
         resultData = loadGraphData("/inout/history/graph/month",2, false);
     }
 
-    
-
-    
-
-
-    if(resultData != undefined)
-            createGraphDay(resultData);
+    if(resultData != undefined){
+        $(".canvas-container").empty();
+        setCsvDate($("#start-date").val(), $("#end-date").val(), $(".time-dimension.active").text());
+        createGraphDay(resultData);
+    }
 });
+
+const setCsvDate = (startDate, endDate, timeDimension)=>{
+
+    
+    $("#csv-download-form input[name='startDate']").val(startDate);
+    $("#csv-download-form input[name='endDate']").val(endDate);
+    $("#csv-download-form input[name='timeDimension']").val(timeDimension);
+
+    if(timeDimension == "MONTH" || timeDimension == "WEEK"){
+        
+        $("#csv-download-form input[name='startDate']").val(startDate+"-01");
+        const endDateObj =  new Date(endDate.split('-')[0],endDate.split('-')[1],0)
+        $("#csv-download-form input[name='endDate']").val(endDate+"-"+endDateObj.getDate());
+        
+    }
+
+}
 
 
 /**
@@ -361,10 +384,6 @@ const toISOMonth = function(date){
  * csv 다운로드 클릭시
  */
 $(document).on("click",".csv-download-btn",function(){
-    $("#csv-form-dynamic-append-container").empty();
-    let startDate = $("#start-date").val();
-    let endDate = $("#end-date").val();
-    let timeDimension = $(".time-dimension.active").text();
     let matGraphForms = getLocalStorage(CHECKED_MAT_STORAGE_KEY);
     if(matGraphForms == null) return;
 
@@ -373,10 +392,8 @@ $(document).on("click",".csv-download-btn",function(){
     
     if(productNames.length != serialnumbers.length) alert("에러");    
 
-    $("#csv-download-form input[name='startDate']").val(startDate);
-    $("#csv-download-form input[name='endDate']").val(endDate);
-    $("#csv-download-form input[name='timeDimension']").val(timeDimension);
-
+    $("#csv-form-dynamic-append-container").empty();
+    
     //csv다운로드폼에 상품명과 serialnumber 추가
     for(let i=0; i<productNames.length; i++){
         let inputStr = `<input name='serialNumberList[${i}]' value='${serialnumbers[i]}'/>`;

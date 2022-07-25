@@ -154,7 +154,7 @@ const createMatRow = function(mat, length){
         row +=        `<img class='${bigImgClass}' src='${mat.product != null ? mat.product.productImage : null}'/>`;
         row +=    `</td>`;
 
-        row +=    `<td class='${importantInfoColor}' columnName='inventoryCnt'>${currentInventory}</td>`;
+        row +=    `<td class='${importantInfoColor}' columnName='inventoryCnt'>${(mat.product != null ? currentInventory : 'N/A')}</td>`;
         row +=    `<td class='${importantInfoColor}' columnName='threshold'>${threshold}</td>`;
         row +=    `<td columnName='calcMethod'>${calcMethod}</td>`;
         row +=    `<td columnName='productWeight'>${(mat.product != null ? mat.product.productWeight+"g" : 'N/A')}</td>`

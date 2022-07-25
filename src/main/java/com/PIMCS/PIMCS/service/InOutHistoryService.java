@@ -82,7 +82,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(productNameList.get(i));
+            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
             LocalDateTime startLocalDateTime = LocalDateTime.of(
                     startDate,
                     LocalTime.of(00,00)
@@ -143,7 +143,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(productNameList.get(i));
+            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
             //startDate, endDate 초기
             startDate = matGraphForm.getStartDate();
             endDate = matGraphForm.getEndDate();
@@ -193,7 +193,7 @@ public class InOutHistoryService {
             ResultGraph resultGraph = new ResultGraph();
 
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(productNameList.get(i));
+            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
             //startDate, endDate초기화
             startDate = LocalDate.of(matGraphForm.getStartDate().getYear(), matGraphForm.getStartDate().getMonth(), 7);
             endDate = matGraphForm.getEndDate();
@@ -243,7 +243,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(productNameList.get(i));
+            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
             //startDate, endDate 초기화
             startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.lengthOfMonth());
             endDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), endDate.lengthOfMonth());
@@ -275,11 +275,14 @@ public class InOutHistoryService {
     public void downloadInOutHistoryCsvService(Company company, InOutHistorySearchForm inOutHistorySearchForm,  Writer writer) throws IOException{
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
-        String[] columns = {"입/출고시간","제품이름","제품코드","장소","입/출고 상태","갯수"};
+        String[] columns = {"입/출고시간","시리얼 번호","제품이름","제품코드","장소","입/출고 상태","갯수"};
         csvPrinter.printRecord(columns);
 
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         List<InOutHistory> inOutHistories = null;
+        System.out.println("===========");
+        System.out.println(inOutHistorySearchForm.getStartDate());
+        System.out.println("===========");
         //입출고 내역 조회내용있으면 조회된 내역만 다운로드
         if(inOutHistorySearchForm.getQuery() != "" || (inOutHistorySearchForm.getStartDate() != null && inOutHistorySearchForm.getEndDate() != null)){
             inOutHistories = dynamoDBUtils.searchInOutHistory(company, inOutHistorySearchForm);
@@ -294,6 +297,7 @@ public class InOutHistoryService {
         for(InOutHistory inOutHistory : inOutHistories){
             List<String> record = new ArrayList<>();
             record.add(inOutHistory.getCreatedAt().toString());
+            record.add(inOutHistory.getMatSerialNumber());
             record.add(inOutHistory.getProductName());
             record.add(inOutHistory.getProductCode());
             record.add(inOutHistory.getMatLocation());
@@ -309,7 +313,7 @@ public class InOutHistoryService {
      */
     public void downloadInOutHistoryGraphCsvService(Company company, MatGraphForm matGraphForm,  Writer writer) throws IOException{
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
-
+        System.out.println(matGraphForm);
         List<ResultGraph> resultGraphs = null;
         if(matGraphForm.getTimeDimension().equals("HOUR"))
             resultGraphs = inOutHistoryHourGraphService(company, matGraphForm);

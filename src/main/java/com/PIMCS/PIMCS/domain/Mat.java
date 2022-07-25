@@ -1,22 +1,20 @@
 package com.PIMCS.PIMCS.domain;
 
-import com.fasterxml.jackson.annotation.*;
-import jdk.jfr.DataAmount;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @ToString(exclude = {"company","product"})
 @Entity
-public class Mat {
+public class Mat  implements Comparable<Mat>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -38,7 +36,6 @@ public class Mat {
     private Timestamp recentlyNoticeDate; //최근통지 일시
     @Transient
     private int currentInventory; //현재재고
-    private int communicationStatus;
     private int battery;
 
     @CreationTimestamp
@@ -46,7 +43,9 @@ public class Mat {
     @UpdateTimestamp
     private Timestamp updatedate;
 
+
     public int getCurrentInventory(){
+        if(product == null) return 0;
 
         if(calcMethod == 1){ // 계산방식 갯수일때
             return inventoryWeight  / product.getProductWeight();
@@ -61,5 +60,10 @@ public class Mat {
             }
         }
         return null;
+    }
+
+    @Override
+    public int compareTo(Mat o) {
+        return this.serialNumber.compareTo(o.getSerialNumber());
     }
 }

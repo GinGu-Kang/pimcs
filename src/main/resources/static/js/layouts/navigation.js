@@ -20,6 +20,12 @@ const URL_NAV_ITEM_MAPPING = {
     "/admin/email/frame/modify": "#emailFrame",
     "/admin/matcategory/add": "#matCategory",
     "/admin/matcategory/read": "#matCategoryRead",
+    "/order/history": "#order-history",
+    "/order/history/search": "#order-history",
+    "/mat/log": "#matLog",
+    "/mat/log/search": "#matLog",
+    "/product/log": "#productLog",
+    "/product/log/search": "#productLog"
 
 }
 jQuery(function ($) {

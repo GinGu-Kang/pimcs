@@ -12,4 +12,6 @@ public class InOutHistorySearchForm {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+
+
 }

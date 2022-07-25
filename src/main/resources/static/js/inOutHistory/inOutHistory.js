@@ -99,11 +99,42 @@ $(document).on("click",".csv-download-btn",function(){
 
     if(location.search != ''){
         let params =  new URLSearchParams(location.search);
-        query = params.get('query');
-        startDate = params.get('startDate');
-        endDate = params.get('endDate');    
+        query = params.get('query') == null ? '' : params.get('query');
+        startDate = params.get('startDate') == null ? '' : params.get('startDate');
+        endDate = params.get('endDate') == null ? '' : params.get('endDate');
         
         
     }
     location.href=`/download/inout/history/csv?query=${query}&startDate=${startDate}&endDate=${endDate}`;
+});
+
+/**
+ * 조회 버튼클릭시
+ */
+
+
+$(document).on("click","#inout-history-inquiry-btn",function(e){
+    
+    e.preventDefault();
+
+    if($("#start-date").val() != '' || $("#end-date").val() != ''){
+
+        if($("#start-date").val() == ''){
+            alert("시작날짜를 선택해주세요.");
+            return false;
+        }
+        if($("#end-date").val() == ''){
+            alert("종료날짜를 선택해주세요.");
+            return false;
+        }
+
+        if($("#start-date").val() > $("#end-date").val()){
+            alert("시작날짜가 종료날짜 보다 더 큽니다.");
+            return false;
+        }
+
+    }
+
+    $("#inout-history-form").submit();
+
 });

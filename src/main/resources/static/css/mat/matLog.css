@@ -1,0 +1,138 @@
+
+/*HEADER*/
+.header-item1{
+    display: flex;
+}
+
+/*SEARCH FORM*/
+.header-item1 .search-form{
+    display: flex;
+    width: 75%;
+}
+/*search input*/
+.header-item1 .input-group-shadow{
+    width: 30%;
+    height: 25px;
+}
+.header-item1 .bi-search,
+.header-item1 .bi-calendar-check {
+    color: #afafaf;
+    margin-right: 10px;
+}
+.bi-calendar-check{
+    margin-left: 6px;
+}
+/*header button*/
+.rect {
+    width: 61px;
+    height: 25px;
+    margin-left: 5px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 3px 6px 0 rgb(0 0 0 / 16%);
+    background-color: #fff;
+    color: #333;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+
+
+.show-item-container{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+}
+
+
+.show-item-select {
+    width: 45px;
+    height: 24px;
+    border: 2px solid #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px 0 rgb(0 0 0 / 16%);
+    background-color: #fafafa;
+    color: #4282ff;
+    font-size: 12px;
+    margin: 0 5px;
+}
+
+
+/*button*/
+button{
+    border: 0;
+    outline: 0;
+    background: #fff;
+}
+
+.pimcs-blue-btn{
+    width: 61px;
+    height: 25px;
+    font-size: 12px;
+    margin-left: 6px;
+}
+
+/*HEADER ITEM2*/
+
+.header-item2{
+    width: 96%;
+    margin-right: 124px;
+    margin-top: 16px;
+}
+
+
+.header-item2 .square {
+    width: 28px;
+    height: 28px;
+    border: 2px solid #ffffff;
+    border-radius: 3px;
+    margin-right: 14px;
+    background-color: #fff;
+    box-shadow: 0 3px 6px 0 rgb(0 0 0 / 16%);
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-item2 .bi-graph-up{
+    color: #4282ff;
+}
+
+.header-item2 .rect{
+    width: 93px;
+    height: 30px;
+
+}
+/*TABLE*/
+.pimcs-table-container{
+    margin-top: 14px;
+}
+.pimcs-table{
+    width: 98%;
+}
+/* in out*/
+.in, .out{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 76px;
+    height: 24px;
+    border-radius: 8px;
+    background-color: #67d689;
+    color: #fff;
+    
+}
+.out{
+    background-color: #eb6a6a;
+}
+/*datepicker*/
+.datepicker-container{
+    width: 310px !important;
+    margin-left: 20px;
+}

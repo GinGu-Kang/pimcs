@@ -62,6 +62,12 @@
   color: #ffffff;
 }
 
+.measurement-btn {
+  width: 50px;
+  
+  margin-left: 10px;
+}
+
 /*SEARCH INPUT*/
 
 /* .search-input-container::after{

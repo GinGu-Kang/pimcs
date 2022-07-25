@@ -1,10 +1,11 @@
 package com.PIMCS.PIMCS;
 
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
-import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
+import com.PIMCS.PIMCS.form.DynamoResultPage;
+import com.PIMCS.PIMCS.noSqlDomain.*;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.service.InOutHistoryService;
@@ -17,6 +18,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,6 +40,9 @@ public class AWSDynamoTest {
     private  MatRepository matRepository;
     @Autowired
     InOutHistoryService inOutHistoryService;
+    @Autowired
+    private  DynamoQuery dynamoQuery;
+
     @Test
     public void createTable(){
         CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(InOutHistory.class)
@@ -70,6 +76,128 @@ public class AWSDynamoTest {
 
     }
 
+    @Test
+    public void createOrderHistory(){
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(OrderHistory.class)
+                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+        Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
+    }
+
+    @Test
+    public void createDynamoMat(){
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(DynamoMat.class)
+                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+        createTableRequest.getGlobalSecondaryIndexes().forEach(
+                idx -> idx
+                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
+                        .withProjection(new Projection().withProjectionType("ALL"))
+        );
+        Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
+    }
+
+
+    @Test
+    public void createDynamoProduct()
+    {
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(DynamoProduct.class)
+                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+        createTableRequest.getGlobalSecondaryIndexes().forEach(
+                idx -> idx
+                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
+                        .withProjection(new Projection().withProjectionType("ALL"))
+        );
+        Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
+    }
+
+    @Test
+    public void createMatLog(){
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(MatLog.class)
+                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+        createTableRequest.getGlobalSecondaryIndexes().forEach(
+                idx -> idx
+                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
+                        .withProjection(new Projection().withProjectionType("ALL"))
+        );
+        Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
+    }
+
+    @Test
+    public void createProductLog(){
+        CreateTableRequest createTableRequest = dynamoDBMapper.generateCreateTableRequest(ProductLog.class)
+                .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
+
+//        createTableRequest.getGlobalSecondaryIndexes().forEach(
+//                idx -> idx
+//                        .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L))
+//                        .withProjection(new Projection().withProjectionType("ALL"))
+//        );
+        Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
+    }
+
+
+    @Test
+    public void putProductLog(){
+        for(int i=0; i<15; i++){
+            ProductLog productLog = ProductLog.builder()
+                    .companyId(1)
+                    .productName("하이항")
+                    .productCode("code_1234")
+                    .userName("poapo")
+                    .userEmail("254@qq.com")
+                    .action("수정")
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            dynamoDBMapper.save(productLog);
+        }
+    }
+    @Test
+    public void putMatLog(){
+        for(int i=0; i<10; i++){
+            MatLog matLog = MatLog.builder()
+                    .companyId(1)
+                    .matSerialNumber("WS01E210001")
+                    .matLocation("창고")
+                    .userName("poapo")
+                    .userEmail("ryongho1997@gmail.com")
+                    .action("생성")
+                    .createdAt(LocalDateTime.now())
+                    .build();
+            dynamoDBMapper.save(matLog);
+
+        }
+    }
+    @Test
+    public void putOrderHistory() throws InterruptedException {
+        Mat mat= matRepository.findBySerialNumber("WS01E210003").get();
+
+        List emailArr = new ArrayList();
+        emailArr.add("ryongho1997@gmail.com");
+        for(int i=0; i<1; i++) {
+            OrderHistory orderHistory = OrderHistory.builder()
+                    .companyId(1)
+                    .createdAt(LocalDateTime.now())
+                    .matSerialNumber(mat.getSerialNumber())
+                    .location(mat.getMatLocation())
+                    .mailRecipients(emailArr)
+                    .productName("abc")
+                    .productCode("code_w3")
+                    .inventoryCnt(1)
+                    .threshold(2)
+                    .orderCnt(5)
+                    .build();
+            dynamoDBMapper.save(orderHistory);
+            Thread.sleep(10);
+        }
+
+
+
+    }
+
+
 
     @Test
     public void putItemTest(){
@@ -93,18 +221,18 @@ public class AWSDynamoTest {
     /*    Assertions.assertThat(inOutHistory.getMatSerialNumber()).isNotEmpty();*/
     }
 
-    @Test
-    public void putEmailItem(){
-        OrderMailRecipients orderMailRecipients = new OrderMailRecipients();
-        List<String> list = new ArrayList<>();
-        list.add("jdijo");
-        list.add("jidoj");
-        orderMailRecipients.setMatSerialNumber("jsiojoi");
-        orderMailRecipients.setMailRecipients(list);
-        orderMailRecipients.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
-
-        dynamoDBMapper.save(orderMailRecipients);
-    }
+//    @Test
+//    public void putEmailItem(){
+//        OrderMailRecipients orderMailRecipients = new OrderMailRecipients();
+//        List<String> list = new ArrayList<>();
+//        list.add("jdijo");
+//        list.add("jidoj");
+//        orderMailRecipients.setMatSerialNumber("jsiojoi");
+//        orderMailRecipients.setMailRecipients(list);
+//        orderMailRecipients.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
+//
+//        dynamoDBMapper.save(orderMailRecipients);
+//    }
 
     @Test
     public void kdopkpd(){
@@ -306,6 +434,83 @@ public class AWSDynamoTest {
 
 //        dynamoDBUtils.updateMat(mats);
     }
+
+    @Test
+    public void queryi(){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":v1",new AttributeValue().withN("1"));
+
+
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("companyId = :v1")
+                .withExpressionAttributeValues(eav);
+
+        DynamoDBQueryExpression<InOutHistory> countqueryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withConsistentRead(false)
+                .withKeyConditionExpression("companyId = :v1")
+                .withExpressionAttributeValues(eav);
+
+
+
+        Pageable pageable = new Pageable() {
+            @Override
+            public int getPageNumber() {
+                return 1;
+            }
+
+            @Override
+            public int getPageSize() {
+                return 10;
+            }
+
+            @Override
+            public long getOffset() {
+                return 0;
+            }
+
+            @Override
+            public Sort getSort() {
+                return null;
+            }
+
+            @Override
+            public Pageable next() {
+                return null;
+            }
+
+            @Override
+            public Pageable previousOrFirst() {
+                return null;
+            }
+
+            @Override
+            public Pageable first() {
+                return null;
+            }
+
+            @Override
+            public Pageable withPage(int pageNumber) {
+                return null;
+            }
+
+            @Override
+            public boolean hasPrevious() {
+                return false;
+            }
+        };
+
+        DynamoResultPage dynamoResultPage = dynamoQuery.exePageQuery(InOutHistory.class, queryExpression,countqueryExpression,pageable);
+        System.out.println(dynamoResultPage.toString());
+    }
+
+    @Test
+    public void batchLoad(){
+        /*DynamoMat.update(dynamoQuery, );*/
+
+   }
 }
 
 

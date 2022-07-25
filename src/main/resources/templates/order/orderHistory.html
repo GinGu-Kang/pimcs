@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
     <head>
-        <title>입・출고 내역</title>
+        <title>발주 내역</title>
         
         <!--PAGINATION-->
         <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
-        <!--IN OUT HISTORY-->
-        <link rel="stylesheet" href="/css/inOutHistory/inOutHistory.css"/>
-        <script src="/js/inOutHistory/inOutHistory.js"></script>
+        
+        <link rel="stylesheet" href="/css/order/orderHistory.css"/>
+        <script src="/js/order/orderHistory.js"></script>
+
         <script>
             $(function(){
-              
-                /*<![CDATA[*/
+              /*<![CDATA[*/
                     let totalPages = "[[${dynamoResultPage.getTotalPage()}]]";
                     let page = "[[${dynamoResultPage.getPage()}]]";
                     let size = "[[${dynamoResultPage.getSize()}]]";
@@ -22,8 +22,7 @@
                     size: size,
                     totalPages: totalPages
                 });
-            
-                initShowItems();
+               
             })
           </script>
         
@@ -33,58 +32,69 @@
         <div class="header">
             <!--ITEM1-->
             <div class="header-item1">
-                <form class="search-form" id="inout-history-form" action="/inout/history/search">
+                <form class="search-form" id="order-history-form" action="/order/history/search">
                     <input type="hidden" name="page" th:value="1"/>
                     <input type="hidden" name="size" th:value="${dynamoResultPage.getSize()}"/>
                     <!--검색 input-->
                     <div class="input-group-shadow">
-                        <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
-                               class="pimcs-bd-group-input text-size-middle" 
-                               th:value="${inOutHistorySearchForm.getQuery()}"
-                               name="query"
-                              />
-                        <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
+                        
+                        <input 
+                               th:if="${searchForm != null && searchForm.getQuery() != ''}"
                                class="pimcs-bd-group-input text-size-middle" 
                                name="query"  
-                               placeholder="Search by product name"
+                               th:value="${searchForm.getQuery()}"
                                />
+                        
+                        <input 
+                            th:unless="${searchForm != null && searchForm.getQuery() != ''}"
+                            class="pimcs-bd-group-input text-size-middle" 
+                            name="query"  
+                            placeholder="Search by product name"
+                        />
+                        
                         <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
                     </div>
                     <div class="d-flex">
                         <!--select date-->
                         <div class="input-group-shadow datepicker-container">
-                            <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
+                            <input 
+                                    th:if="${searchForm != null && searchForm.getStartDate() != null}"
                                     type="date" 
                                     id="start-date"  
                                     class="pimcs-bd-group-input text-size-middle" 
                                     name="startDate" 
-                                    th:value="${inOutHistorySearchForm.getStartDate()}"
+                                    th:value="${searchForm.getStartDate()}"
                                     />
-                            <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getStartDate() != null}" 
+                            <input 
+                                th:unless="${searchForm != null && searchForm.getStartDate() != null}"
                                 type="date" 
                                 id="start-date"  
                                 class="pimcs-bd-group-input text-size-middle" 
-                                placeholder="Search by product name"
                                 name="startDate" 
-                            />
+                                />
+                            
 
                             <span class="input-group-text-shadow d-flex justify-content-center">~</span>
-                            <input  th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
+                            <input  
+                                    th:if="${searchForm != null && searchForm.getEndDate() != null}"
                                     type="date" 
                                     id="end-date" 
                                     class="pimcs-bd-group-input text-size-middle" 
                                     name="endDate" 
-                                    th:value="${inOutHistorySearchForm.getEndDate()}"
+                                    th:value="${searchForm.getEndDate()}"
                                 />
-                            <input  th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getEndDate() != null}" 
-                                    type="date" 
-                                    id="end-date" 
-                                    class="pimcs-bd-group-input text-size-middle" 
-                                    name="endDate" 
-                                />
+                            <input  
+                                th:unless="${searchForm != null && searchForm.getEndDate() != null}"
+                                type="date" 
+                                id="end-date" 
+                                class="pimcs-bd-group-input text-size-middle" 
+                                name="endDate" 
+                                
+                            />
+                            
                         </div>
                         
-                        <button class="pimcs-blue-btn inquiry-btn" id="inout-history-inquiry-btn">조회</button>
+                        <button class="pimcs-blue-btn inquiry-btn" id="order-inquiry-btn">조회</button>
                     </div>
                 </form>
 
@@ -138,30 +148,30 @@
             <table class="table pimcs-table">
                 <thead>
                     <tr class="text-size-middle">
-                        <th scope="col col-md-2" >입/출고 시간</th>
                         <th scope="col col-md-2" >시리얼 번호</th>
-                        <th scope="col col-md-2" >제품 이름</th>
-                        <th scope="col col-md-2" >제품 코드</th>
-                        <th scope="col col-md-2" >장소</th>
-                        <th scope="col col-md-2" >입/출고 상태</th>
-                        <th scope="col col-md-2" >갯수</th>
+                        <th scope="col col-md-2" >위치</th>
+                        <th scope="col col-md-2" >주문 이메일</th>
+                        <th scope="col col-md-2" >상품명</th>
+                        <th scope="col col-md-2" >상품코드</th>
+                        <th scope="col col-md-2" >현재재고</th>
+                        <th scope="col col-md-2" >임계값</th>
+                        <th scope="col col-md-2" >상품주문갯수</th>
+                        <th scope="col col-md-2" >발주 시간</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="inOutHistory : ${dynamoResultPage.getData()}">
+                    <tr th:each="orderHistory : ${dynamoResultPage.getData()}">
                         
-                        <td class="text-size-between-middle-samll" th:text="${#temporals.format(inOutHistory.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getMatSerialNumber()}"></td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getProductName()}"></td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getProductCode()}"></td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getMatLocation()}"></td>
-                        <td th:if="${inOutHistory.getInOutStatus.toString() == 'IN'}">
-                            <div class="in text-size-between-middle-samll">입고</div>
-                        </td>
-                        <td th:unless="${inOutHistory.getInOutStatus.toString() == 'IN'}">
-                            <div class="out text-size-between-middle-samll">출고</div>
-                        </td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getUpdateCnt()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getMatSerialNumber()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getLocation()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getMailRecipients().toString()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getProductName()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getProductCode()}"></td>
+                        
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getInventoryCnt()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getThreshold()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${orderHistory.getOrderCnt()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${#temporals.format(orderHistory.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></td>
                     </tr>
                 </tbody>
             </table>

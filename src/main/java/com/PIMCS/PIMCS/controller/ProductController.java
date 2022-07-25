@@ -1,10 +1,14 @@
 package com.PIMCS.PIMCS.controller;
 
+import com.PIMCS.PIMCS.Interface.FileStorage;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,9 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +26,15 @@ import java.util.List;
 @RequestMapping(value = "/product")
 public class ProductController {
 
+
     private final ProductService productService;
+    @Qualifier("fileStorage")
+    private final FileStorage fileStorage;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, FileStorage fileStorage) {
         this.productService = productService;
+        this.fileStorage = fileStorage;
     }
 
 
@@ -70,10 +76,7 @@ public class ProductController {
     public ResponseEntity<byte[]> loadProductImage(@PathVariable String fileName)  {
 
         try {
-            InputStream imageStream = new FileInputStream("/Users/gangjingu/Desktop/JG/workspace/media/" + fileName);
-            byte[] imageByteArray = new byte[0];
-            imageByteArray = imageStream.readAllBytes();
-            imageStream.close();
+            byte[] imageByteArray = fileStorage.read(fileName);
             return  new ResponseEntity<byte[]>(imageByteArray, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,5 +133,32 @@ public class ProductController {
     @ResponseBody
     public HashMap<String, Object> checkProductCode(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("productCode") String productCode){
         return productService.checkProductCodeSerivice(secUserCustomForm.getCompany(), productCode);
+    }
+
+    @GetMapping("/log")
+    public String productLog(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            @PageableDefault(size=10) Pageable pageable,
+            Model model){
+
+        DynamoResultPage dynamoResultPage = productService.productLogService(secUserCustomForm.getCompany(), pageable);
+
+        model.addAttribute("dynamoResultPage", dynamoResultPage);
+        model.addAttribute("searchForm", new InOutHistorySearchForm());
+        return "product/productLog.html";
+    }
+
+    @GetMapping("/log/search")
+    public String searchProductLog(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            @PageableDefault(size=10) Pageable pageable,
+            InOutHistorySearchForm searchForm,
+            Model model){
+
+        DynamoResultPage dynamoResultPage = productService.searchProductLogService(secUserCustomForm.getCompany(), searchForm, pageable);
+        model.addAttribute("dynamoResultPage", dynamoResultPage);
+        model.addAttribute("searchForm", searchForm);
+        return "product/productLog.html";
+
     }
 }

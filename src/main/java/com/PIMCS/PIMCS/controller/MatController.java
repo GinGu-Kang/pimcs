@@ -2,11 +2,14 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.*;
-import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
-import com.PIMCS.PIMCS.repository.MatRepository;
+import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.service.MatService;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Array;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,12 +26,14 @@ import java.util.List;
 public class MatController {
 
     private final MatService matService;
+    private final UserRepository userRepository;
 
 
     @Autowired
-    public MatController(MatService matService) {
+    public MatController(MatService matService, UserRepository userRepository) {
         this.matService = matService;
 
+        this.userRepository = userRepository;
     }
 
     @InitBinder
@@ -59,7 +62,8 @@ public class MatController {
     @PostMapping("/mat/create")
     public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm, Model model){
 
-        Mat mat = matService.createMat(matForm,secUserCustomForm.getCompany());
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        Mat mat = matService.createMat(matForm,secUserCustomForm.getCompany(), user);
 
         String mailRecipientsStr = String.join(",",matForm.getMailRecipients());
 
@@ -74,8 +78,8 @@ public class MatController {
     @PostMapping("/mat/update")
     @ResponseBody
     public HashMap<String,String> updateMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
-
-        return matService.updateMat(secUserCustomForm.getCompany(),matFormList);
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        return matService.updateMat(secUserCustomForm.getCompany(),matFormList, user);
     }
 
     /**
@@ -83,9 +87,9 @@ public class MatController {
      */
     @PostMapping("/mat/update/email")
     @ResponseBody
-    public HashMap<String, String> updateMatEmail(MailRecipientsForm mailRecipientsForm){
+    public HashMap<String, String> updateMatEmail(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MailRecipientsForm mailRecipientsForm){
         System.out.println(mailRecipientsForm.toString());
-        return matService.updateMatEmailService(mailRecipientsForm.getMailRecipients());
+        return matService.updateMatEmailService(mailRecipientsForm.getMailRecipients(), secUserCustomForm.getCompany());
     }
 
 
@@ -96,7 +100,8 @@ public class MatController {
     @PostMapping("/mat/delete")
     @ResponseBody
     public HashMap<String,Object> deleteMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
-        return matService.deleteMat(secUserCustomForm.getCompany(), matFormList);
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        return matService.deleteMat(secUserCustomForm.getCompany(), matFormList, user);
     }
 
     /**
@@ -120,5 +125,32 @@ public class MatController {
         matService.downloadMatCsvService(secUserCustomForm.getCompany(), matCsvForm, response.getWriter());
     }
 
+    @GetMapping("/mat/log")
+    public String matLog(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            @PageableDefault(size=10) Pageable pageable,
+            Model model){
+
+        DynamoResultPage dynamoResultPage = matService.matLogService(secUserCustomForm.getCompany(), pageable);
+
+        model.addAttribute("dynamoResultPage", dynamoResultPage);
+        model.addAttribute("searchForm", new InOutHistorySearchForm());
+        return "mat/matLog.html";
+    }
+
+    @GetMapping("/mat/log/search")
+    public String searchMatLog(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            @PageableDefault(size=10) Pageable pageable,
+            InOutHistorySearchForm searchForm,
+            Model model
+    ){
+        System.out.println(searchForm);
+
+        DynamoResultPage dynamoResultPage = matService.searchMatLogService(secUserCustomForm.getCompany(), searchForm, pageable);
+        model.addAttribute("dynamoResultPage", dynamoResultPage);
+        model.addAttribute("searchForm", searchForm);
+        return "mat/matLog.html";
+    }
 
 }

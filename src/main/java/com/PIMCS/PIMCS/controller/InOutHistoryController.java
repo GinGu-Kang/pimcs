@@ -50,8 +50,7 @@ public class InOutHistoryController {
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             @PageableDefault(size=10) Pageable pageable,
             Model model){
-        System.out.println("==========");
-        System.out.println(pageable.toString());
+
         DynamoResultPage dynamoResultPage = inOutHistoryService.inOutHistoryService(secUserCustomForm.getCompany(), pageable);
         model.addAttribute("dynamoResultPage",dynamoResultPage);
         return "inOutHistory/inOutHistory";

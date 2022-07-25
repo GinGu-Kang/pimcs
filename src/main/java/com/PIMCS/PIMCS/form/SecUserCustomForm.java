@@ -16,6 +16,7 @@ public class SecUserCustomForm extends User  {
     public SecUserCustomForm(String username, String password, Collection<? extends GrantedAuthority> authorities,Company company) {
         super(username, password, authorities);
         this.company = company;
+
     }
 
     public SecUserCustomForm(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities) {

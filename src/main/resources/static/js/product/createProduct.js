@@ -222,5 +222,30 @@ jQuery(function ($) {
         $(element).css("border-color","#a8c6ff");
     }
 
+
+    $(".measurement-btn").click(function(){
+        console.log("clicked");
+
+        const serialNumber = prompt("매트 시리얼번호");
+        if(serialNumber == ''){
+            alert('매트 시리얼번호를 입력해주세요.');
+            return;
+        }
+
+        const data = loadGetData({
+            url: "/api/device",
+            data:{
+                "serialNumber": serialNumber
+            }});
+        
+        console.log(data);
+        if(!data){
+            alert("상품을 매트에 올려주세요.");
+            return;
+        }
+        $("input[name='product.productWeight']").val(data.inventoryWeight);
+
+    });
+
 });
 

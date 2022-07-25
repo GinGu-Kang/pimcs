@@ -6,7 +6,9 @@ import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.form.DynamoResultPage;
 import com.PIMCS.PIMCS.form.InOutHistorySearchForm;
 import com.PIMCS.PIMCS.form.MatGraphForm;
+import com.PIMCS.PIMCS.noSqlDomain.DynamoMat;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
+import com.PIMCS.PIMCS.noSqlDomain.OrderHistory;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -43,6 +45,7 @@ public class DynamoDBUtils {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("companyId = :companyId")
                 .withScanIndexForward(false)
+                .withScanIndexForward(false)
                 .withExpressionAttributeValues(eav);
 
         List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
@@ -68,6 +71,20 @@ public class DynamoDBUtils {
     }
 
 
+    public DynamoResultPage loadOrderHistoryByCompany(Company company, Pageable pageable){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+                .withKeyConditionExpression("companyId = :companyId")
+                .withScanIndexForward(false)
+                .withExpressionAttributeValues(eav)
+                .withLimit(SCAN_LIMIT_SIZE);
+
+        List<OrderHistory> orderHistories = mapperQueryPage(queryExpression);
+        return createPagination(orderHistories, pageable);
+    }
+
+
     /**
      * 입출고 내역 검색
      */
@@ -81,7 +98,7 @@ public class DynamoDBUtils {
         eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
         eav.put(":query", new AttributeValue().withS(inOutHistorySearchForm.getQuery()));
         //startDate와 endDate null 아니면
-        if(inOutHistorySearchForm.getStartDate() != null && inOutHistorySearchForm.getStartDate() != null){
+        if(inOutHistorySearchForm.getStartDate() != null && inOutHistorySearchForm.getEndDate() != null){
             LocalDate endDate = inOutHistorySearchForm.getEndDate().plusDays(1);
             eav.put(":start", new AttributeValue().withS(inOutHistorySearchForm.getStartDate().toString()));
             eav.put(":end", new AttributeValue().withS(endDate.toString()));
@@ -134,7 +151,7 @@ public class DynamoDBUtils {
     /**
      * InoutHistory List를 pagination 만들기
      */
-    private DynamoResultPage createPagination(List<InOutHistory> inOutHistories, Pageable pageable){
+    private DynamoResultPage createPagination(List data, Pageable pageable){
         int pageNumebr = pageable.getPageNumber() + 1;
         int pageSize = pageable.getPageSize();
 
@@ -146,28 +163,32 @@ public class DynamoDBUtils {
         System.out.println(pageNumebr);
         System.out.println("pageSize: "+pageSize);
         try{
-            pageInOutHistories = inOutHistories.subList(
+            pageInOutHistories = data.subList(
                     end - pageSize ,
                     end
             );
         }catch (IndexOutOfBoundsException e){
-            pageInOutHistories = inOutHistories.subList(
+            pageInOutHistories = data.subList(
                     end - pageSize,
-                    inOutHistories.size()
+                    data.size()
             );
         }
 
-        int totalPageSize = (int)Math.ceil((double)inOutHistories.size() /pageSize);
+        int totalPageSize = (int)Math.ceil((double)data.size() /pageSize);
         totalPageSize = (totalPageSize == 0) ? 1 : totalPageSize;
 
         DynamoResultPage dynamoResultPage = DynamoResultPage.builder()
                 .page(pageNumebr)
                 .size(pageSize)
                 .totalPage(totalPageSize)
-                .inOutHistories(pageInOutHistories)
+                .data(pageInOutHistories)
                 .build();
         return dynamoResultPage;
     }
+
+
+
+
 
 
 
@@ -242,8 +263,8 @@ public class DynamoDBUtils {
         return result;
     }
 
-    public List<InOutHistory> mapperQueryPage(DynamoDBQueryExpression queryExpression){
-        List<InOutHistory> result = new ArrayList<>();
+    public List mapperQueryPage(DynamoDBQueryExpression queryExpression){
+        List result = new ArrayList<>();
         do {
             QueryResultPage<InOutHistory> queryPage = dynamoDBMapper.queryPage(InOutHistory.class, queryExpression);
             queryPage.getResults().forEach(inOutHistory -> result.add(inOutHistory));
@@ -258,148 +279,135 @@ public class DynamoDBUtils {
      * rdbms 수정시
      * dynamodb 매트위치 및 박스무게 수정
      */
-    public void updateMat(List<Mat> mats, Company company){
-        //요청 쿼리 만들기
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
-        String query = "";
-        for(int i=0; i<mats.size(); i++){
-            Mat mat = mats.get(i);
-            eav.put(":serialNumber"+i,new AttributeValue().withS(mat.getSerialNumber()));
-            query += "matSerialNumber = :serialNumber"+i;
-            if(i != mats.size()-1) query += " or ";
-        }
+//    public void updateMat(List<Mat> mats, Company company){
+//        //요청 쿼리 만들기
+//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+//        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
+//        String query = "";
+//        for(int i=0; i<mats.size(); i++){
+//            Mat mat = mats.get(i);
+//            eav.put(":serialNumber"+i,new AttributeValue().withS(mat.getSerialNumber()));
+//            query += "matSerialNumber = :serialNumber"+i;
+//            if(i != mats.size()-1) query += " or ";
+//        }
+//
+//        //select 쿼리실행
+//        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+//                .withIndexName("byConpanyId")
+//                .withConsistentRead(false)
+//                .withKeyConditionExpression("companyId = :companyId")
+//                .withFilterExpression(query)
+//                .withExpressionAttributeValues(eav)
+//                .withLimit(SCAN_LIMIT_SIZE);
+//
+//
+//        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
+//
+//        List<InOutHistory> result = new ArrayList<>();
+//        //dynamodb mat위치 및 박스무게 수정
+//        for(InOutHistory inOutHistory : inOutHistories){
+//            Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
+//            inOutHistory.setMatLocation(mat.getMatLocation());
+//            inOutHistory.setBoxWeight(mat.getBoxWeight());
+//            inOutHistory.setCalcMethod(mat.getCalcMethod());
+//            inOutHistory.setThreshold(mat.getThreshold());
+//
+//            result.add(inOutHistory);
+//        }
+//        //update 쿼리실행
+//        dynamoDBMapper.batchSave(result);
+//    }
 
-        //select 쿼리실행
-        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-                .withIndexName("byConpanyId")
-                .withConsistentRead(false)
-                .withKeyConditionExpression("companyId = :companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav)
-                .withLimit(SCAN_LIMIT_SIZE);
-
-
-        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
-
-        List<InOutHistory> result = new ArrayList<>();
-        //dynamodb mat위치 및 박스무게 수정
-        for(InOutHistory inOutHistory : inOutHistories){
-            Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
-            inOutHistory.setMatLocation(mat.getMatLocation());
-            inOutHistory.setBoxWeight(mat.getBoxWeight());
-            inOutHistory.setCalcMethod(mat.getCalcMethod());
-            inOutHistory.setThreshold(mat.getThreshold());
-
-            result.add(inOutHistory);
-        }
-        //update 쿼리실행
-        dynamoDBMapper.batchSave(result);
-    }
-
-    public void updateProduct(Company company, List<Product> products){
-
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
-        String query = "( ";
-        for(int i=0; i<products.size(); i++){
-            Product product = products.get(i);
-            eav.put(":productId"+i, new AttributeValue().withN(String.valueOf(product.getId())));
-            query += "productId = :productId"+i;
-            if(i != products.size()-1) query += " or ";
-        }
-        query += " )";
-
-
-
-    DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-                .withIndexName("byConpanyId")
-                .withConsistentRead(false)
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav)
-                .withLimit(SCAN_LIMIT_SIZE);
-
-
-        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
-
-        List<InOutHistory> result = new ArrayList<>();
-
-        for(InOutHistory inOutHistory : inOutHistories){
-            Product product = Product.findByProductId(products, inOutHistory.getProductId());
-            inOutHistory.setProductCode(product.getProductCode());
-            inOutHistory.setProductName(product.getProductName());
-            inOutHistory.setProductWeight(product.getProductWeight());
-
-            result.add(inOutHistory);
-        }
-
-        dynamoDBMapper.batchSave(result);
-    }
-
-
-    /**
-     * 주문메일을 dynamodb에 insert
-     */
-    public OrderMailRecipients putOrderMailRecipients(Mat mat, List<String> mailRecipients){
-        OrderMailRecipients orderMailRecipients = new OrderMailRecipients();
-
-        orderMailRecipients.setMatSerialNumber(mat.getSerialNumber());
-        orderMailRecipients.setMailRecipients(mailRecipients);
-        orderMailRecipients.setCreatedAt(LocalDateTime.of(LocalDate.now(), LocalTime.now()));
-
-        dynamoDBMapper.save(orderMailRecipients);
+//    public void updateProduct(Company company, List<Product> products){
+//
+//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+//        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+//        String query = "( ";
+//        for(int i=0; i<products.size(); i++){
+//            Product product = products.get(i);
+//            eav.put(":productId"+i, new AttributeValue().withN(String.valueOf(product.getId())));
+//            query += "productId = :productId"+i;
+//            if(i != products.size()-1) query += " or ";
+//        }
+//        query += " )";
+//
+//
+//
+//    DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
+//                .withIndexName("byConpanyId")
+//                .withConsistentRead(false)
+//                .withKeyConditionExpression("companyId=:companyId")
+//                .withFilterExpression(query)
+//                .withExpressionAttributeValues(eav)
+//                .withLimit(SCAN_LIMIT_SIZE);
+//
+//
+//        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
+//
+//        List<InOutHistory> result = new ArrayList<>();
+//
+//        for(InOutHistory inOutHistory : inOutHistories){
+//            Product product = Product.findByProductId(products, inOutHistory.getProductId());
+//            inOutHistory.setProductCode(product.getProductCode());
+//            inOutHistory.setProductName(product.getProductName());
+//            inOutHistory.setProductWeight(product.getProductWeight());
+//
+//            result.add(inOutHistory);
+//        }
+//
+//        dynamoDBMapper.batchSave(result);
+//    }
 
 
-        return orderMailRecipients;
-    }
-
-    public List<OrderMailRecipients> loadOrderMailRecipients(List<String> serialNumbers){
-
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        String query = "(";
-        for(int i=0; i<serialNumbers.size(); i++){
-            String serialNumber = serialNumbers.get(i);
-            eav.put(":serialNumber"+i,new AttributeValue().withS(serialNumber));
-            query += "matSerialNumber = :serialNumber"+i;
-            if(i != serialNumbers.size()-1) query += " or ";
-        }
-        query +=")";
-        System.out.println(query);
-
-        //select 쿼리실행
-        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-                .withKeyConditionExpression(query)
-                .withExpressionAttributeValues(eav);
-
-        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
-
-    }
 
 
-    public void updateOrderMailRecipients(List<OrderMailRecipients> list){
-        List<String> serialNumbers = OrderMailRecipients.getSerialNumberList(list);
-        List<OrderMailRecipients> findMailRecipients = loadOrderMailRecipients(serialNumbers);
-        List<OrderMailRecipients> save = new ArrayList<>();
+//
+//    public List<OrderMailRecipients> loadOrderMailRecipients(List<String> serialNumbers){
+//
+//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+//        String query = "(";
+//        for(int i=0; i<serialNumbers.size(); i++){
+//            String serialNumber = serialNumbers.get(i);
+//            eav.put(":serialNumber"+i,new AttributeValue().withS(serialNumber));
+//            query += "matSerialNumber = :serialNumber"+i;
+//            if(i != serialNumbers.size()-1) query += " or ";
+//        }
+//        query +=")";
+//        System.out.println(query);
+//
+//        //select 쿼리실행
+//        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
+//                .withKeyConditionExpression(query)
+//                .withExpressionAttributeValues(eav);
+//
+//        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
+//
+//    }
 
-        for(OrderMailRecipients o : findMailRecipients ){
-            OrderMailRecipients find = OrderMailRecipients.findBySerialNumber(o.getMatSerialNumber(), list);
-            o.setMailRecipients(find.getMailRecipients());
-            save.add(o);
-        }
 
-        dynamoDBMapper.batchSave(save);
-    }
+//    public void updateOrderMailRecipients(List<OrderMailRecipients> list){
+//        List<String> serialNumbers = OrderMailRecipients.getSerialNumberList(list);
+//        List<OrderMailRecipients> findMailRecipients = loadOrderMailRecipients(serialNumbers);
+//        List<OrderMailRecipients> save = new ArrayList<>();
+//
+//        for(OrderMailRecipients o : findMailRecipients ){
+//            OrderMailRecipients find = OrderMailRecipients.findBySerialNumber(o.getMatSerialNumber(), list);
+//            o.setMailRecipients(find.getMailRecipients());
+//            save.add(o);
+//        }
+//
+//        dynamoDBMapper.batchSave(save);
+//    }
 
-    public List<OrderMailRecipients> readMailBySerialNumber(String serialNumber){
-        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-        eav.put(":serialNumber", new AttributeValue().withS(serialNumber));
-        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-                .withKeyConditionExpression("matSerialNumber=:serialNumber")
-                .withExpressionAttributeValues(eav)
-                .withScanIndexForward(false);
-        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
-    }
+//    public List<OrderMailRecipients> readMailBySerialNumber(String serialNumber){
+//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+//        eav.put(":serialNumber", new AttributeValue().withS(serialNumber));
+//        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
+//                .withKeyConditionExpression("matSerialNumber=:serialNumber")
+//                .withExpressionAttributeValues(eav)
+//                .withScanIndexForward(false);
+//        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
+//    }
 
 
 }

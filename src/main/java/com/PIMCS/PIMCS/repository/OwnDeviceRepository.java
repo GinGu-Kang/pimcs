@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface OwnDeviceRepository extends JpaRepository<OwnDevice,Integer> {
     List<OwnDevice> findAllBySerialNumberIn(List<String> deviceSerialList);
+    void deleteAllBySerialNumberIn(List<String> ownDeviceList);
 
 }

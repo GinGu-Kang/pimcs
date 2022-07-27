@@ -10,7 +10,11 @@ function deliverySave(){
     var deviceSerialList = new Array(fileValue);
 
     for(var i=0; i<fileValue; i++){
-        deviceSerialList[i] = $("input[name='input-device-item']")[i].value;
+        if($("input[name='input-device-item']")[i].value!=""){
+            deviceSerialList[i] = $("input[name='input-device-item']")[i].value;
+        }else{
+            return alert("빈칸을 입력할 수 없습니다.")
+        }
     }
 
     if(result){
@@ -32,7 +36,6 @@ function deliverySave(){
                     alert(resultMap['message']);
                     location.reload();
                 }
-
             },
             error:function(){
                 alert("에러입니다");
@@ -46,14 +49,14 @@ function deliverySave(){
 
 //모달 직접입력 창 밑 입력된 기기 시리얼 input 창 동적생성
 for(let i = 0; i < totalCnt; i++){
-    $("#self-input-item").append($('<span>'+(i+1)+'번 </span><input  id=self-device-'+i+' th:type="text" class="form-control self-device-item" placeholder="시리얼을 입력하세요">'));
+    // $("#self-input-item").append($('<span>'+(i+1)+'번 </span><input  id=self-device-'+i+' th:type="text" class="form-control self-device-item" placeholder="시리얼을 입력하세요">'));
     $("#input-device").append($('<span>'+(i+1)+'번 </span> <input id=input-device-'+i+' name="input-device-item" th:type="text" class="form-control input-device-item" placeholder="시리얼을 입력하세요" required>'));
 }
-//직접입력시 입력된 기기 input에 serial 입력
-$(".self-device-item").keyup(function (){
-    let inputDeviceId=$(this).prop("id").replace("self-device-","#input-device-");
-    $(inputDeviceId).val($(this).val());
-})
+// //직접입력시 입력된 기기 input에 serial 입력
+// $(".self-device-item").keyup(function (){
+//     let inputDeviceId=$(this).prop("id").replace("self-device-","#input-device-");
+//     $(inputDeviceId).val($(this).val());
+// })
 
 $("#depositComplete, #depositIncomplete").on("click", function(){
     switch($(this).text()) {
@@ -67,8 +70,6 @@ $("#depositComplete, #depositIncomplete").on("click", function(){
 });
 
 function depositChange({isDeposit}){
-
-
 
 
     $.ajax({
@@ -92,18 +93,18 @@ function depositChange({isDeposit}){
 
 
 
-function inputFormChange(){
-    let changeButton=$("#form-change-button")
-    if(changeButton.text()=="CSV 입력"){
-        $("#self-input").css("display","none")
-        $("#csv-input").css("display","block")
-        changeButton.text("직접 입력")
-    }
-    else{
-        $("#csv-input").css("display","none")
-        $("#self-input").css("display","block")
-        changeButton.text("CSV 입력")
-    }
-
-
-}
+// function inputFormChange(){
+//     let changeButton=$("#form-change-button")
+//     if(changeButton.text()=="CSV 입력"){
+//         $("#self-input").css("display","none")
+//         $("#csv-input").css("display","block")
+//         changeButton.text("직접 입력")
+//     }
+//     else{
+//         $("#csv-input").css("display","none")
+//         $("#self-input").css("display","block")
+//         changeButton.text("CSV 입력")
+//     }
+//
+//
+// }

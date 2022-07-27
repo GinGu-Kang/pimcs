@@ -70,7 +70,13 @@
       </p>
     </section>
   </section>
-  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a></p>
+  <p id="list-p">
+    <a th:class="list-button"  th:href="@{/admin/order/list}">목록</a>
+    <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a>
+    <th:block th:if="${matOrder.getSendHistory()}==null">
+      <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a>
+    </th:block>
+  </p>
 
 
   <script>

@@ -5,6 +5,7 @@
   <meta name="_csrf" th:content="${_csrf.token}"/>
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <link rel="stylesheet"  href="/css/admin/companyView.css">
+  <script defer type="text/javascript" src="/js/admin/companyView.js"></script>
 
   <meta charset="UTF-8">
   <title>Title</title>
@@ -20,34 +21,38 @@
       <p class="sub-title">
         회사 정보
       </p>
-      <div th:class="qna-title">
-        <span th:class="write-label" >주문자 메일</span>
-        <span th:class="write-value" th:text="asd"></span>
-      </div>
       <hr>
-      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsadsa"></span></p>
+      <p ><span th:class="write-label">회사 이름</span><span th:class="write-value" th:text="${company.getCompanyName()}"></span></p>
       <hr>
-      <p ><span th:class="write-label">주문회사</span><span th:class="write-value" th:text="dsa"></span></p>
+      <p ><span th:class="write-label">회사 id</span><span th:class="write-value" th:text="${company.getId()}"></span></p>
       <hr>
-      <p ><span th:class="write-label">회사 코드</span><span th:class="write-value" th:text="dsa"></span></p>
+      <p ><span th:class="write-label">회사 코드</span><span th:class="write-value" th:text="${company.getCompanyCode()}"></span></p>
       <hr>
-      <p ><span th:class="write-label">작성일</span><span th:class="write-value" th:text="ads"></span></p>
+      <p ><span th:class="write-label">회사 주소</span><span th:class="write-value" th:text="${company.getCompanyAddress()}"></span></p>
       <hr>
-      <p ><span th:class="write-label">희망 배송일</span><span th:class="write-value" th:text="dsa"></span></p>
+      <p ><span th:class="write-label">연락처</span><span th:class="write-value" th:text="${company.getContactPhone()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">생성일</span><span th:class="write-value" th:text="${company.getCreatedAt()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">대표 이메일</span><span th:class="write-value" th:text="${company.getCeoEmail()}"></span></p>
+      <hr>
+      <p ><span th:class="write-label">대표 이름</span><span th:class="write-value" th:text="${company.getCeoName()}"></span></p>
 
-      <p class="sub-title">
-        구매 기기
-      </p>
-      <div th:class="qna-title">
-        <span th:class="write-label" >주문자 메일</span>
-        <span th:class="write-value" th:text="ads"></span>
-      </div>
-      <hr>
-      <p ><span th:class="write-label">입금자 이름</span><span th:class="write-value" th:text="dsa"></span><i class="bi bi-x-lg delete"></i></p>
-      <hr>
+
+      <th:block th:if="${company.getOwnDeviceList()}!=null">
+        <p class="sub-title">
+          구매 기기
+        </p>
+        <th:block  th:each="ownDevice,i:${company.getOwnDeviceList()}">
+          <p><label th:for="${ownDevice.getSerialNumber()}"><span th:text="${i.count}+'.'"></span> <span th:text="${ownDevice.getSerialNumber()}"></span></label><input class="serial" name="serial"  th:id="${ownDevice.getSerialNumber()}" type="checkbox" th:value="${ownDevice.getSerialNumber()}"></p>
+          <hr>
+        </th:block>
+      </th:block>
     </section>
   </section>
-  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/company/list}">회사 목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">매트 추가</a></p>
+  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/companies}">회사 목록</a>
+    <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">매트 추가</a>
+  </p>
 </div>
 </div>
 </html>

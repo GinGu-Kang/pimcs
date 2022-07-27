@@ -15,7 +15,7 @@
   </p>
   <div id="paging"></div>
   <section class="action-btn-container">
-    <form th:action="@{/admin/company/search}" method="get" >
+    <form th:action="@{/admin/companies}" method="get" >
       <div class="inquery-mat-header-left-box">
         <select class="search-select" name="selectOption" >
           <option>회사 이름</option>
@@ -47,7 +47,7 @@
     <tbody id="pimcs-tbody" class="pimcs-tbody">
 
     <th:block th:each="company,i:${companyList}">
-      <tr class="worker-tr"  th:onclick="|location.href='@{/admin/company/view/?companyId={companyId}(companyId=${company.getId()})}'|">
+      <tr class="worker-tr"  th:onclick="'location.href=\''+ @{/admin/company/{id}(id=${company.getId()})} + '\''">
         <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
         <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
         <td  th:text="${company.getCreatedAt()}"></td>

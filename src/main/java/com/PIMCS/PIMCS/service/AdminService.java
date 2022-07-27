@@ -7,7 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -80,6 +82,10 @@ public class AdminService {
     public Page<Company> findAllCompany(Pageable pageable){
         return companyRepository.findAll(pageable);
     }
+    /*회사 상세*/
+    public Optional<Company> findCompany(Integer companyId){
+        return companyRepository.findById(companyId);
+    }
     //회사 검색
     public Page<Company> filterCompany(String keyword,String selectOption,Pageable pageable){
 
@@ -96,7 +102,15 @@ public class AdminService {
 
         return searchCompanys;
     }
+    /*매핑된 기기 삭제*/
+    public void removeOwndevice(List<String> ownDeviceList) {
+        for (String serial:ownDeviceList
+             ) {
+            System.out.println(serial);
 
+        }
+//        ownDeviceRepository.deleteAllBySerialNumberIn(ownDeviceList);
+    }
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
     }
@@ -111,6 +125,7 @@ public class AdminService {
 
         return question;
     }
+
     //질문 필터링 검색
     public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
 

@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -57,19 +60,12 @@ public class AdminController {
         adminService.removeMatCategory(DBId);
         return true;
     }
-    /*회사 관리*/
-    @GetMapping("company/list")
-    public String companyList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-                               Model model){
-        Page<Company> companyPage=adminService.findAllCompany(pageable);
-        model.addAttribute("companyPage",companyPage);
-        model.addAttribute("companyList",companyPage.getContent());
-
-        return "admin/companyList";
-    }
     //회사 조회
-    @GetMapping("company/search")
-    public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,String selectOption,Model model){
+    @GetMapping("companies")
+    public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                @RequestParam(value = "selectOption", defaultValue = "") String selectOption,
+                                Model model){
         System.out.println(keyword);
         Page<Company> companyPage=adminService.filterCompany(keyword,selectOption,pageable);
         model.addAttribute("companyPage",companyPage);
@@ -78,12 +74,25 @@ public class AdminController {
     }
 
     /*회사 상세 보기*/
-    @GetMapping("company/view")
-    public String companyDetail(Model model,Integer companyId){
-        System.out.println(companyId+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-//        Question question = adminService.findQuestion(companyId);
-//        model.addAttribute(question);
-        return "admin/companyView";
+    @GetMapping("company/{companyId}")
+    public String companyDetail(Model model,@PathVariable Integer companyId){
+        Optional<Company> company = adminService.findCompany(companyId);
+        if (company.isPresent()){
+            model.addAttribute("company",company.get());
+            return "admin/companyView";
+        }else{
+            return "noneRole";
+        }
+    }
+    /*매핑된 기기 삭제*/
+    @ResponseBody
+    @PostMapping(value = "owndevices")
+    public Boolean deleteOwnDevices(@RequestParam List<String> ownDeviceList) {
+
+        adminService.removeOwndevice(ownDeviceList);
+
+
+        return true;
     }
 
 

@@ -17,7 +17,7 @@ const URL_NAV_ITEM_MAPPING = {
     "/qna/view": "#QnA",
     "/admin/qna/list": "#adminQnA",
     "/admin/order/list": "#adminOrderMat",
-    "/admin/company/list": "#companyManagement",
+    "/admin/companies": "#companyManagement",
     "/admin/email/frame/modify": "#emailFrame",
     "/admin/matcategory/add": "#matCategory",
     "/admin/matcategory/read": "#matCategoryRead",

@@ -191,7 +191,7 @@ pre{
 .company p{
     position: relative;
 }
-.company .delete{
+.company .serial{
     position: absolute;
     right: 0px;
     line-height: 20px;

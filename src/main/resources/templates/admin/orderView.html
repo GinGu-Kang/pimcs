@@ -5,6 +5,7 @@
   <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
   <link rel="stylesheet"  href="/css/admin/orderView.css">
   <script defer type="text/javascript" src="/js/admin/orderView.js"></script>
+  <script defer type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
   <meta charset="UTF-8">
   <title>Title</title>
 
@@ -81,7 +82,6 @@
 
   <script>
 
-    console.log($(".orderCnt").text())
 
     /*<![CDATA[*/
     let totalCnt = "[[${matOrder.getTotalCnt}]]";

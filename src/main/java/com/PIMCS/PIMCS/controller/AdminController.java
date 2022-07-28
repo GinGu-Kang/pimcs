@@ -86,12 +86,9 @@ public class AdminController {
     }
     /*매핑된 기기 삭제*/
     @ResponseBody
-    @PostMapping(value = "owndevices")
-    public Boolean deleteOwnDevices(@RequestParam List<String> ownDeviceList) {
-
+    @DeleteMapping (value = "owndevices")
+    public Boolean deleteOwnDevices(@RequestParam(value = "ownDeviceList[]") List<Integer> ownDeviceList) {
         adminService.removeOwndevice(ownDeviceList);
-
-
         return true;
     }
 
@@ -192,7 +189,13 @@ public class AdminController {
         return resultMap;
     }
 
+    @ResponseBody
+    @PostMapping("company/owndevice")
+    public HashMap<String,String> ownDeviceSave(@RequestParam(value="deviceSerial") String deviceSerial,@RequestParam(value="companyId") Integer companyId){
+        HashMap<String,String> resultMap = adminService.addOwnDevice(deviceSerial,companyId);
 
+        return resultMap;
+    }
 
 
 

@@ -12,7 +12,7 @@
 
 </head>
 <div layout:fragment="content"  class="content">
-
+  <div th:replace="admin/modal/companyViewAddMat :: addMat"></div>
   <p class="title">
     회사 상세 정보
   </p>
@@ -44,73 +44,31 @@
           구매 기기
         </p>
         <th:block  th:each="ownDevice,i:${company.getOwnDeviceList()}">
-          <p><label th:for="${ownDevice.getSerialNumber()}"><span th:text="${i.count}+'.'"></span> <span th:text="${ownDevice.getSerialNumber()}"></span></label><input class="serial" name="serial"  th:id="${ownDevice.getSerialNumber()}" type="checkbox" th:value="${ownDevice.getSerialNumber()}"></p>
+          <p>
+            <label th:for="${ownDevice.getSerialNumber()}">
+              <span th:text="${i.count}+'.'"></span>
+              <span th:text="${ownDevice.getSerialNumber()}"></span>
+            </label>
+            <input class="serial" name="serial"  th:id="${ownDevice.getSerialNumber()}" type="checkbox" th:value="${ownDevice.getId()}">
+          </p>
           <hr>
         </th:block>
       </th:block>
     </section>
   </section>
-  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/companies}">회사 목록</a>
-    <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">매트 추가</a>
+  <p id="list-p">
+    <a th:class="footer-button"  th:href="@{/admin/companies}">회사 목록</a>
+    <a th:class="footer-button" data-toggle="modal" data-target="#addMat" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMat">매트 추가</a>
+    <a class="del footer-button">삭제</a>
   </p>
+
+  <script>
+
+
+    /*<![CDATA[*/
+    let companyId = "[[${company.getId}]]"
+    /*]]>*/
+  </script>
 </div>
 </div>
-</html>
-<!--  <p id="list-p"><a th:class="list-button"  th:href="@{/admin/order/list}">목록</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 상태 변경</a> <a th:class="list-button" data-toggle="modal" data-target="#mappingSerial" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryModal">배송</a></p>-->
-<!--  <script>-->
-<!--    function deliverySave(){-->
-<!--      let result = confirm("배송된 기기의 시리얼이 일치 합니까?");-->
-<!--      let duplicateCheck = 0;-->
-<!--      if(result){-->
-<!--        if(duplicateCheck){-->
-<!--          alert("저장되었습니다.");-->
-<!--        }else {-->
-<!--          alert("중복된 기기가 존재합니다.(WS@)!@))");-->
-<!--        }-->
-
-<!--        //  orderview로 새로고침 이후 맨 밑에 배송된 기기들 보여주기 이메일 전송하기-->
-<!--      } else {-->
-<!--        alert("취소되었습니다.");-->
-<!--      }-->
-
-<!--    }-->
-
-<!--    function inputFormChange(){-->
-<!--      let changeButton=$("#form-change-button")-->
-<!--      if(changeButton.text()=="CSV 입력"){-->
-<!--        $("#csv-input").css("display","block")-->
-<!--        $("#self-input").css("display","none")-->
-<!--        changeButton.text("직접 입력")-->
-<!--      }-->
-<!--      else{-->
-<!--        $("#csv-input").css("display","none")-->
-<!--        $("#self-input").css("display","block")-->
-<!--        changeButton.text("CSV 입력")-->
-<!--      }-->
-
-
-<!--    }-->
-
-
-<!--    function isDeposit(){-->
-<!--      let isChange = confirm("입금상태를 변경 하시겠습니까?");-->
-<!--      let result = 0;-->
-<!--      if(isChange){-->
-<!--        result = confirm("확인을 누르시면 입금완료상태로 변경 됩니다.")-->
-<!--        if(result){-->
-<!--          alert("입금 완료 상태로 변경되었습니다.");-->
-<!--        }else {-->
-<!--          alert("입금 미완료 상태로 변경되었습니다.");-->
-<!--        }-->
-<!--      }else {-->
-<!--        alert("취소되었습니다");-->
-<!--      }-->
-<!--    }-->
-<!--  </script>-->
-</div>
-
-
-
-</div>
-
 </html>

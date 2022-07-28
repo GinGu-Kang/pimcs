@@ -93,23 +93,19 @@ public class AdminService {
 
         switch (selectOption){
             case "회사 코드":
-                searchCompanys =companyRepository.findByCompanyCodeLike("%"+keyword+"%",pageable);
+                searchCompanys =companyRepository.findByCompanyCodeLikeOrderById("%"+keyword+"%",pageable);
                 break;
             default:
-                searchCompanys =companyRepository.findByCompanyNameLike("%"+keyword+"%",pageable);
+                searchCompanys =companyRepository.findByCompanyNameLikeOrderById("%"+keyword+"%",pageable);
                 break;
         };
 
         return searchCompanys;
     }
     /*매핑된 기기 삭제*/
-    public void removeOwndevice(List<String> ownDeviceList) {
-        for (String serial:ownDeviceList
-             ) {
-            System.out.println(serial);
-
-        }
-//        ownDeviceRepository.deleteAllBySerialNumberIn(ownDeviceList);
+    @Transactional
+    public void removeOwndevice(List<Integer> ownDeviceList) {
+        ownDeviceRepository.deleteAllByIdIn(ownDeviceList);
     }
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
@@ -253,5 +249,35 @@ public class AdminService {
         return resultMap;
     }
 
+    @Transactional
+    public HashMap<String,String> addOwnDevice(String deviceSerial , Integer companyId) {
+        String message = "";
+        HashMap<String, String> resultMap = new HashMap<>();
+        //기기 중복 체크
+        Optional<OwnDevice> ownDeviceDuplicateCheck = ownDeviceRepository.findBySerialNumber(deviceSerial);
+
+
+        if (ownDeviceDuplicateCheck.isPresent()) {
+
+            message = "중복된 기기입니다.";
+
+            resultMap.put("message", message);
+            resultMap.put("isError", "true");
+
+        } else {
+
+            OwnDevice ownDevice = OwnDevice.builder()
+                    .company(companyRepository.getOne(companyId))
+                    .serialNumber(deviceSerial)
+                    .build();
+            ownDeviceRepository.save(ownDevice);
+            message = "저장 되었습니다.";
+
+            resultMap.put("message", message);
+            resultMap.put("isError", "false");
+
+        }
+        return resultMap;
+    }
 
 }

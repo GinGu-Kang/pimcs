@@ -1,7 +1,7 @@
  .content{
   padding-top: 45px;
   padding-left: 34px;
-  
+
 }
 
 /*SELECT BOX*/
@@ -350,5 +350,16 @@ thead th:last-child {
     overflow: auto;
 
   }
-  
+  /*목록 버튼*/
+  .footer-button{
+    width: 155px;
+    height: 50px;
+    padding: 16px 47px 15px 48px;
+    border-radius: 6px;
+    border: solid 1px #dbdbdb;
+    background-color: #4282ff;
+    text-decoration-line : none;
+    text-decoration : none;
+    color: #ffffff;
+  }
 }

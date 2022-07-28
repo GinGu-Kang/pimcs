@@ -16,7 +16,7 @@ public interface CompanyRepository extends JpaRepository<Company,Integer> {
 //    Optional<Company> findByCompanyId(Integer companyId);
     @EntityGraph(value = "Company.companyWorker")
     Optional<Company> findByCompanyCode(String companyCode);
-    Page<Company> findByCompanyCodeLike(String companyCode, Pageable pageable);
-    Page<Company> findByCompanyNameLike(String companyName, Pageable pageable);
+    Page<Company> findByCompanyCodeLikeOrderById(String companyCode, Pageable pageable);
+    Page<Company> findByCompanyNameLikeOrderById(String companyName, Pageable pageable);
     Company getOne(Integer companyId);
 }

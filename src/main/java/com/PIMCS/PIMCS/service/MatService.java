@@ -1,22 +1,25 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.Utils.MatServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
-import com.PIMCS.PIMCS.form.MatCsvForm;
-import com.PIMCS.PIMCS.form.MatForm;
-import com.PIMCS.PIMCS.form.MatFormList;
-import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
+import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.noSqlDomain.*;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 
 import java.io.IOException;
@@ -25,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -32,12 +36,13 @@ public class MatService {
     private final MatRepository matRepository;
     private final ProductRepository productRepository;
     private final DynamoDBMapper dynamoDBMapper;
-
+    private final DynamoQuery dynamoQuery;
     @Autowired
-    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper) {
+    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery) {
         this.matRepository = matRepository;
         this.productRepository = productRepository;
         this.dynamoDBMapper = dynamoDBMapper;
+        this.dynamoQuery = dynamoQuery;
     }
 
 
@@ -56,7 +61,7 @@ public class MatService {
      * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
      * @throws IllegalStateException product존재하지 않을때
      */
-    public Mat createMat(MatForm matForm, Company company){
+    public Mat createMat(MatForm matForm, Company company, User user){
         Mat mat = matForm.getMat();
         //유효성 검사
         HashMap<String,Object> resultMap = checkMatSerialNumberService(mat.getSerialNumber());
@@ -69,12 +74,20 @@ public class MatService {
             Product product = productOpt.get();
             mat.setProduct(product);
             mat.setCompany(company);
-            mat.setCommunicationStatus(0);
+//            mat.setCommunicationStatus(0);
             matRepository.save(mat);
 
-            DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-            dynamoDBUtils.putOrderMailRecipients(mat, matForm.getMailRecipients());
 
+            DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, company.getId(),mat.getSerialNumber());
+
+            if(dynamoMat != null){ //dynamodb에 매트가 등록되어 있으면 삭제
+                dynamoDBMapper.delete(dynamoMat);
+            }
+            DynamoMat.save(dynamoDBMapper, mat); // dynamoMat 저장
+            // 주문이메일 dynamodb에 삽입
+            OrderMailRecipients.save(dynamoDBMapper,mat, matForm.getMailRecipients());
+            //로그 남기기
+            MatLog.save(mat, user, "생성", dynamoDBMapper);
             return mat;
         }else{
             throw new IllegalStateException("Product does not exist.");
@@ -93,7 +106,7 @@ public class MatService {
      * 매트수정 서비스
      * @throws  IllegalStateException 회사에 등록되지 않은 product 또는 mat 일때 발생
      */
-    public HashMap<String, String> updateMat(Company company, MatFormList matFormList){
+    public HashMap<String, String> updateMat(Company company, MatFormList matFormList, User user){
         //로그인한 유저 회사에 등록된 produts와 mats찾기
         List<Product> findProducts = productRepository.findByCompany(company);
         List<Mat> findMats = matRepository.findByCompany(company);
@@ -120,17 +133,18 @@ public class MatService {
 
         matRepository.saveAll(saveMats);
 
+        //dynamodb 동기화
+        DynamoMat.update(dynamoDBMapper,dynamoQuery,saveMats,company);
 
-        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        dynamoDBUtils.updateMat(saveMats, company);
-
+        //로그 남기기
+        MatLog.batchSave(saveMats, user, "수정", dynamoDBMapper);
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");
         return hashMap;
     }
-    public HashMap<String,String> updateMatEmailService(List<OrderMailRecipients> orderMailRecipients){
-        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        dynamoDBUtils.updateOrderMailRecipients(orderMailRecipients);;
+    public HashMap<String,String> updateMatEmailService(List<OrderMailRecipients> orderMailRecipients, Company company){
+
+        OrderMailRecipients.update(dynamoDBMapper, dynamoQuery, orderMailRecipients, company);
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");
         return hashMap;
@@ -139,18 +153,27 @@ public class MatService {
     /**
      * 매트삭제 서비스
      */
-    public HashMap<String, Object> deleteMat(Company company, MatFormList matFormList){
+    public HashMap<String, Object> deleteMat(Company company, MatFormList matFormList,  User user){
         List<Mat> findMats = matRepository.findByCompany(company);
         List<Mat> saveMats = new ArrayList<>();
         MatServiceUtils matServiceUtils = new MatServiceUtils();
+        System.out.println("forms");
+        System.out.println(matFormList);
         for(MatForm matForm : matFormList.getMatForms()){
             Mat findMat = matServiceUtils.findMat(findMats, matForm.getMat().getId());
-            if(findMat != null)
-                saveMats.add(matForm.getMat());
-            else
+            if(findMat != null) {
+                saveMats.add(findMat);
+            }
+            else {
                 throw new IllegalStateException("Mat does not exist.");
+            }
         }
         matRepository.deleteAllInBatch(saveMats);
+
+        DynamoMat.delete(dynamoDBMapper, dynamoQuery, saveMats, company); // dynamoMat 데이터 삭제
+        OrderMailRecipients.delete(dynamoDBMapper, dynamoQuery, saveMats, company); // 주문이메일 삭제
+        MatLog.batchSave(saveMats, user, "삭제", dynamoDBMapper); //로그남기기
+
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("success",true);
         hashMap.put("message","삭제 완료하였습니다.");
@@ -192,6 +215,7 @@ public class MatService {
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
 
         columns.remove("communicationStatus");
+
         csvPrinter.printRecord(columns);
 
 
@@ -206,25 +230,28 @@ public class MatService {
 
         for(Mat mat : findMats){
             List<String> record = new ArrayList<>();
+            Product product = mat.getProduct();
+            DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, mat.getCompany().getId(), mat.getSerialNumber());
+            mat.setInventoryWeight(dynamoMat.getInventoryWeight());
+
             if(columns.contains("serialNumber")) record.add(mat.getSerialNumber());
             if(columns.contains("matVersion")) record.add("A3");
-            if(columns.contains("productCode")) record.add(mat.getProduct().getProductCode());
-            if(columns.contains("productName")) record.add(mat.getProduct().getProductName());
-            if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
-            if(columns.contains("productImage")) record.add(mat.getProduct().getProductImage());
-            if(columns.contains("inventoryCnt")) record.add(String.valueOf(mat.getCurrentInventory()));
+            if(columns.contains("productCode")) record.add((product != null) ? product.getProductCode() : "N/A");
+            if(columns.contains("productName")) record.add((product != null) ? product.getProductName() : "N/A");
+            if(columns.contains("inventoryCnt")) record.add((product != null ) ? String.valueOf(mat.getCurrentInventory()) : "N/A");
             if(columns.contains("threshold")) record.add(String.valueOf(mat.getThreshold()));
             if(columns.contains("calcMethod")) record.add((mat.getCalcMethod() == 0) ? "무게(g)" : "갯수(개)");
-            if(columns.contains("productWeight")) record.add(String.valueOf(mat.getProduct().getProductWeight()));
+            if(columns.contains("productWeight")) record.add((product != null) ? String.valueOf(product.getProductWeight()) : "N/A");
             if(columns.contains("inventoryWeight")) record.add(String.valueOf(mat.getInventoryWeight()));
             if(columns.contains("matLocation")) record.add(mat.getMatLocation());
             if(columns.contains("productOrderCnt")) record.add(String.valueOf(mat.getProductOrderCnt()));
             if(columns.contains("boxWeight")) record.add(String.valueOf(mat.getBoxWeight()));
             if(columns.contains("mailRecipients")){
-                for(OrderMailRecipients o : dynamoDBUtils.readMailBySerialNumber(mat.getSerialNumber())){
-                    record.add(o.getMailRecipients().toString());
-                    break;
-                }
+
+                OrderMailRecipients o = dynamoDBMapper.load(OrderMailRecipients.class, mat.getCompany().getId(), mat.getSerialNumber());
+                record.add(
+                        (o != null) ? o.getMailRecipients().toString() : "N/A"
+                );
             }
 
             csvPrinter.printRecord(record);
@@ -234,5 +261,42 @@ public class MatService {
     }
 
 
+    public DynamoResultPage matLogService(Company company, Pageable pageable){
+        DynamoDBQueryExpression<MatLog> queryExpression = MatLog.queryExpression(company, false);
+        DynamoDBQueryExpression<MatLog> countQueryExpression = MatLog.queryExpression(company, true);
+        return dynamoQuery.exePageQuery(MatLog.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    public DynamoResultPage searchMatLogService(Company company, InOutHistorySearchForm searchForm, Pageable pageable){
+        DynamoDBQueryExpression<MatLog> queryExpression = MatLog.searchQueryExpression(company, searchForm);
+        DynamoDBQueryExpression<MatLog> countQueryExpression = MatLog.searchQueryExpression(company, searchForm);
+
+        return dynamoQuery.exePageQuery(MatLog.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    /**
+     * 양도하기 서비스
+     */
+    public HashMap<String, String> transferMatService(Company company, MatFormList matFormList, String targetCompanyCode, User user){
+
+        List<MatForm> matForms = matFormList.getMatForms();
+        List<String> serialNumbers = matForms.stream().map(o -> o.getMat().getSerialNumber()).collect(Collectors.toList());
+
+        //rdb mat삭제
+        List<Mat> mats = matRepository.findByCompanyAndSerialNumberIn(company,serialNumbers);
+        matRepository.deleteAllInBatch(mats);
+
+        //매트와 회사 연결 테이블 업데이터
+
+
+        DynamoMat.delete(dynamoDBMapper, dynamoQuery, mats, company); // dynamoMat 데이터 삭제
+        OrderMailRecipients.delete(dynamoDBMapper, dynamoQuery, mats, company); // 주문이메일 삭제
+        MatLog.batchSave(mats, user, "양도", dynamoDBMapper); //로그남기기
+
+        HashMap<String, String> hashMap =new HashMap<>();
+        hashMap.put("message","양도 완료했습니다.");
+        return hashMap;
+
+    }
 
 }

@@ -5,6 +5,7 @@ import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.*;
+import com.PIMCS.PIMCS.noSqlDomain.DynamoMat;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.hibernate.annotations.CreationTimestamp;
@@ -105,7 +106,7 @@ public class APIServiceUtils {
     /**
      * mat 데이터를 json 직렬하기 편한 객체로 만들어준다
      */
-    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company, DynamoDBMapper dynamoDBMapper) {
+    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery) {
         List<MatPageAdapter.Mat> resultMats = new ArrayList<>();
 
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
@@ -134,8 +135,10 @@ public class APIServiceUtils {
                     .build();
 
 
-            List<OrderMailRecipients> orderMailRecipients = dynamoDBUtils.readMailBySerialNumber(mat.getSerialNumber());
+            List<OrderMailRecipients> orderMailRecipients = OrderMailRecipients.findBySerialNumber(dynamoQuery, company,mat.getSerialNumber());
 
+            DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, company.getId(), mat.getSerialNumber());
+            mat.setInventoryWeight(dynamoMat.getInventoryWeight());
             // adapter mat데이터 추가
             MatPageAdapter.Mat matPageAdapter = MatPageAdapter.Mat.builder()
                     .id(mat.getId())
@@ -149,7 +152,7 @@ public class APIServiceUtils {
                     .matLocation(mat.getMatLocation())
                     .productOrderCnt(mat.getProductOrderCnt())
                     .boxWeight(mat.getBoxWeight())
-                    .communicationStatus(mat.getCommunicationStatus())
+                    .communicationStatus(dynamoMat.getCommunicationStatus())
                     .currentInventory(mat.getCurrentInventory())
                     .orderMailRecipients(orderMailRecipients)
                     .build();

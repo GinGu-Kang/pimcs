@@ -155,3 +155,26 @@ const initFormInputValue = function(){
 
     $(".calc-method-btn").first().click();
 }
+
+
+
+$(document).on("click",".measurement-btn",function(){
+    const defaultVal = $("input[name='mat.serialNumber']").val();
+    const serialNumber = prompt("매트 시리얼번호", defaultVal);
+    if(serialNumber == ''){
+        alert('매트 시리얼번호를 입력해주세요.');
+        return;
+    }
+    const data = loadGetData({
+        url: "/api/device",
+        data:{
+            "serialNumber": serialNumber
+        }});
+    
+    console.log(data);
+    if(!data){
+        alert("박스를 매트에 올려주세요.");
+        return;
+    }
+    $("input[name='mat.boxWeight']").val(data.inventoryWeight);
+});

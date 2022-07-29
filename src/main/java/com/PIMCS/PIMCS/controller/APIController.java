@@ -5,6 +5,7 @@ import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.domain.Redis.Device;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
@@ -107,7 +108,19 @@ public class APIController {
      */
     @PostMapping("/api/email/recipients")
     @ResponseBody
-    public List<OrderMailRecipients> emailRecipientsAPI(@RequestParam List<String> serialNumbers){
-        return apiService.emailRecipientsAPIService(serialNumbers);
+    public List<OrderMailRecipients> emailRecipientsAPI(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam List<String> serialNumbers){
+        return apiService.emailRecipientsAPIService(serialNumbers, secUserCustomForm.getCompany());
     }
+
+
+    @GetMapping("/api/device")
+    @ResponseBody
+    public Device currentInventoryWeight(@RequestParam String serialNumber){
+        System.out.println("=========");
+        System.out.println(serialNumber);
+        Device device = apiService.currentInventoryWeightService(serialNumber);
+        System.out.println(device);
+        return device;
+    }
+
 }

@@ -36,8 +36,9 @@
         <details>
             <summary class="summary text-size-middle">Order</summary>
             <div markdown="1">   
-                <div class="detail-item text-size-between-middle-samll">발주 내역</div>    
-                <div class="detail-item text-size-between-middle-samll">발주 통계</div>
+                <div id="order-history" class="detail-item text-size-between-middle-samll">
+                    <a href="/order/history" class="text-size-between-middle-samll">발주 내역</a>
+                </div>    
             </div>
         </details>
         
@@ -66,6 +67,20 @@
                 
             </div>
         </details>
+
+        <details>
+            <summary class="summary text-size-middle">기록</summary>
+            <div markdown="1">
+                <div id="matLog" class="detail-item text-size-between-middle-samll">
+                    <a  href="/mat/log" class="text-size-between-middle-samll">매트관리기록</a>
+                </div>
+                <div id="productLog" class="detail-item text-size-between-middle-samll">
+                    <a href="/product/log" class="text-size-between-middle-samll">상품관리기록</a>
+                </div>
+                
+            </div>
+        </details>
+
 
             <details sec:authorize="hasRole('ROLE_ChiefOfPimcs')">
             <summary class="summary text-size-middle">관리자</summary>

@@ -14,5 +14,5 @@ public class DynamoResultPage {
     private int page;
     private int totalPage;
     private int size;
-    private List<InOutHistory> inOutHistories;
+    private List data;
 }

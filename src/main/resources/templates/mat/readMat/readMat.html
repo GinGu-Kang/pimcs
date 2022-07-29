@@ -44,7 +44,8 @@
     <div th:replace="mat/updateMat/updateProductModal :: product"></div>
     <!--주문이메일 변경 모달-->
     <div th:replace="mat/updateMat/mailRecipientsModal :: mailRecipients"></div>
-    
+    <!--양도 모달-->
+    <div th:replace="mat/readMat/modal/transferModal :: transferModal"></div>
 
     <!--DESKTOP 매트조회 헤더-->
     <div class="inquery-mat-header col-md-12">
@@ -125,6 +126,7 @@
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="mailRecipients" target="mailRecipientsModal">주문이메일</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="transfer" target="transferModal">양도하기</a></li>
                 </ul>
             </div>
 
@@ -170,6 +172,7 @@
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="productOrderCnt" target="productOrderCntModal">상품주문갯수 변경</a></li>
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="boxWeight" target="boxWeightModal">박스무게 변경</a></li>
                     <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="mailRecipients" target="mailRecipientsModal">주문이메일</a></li>
+                    <li><a class="dropdown-item text-size-between-middle-samll update-dropdown-item" data="transfer" target="transferModal">양도하기</a></li>
                 </ul>
             </div>
 

@@ -1,19 +1,27 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Interface.FileStorage;
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
-import com.PIMCS.PIMCS.Utils.FileUtils;
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.Utils.ProductServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.domain.ProductCategory;
 import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.noSqlDomain.DynamoMat;
+import com.PIMCS.PIMCS.noSqlDomain.DynamoProduct;
+import com.PIMCS.PIMCS.noSqlDomain.MatLog;
+import com.PIMCS.PIMCS.noSqlDomain.ProductLog;
 import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,12 +39,18 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductCategoryRepository productCategoryRepository;
     private final DynamoDBMapper dynamoDBMapper;
+    private final DynamoQuery dynamoQuery;
+
+    @Qualifier("fileStorage")
+    private final FileStorage fileStorage;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper) {
+    public ProductService(ProductRepository productRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, FileStorage fileStorage) {
         this.productRepository = productRepository;
         this.productCategoryRepository = productCategoryRepository;
         this.dynamoDBMapper = dynamoDBMapper;
+        this.dynamoQuery = dynamoQuery;
+        this.fileStorage = fileStorage;
     }
 
     /**
@@ -59,7 +73,7 @@ public class ProductService {
         String productImagePath = null;
         if(productForm.getProductImage() != null) {
             try {
-                productImagePath = FileUtils.uploadFile(productForm.getProductImage());
+                productImagePath = fileStorage.save(productForm.getProductImage());
             } catch (Exception e) {
                 throw new IllegalStateException("Failed to upload file.");
             }
@@ -73,11 +87,20 @@ public class ProductService {
                 product.setProductImage("/product/image/"+productImagePath);
             else
                 product.setProductImage("null");
+            //rdbms 저장
             productRepository.save(product);
+            //dynamodb 저장
+            DynamoProduct dynamoProduct = dynamoDBMapper.load(DynamoProduct.class,product.getId());
+            if(dynamoProduct != null){ // dynamodb에 상품이 등록되어 있으면 삭제
+                dynamoDBMapper.delete(dynamoProduct);
+            }
+            DynamoProduct.save(dynamoDBMapper,product); // dynamoProduct 저장
             return product;
         }else{
             throw new IllegalStateException("Category does not exist.");
         }
+
+
     }
 
     /**
@@ -139,7 +162,7 @@ public class ProductService {
                 //파일 저장
                 String productImagePath = null;
                 try {
-                    productImagePath = FileUtils.uploadFile(productForm.getProductImage());
+                    productImagePath = fileStorage.save(productForm.getProductImage());
                     product.setProductImage("/product/image/"+productImagePath);
                 } catch (Exception e) {
                     throw new IllegalStateException("Failed to upload file.");
@@ -159,8 +182,9 @@ public class ProductService {
         }
         //RDBMS에 제품 업데이트
         productRepository.saveAll(saveProducts);
-        //dynamodb 제품 업데이트
-        dynamoDBUtils.updateProduct(company, saveProducts);
+
+        //dynamodb 업데이트
+        DynamoProduct.update(dynamoDBMapper, dynamoQuery, saveProducts, company);
 
         return result;
     }
@@ -183,6 +207,8 @@ public class ProductService {
     public HashMap<String, Object> deleteProduct(Company company, ProductFormList productFormList){
         List<Product> findProducts = productRepository.findByCompany(company);
         List<Product> deleteProducts = new ArrayList<>();
+
+
         ProductServiceUtils productServiceUtils = new ProductServiceUtils();
 
         for(ProductForm productForm : productFormList.getProductForms()){
@@ -195,6 +221,9 @@ public class ProductService {
             }
         }
         productRepository.deleteAllInBatch(deleteProducts);
+        DynamoProduct.delete(dynamoDBMapper, dynamoQuery, deleteProducts, company);
+
+
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("isSuccess",true);
         hashMap.put("message",deleteProducts.size()+"개 제품 삭제 완료하였습니다.");
@@ -207,7 +236,7 @@ public class ProductService {
      */
     public void downloadProductCsvService(Company company, ProductCsvForm productCsvForm, Writer writer) throws IOException {
 
-        String[] columns = {"제품코드","제품명","제품카테고리","제품이미지","제품무게"};
+        String[] columns = {"제품코드","제품명","제품카테고리","제품무게"};
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
         csvPrinter.printRecord(columns);
 
@@ -223,7 +252,6 @@ public class ProductService {
                     product.getProductCode(),
                     product.getProductName(),
                     product.getProductCategory().getCategoryName(),
-                    product.getProductImage(),
                     product.getProductWeight()+"g"
             };
             csvPrinter.printRecord(record);
@@ -265,6 +293,24 @@ public class ProductService {
         }
 
         return hashMap;
+    }
+
+    /**
+     * 상품로그
+     */
+    public DynamoResultPage productLogService(Company company, Pageable pageable){
+        DynamoDBQueryExpression<ProductLog> queryExpression = ProductLog.queryExpression(company, false);
+        DynamoDBQueryExpression<ProductLog> countQueryExpression = ProductLog.queryExpression(company, true);
+        return dynamoQuery.exePageQuery(ProductLog.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    /**
+     * 상품로그 검색
+     */
+    public DynamoResultPage searchProductLogService(Company company, InOutHistorySearchForm searchForm, Pageable pageable){
+        DynamoDBQueryExpression<ProductLog> queryExpression = ProductLog.searchQueryExpression(company, searchForm);
+        DynamoDBQueryExpression<ProductLog> countQueryExpression = ProductLog.searchQueryExpression(company, searchForm);
+        return dynamoQuery.exePageQuery(ProductLog.class, queryExpression, countQueryExpression, pageable);
     }
 
 }

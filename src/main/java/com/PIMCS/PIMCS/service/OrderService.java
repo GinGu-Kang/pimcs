@@ -1,19 +1,33 @@
 package com.PIMCS.PIMCS.service;
 
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.email.EmailUtilImpl;
-import com.PIMCS.PIMCS.form.MatCategoryAndOrderForm;
-import com.PIMCS.PIMCS.form.OrderMailForm;
-import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
+import com.PIMCS.PIMCS.noSqlDomain.OrderHistory;
 import com.PIMCS.PIMCS.repository.*;
 
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Writer;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Slf4j
 @Service
 public class OrderService {
@@ -23,12 +37,13 @@ public class OrderService {
     private final UserRepository userRepository;
     private final OrderMailFrameRepository orderMailFrameRepository;
     private final EmailUtilImpl emailUtilImpl;
+    private final DynamoQuery dynamoQuery;
 
 
 
 
 
-    public OrderService(MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, UserRepository userRepository, OrderMailFrameRepository orderMailFrameRepository, EmailUtilImpl emailUtilImpl) {
+    public OrderService(MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, UserRepository userRepository, OrderMailFrameRepository orderMailFrameRepository, EmailUtilImpl emailUtilImpl, DynamoQuery dynamoQuery) {
         this.matCategoryRepository = matCategoryRepository;
         this.matCategoryOrderRepository = matCategoryOrderRepository;
         this.matOrderRepository = matOrderRepository;
@@ -36,6 +51,7 @@ public class OrderService {
         this.orderMailFrameRepository = orderMailFrameRepository;
         this.emailUtilImpl = emailUtilImpl;
 
+        this.dynamoQuery = dynamoQuery;
     }
     @Transactional
     public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
@@ -136,4 +152,64 @@ public class OrderService {
         matOrderRepository.deleteById(id);
     }
 
+
+    /**
+     * 발주내역
+     */
+    public DynamoResultPage orderHistoryService(Company company, Pageable pageable){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+
+        DynamoDBQueryExpression<OrderHistory> queryExpression = OrderHistory.queryExpression(company, false);
+        DynamoDBQueryExpression<OrderHistory> countQueryExpression = OrderHistory.queryExpression(company, true);
+
+        return dynamoQuery.exePageQuery(OrderHistory.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    /**
+     * 발주내역 검색
+     */
+    public DynamoResultPage orderHistorySearchService(Company company, InOutHistorySearchForm orderSearchForm, Pageable pageable){
+
+        DynamoDBQueryExpression<OrderHistory> queryExpression = OrderHistory.searchQueryExpression(company,orderSearchForm);
+        DynamoDBQueryExpression<OrderHistory> countQueryExpression = OrderHistory.searchQueryExpression(company, orderSearchForm);
+
+        return dynamoQuery.exePageQuery(OrderHistory.class, queryExpression, countQueryExpression, pageable);
+    }
+
+
+    /**
+     * 발주내역 csv 다운로드
+     */
+    public void downloadOrderHistoryCsvService(Company company, InOutHistorySearchForm searchForm, Writer writer) throws IOException {
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        String[] columns = {"시리얼 번호", "장소", "주문 이메일", "상품명", "상품코드", "현재재고", "임계값", "상품주문갯수", "발주 시간"};
+        csvPrinter.printRecord(columns);
+
+        List orderHistories;
+        if(searchForm.getQuery() != "" || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+            orderHistories = dynamoQuery.exeQuery(OrderHistory.class,  OrderHistory.searchQueryExpression(company, searchForm));
+
+        }else { // 전제데이터 다운로드
+            orderHistories = dynamoQuery.exeQuery(OrderHistory.class, OrderHistory.queryExpression(company, false));
+        }
+
+        for(Object o : orderHistories){
+            OrderHistory orderHistory = (OrderHistory) o;
+            List<String> record = new ArrayList<>();
+            record.add(orderHistory.getMatSerialNumber());
+            record.add(orderHistory.getLocation());
+            record.add(orderHistory.getMailRecipients().toString());
+            record.add(orderHistory.getProductName());
+            record.add(orderHistory.getProductCode());
+            record.add(String.valueOf(orderHistory.getInventoryCnt()));
+            record.add(String.valueOf(orderHistory.getThreshold()));
+            record.add(String.valueOf(orderHistory.getOrderCnt()));
+            record.add(orderHistory.getCreatedAt().toString());
+            csvPrinter.printRecord(record);
+        }
+    }
+
 }
+
+

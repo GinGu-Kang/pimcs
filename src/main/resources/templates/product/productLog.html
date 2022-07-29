@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+    <head>
+        <title>상품관리기록</title>
+        
+        <!--PAGINATION-->
+        <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+        <script type="text/javascript" src="/js/product/productLog.js"></script>
+        <link rel="stylesheet" href="/css/product/productLog.css"/>
+
+        <script>
+            $(function(){
+              
+               /*<![CDATA[*/
+                    let totalPages = "[[${dynamoResultPage.getTotalPage()}]]";
+                    let page = "[[${dynamoResultPage.getPage()}]]";
+                    let size = "[[${dynamoResultPage.getSize()}]]";
+                /*]]>*/
+
+                console.log("total:  "+totalPages)
+                console.log("page: "+page);
+                console.log('size: '+size)
+                
+                
+                pagination({
+                    page: page,
+                    size: size,
+                    totalPages: (totalPages == 0) ? 1 : totalPages
+                });
+
+            })
+          </script>
+        
+    </head>
+    <div layout:fragment="content" class="content">
+        <div class="header-item1">
+            <form class="search-form" id="product-log-form" action="/product/log/search">
+                
+                <!--검색 input-->
+                <div class="input-group-shadow">
+                    
+                    <input 
+                        class="pimcs-bd-group-input text-size-middle" 
+                        name="query"  
+                        placeholder="Search by product name"
+                        th:value="${searchForm.getQuery()}"
+                    />
+                    
+                    <span class="input-group-text-shadow"><i class="bi bi-search"></i></span>
+                </div>
+                <div class="d-flex">
+                    <!--select date-->
+                    <div class="input-group-shadow datepicker-container">
+                        <input 
+                                type="date" 
+                                id="start-date"  
+                                class="pimcs-bd-group-input text-size-middle" 
+                                name="startDate" 
+                                th:value="${searchForm.getStartDate()}"
+                                />
+                        
+                        <span class="input-group-text-shadow d-flex justify-content-center">~</span>
+                        <input  
+                                type="date" 
+                                id="end-date" 
+                                class="pimcs-bd-group-input text-size-middle" 
+                                name="endDate" 
+                                th:value="${searchForm.getEndDate()}"
+                            />
+                    </div>
+                    <button class="pimcs-blue-btn inquiry-btn" id="order-inquiry-btn">조회</button>
+                </div>
+            </form>
+        </div>
+        <!--PAGINATION-->
+        <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center">
+            <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+        </div>
+
+        <!--TABLE-->
+        <div class="pimcs-table-container">
+        
+            <table class="table pimcs-table">
+                <thead>
+                    <tr class="text-size-middle">
+                        <th scope="col col-md-2" >상품명</th>
+                        <th scope="col col-md-2" >상품코드</th>
+                        <th scope="col col-md-2" >사용자 이름</th>
+                        <th scope="col col-md-2" >사용자 이메일</th>
+                        <th scope="col col-md-2" >action</th>
+                        <th scope="col col-md-2" >일시</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="obj : ${dynamoResultPage.getData()}">
+                        
+                        <td class="text-size-between-middle-samll" th:text="${obj.getProductName()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${obj.getProductCode()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${obj.getUserName()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${obj.getUserEmail()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${obj.getAction()}"></td>
+                        <td class="text-size-between-middle-samll" th:text="${#temporals.format(obj.getCreatedAt(), 'yyyy-MM-dd HH:mm')}"></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</html>

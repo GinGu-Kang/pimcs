@@ -20,6 +20,7 @@
                 /*]]>*/
                 
                 setCheckedData(serialNumberList);
+                
 
                 lazyLoadGraph.observe(document.querySelector('.scroll-detecting'));
 
@@ -71,8 +72,8 @@
         <!--csv download form-->
         <form th:action="@{/download/inout/history/graph/csv}" style="display: none;" id="csv-download-form" method="post">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-            <input name="startDate" type="date" class="start-date"/>
-            <input name="endDate" type="date" class="end-date"/>
+            <input name="startDate" type="date"/>
+            <input name="endDate" type="date"/>
             <input name="timeDimension" type="text"/>
             <div id="csv-form-dynamic-append-container">
 

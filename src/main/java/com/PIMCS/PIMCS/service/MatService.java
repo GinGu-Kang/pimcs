@@ -3,13 +3,12 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.Utils.MatServiceUtils;
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.domain.Product;
-import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.noSqlDomain.*;
+import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.MatRepository;
+import com.PIMCS.PIMCS.repository.OwnDeviceRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
@@ -37,12 +36,16 @@ public class MatService {
     private final ProductRepository productRepository;
     private final DynamoDBMapper dynamoDBMapper;
     private final DynamoQuery dynamoQuery;
+    private final OwnDeviceRepository ownDeviceRepository;
+    private final CompanyRepository companyRepository;
     @Autowired
-    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery) {
+    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, OwnDeviceRepository ownDeviceRepository, CompanyRepository companyRepository) {
         this.matRepository = matRepository;
         this.productRepository = productRepository;
         this.dynamoDBMapper = dynamoDBMapper;
         this.dynamoQuery = dynamoQuery;
+        this.ownDeviceRepository = ownDeviceRepository;
+        this.companyRepository = companyRepository;
     }
 
 
@@ -64,7 +67,7 @@ public class MatService {
     public Mat createMat(MatForm matForm, Company company, User user){
         Mat mat = matForm.getMat();
         //유효성 검사
-        HashMap<String,Object> resultMap = checkMatSerialNumberService(mat.getSerialNumber());
+        HashMap<String,Object> resultMap = checkMatSerialNumberService(company,mat.getSerialNumber());
         if(!(boolean)resultMap.get("result")){ //등록할수 없는 매트일때
             throw new IllegalStateException(resultMap.get("message").toString());
         }
@@ -185,13 +188,17 @@ public class MatService {
      * @return hashMap
      *      hashMap.get('result'): true면 serialNumber 사용가능, false면 serialNumber 사용불가능
      */
-    public HashMap checkMatSerialNumberService(String serialNumber){
+    public HashMap checkMatSerialNumberService(Company company,String serialNumber){
         HashMap hashMap = new HashMap<>();
         Optional<Mat> optMat = matRepository.findBySerialNumber(serialNumber);
+        OwnDevice ownDevice = ownDeviceRepository.findByCompanyAndSerialNumber(company,serialNumber).orElse(null);
 
         if(optMat.isPresent()){ //null 값이아니면
             hashMap.put("result", false);
             hashMap.put("message","매트가 이미 등록되어 있습니다.");
+        }else if(ownDevice == null){
+            hashMap.put("result", false);
+            hashMap.put("message","소유 기기가 아니거나 존재하지않는 기기입니다..");
         }else{
             hashMap.put("result", true);
             hashMap.put("message","등록할 수 있는 시리얼번호 입니다.");
@@ -281,17 +288,33 @@ public class MatService {
 
         List<MatForm> matForms = matFormList.getMatForms();
         List<String> serialNumbers = matForms.stream().map(o -> o.getMat().getSerialNumber()).collect(Collectors.toList());
+        Company targetCompany = companyRepository.findByCompanyCode(targetCompanyCode).orElse(null);
+
+        if (targetCompany == null){
+            throw  new IllegalStateException("Company does not exists");
+        }
+
 
         //rdb mat삭제
         List<Mat> mats = matRepository.findByCompanyAndSerialNumberIn(company,serialNumbers);
         matRepository.deleteAllInBatch(mats);
 
         //매트와 회사 연결 테이블 업데이터
+        List<OwnDevice> ownDevicies = ownDeviceRepository.findAllBySerialNumberIn(serialNumbers);
+        List<OwnDevice> saveOwnDevicies = ownDevicies.stream().map(o -> {
+            o.setCompany(targetCompany);
+            return o;
+        }).collect(Collectors.toList());
+        ownDeviceRepository.saveAll(saveOwnDevicies);
 
+        // dynamoMat 데이터 삭제
+        DynamoMat.delete(dynamoDBMapper, dynamoQuery, mats, company);
 
-        DynamoMat.delete(dynamoDBMapper, dynamoQuery, mats, company); // dynamoMat 데이터 삭제
-        OrderMailRecipients.delete(dynamoDBMapper, dynamoQuery, mats, company); // 주문이메일 삭제
-        MatLog.batchSave(mats, user, "양도", dynamoDBMapper); //로그남기기
+        // 주문이메일 삭제
+        OrderMailRecipients.delete(dynamoDBMapper, dynamoQuery, mats, company);
+
+        //로그남기기
+        MatLog.batchSave(mats, user, "양도", dynamoDBMapper);
 
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","양도 완료했습니다.");

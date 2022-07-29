@@ -4,11 +4,12 @@ import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
-import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Redis.Device;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
+import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.service.APIService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,15 +18,19 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class APIController {
     private final APIService apiService;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public APIController(APIService apiService) {
+    public APIController(APIService apiService, CompanyRepository companyRepository) {
         this.apiService = apiService;
+        this.companyRepository = companyRepository;
     }
 
     /**
@@ -122,5 +127,20 @@ public class APIController {
         System.out.println(device);
         return device;
     }
+
+    @GetMapping("/api/company/exist")
+    @ResponseBody
+    public Map<String, Object> getCompanyByCompanyCode(@RequestParam String companyCode){
+        Company company = companyRepository.findByCompanyCode(companyCode).orElse(null);
+        Map<String, Object> map = new HashMap<>();
+        if(company == null){
+            map.put("isExist", false);
+            map.put("message", "존재하지 않는 회사코드 입니다.");
+        }else{
+            map.put("isExist", true);
+        }
+        return map;
+    }
+
 
 }

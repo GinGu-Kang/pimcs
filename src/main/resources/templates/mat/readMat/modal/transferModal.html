@@ -37,9 +37,22 @@
          */
         const onClickedTransfer = function(){
             if($("input[name='companyCode']").val() == ""){
-                alert("매트위치를 입력해주세요.");
+                alert("회사 코드를 입력해주세요.");
                 return;
             }
+            
+            const res = loadGetData({
+                url: "/api/company/exist",
+                data: {
+                    "companyCode": $("input[name='companyCode']").val()
+                }
+            })
+
+            if(!res.isExist){
+                alert(res.message);
+                return;
+            }
+            
 
             let token = $("meta[name='_csrf']").attr("content");
             let header = $("meta[name='_csrf_header']").attr("content");

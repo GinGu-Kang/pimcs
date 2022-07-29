@@ -109,8 +109,8 @@ public class MatController {
      */
     @GetMapping("/mat/check/serialNum")
     @ResponseBody
-    public HashMap<String,Object> checkMatSerialNum(@RequestParam("serialNum") String serialNum){
-        return matService.checkMatSerialNumberService(serialNum);
+    public HashMap<String,Object> checkMatSerialNum(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("serialNum") String serialNum){
+        return matService.checkMatSerialNumberService(secUserCustomForm.getCompany(), serialNum);
     }
 
     /**

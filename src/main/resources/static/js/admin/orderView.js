@@ -120,20 +120,12 @@ function readExcel() {
         let rows = XLSX.utils.sheet_to_json(workBook.Sheets['Sheet1']);
         if(Object.values(rows).length ==totalCnt){
             for (let i in rows){
-                $('#input-device-'+i).val(rows[i]['Serial'])
+                $('#input-device-'+i).val(rows[i]['serial'])
             }
         }else {
             alert("입력된 값과 주문한 기기수량이 일치하지 않습니다.\n 입력된 기기 갯수: "+Object.values(rows).length
             +"\n총 주문 갯수: "+totalCnt)
         }
-
-        // workBook.SheetNames.forEach(function (sheetName) {
-        //     console.log('SheetName: ' + sheetName);
-        //     let rows = XLSX.utils.sheet_to_json(workBook.Sheets[sheetName]);
-        //     console.log(JSON.stringify(rows));
-        //
-        // })
-
 
     };
     reader.readAsBinaryString(input.files[0]);

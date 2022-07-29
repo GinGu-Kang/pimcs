@@ -89,18 +89,21 @@ public class AdminService {
     //회사 검색
     public Page<Company> filterCompany(String keyword,String selectOption,Pageable pageable){
 
-        Page<Company> searchCompanys =  null ;
+        Page<Company> searchCompanies =  null ;
 
         switch (selectOption){
             case "회사 코드":
-                searchCompanys =companyRepository.findByCompanyCodeLikeOrderById("%"+keyword+"%",pageable);
+                searchCompanies =companyRepository.findByCompanyCodeLikeOrderById("%"+keyword+"%",pageable);
+                break;
+            case "기기 시리얼":
+                searchCompanies =companyRepository.findByOwnDeviceSerial(keyword,pageable);
                 break;
             default:
-                searchCompanys =companyRepository.findByCompanyNameLikeOrderById("%"+keyword+"%",pageable);
+                searchCompanies =companyRepository.findByCompanyNameLikeOrderById("%"+keyword+"%",pageable);
                 break;
         };
 
-        return searchCompanys;
+        return searchCompanies;
     }
     /*매핑된 기기 삭제*/
     @Transactional

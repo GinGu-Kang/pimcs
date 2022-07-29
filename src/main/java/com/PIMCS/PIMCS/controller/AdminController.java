@@ -66,7 +66,6 @@ public class AdminController {
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                 @RequestParam(value = "selectOption", defaultValue = "") String selectOption,
                                 Model model){
-        System.out.println(keyword);
         Page<Company> companyPage=adminService.filterCompany(keyword,selectOption,pageable);
         model.addAttribute("companyPage",companyPage);
         model.addAttribute("companyList",companyPage.getContent());

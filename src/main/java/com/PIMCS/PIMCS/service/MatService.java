@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -271,6 +272,31 @@ public class MatService {
         DynamoDBQueryExpression<MatLog> countQueryExpression = MatLog.searchQueryExpression(company, searchForm);
 
         return dynamoQuery.exePageQuery(MatLog.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    /**
+     * 양도하기 서비스
+     */
+    public HashMap<String, String> transferMatService(Company company, MatFormList matFormList, String targetCompanyCode, User user){
+
+        List<MatForm> matForms = matFormList.getMatForms();
+        List<String> serialNumbers = matForms.stream().map(o -> o.getMat().getSerialNumber()).collect(Collectors.toList());
+
+        //rdb mat삭제
+        List<Mat> mats = matRepository.findByCompanyAndSerialNumberIn(company,serialNumbers);
+        matRepository.deleteAllInBatch(mats);
+
+        //매트와 회사 연결 테이블 업데이터
+
+
+        DynamoMat.delete(dynamoDBMapper, dynamoQuery, mats, company); // dynamoMat 데이터 삭제
+        OrderMailRecipients.delete(dynamoDBMapper, dynamoQuery, mats, company); // 주문이메일 삭제
+        MatLog.batchSave(mats, user, "양도", dynamoDBMapper); //로그남기기
+
+        HashMap<String, String> hashMap =new HashMap<>();
+        hashMap.put("message","양도 완료했습니다.");
+        return hashMap;
+
     }
 
 }

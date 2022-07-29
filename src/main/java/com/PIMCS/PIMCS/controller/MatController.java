@@ -153,4 +153,19 @@ public class MatController {
         return "mat/matLog.html";
     }
 
+    /**
+     * 앙도하기
+     */
+    @PostMapping("/mat/transfer")
+    @ResponseBody
+    public HashMap<String, String> transferMat(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            MatFormList matFormList,
+            @RequestParam(value = "companyCode")String companyCode){
+
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+
+        return matService.transferMatService(secUserCustomForm.getCompany(), matFormList, companyCode, user);
+    }
+
 }

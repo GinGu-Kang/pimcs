@@ -41,6 +41,8 @@ const createCheckedItem = function(oldKey){
 
         }else if(oldKey == "product"){
             li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${getProductAttribute(mat,"productName")}</li>`;
+        }else if(oldKey == "transfer"){
+            li += `<li>${mat['serialNumber']}</li>`;
         }else {
             li += `<li>${mat['serialNumber']}&nbsp;/&nbsp;${mat[oldKey]}</li>`;
         }
@@ -58,7 +60,8 @@ const updateMatFormData = function({columnName, replaceValue}){
     
     for(let i=0; i < checkedMats.length; i++){
         let mat = checkedMats[i];
-        mat[columnName] = replaceValue;
+        if(columnName != null && replaceValue != null)
+            mat[columnName] = replaceValue;
         formData.append(`matForms[${i}].mat.id`, mat.id);
         formData.append(`matForms[${i}].productId`, mat.product.id);
         formData.append(`matForms[${i}].mat.serialNumber`, mat.serialNumber);

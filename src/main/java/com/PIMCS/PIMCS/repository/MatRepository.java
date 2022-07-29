@@ -24,6 +24,8 @@ public interface MatRepository extends JpaRepository<Mat,String> {
 
      Optional<Mat> findBySerialNumber(String serialNum); //시리얼번호
 
+     List<Mat> findByCompanyAndSerialNumberIn(Company company,List<String> serialNumbers);
+
      @EntityGraph(attributePaths = "product")
      Page<Mat> findByCompanyOrderByIdDesc(Company company, Pageable pageable);
 

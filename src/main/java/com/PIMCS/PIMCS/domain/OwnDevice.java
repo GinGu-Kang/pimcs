@@ -23,6 +23,7 @@ public class OwnDevice {
     @Column(updatable =false)
     @CreationTimestamp
     private Timestamp createdAt;
+
     private String serialNumber;
 
     @ManyToOne

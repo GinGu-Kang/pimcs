@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="30 seconds"> <!-- logback 구현체가 설정을 확인하는 주기 -->
 
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%clr(${LOG_LEVEL_PATTERN:-%5p})] [%thread] %logger{30} %msg%n</pattern>
+        </encoder>
+    </appender>
     <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./application_log/application.log</file>
         <encoder>
@@ -10,15 +20,16 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>./application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>5MB</maxFileSize>
+            <maxFileSize>50KB</maxFileSize>
             <maxHistory>30</maxHistory>
             <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <springProfile name="!(dev | prod)">
+    <springProfile name="!prod">
         <root level="info">
             <appender-ref ref="file" />
+            <appender-ref ref="console" />
         </root>
     </springProfile>
 </configuration>

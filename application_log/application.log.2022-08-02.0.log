@@ -1,0 +1,391 @@
+2022-08-02 17:16:38.409 [restartedMain] [traceId=] INFO  com.PIMCS.PIMCS.PimcsApplication.logStarting - Starting PimcsApplication using Java 17.0.1 on gangjinguui-MacBookPro.local with PID 43536 (/Users/gangjingu/Desktop/JG/workspace/pimcs/build/classes/java/main started by gangjingu in /Users/gangjingu/Desktop/JG/workspace/pimcs)
+2022-08-02 17:16:38.410 [restartedMain] [traceId=] INFO  com.PIMCS.PIMCS.PimcsApplication.logStartupProfileInfo - The following profiles are active: dev
+2022-08-02 17:16:38.511 [restartedMain] [traceId=] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-08-02 17:16:38.511 [restartedMain] [traceId=] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor.logTo - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-08-02 17:16:38.896 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.multipleStoresDetected - Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-08-02 17:16:38.896 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-08-02 17:16:38.937 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.Redis.DeviceRepository. If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository.
+2022-08-02 17:16:38.937 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.Redis.FindPwdVORedisRepository. If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository.
+2022-08-02 17:16:38.938 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository. If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository.
+2022-08-02 17:16:38.939 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data JPA - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.Redis.WaitingUserRedisRepository. If you want this repository to be a JPA repository, consider annotating your entities with one of these annotations: javax.persistence.Entity, javax.persistence.MappedSuperclass (preferred), or consider extending one of the following types with your repository: org.springframework.data.jpa.repository.JpaRepository.
+2022-08-02 17:16:38.953 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 53 ms. Found 15 JPA repository interfaces.
+2022-08-02 17:16:38.962 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.multipleStoresDetected - Multiple Spring Data modules found, entering strict repository configuration mode!
+2022-08-02 17:16:38.962 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2022-08-02 17:16:38.970 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.AnswerRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.971 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.CompanyRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.971 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.MatCategoryOrderRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.971 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.MatCategoryRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.971 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.MatOrderRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.972 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.MatRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.972 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.OrderMailFrameRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.972 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.OwnDeviceRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.972 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.ProductCategoryRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.973 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.ProductRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.973 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.QuestionRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.975 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.RoleRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.975 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.SendHistoryRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.975 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.UserRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.976 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationExtensionSupport.isStrictRepositoryCandidate - Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.PIMCS.PIMCS.repository.UserRoleRepository. If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository.
+2022-08-02 17:16:38.979 [restartedMain] [traceId=] INFO  o.s.d.r.c.RepositoryConfigurationDelegate.registerRepositoriesIn - Finished Spring Data repository scanning in 13 ms. Found 4 Redis repository interfaces.
+2022-08-02 17:16:39.284 [restartedMain] [traceId=] INFO  o.s.b.w.e.tomcat.TomcatWebServer.initialize - Tomcat initialized with port(s): 8080 (http)
+2022-08-02 17:16:39.289 [restartedMain] [traceId=] INFO  o.a.coyote.http11.Http11NioProtocol.log - Initializing ProtocolHandler ["http-nio-8080"]
+2022-08-02 17:16:39.289 [restartedMain] [traceId=] INFO  o.a.catalina.core.StandardService.log - Starting service [Tomcat]
+2022-08-02 17:16:39.289 [restartedMain] [traceId=] INFO  o.a.catalina.core.StandardEngine.log - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-08-02 17:16:39.334 [restartedMain] [traceId=] INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring embedded WebApplicationContext
+2022-08-02 17:16:39.334 [restartedMain] [traceId=] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext.prepareWebApplicationContext - Root WebApplicationContext: initialization completed in 823 ms
+2022-08-02 17:16:39.371 [restartedMain] [traceId=] WARN  o.a.c.c.C.[Tomcat].[localhost].[/].log - Cannot deserialize session attribute [SPRING_SECURITY_CONTEXT] for session [DE9AA9BCF8736432CD2607275FE6980C]
+2022-08-02 17:16:39.440 [restartedMain] [traceId=] INFO  o.h.jpa.internal.util.LogHelper.logPersistenceUnitInformation - HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-08-02 17:16:39.460 [restartedMain] [traceId=] INFO  org.hibernate.Version.logVersion - HHH000412: Hibernate ORM core version 5.6.3.Final
+2022-08-02 17:16:39.519 [restartedMain] [traceId=] INFO  o.h.annotations.common.Version.<clinit> - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-08-02 17:16:39.560 [restartedMain] [traceId=] INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Starting...
+2022-08-02 17:16:39.614 [restartedMain] [traceId=] INFO  com.zaxxer.hikari.HikariDataSource.getConnection - HikariPool-1 - Start completed.
+2022-08-02 17:16:39.621 [restartedMain] [traceId=] INFO  org.hibernate.dialect.Dialect.<init> - HHH000400: Using dialect: org.hibernate.dialect.MySQL8Dialect
+2022-08-02 17:16:39.933 [restartedMain] [traceId=] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator.initiateService - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-08-02 17:16:39.937 [restartedMain] [traceId=] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean.buildNativeEntityManagerFactory - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-08-02 17:16:40.117 [restartedMain] [traceId=] WARN  o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration.openEntityManagerInViewInterceptor - spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-08-02 17:16:40.505 [restartedMain] [traceId=] INFO  o.s.b.d.a.OptionalLiveReloadServer.startServer - LiveReload server is running on port 35729
+2022-08-02 17:16:40.830 [restartedMain] [traceId=] INFO  o.s.s.web.DefaultSecurityFilterChain.<init> - Will secure Ant [pattern='/css/**'] with []
+2022-08-02 17:16:40.831 [restartedMain] [traceId=] INFO  o.s.s.web.DefaultSecurityFilterChain.<init> - Will secure Ant [pattern='/js/**'] with []
+2022-08-02 17:16:40.831 [restartedMain] [traceId=] INFO  o.s.s.web.DefaultSecurityFilterChain.<init> - Will secure Ant [pattern='/img/**'] with []
+2022-08-02 17:16:40.848 [restartedMain] [traceId=] INFO  o.s.s.web.DefaultSecurityFilterChain.<init> - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@78dd2812, org.springframework.security.web.context.SecurityContextPersistenceFilter@4cb1f0c2, org.springframework.security.web.header.HeaderWriterFilter@7df3ac47, org.springframework.security.web.csrf.CsrfFilter@7c40974f, org.springframework.security.web.authentication.logout.LogoutFilter@7f8fffa9, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@3682b4d3, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@5c1cc539, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@464ad203, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@1746cac0, org.springframework.security.web.session.SessionManagementFilter@53697552, org.springframework.security.web.access.ExceptionTranslationFilter@30266aed, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@6b3b89eb]
+2022-08-02 17:16:41.116 [restartedMain] [traceId=] INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
+2022-08-02 17:16:41.124 [restartedMain] [traceId=] INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port(s): 8080 (http) with context path ''
+2022-08-02 17:16:41.132 [restartedMain] [traceId=] INFO  com.PIMCS.PIMCS.PimcsApplication.logStarted - Started PimcsApplication in 2.899 seconds (JVM running for 3.333)
+2022-08-02 17:16:48.917 [http-nio-8080-exec-1] [traceId=] INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2022-08-02 17:16:48.917 [http-nio-8080-exec-1] [traceId=] INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
+2022-08-02 17:16:48.919 [http-nio-8080-exec-1] [traceId=] INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 2 ms
+2022-08-02 17:16:48.938 [http-nio-8080-exec-2] [traceId=27d656b9-a500-4845-b015-22b28c6f76a8] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/auth/login] content-type=[null]
+2022-08-02 17:16:49.111 [http-nio-8080-exec-2] [traceId=27d656b9-a500-4845-b015-22b28c6f76a8] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/html;charset=UTF-8]
+2022-08-02 17:16:49.184 [http-nio-8080-exec-3] [traceId=5fd312de-a08e-44a8-91e8-70ec4f37606f] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/reset.css] content-type=[null]
+2022-08-02 17:16:49.185 [http-nio-8080-exec-4] [traceId=1cb2d411-a477-47f1-b058-0d4c672da4ac] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/user/login.css] content-type=[null]
+2022-08-02 17:16:49.192 [http-nio-8080-exec-4] [traceId=1cb2d411-a477-47f1-b058-0d4c672da4ac] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:49.192 [http-nio-8080-exec-3] [traceId=5fd312de-a08e-44a8-91e8-70ec4f37606f] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:49.371 [http-nio-8080-exec-5] [traceId=02ff423f-3b36-47da-9f25-c6ca51a051b7] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/img/logo2.png] content-type=[null]
+2022-08-02 17:16:49.374 [http-nio-8080-exec-5] [traceId=02ff423f-3b36-47da-9f25-c6ca51a051b7] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[image/png]
+2022-08-02 17:16:53.078 [http-nio-8080-exec-7] [traceId=ebe030f4-199f-4faa-a751-b328507bbf6f] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/] content-type=[null]
+2022-08-02 17:16:53.304 [http-nio-8080-exec-7] [traceId=ebe030f4-199f-4faa-a751-b328507bbf6f] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/html;charset=UTF-8]
+2022-08-02 17:16:53.329 [http-nio-8080-exec-9] [traceId=290f014e-2d77-4491-9b88-a61154a03595] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/common.css] content-type=[null]
+2022-08-02 17:16:53.329 [http-nio-8080-exec-8] [traceId=df9cec5c-58e5-4e72-b855-97cdfd037781] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/reset.css] content-type=[null]
+2022-08-02 17:16:53.331 [http-nio-8080-exec-8] [traceId=df9cec5c-58e5-4e72-b855-97cdfd037781] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.331 [http-nio-8080-exec-9] [traceId=290f014e-2d77-4491-9b88-a61154a03595] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.335 [http-nio-8080-exec-10] [traceId=b0f79be5-85dd-4e0b-bffc-9a3a9e7adb71] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/layouts/header.css] content-type=[null]
+2022-08-02 17:16:53.335 [http-nio-8080-exec-2] [traceId=a5143bd8-44bc-4b41-91eb-a6e86d7b5094] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/mat/readMat/readMat.css] content-type=[null]
+2022-08-02 17:16:53.336 [http-nio-8080-exec-1] [traceId=04356335-946a-432f-bbc5-543305db5cc3] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/layouts/navigation.css] content-type=[null]
+2022-08-02 17:16:53.337 [http-nio-8080-exec-5] [traceId=18c6d116-0f4b-4151-9799-4e120c3f0966] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/mat/updateMatCommon.css] content-type=[null]
+2022-08-02 17:16:53.337 [http-nio-8080-exec-4] [traceId=40ff17df-7bae-46eb-9d95-264323bf217d] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/mat/readMat/modal/displaySettingModal.css] content-type=[null]
+2022-08-02 17:16:53.337 [http-nio-8080-exec-10] [traceId=b0f79be5-85dd-4e0b-bffc-9a3a9e7adb71] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.337 [http-nio-8080-exec-2] [traceId=a5143bd8-44bc-4b41-91eb-a6e86d7b5094] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.338 [http-nio-8080-exec-4] [traceId=40ff17df-7bae-46eb-9d95-264323bf217d] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.339 [http-nio-8080-exec-5] [traceId=18c6d116-0f4b-4151-9799-4e120c3f0966] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.339 [http-nio-8080-exec-4] [traceId=047fe983-3584-481e-9e59-227d15b4dcba] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/common.js] content-type=[null]
+2022-08-02 17:16:53.340 [http-nio-8080-exec-7] [traceId=418b2032-b6d9-4559-a545-c08c0061225a] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/layouts/header.js] content-type=[null]
+2022-08-02 17:16:53.340 [http-nio-8080-exec-8] [traceId=4e59ae6c-af02-49a0-9096-32b0fbdb3393] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/layouts/navigation.js] content-type=[null]
+2022-08-02 17:16:53.340 [http-nio-8080-exec-4] [traceId=047fe983-3584-481e-9e59-227d15b4dcba] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.341 [http-nio-8080-exec-7] [traceId=418b2032-b6d9-4559-a545-c08c0061225a] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.341 [http-nio-8080-exec-9] [traceId=4f146dad-4ec4-43b2-9a32-4e4fcac0509a] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/jquery.twbsPagination.js] content-type=[null]
+2022-08-02 17:16:53.341 [http-nio-8080-exec-8] [traceId=4e59ae6c-af02-49a0-9096-32b0fbdb3393] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.342 [http-nio-8080-exec-9] [traceId=4f146dad-4ec4-43b2-9a32-4e4fcac0509a] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.342 [http-nio-8080-exec-3] [traceId=d26dd778-25dc-4b26-9f8a-1da8cf4e1373] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/css/layouts/default.css] content-type=[null]
+2022-08-02 17:16:53.342 [http-nio-8080-exec-10] [traceId=f5995f0a-57a7-45e8-9638-16efed52a144] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/mat/readMat/readMatCommon.js] content-type=[null]
+2022-08-02 17:16:53.343 [http-nio-8080-exec-9] [traceId=ba27de12-abe6-4fd5-8a42-0c0a85f35152] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/mat/readMat/readMatTable.js] content-type=[null]
+2022-08-02 17:16:53.343 [http-nio-8080-exec-1] [traceId=04356335-946a-432f-bbc5-543305db5cc3] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.343 [http-nio-8080-exec-2] [traceId=39b8f0b7-0623-4bf4-b9c0-3d0e13d1adf6] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/mat/readMat/readMatCardView.js] content-type=[null]
+2022-08-02 17:16:53.343 [http-nio-8080-exec-3] [traceId=d26dd778-25dc-4b26-9f8a-1da8cf4e1373] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[text/css]
+2022-08-02 17:16:53.344 [http-nio-8080-exec-10] [traceId=f5995f0a-57a7-45e8-9638-16efed52a144] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.344 [http-nio-8080-exec-5] [traceId=b25d5f02-0f5a-4330-b913-3d202e321858] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/mat/updateMat/updateMatModalCommon.js] content-type=[null]
+2022-08-02 17:16:53.345 [http-nio-8080-exec-2] [traceId=39b8f0b7-0623-4bf4-b9c0-3d0e13d1adf6] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.345 [http-nio-8080-exec-9] [traceId=ba27de12-abe6-4fd5-8a42-0c0a85f35152] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.345 [http-nio-8080-exec-3] [traceId=163ab44e-8717-42e8-a822-65c565023994] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/js/mat/readMat/modal/displaySettingModal.js] content-type=[null]
+2022-08-02 17:16:53.345 [http-nio-8080-exec-5] [traceId=b25d5f02-0f5a-4330-b913-3d202e321858] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.346 [http-nio-8080-exec-3] [traceId=163ab44e-8717-42e8-a822-65c565023994] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[application/javascript]
+2022-08-02 17:16:53.464 [http-nio-8080-exec-7] [traceId=c2afe369-3676-49c4-b091-0db27b898a97] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/img/logo.png] content-type=[null]
+2022-08-02 17:16:53.466 [http-nio-8080-exec-7] [traceId=c2afe369-3676-49c4-b091-0db27b898a97] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[image/png]
+2022-08-02 17:16:53.476 [http-nio-8080-exec-8] [traceId=c67b0b2e-e913-4ab0-bbc3-fa71f73c5783] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/img/table_viewer_active_icon.png] content-type=[null]
+2022-08-02 17:16:53.476 [http-nio-8080-exec-1] [traceId=e35225bb-a28e-4454-bb30-ac84a2573764] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/img/card-viewer-icon.png] content-type=[null]
+2022-08-02 17:16:53.478 [http-nio-8080-exec-1] [traceId=e35225bb-a28e-4454-bb30-ac84a2573764] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[image/png]
+2022-08-02 17:16:53.478 [http-nio-8080-exec-8] [traceId=c67b0b2e-e913-4ab0-bbc3-fa71f73c5783] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[image/png]
+2022-08-02 17:16:53.484 [http-nio-8080-exec-6] [traceId=90bd53e6-d293-4d5d-8204-b2ea64dc87cd] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/api/page/matspage=1&size=10] content-type=[null]
+2022-08-02 17:16:53.631 [http-nio-8080-exec-6] [traceId=90bd53e6-d293-4d5d-8204-b2ea64dc87cd] INFO  c.a.http.JsonErrorResponseHandler.unmarshallException - Unable to unmarshall exception content
+com.fasterxml.jackson.databind.exc.InvalidDefinitionException: Failed to call `setAccess()` on Method 'setCause' due to `java.lang.reflect.InaccessibleObjectException`, problem: Unable to make final void java.lang.Throwable.setCause(java.lang.Throwable) accessible: module java.base does not "opens java.lang" to unnamed module @76908cc0
+ at [Source: UNKNOWN; byte offset: #UNKNOWN]
+	at com.fasterxml.jackson.databind.exc.InvalidDefinitionException.from(InvalidDefinitionException.java:67)
+	at com.fasterxml.jackson.databind.DeserializationContext.reportBadDefinition(DeserializationContext.java:1904)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCache2(DeserializerCache.java:268)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache._createAndCacheValueDeserializer(DeserializerCache.java:244)
+	at com.fasterxml.jackson.databind.deser.DeserializerCache.findValueDeserializer(DeserializerCache.java:142)
+	at com.fasterxml.jackson.databind.DeserializationContext.findRootValueDeserializer(DeserializationContext.java:642)
+	at com.fasterxml.jackson.databind.ObjectMapper._findRootDeserializer(ObjectMapper.java:4805)
+	at com.fasterxml.jackson.databind.ObjectMapper._readValue(ObjectMapper.java:4650)
+	at com.fasterxml.jackson.databind.ObjectMapper.readValue(ObjectMapper.java:2831)
+	at com.fasterxml.jackson.databind.ObjectMapper.treeToValue(ObjectMapper.java:3295)
+	at com.amazonaws.transform.JsonErrorUnmarshaller.unmarshall(JsonErrorUnmarshaller.java:52)
+	at com.amazonaws.http.JsonErrorResponseHandler.unmarshallException(JsonErrorResponseHandler.java:108)
+	at com.amazonaws.http.JsonErrorResponseHandler.createException(JsonErrorResponseHandler.java:96)
+	at com.amazonaws.http.JsonErrorResponseHandler.handle(JsonErrorResponseHandler.java:63)
+	at com.amazonaws.http.JsonErrorResponseHandler.handle(JsonErrorResponseHandler.java:33)
+	at com.amazonaws.http.AwsErrorResponseHandler.handleAse(AwsErrorResponseHandler.java:53)
+	at com.amazonaws.http.AwsErrorResponseHandler.handle(AwsErrorResponseHandler.java:41)
+	at com.amazonaws.http.AwsErrorResponseHandler.handle(AwsErrorResponseHandler.java:26)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.handleErrorResponse(AmazonHttpClient.java:1694)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeOneRequest(AmazonHttpClient.java:1367)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeHelper(AmazonHttpClient.java:1113)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.doExecute(AmazonHttpClient.java:770)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeWithTimer(AmazonHttpClient.java:744)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.execute(AmazonHttpClient.java:726)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.access$500(AmazonHttpClient.java:686)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutionBuilderImpl.execute(AmazonHttpClient.java:668)
+	at com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:532)
+	at com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:512)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.doInvoke(AmazonDynamoDBClient.java:4279)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.invoke(AmazonDynamoDBClient.java:4246)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.executeQuery(AmazonDynamoDBClient.java:2649)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.query(AmazonDynamoDBClient.java:2615)
+	at com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.queryPage(DynamoDBMapper.java:1631)
+	at com.amazonaws.services.dynamodbv2.datamodeling.AbstractDynamoDBMapper.queryPage(AbstractDynamoDBMapper.java:297)
+	at com.PIMCS.PIMCS.Utils.DynamoQuery.getAllItems(DynamoQuery.java:78)
+	at com.PIMCS.PIMCS.Utils.DynamoQuery.exeQuery(DynamoQuery.java:72)
+	at com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients.findBySerialNumber(OrderMailRecipients.java:80)
+	at com.PIMCS.PIMCS.Utils.APIServiceUtils.createMatPageAdapter(APIServiceUtils.java:138)
+	at com.PIMCS.PIMCS.service.APIService.loadPageMatsService(APIService.java:129)
+	at com.PIMCS.PIMCS.service.APIService$$FastClassBySpringCGLIB$$f0549d55.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:783)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:698)
+	at com.PIMCS.PIMCS.service.APIService$$EnhancerBySpringCGLIB$$85504352.loadPageMatsService(<generated>)
+	at com.PIMCS.PIMCS.controller.APIController.loadPageMats(APIController.java:88)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at com.PIMCS.PIMCS.filters.LoggingFilter.doFilterWrapped(LoggingFilter.java:45)
+	at com.PIMCS.PIMCS.filters.LoggingFilter.doFilterInternal(LoggingFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:219)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:213)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.csrf.CsrfFilter.doFilterInternal(CsrfFilter.java:117)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:540)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:382)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1732)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2022-08-02 17:16:53.638 [http-nio-8080-exec-6] [traceId=90bd53e6-d293-4d5d-8204-b2ea64dc87cd] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logResponse - Response: content-type:[null]
+2022-08-02 17:16:53.639 [http-nio-8080-exec-6] [traceId=90bd53e6-d293-4d5d-8204-b2ea64dc87cd] ERROR o.a.c.c.C.[.[.[.[dispatcherServlet].log - Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is com.amazonaws.AmazonServiceException: Unable to unmarshall exception response with the unmarshallers provided (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ValidationException; Request ID: 7ab4659e-bb7d-445b-b942-96b511439cc9)] with root cause
+com.amazonaws.AmazonServiceException: Unable to unmarshall exception response with the unmarshallers provided (Service: AmazonDynamoDBv2; Status Code: 400; Error Code: ValidationException; Request ID: 7ab4659e-bb7d-445b-b942-96b511439cc9)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.handleErrorResponse(AmazonHttpClient.java:1712)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeOneRequest(AmazonHttpClient.java:1367)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeHelper(AmazonHttpClient.java:1113)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.doExecute(AmazonHttpClient.java:770)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.executeWithTimer(AmazonHttpClient.java:744)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.execute(AmazonHttpClient.java:726)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutor.access$500(AmazonHttpClient.java:686)
+	at com.amazonaws.http.AmazonHttpClient$RequestExecutionBuilderImpl.execute(AmazonHttpClient.java:668)
+	at com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:532)
+	at com.amazonaws.http.AmazonHttpClient.execute(AmazonHttpClient.java:512)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.doInvoke(AmazonDynamoDBClient.java:4279)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.invoke(AmazonDynamoDBClient.java:4246)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.executeQuery(AmazonDynamoDBClient.java:2649)
+	at com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient.query(AmazonDynamoDBClient.java:2615)
+	at com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper.queryPage(DynamoDBMapper.java:1631)
+	at com.amazonaws.services.dynamodbv2.datamodeling.AbstractDynamoDBMapper.queryPage(AbstractDynamoDBMapper.java:297)
+	at com.PIMCS.PIMCS.Utils.DynamoQuery.getAllItems(DynamoQuery.java:78)
+	at com.PIMCS.PIMCS.Utils.DynamoQuery.exeQuery(DynamoQuery.java:72)
+	at com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients.findBySerialNumber(OrderMailRecipients.java:80)
+	at com.PIMCS.PIMCS.Utils.APIServiceUtils.createMatPageAdapter(APIServiceUtils.java:138)
+	at com.PIMCS.PIMCS.service.APIService.loadPageMatsService(APIService.java:129)
+	at com.PIMCS.PIMCS.service.APIService$$FastClassBySpringCGLIB$$f0549d55.invoke(<generated>)
+	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:218)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.invokeJoinpoint(CglibAopProxy.java:783)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753)
+	at org.springframework.transaction.interceptor.TransactionInterceptor$1.proceedWithInvocation(TransactionInterceptor.java:123)
+	at org.springframework.transaction.interceptor.TransactionAspectSupport.invokeWithinTransaction(TransactionAspectSupport.java:388)
+	at org.springframework.transaction.interceptor.TransactionInterceptor.invoke(TransactionInterceptor.java:119)
+	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
+	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:753)
+	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:698)
+	at com.PIMCS.PIMCS.service.APIService$$EnhancerBySpringCGLIB$$85504352.loadPageMatsService(<generated>)
+	at com.PIMCS.PIMCS.controller.APIController.loadPageMats(APIController.java:88)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at org.springframework.web.method.support.InvocableHandlerMethod.doInvoke(InvocableHandlerMethod.java:205)
+	at org.springframework.web.method.support.InvocableHandlerMethod.invokeForRequest(InvocableHandlerMethod.java:150)
+	at org.springframework.web.servlet.mvc.method.annotation.ServletInvocableHandlerMethod.invokeAndHandle(ServletInvocableHandlerMethod.java:117)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.invokeHandlerMethod(RequestMappingHandlerAdapter.java:895)
+	at org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter.handleInternal(RequestMappingHandlerAdapter.java:808)
+	at org.springframework.web.servlet.mvc.method.AbstractHandlerMethodAdapter.handle(AbstractHandlerMethodAdapter.java:87)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1067)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:963)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1006)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:898)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:655)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:883)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:764)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at com.PIMCS.PIMCS.filters.LoggingFilter.doFilterWrapped(LoggingFilter.java:45)
+	at com.PIMCS.PIMCS.filters.LoggingFilter.doFilterInternal(LoggingFilter.java:37)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:327)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.invoke(FilterSecurityInterceptor.java:115)
+	at org.springframework.security.web.access.intercept.FilterSecurityInterceptor.doFilter(FilterSecurityInterceptor.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:122)
+	at org.springframework.security.web.access.ExceptionTranslationFilter.doFilter(ExceptionTranslationFilter.java:116)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:126)
+	at org.springframework.security.web.session.SessionManagementFilter.doFilter(SessionManagementFilter.java:81)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AnonymousAuthenticationFilter.doFilter(AnonymousAuthenticationFilter.java:109)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter.doFilter(SecurityContextHolderAwareRequestFilter.java:149)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.savedrequest.RequestCacheAwareFilter.doFilter(RequestCacheAwareFilter.java:63)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:219)
+	at org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter.doFilter(AbstractAuthenticationProcessingFilter.java:213)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:103)
+	at org.springframework.security.web.authentication.logout.LogoutFilter.doFilter(LogoutFilter.java:89)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.csrf.CsrfFilter.doFilterInternal(CsrfFilter.java:117)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.header.HeaderWriterFilter.doHeadersAfter(HeaderWriterFilter.java:90)
+	at org.springframework.security.web.header.HeaderWriterFilter.doFilterInternal(HeaderWriterFilter.java:75)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:110)
+	at org.springframework.security.web.context.SecurityContextPersistenceFilter.doFilter(SecurityContextPersistenceFilter.java:80)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter.doFilterInternal(WebAsyncManagerIntegrationFilter.java:55)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.springframework.security.web.FilterChainProxy$VirtualFilterChain.doFilter(FilterChainProxy.java:336)
+	at org.springframework.security.web.FilterChainProxy.doFilterInternal(FilterChainProxy.java:211)
+	at org.springframework.security.web.FilterChainProxy.doFilter(FilterChainProxy.java:183)
+	at org.springframework.web.filter.DelegatingFilterProxy.invokeDelegate(DelegatingFilterProxy.java:354)
+	at org.springframework.web.filter.DelegatingFilterProxy.doFilter(DelegatingFilterProxy.java:267)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:117)
+	at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
+	at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
+	at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
+	at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
+	at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:540)
+	at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
+	at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
+	at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
+	at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:357)
+	at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:382)
+	at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
+	at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:895)
+	at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1732)
+	at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
+	at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
+	at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
+	at java.base/java.lang.Thread.run(Thread.java:833)

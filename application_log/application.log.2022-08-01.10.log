@@ -1,7 +1,0 @@
-2022-08-01 16:21:19.706 [restartedMain] [traceId=] INFO  o.a.coyote.http11.Http11NioProtocol.log - Starting ProtocolHandler ["http-nio-8080"]
-2022-08-01 16:21:19.733 [restartedMain] [traceId=] INFO  o.s.b.w.e.tomcat.TomcatWebServer.start - Tomcat started on port(s): 8080 (http) with context path ''
-2022-08-01 16:21:19.764 [restartedMain] [traceId=] INFO  com.PIMCS.PIMCS.PimcsApplication.logStarted - Started PimcsApplication in 13.085 seconds (JVM running for 13.979)
-2022-08-01 16:22:10.622 [http-nio-8080-exec-1] [traceId=] INFO  o.a.c.c.C.[Tomcat].[localhost].[/].log - Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-08-01 16:22:10.627 [http-nio-8080-exec-1] [traceId=] INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Initializing Servlet 'dispatcherServlet'
-2022-08-01 16:22:10.632 [http-nio-8080-exec-1] [traceId=] INFO  o.s.web.servlet.DispatcherServlet.initServletBean - Completed initialization in 5 ms
-2022-08-01 16:22:10.726 [http-nio-8080-exec-2] [traceId=6a37c7b3-9851-4952-a6d7-8f5de6b6d99c] INFO  c.PIMCS.PIMCS.filters.LoggingFilter.logRequest - Request : GET uri=[/auth/login] content-type=[null]

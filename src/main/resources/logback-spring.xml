@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="30 seconds"> <!-- logback 구현체가 설정을 확인하는 주기 -->
+<configuration>
 
-    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter" />
-
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>INFO</level>
-        </filter>
-        <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%clr(${LOG_LEVEL_PATTERN:-%5p})] [%thread] %logger{30} %msg%n</pattern>
-        </encoder>
-    </appender>
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>./application_log/application.log</file>
         <encoder>
             <pattern>
@@ -20,16 +10,34 @@
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <fileNamePattern>./application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
-            <maxFileSize>50KB</maxFileSize>
+            <maxFileSize>5MB</maxFileSize>
             <maxHistory>30</maxHistory>
             <totalSizeCap>5GB</totalSizeCap>
         </rollingPolicy>
     </appender>
 
-    <springProfile name="!prod">
-        <root level="info">
-            <appender-ref ref="file" />
-            <appender-ref ref="console" />
-        </root>
-    </springProfile>
+
+
+
+
+    <appender name="LOCAL_CONSOLE_POLICY" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+        </layout>
+    </appender>
+
+
+
+
+    <root level="info">
+        <springProfile name="dev">
+            <appender-ref ref="LOCAL_CONSOLE_POLICY"/>
+        </springProfile>
+
+        <springProfile name="prod">
+            <appender-ref ref="INFO_FILE_POLICY"/>
+        </springProfile>
+    </root>
+
+
 </configuration>

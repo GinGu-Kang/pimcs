@@ -17,7 +17,7 @@
     <p class="title">
         매트 카테고리 등록
     </p>
-    <form name="signUp" th:action="@{/admin/matcategory/add}" method="post">
+    <form name="signUp" th:action="@{/admin/matcategories}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <p class="label">기기명 입력</p>
         <input type="text" name="matCategoryName"  required>

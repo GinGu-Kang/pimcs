@@ -78,7 +78,7 @@ public class APIController {
     }
 
 
-    /**
+    /**i
      *  page query로 select하기 위한 api controler
      */
     @GetMapping("/api/page/mats")

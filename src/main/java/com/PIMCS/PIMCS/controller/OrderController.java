@@ -39,7 +39,7 @@ public class OrderController {
 
     @GetMapping("mat")
     public String orderMat(Model model){
-        List<MatCategory> matCategoryList=adminService.findMatCategory();
+        List<MatCategory> matCategoryList=orderService.findMatCategoryListService();
         model.addAttribute("matCategoryList",matCategoryList);
         return "order/orderMat";
     }

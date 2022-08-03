@@ -11,7 +11,7 @@
 </head>
 <div layout:fragment="content"  class="content">
     <p class="title">
-        매트 카테고리 수정
+        매트 카테고리
     </p>
     <table class="table pimcs-table">
         <thead>
@@ -52,10 +52,10 @@
         var matPrice = $(modifyButton).closest("tr").children("td:eq(2)").children().prop('value');
         var maxWeight = $(modifyButton).closest("tr").children("td:eq(3)").children().prop('value');
 
-
+        console.log(matPrice)
         $.ajax({
-            url: '/admin/matcategory/modify',
-            type: 'post',
+            url: '/admin/matcategories',
+            type: 'put',
             data: {
                 matCategoryName: matCategoryName,
                 matInformation: matInformation,
@@ -81,7 +81,7 @@
         var DBId = $(removeButton).closest("tr").children("td:eq(4)").children().prop('value');
         console.log(DBId)
         $.ajax({
-                    url:'/admin/matcategory/remove',
+                    url:'/admin/matcategories/remove',
                     type:'post',
                     data:{DBId:DBId},
                     beforeSend : function(xhr)

@@ -42,7 +42,7 @@ public class AdminService {
     }
 
 
-    public void addMatCategory(MatCategory matCategory){
+    public void createMatCategoriesService(MatCategory matCategory){
         matCategoryRepository.save(matCategory);
     }
 
@@ -55,7 +55,7 @@ public class AdminService {
         }
 
     }
-    public List<MatCategory> findMatCategory(){
+    public List<MatCategory> findMatCategoryListService(){
         return matCategoryRepository.findAll();
     }
 

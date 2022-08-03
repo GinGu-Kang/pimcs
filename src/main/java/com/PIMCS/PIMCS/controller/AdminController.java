@@ -7,13 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -27,29 +24,29 @@ public class AdminController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/matcategory/add")
-    public String matCategoryAddForm(){
-        return "admin/addMatCategory";
+    @GetMapping("/matcategories/create")
+    public String createMatCategoryForm(){
+        return "admin/matCategories";
     }
 
 
-    @PostMapping("/matcategory/add")
-    public String matCategoryAdd(MatCategory matCategory){
-        adminService.addMatCategory(matCategory);
-        return "redirect:/admin/matcategory/read";
+    @PostMapping("/matcategories")
+    public String createMatCategories(MatCategory matCategory){
+        adminService.createMatCategoriesService(matCategory);
+        return "redirect:/admin/matcategoies";
     }
 
 
-    @GetMapping("matcategory/read")
-    public String matCategoryList(Model model){
-        model.addAttribute(adminService.findMatCategory());
-        return "admin/categoryManagement";
+    @GetMapping("/matcategories")
+    public String findMatCategoryList(Model model){
+        model.addAttribute(adminService.findMatCategoryListService());
+        return "admin/matCategories";
     }
 
-    @PostMapping("matcategory/modify")
+    @PutMapping("/matcategories")
     @ResponseBody
     public boolean matCategoryModify(MatCategory matCategory){
-
+        System.out.println("1212412421");
         adminService.modifyMatCategory(matCategory);
         return true;
     }
@@ -73,7 +70,7 @@ public class AdminController {
     }
 
     /*회사 상세 보기*/
-    @GetMapping("company/{companyId}")
+    @GetMapping("companies/{companyId}")
     public String companyDetail(Model model,@PathVariable Integer companyId){
         Optional<Company> company = adminService.findCompany(companyId);
         if (company.isPresent()){

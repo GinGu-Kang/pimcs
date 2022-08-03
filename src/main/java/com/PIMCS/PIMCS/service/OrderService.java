@@ -210,6 +210,9 @@ public class OrderService {
         }
     }
 
+    public List<MatCategory> findMatCategoryListService(){
+        return matCategoryRepository.findAll();
+    }
 }
 
 

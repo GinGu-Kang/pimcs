@@ -71,7 +71,7 @@
             type:'post',
             data:{email:email},
             beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            {
                 xhr.setRequestHeader(header, token);
             },
             success:function(isEmail){ //컨트롤러에서 넘어온 cnt값을 받는다
@@ -102,7 +102,7 @@
             type:'post',
             data:{company:company},
             beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            {
                 xhr.setRequestHeader(header, token);
             },
             success:function(isCompany){ //컨트롤러에서 넘어온 cnt값을 받는다

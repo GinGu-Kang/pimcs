@@ -43,19 +43,17 @@ public class AdminController {
         return "admin/matCategories";
     }
 
-    @PutMapping("/matcategories")
     @ResponseBody
-    public boolean matCategoryModify(MatCategory matCategory){
-        System.out.println("1212412421");
-        adminService.modifyMatCategory(matCategory);
-        return true;
+    @PutMapping("/matcategories")
+    public HashMap<String,String> updateMatCategory(MatCategory matCategory){
+        HashMap<String,String> resultMap = adminService.updateMatCategoryService(matCategory);
+        return resultMap;
     }
 
     @ResponseBody
-    @PostMapping("matcategory/remove")
-    public boolean matCategoryRemove(Integer DBId){
-        adminService.removeMatCategory(DBId);
-        return true;
+    @DeleteMapping("/matcategories")
+    public void matCategoryRemove(Integer Id){
+        adminService.removeMatCategory(Id);
     }
     //회사 조회
     @GetMapping("companies")

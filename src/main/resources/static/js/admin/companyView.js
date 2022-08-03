@@ -27,7 +27,7 @@ $(".del").on("click",function (){
             type:'delete',
             data:{ownDeviceList:ownDeviceList},
             beforeSend : function(xhr)
-            {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+            {
                 xhr.setRequestHeader(header, token);
             },
             success:function(resultMap){
@@ -53,7 +53,7 @@ $("#add-mat-button").on("click",function () {
         type: 'post',
         data: {deviceSerial: deviceSerial,
             companyId:companyId},
-        beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+        beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
         },
         success: function (resultMap) {

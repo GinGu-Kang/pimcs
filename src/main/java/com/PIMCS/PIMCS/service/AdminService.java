@@ -46,13 +46,27 @@ public class AdminService {
         matCategoryRepository.save(matCategory);
     }
 
-    public void modifyMatCategory(MatCategory matCategory){
+    public HashMap<String,String> updateMatCategoryService(MatCategory matCategory){
         Optional<MatCategory> matCategorySource=matCategoryRepository.findByMatCategoryName(matCategory.getMatCategoryName());
+        HashMap<String,String> resultMap= new HashMap<>();
+        String msg="";
 
         if(matCategorySource.isPresent()){
+
             matCategory.setId(matCategorySource.get().getId());
             matCategoryRepository.save(matCategory);
+
+            msg="변경되었습니다.";
+            resultMap.put("result","T");
+            resultMap.put("msg",msg);
+
+        }else {
+            msg="존재하지 않는 카테고리 입니다.";
+            resultMap.put("result","F");
+            resultMap.put("msg",msg);
         }
+        return resultMap;
+
 
     }
     public List<MatCategory> findMatCategoryListService(){

@@ -3,6 +3,8 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.service.AdminService;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,8 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -26,35 +30,45 @@ public class AdminController {
 
     @GetMapping("/matcategories/create")
     public String createMatCategoryForm(){
-        return "admin/matCategories";
+        return "admin/createMatCategory";
     }
 
 
     @PostMapping("/matcategories")
-    public String createMatCategories(MatCategory matCategory){
-        adminService.createMatCategoriesService(matCategory);
-        return "redirect:/admin/matcategoies";
+    public String createMatCategory(MatCategory matCategory){
+        adminService.createMatCategoryService(matCategory);
+        return "redirect:/admin/matcategories";
     }
 
 
     @GetMapping("/matcategories")
     public String findMatCategoryList(Model model){
         model.addAttribute(adminService.findMatCategoryListService());
-        return "admin/matCategories";
+        return "admin/findMatCategoryList.html";
     }
 
     @ResponseBody
     @PutMapping("/matcategories")
     public HashMap<String,String> updateMatCategory(MatCategory matCategory){
-        HashMap<String,String> resultMap = adminService.updateMatCategoryService(matCategory);
+        HashMap<String,String> resultMap = new HashMap<>();
+        try{
+             resultMap= adminService.updateMatCategoryService(matCategory);
+        }
+        catch (DataIntegrityViolationException e){
+            System.out.println("잡았다 요놈");
+            resultMap.put("msg","error");
+        }
+
         return resultMap;
     }
 
     @ResponseBody
     @DeleteMapping("/matcategories")
-    public void matCategoryRemove(Integer Id){
-        adminService.removeMatCategory(Id);
+    public void deleteMatCategory(Integer Id){
+        adminService.deleteMatCategoryService(Id);
     }
+
+
     //회사 조회
     @GetMapping("companies")
     public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
@@ -185,12 +199,10 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("company/owndevice")
-    public HashMap<String,String> ownDeviceSave(@RequestParam(value="deviceSerial") String deviceSerial,@RequestParam(value="companyId") Integer companyId){
-        HashMap<String,String> resultMap = adminService.addOwnDevice(deviceSerial,companyId);
-
+    public HashMap<String,String> ownDeviceSave(@RequestBody Map<String, String> param){
+        HashMap<String,String> resultMap = adminService.addOwnDevice(param.get("deviceSerial"),Integer.parseInt(param.get("companyId")));
         return resultMap;
     }
-
 
 
 }

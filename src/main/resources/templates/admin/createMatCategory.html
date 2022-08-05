@@ -4,7 +4,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet"  href="/css/admin/addMatCategory.css">
-
+    <script defer type="text/javascript" src="/js/admin/createMatCategory.js"></script>
 
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,7 +17,7 @@
     <p class="title">
         매트 카테고리 등록
     </p>
-    <form name="signUp" th:action="@{/admin/matcategories}" method="post">
+    <form id="createMatCategoryForm" th:action="@{/admin/matcategories}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <p class="label">기기명 입력</p>
         <input type="text" name="matCategoryName"  required>

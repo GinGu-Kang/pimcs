@@ -26,7 +26,6 @@ function matCategoryModify(id) {
             xhr.setRequestHeader(header, token);
         },success:function(resultMap){
             alert(resultMap['msg'])
-
         },
         error: function () {
             alert("에러입니다");

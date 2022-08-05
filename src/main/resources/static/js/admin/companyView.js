@@ -51,8 +51,9 @@ $("#add-mat-button").on("click",function () {
     $.ajax({
         url: "/admin/company/owndevice",
         type: 'post',
-        data: {deviceSerial: deviceSerial,
-            companyId:companyId},
+        contentType: 'application/json',
+        data:JSON.stringify({deviceSerial: deviceSerial,
+            companyId:companyId}),
         beforeSend: function (xhr) {
             xhr.setRequestHeader(header, token);
         },

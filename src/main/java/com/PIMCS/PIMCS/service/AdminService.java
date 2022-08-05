@@ -42,18 +42,17 @@ public class AdminService {
     }
 
 
-    public void createMatCategoriesService(MatCategory matCategory){
+    public void createMatCategoryService(MatCategory matCategory){
         matCategoryRepository.save(matCategory);
     }
 
     public HashMap<String,String> updateMatCategoryService(MatCategory matCategory){
-        Optional<MatCategory> matCategorySource=matCategoryRepository.findByMatCategoryName(matCategory.getMatCategoryName());
+        Optional<MatCategory> isMatCategory=matCategoryRepository.findById(matCategory.getId());
         HashMap<String,String> resultMap= new HashMap<>();
         String msg="";
 
-        if(matCategorySource.isPresent()){
+        if(isMatCategory.isPresent()){
 
-            matCategory.setId(matCategorySource.get().getId());
             matCategoryRepository.save(matCategory);
 
             msg="변경되었습니다.";
@@ -73,11 +72,23 @@ public class AdminService {
         return matCategoryRepository.findAll();
     }
 
-    public void removeMatCategory(Integer id){
+    public HashMap<String,String> deleteMatCategoryService(Integer id){
         Optional<MatCategory> matCategory=matCategoryRepository.findById(id);
+        HashMap<String,String> resultMap= new HashMap<>();
+        String msg="";
+
         if(matCategory.isPresent()){
             matCategoryRepository.delete(matCategory.get());
+            msg="삭제되었습니다.";
+            resultMap.put("result","T");
+            resultMap.put("msg",msg);
+        }else {
+            msg="존재하지 않는 카테고리 입니다.";
+            resultMap.put("result","F");
+            resultMap.put("msg",msg);
         }
+
+        return resultMap;
     }
 
     public List<MatCategory> findMatCategoryList(List<Integer> matCategoryIdList){

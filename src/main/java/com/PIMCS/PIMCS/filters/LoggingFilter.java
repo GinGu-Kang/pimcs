@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import javax.servlet.FilterChain;
@@ -31,52 +32,46 @@ public class LoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         MDC.put("traceId", UUID.randomUUID().toString());
+
         if (isAsyncDispatch(request)) {
             filterChain.doFilter(request, response);
         } else {
-            doFilterWrapped(new RequestWrapper(request), new ResponseWrapper(response), filterChain);
+//            filterChain.doFilter(request, response);
+            doFilterWrapped(wrapRequest(request), wrapResponse(response), filterChain);
         }
         MDC.clear();
     }
-
-    protected void doFilterWrapped(RequestWrapper request, ContentCachingResponseWrapper response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterWrapped(ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, FilterChain filterChain) throws ServletException, IOException {
         try {
             logRequest(request);
             filterChain.doFilter(request, response);
         } finally {
+
             logResponse(response);
             response.copyBodyToResponse();
         }
     }
 
-    private static void logRequest(RequestWrapper request) throws IOException {
+    private static void logRequest(ContentCachingRequestWrapper request) throws IOException {
         String queryString = request.getQueryString();
         log.info("Request : {} uri=[{}] content-type=[{}]",
                 request.getMethod(),
                 queryString == null ? request.getRequestURI() : request.getRequestURI() + queryString,
                 request.getContentType()
         );
-//        logPayload("Request", request.getContentType(), request.getInputStream());
+
     }
 
     private static void logResponse(ContentCachingResponseWrapper response) throws IOException {
         log.info("Response: content-type:[{}]", response.getContentType());
-//        logPayload("Response", response.getContentType(), response.getContentInputStream());
+
+
     }
 
-//    private static void logPayload(String prefix, String contentType, InputStream inputStream) throws IOException {
-//        boolean visible = isVisible(MediaType.valueOf(contentType == null ? "application/json" : contentType));
-//        if (visible) {
-//            byte[] content = StreamUtils.copyToByteArray(inputStream);
-//            if (content.length > 0) {
-//                String contentString = new String(content);
-//                log.info("{} Payload: {}", prefix, contentString);
-//            }
-//        } else {
-//            log.info("{} Payload: Binary Content", prefix);
-//        }
-//
-//    }
+
+
+
+
 
     private static boolean isVisible(MediaType mediaType) {
         final List<MediaType> VISIBLE_TYPES = Arrays.asList(
@@ -92,4 +87,21 @@ public class LoggingFilter extends OncePerRequestFilter {
         return VISIBLE_TYPES.stream()
                 .anyMatch(visibleType -> visibleType.includes(mediaType));
     }
+
+    private static ContentCachingRequestWrapper wrapRequest(HttpServletRequest request) {
+        if (request instanceof ContentCachingRequestWrapper) {
+            return (ContentCachingRequestWrapper) request;
+        } else {
+            return new ContentCachingRequestWrapper(request);
+        }
+    }
+
+    private static ContentCachingResponseWrapper wrapResponse(HttpServletResponse response) {
+        if (response instanceof ContentCachingResponseWrapper) {
+            return (ContentCachingResponseWrapper) response;
+        } else {
+            return new ContentCachingResponseWrapper(response);
+        }
+    }
 }
+//

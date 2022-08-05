@@ -34,10 +34,11 @@ public class AdminController {
     }
 
 
+    @ResponseBody
     @PostMapping("/matcategories")
-    public String createMatCategory(MatCategory matCategory){
-        adminService.createMatCategoryService(matCategory);
-        return "redirect:/admin/matcategories";
+    public MatCategory createMatCategory(@RequestBody MatCategory matCategory){
+        MatCategory resultData=adminService.createMatCategoryService(matCategory);
+        return resultData;
     }
 
 

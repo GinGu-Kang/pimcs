@@ -2,7 +2,9 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.repository.*;
+import org.joda.time.IllegalInstantException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -42,8 +44,17 @@ public class AdminService {
     }
 
 
-    public void createMatCategoryService(MatCategory matCategory){
-        matCategoryRepository.save(matCategory);
+    public MatCategory createMatCategoryService(MatCategory matCategory){
+        matCategory.setMatCategoryName("a4");
+        try{
+            matCategoryRepository.save(matCategory);
+        }catch (DataIntegrityViolationException e){
+            throw new IllegalArgumentException("이름이 겹치자나");
+
+        }
+        return matCategory;
+
+
     }
 
     public HashMap<String,String> updateMatCategoryService(MatCategory matCategory){

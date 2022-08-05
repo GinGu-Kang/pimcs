@@ -112,6 +112,30 @@ const loadPostData = function({url,header,data}){
     });
     return resultData;
 }
+/*json으로 반환*/
+const loadPostDataToJson = function({url,header,data}){
+
+    let resultData;
+    $.ajax({
+        url:url,
+        type:'post',
+        contentType: 'application/json',
+        data:JSON.stringify(data),
+        async: false, // 동기식으로 동작
+        beforeSend : function(xhr)
+        {
+
+            xhr.setRequestHeader(header['header'], header['token']);
+        },
+        success:function(response){
+            resultData = response;
+        },
+        error:function(request,status,error){
+            alert(error.);
+        }
+    });
+    return resultData;
+}
 
 /**
  * 천단위 콤바
@@ -119,7 +143,26 @@ const loadPostData = function({url,header,data}){
 const formatKoKr = function(str){
     return str.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
-    
+
+jQuery.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+            var arr = this.serializeArray();
+            if (arr) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });
+            }//if ( arr ) {
+        }
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+
+    return obj;
+};
     
 
 

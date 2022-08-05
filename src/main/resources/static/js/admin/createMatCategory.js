@@ -1,11 +1,44 @@
-var token = $("meta[name='_csrf']").attr("content");
-var header = $("meta[name='_csrf_header']").attr("content");
+
+jQuery.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+            var arr = this.serializeArray();
+            if (arr) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });
+            }//if ( arr ) {
+        }
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+
+    return obj;
+};
 
 
-$("#createMatCategoryForm").submit(function (){
+$("#submit-btn").on("click",function (){
 
-    console.log("hihi")
-    alert("hi")
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    let formData = $('#createMatCategoryForm').serializeObject();
+    let resultData = loadPostDataToJson({
+        url: "/admin/matcategories",
+        header: {
+            'header': header,
+            'token': token
+        },
+        data: formData
+
+    });
+    if(resultData!=null){
+        alert("저장되었습니다.")
+        location.replace("/admin/matcategories");
+    }
+
 
 });
 

@@ -121,7 +121,7 @@ const loadPostDataToJson = function({url,header,data}){
         type:'post',
         contentType: 'application/json',
         data:JSON.stringify(data),
-        async: false, // 동기식으로 동작
+        async: false,
         beforeSend : function(xhr)
         {
 

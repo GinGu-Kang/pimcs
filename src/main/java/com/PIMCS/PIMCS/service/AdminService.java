@@ -2,15 +2,17 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.repository.*;
-import org.joda.time.IllegalInstantException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +30,7 @@ public class AdminService {
     private final CompanyRepository companyRepository;
     private final OwnDeviceRepository ownDeviceRepository;
     private final SendHistoryRepository sendHistoryRepository;
+    private static final Logger logger =LoggerFactory.getLogger(AdminService.class);
 
 
     @Autowired
@@ -45,61 +48,39 @@ public class AdminService {
 
 
     public MatCategory createMatCategoryService(MatCategory matCategory){
-        matCategory.setMatCategoryName("a4");
         try{
-            matCategoryRepository.save(matCategory);
+            return matCategoryRepository.save(matCategory);
         }catch (DataIntegrityViolationException e){
-            throw new IllegalArgumentException("이름이 겹치자나");
-
+            throw new DuplicateKeyException("이름은 중복될수 없습니다.");
         }
-        return matCategory;
-
-
     }
 
-    public HashMap<String,String> updateMatCategoryService(MatCategory matCategory){
-        Optional<MatCategory> isMatCategory=matCategoryRepository.findById(matCategory.getId());
-        HashMap<String,String> resultMap= new HashMap<>();
-        String msg="";
+    public void updateMatCategoryService(MatCategory matCategory){
+        Optional<MatCategory> optionalMatCategory=matCategoryRepository.findById(matCategory.getId());
 
-        if(isMatCategory.isPresent()){
-
-            matCategoryRepository.save(matCategory);
-
-            msg="변경되었습니다.";
-            resultMap.put("result","T");
-            resultMap.put("msg",msg);
-
+        if(optionalMatCategory.isPresent()){
+            try{
+                matCategoryRepository.save(matCategory);
+            }catch (DataIntegrityViolationException e){
+                throw new DuplicateKeyException("이름은 중복될수 없습니다.");
+            }
         }else {
-            msg="존재하지 않는 카테고리 입니다.";
-            resultMap.put("result","F");
-            resultMap.put("msg",msg);
+            throw new IllegalStateException("존재하지 않는 카테고리 입니다.");
         }
-        return resultMap;
-
 
     }
+
     public List<MatCategory> findMatCategoryListService(){
         return matCategoryRepository.findAll();
     }
 
-    public HashMap<String,String> deleteMatCategoryService(Integer id){
-        Optional<MatCategory> matCategory=matCategoryRepository.findById(id);
-        HashMap<String,String> resultMap= new HashMap<>();
-        String msg="";
-
-        if(matCategory.isPresent()){
-            matCategoryRepository.delete(matCategory.get());
-            msg="삭제되었습니다.";
-            resultMap.put("result","T");
-            resultMap.put("msg",msg);
+    public void deleteMatCategoryService(Integer id){
+        Optional<MatCategory> optionalMatCategory=matCategoryRepository.findById(id);
+        if(optionalMatCategory.isPresent()){
+            matCategoryRepository.delete(optionalMatCategory.get());
         }else {
-            msg="존재하지 않는 카테고리 입니다.";
-            resultMap.put("result","F");
-            resultMap.put("msg",msg);
+            throw new IllegalStateException("존재하지 않는 카테고리 입니다.");
         }
-
-        return resultMap;
     }
 
     public List<MatCategory> findMatCategoryList(List<Integer> matCategoryIdList){
@@ -118,12 +99,19 @@ public class AdminService {
     public Page<Company> findAllCompany(Pageable pageable){
         return companyRepository.findAll(pageable);
     }
+
     /*회사 상세*/
-    public Optional<Company> findCompany(Integer companyId){
-        return companyRepository.findById(companyId);
+    public Company detailsCompanyService(Integer companyId) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
+        if (optionalCompany.isPresent()) {
+            return companyRepository.findById(companyId).get();
+        }else{
+            throw new IllegalStateException("존재하지 않는 회사입니다.");
+        }
     }
+
     //회사 검색
-    public Page<Company> filterCompany(String keyword,String selectOption,Pageable pageable){
+    public Page<Company> findCompanyListService(String keyword,String selectOption,Pageable pageable){
 
         Page<Company> searchCompanies =  null ;
 

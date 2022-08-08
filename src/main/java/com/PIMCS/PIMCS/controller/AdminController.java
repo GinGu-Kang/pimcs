@@ -33,14 +33,11 @@ public class AdminController {
         return "admin/createMatCategory";
     }
 
-
     @ResponseBody
     @PostMapping("/matcategories")
     public MatCategory createMatCategory(@RequestBody MatCategory matCategory){
-        MatCategory resultData=adminService.createMatCategoryService(matCategory);
-        return resultData;
+        return adminService.createMatCategoryService(matCategory);
     }
-
 
     @GetMapping("/matcategories")
     public String findMatCategoryList(Model model){
@@ -50,49 +47,40 @@ public class AdminController {
 
     @ResponseBody
     @PutMapping("/matcategories")
-    public HashMap<String,String> updateMatCategory(MatCategory matCategory){
-        HashMap<String,String> resultMap = new HashMap<>();
-        try{
-             resultMap= adminService.updateMatCategoryService(matCategory);
-        }
-        catch (DataIntegrityViolationException e){
-            System.out.println("잡았다 요놈");
-            resultMap.put("msg","error");
-        }
-
-        return resultMap;
+    public boolean updateMatCategory(@RequestBody MatCategory matCategory){
+        adminService.updateMatCategoryService(matCategory);
+        return true;
     }
 
     @ResponseBody
     @DeleteMapping("/matcategories")
-    public void deleteMatCategory(Integer Id){
-        adminService.deleteMatCategoryService(Id);
+    public boolean deleteMatCategory(@RequestBody MatCategory matCategory){
+        adminService.deleteMatCategoryService(matCategory.getId());
+        return true;
     }
 
 
     //회사 조회
     @GetMapping("companies")
-    public String companySearch(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+    public String findCompanyList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                 @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                 @RequestParam(value = "selectOption", defaultValue = "") String selectOption,
                                 Model model){
-        Page<Company> companyPage=adminService.filterCompany(keyword,selectOption,pageable);
+        Page<Company> companyPage=adminService.findCompanyListService(keyword,selectOption,pageable);
         model.addAttribute("companyPage",companyPage);
         model.addAttribute("companyList",companyPage.getContent());
-        return "admin/companyList";
+        return "admin/findCompanyList";
     }
 
     /*회사 상세 보기*/
     @GetMapping("companies/{companyId}")
-    public String companyDetail(Model model,@PathVariable Integer companyId){
-        Optional<Company> company = adminService.findCompany(companyId);
-        if (company.isPresent()){
-            model.addAttribute("company",company.get());
-            return "admin/companyView";
-        }else{
-            return "noneRole";
-        }
+    public String detailsCompany(Model model,@PathVariable Integer companyId){
+        Company company = adminService.detailsCompanyService(companyId);
+        return "admin/companyView";
     }
+
+
+
     /*매핑된 기기 삭제*/
     @ResponseBody
     @DeleteMapping (value = "owndevices")
@@ -161,10 +149,6 @@ public class AdminController {
 
     @GetMapping("order/search")
     public String adminOrderQuestion(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,String keyword,Integer totalPriceStart,Integer totalPriceEnd,Model model){
-        System.out.println( "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-        System.out.println(keyword);
-        System.out.println(totalPriceEnd);
-        System.out.println(totalPriceStart);
 
         System.out.println(keyword);
         Page<MatOrder> matOrderPage=adminService.filterOrder(keyword,totalPriceStart,totalPriceEnd,pageable);

@@ -112,26 +112,29 @@ const loadPostData = function({url,header,data}){
     });
     return resultData;
 }
-/*json으로 반환*/
-const loadPostDataToJson = function({url,header,data}){
 
+/*json으로 반환후 post*/
+const loadDataToJson = function({url,type,data}){
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
     let resultData;
     $.ajax({
         url:url,
-        type:'post',
+        type:type,
         contentType: 'application/json',
         data:JSON.stringify(data),
         async: false,
         beforeSend : function(xhr)
         {
-
-            xhr.setRequestHeader(header['header'], header['token']);
+            xhr.setRequestHeader(header, token);
         },
         success:function(response){
             resultData = response;
         },
         error:function(request,status,error){
-            alert(error.);
+            let detailMsg = JSON.parse(request.responseText)['trace'].split('\n')[0];
+            let startMsgIndex = detailMsg.indexOf(':');
+            alert(detailMsg.substr(startMsgIndex+1));
         }
     });
     return resultData;
@@ -144,6 +147,10 @@ const formatKoKr = function(str){
     return str.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
+/*
+ *  form data를  queryString을 json 형태로 변환
+ *  -> $('#createMatCategoryForm').serializeObject();
+ */
 jQuery.fn.serializeObject = function() {
     var obj = null;
     try {
@@ -154,7 +161,7 @@ jQuery.fn.serializeObject = function() {
                 jQuery.each(arr, function() {
                     obj[this.name] = this.value;
                 });
-            }//if ( arr ) {
+            }
         }
     } catch (e) {
         alert(e.message);

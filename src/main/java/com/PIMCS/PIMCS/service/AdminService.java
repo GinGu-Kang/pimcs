@@ -129,14 +129,19 @@ public class AdminService {
 
         return searchCompanies;
     }
+
     /*매핑된 기기 삭제*/
     @Transactional
-    public void removeOwndevice(List<Integer> ownDeviceList) {
-        ownDeviceRepository.deleteAllByIdIn(ownDeviceList);
+    public void deleteOwnDeviceListService(List<Integer> ownDeviceIdList) {
+        ownDeviceIdList.remove(0);
+        System.out.println(ownDeviceIdList.size());
+        ownDeviceRepository.deleteAllByIdIn(ownDeviceIdList);
     }
+
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
     }
+
 
     public Question findQuestion(Integer questionId){
         Question question=questionRepository.findById(questionId).get();
@@ -150,7 +155,7 @@ public class AdminService {
     }
 
     //질문 필터링 검색
-    public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
+    public Page<Question> findAdminQuestionListService(String keyword,String selectOption,Pageable pageable){
 
         Page<Question> searchQuestions =  null ;
 

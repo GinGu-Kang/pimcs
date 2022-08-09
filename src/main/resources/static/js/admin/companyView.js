@@ -6,12 +6,12 @@ let header = $("meta[name='_csrf_header']").attr("content");
 $(".del").on("click",function (){
     let result = confirm("회사의 소유 기기를 삭제하시겠습니까?");
     let fileValue = $("input:checkbox[name='serial']:checked").length;
-    let ownDeviceList = [];
+    let ownDeviceIdList = [];
 
     if(fileValue!=0){
         for(var i=0; i<fileValue; i++){
             if($("input:checkbox[name='serial']:checked")[i].value!=null){
-                ownDeviceList[i] = $("input:checkbox[name='serial']:checked")[i].value;
+                ownDeviceIdList[i] = $("input:checkbox[name='serial']:checked")[i].value;
             }else{
                 return alert("빈칸을 입력할 수 없습니다.")
             }
@@ -20,12 +20,12 @@ $(".del").on("click",function (){
         return alert("선택된 기기가 없습니다.")
     }
 
-    console.log(ownDeviceList);
+    console.log(ownDeviceIdList);
     if(result){
         $.ajax({
             url:"/admin/owndevices",
             type:'delete',
-            data:{ownDeviceList:ownDeviceList},
+            data:{ownDeviceIdList:ownDeviceIdList},
             beforeSend : function(xhr)
             {
                 xhr.setRequestHeader(header, token);

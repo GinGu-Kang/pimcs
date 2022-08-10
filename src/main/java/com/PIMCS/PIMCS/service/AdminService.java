@@ -143,7 +143,7 @@ public class AdminService {
     }
 
 
-    public Question findQuestion(Integer questionId){
+    public Question detailsAdminQnaService(Integer questionId){
         Question question=questionRepository.findById(questionId).get();
 
         if (question.getAnswer()==null){
@@ -155,7 +155,7 @@ public class AdminService {
     }
 
     //질문 필터링 검색
-    public Page<Question> findAdminQuestionListService(String keyword,String selectOption,Pageable pageable){
+    public Page<Question> findAdminQnaListService(String keyword,String selectOption,Pageable pageable){
 
         Page<Question> searchQuestions =  null ;
 

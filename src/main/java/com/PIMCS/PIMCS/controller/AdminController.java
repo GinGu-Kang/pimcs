@@ -94,29 +94,31 @@ public class AdminController {
 
 
 
-    //필터링 조회
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    /*관리자 qna*/
     @GetMapping("qnas")
-    public String findAdminQuestionList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+    public String findAdminQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                                       @RequestParam(value = "keyword", defaultValue = "") String keyword,
                                       @RequestParam(value = "selectOption", defaultValue = "") String selectOption,
                                       Model model){
-        Page<Question> questionPage=adminService.findAdminQuestionListService(keyword,selectOption,pageable);
+        Page<Question> questionPage=adminService.findAdminQnaListService(keyword,selectOption,pageable);
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
-        return "admin/findQnaList";
+        return "admin/findAdminQnaList";
     }
 
-    @GetMapping("qna/view")
-    public String detailAdminQna(Model model,Integer questionId){
-        Question question = adminService.findQuestion(questionId);
+    @GetMapping("qnas/{questionId}")
+    public String detailsAdminQna(Model model,@PathVariable(value = "questionId") Integer questionId){
+        Question question = adminService.detailsAdminQnaService(questionId);
         model.addAttribute(question);
-        return "admin/adminQnaView";
+        return "admin/detailsAdminQna";
     }
 
-    @PostMapping("qna/view")
-    public String answerAdd(Answer answer,Integer questionId){
-        adminService.addAnswer(questionId,answer);
+
+    @PostMapping("qnas")
+    public String createAnswer(@RequestBody Answer answer,Integer questionId){
+        System.out.println(questionId);
+        System.out.println(answer.getQuestion());
+//        adminService.addAnswer(questionId,answer);
         return "redirect:/admin/qnas";
     }
 

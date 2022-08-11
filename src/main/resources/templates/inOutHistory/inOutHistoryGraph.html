@@ -19,6 +19,7 @@
                     let serialNumberList = "[[${matGraphForm}]]";
                 /*]]>*/
                 
+                
                 setCheckedData(serialNumberList);
                 
 
@@ -70,7 +71,7 @@
             </div>
         </div>
         <!--csv download form-->
-        <form th:action="@{/download/inout/history/graph/csv}" style="display: none;" id="csv-download-form" method="post">
+        <form th:action="@{/mats/csv/history-graph}" style="display: none;" id="csv-download-form" method="post">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
             <input name="startDate" type="date"/>
             <input name="endDate" type="date"/>

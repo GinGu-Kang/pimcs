@@ -1,4 +1,5 @@
 const showItemsSelectbox = ".show-item-select";
+const MAT_API_URI = "/api/mats";
 
 /**
  * 세션스토리지 비우기 및 테이블데이터 초기화
@@ -128,7 +129,7 @@ const loadMatAll = function(){
     pageSize = parseInt(pageSize);
 
     let resultData = loadGetData({
-        url: "/api/page/mats",
+        url: MAT_API_URI,
         data: {
             "page": 1,
             "size": pageSize * totalPages
@@ -212,7 +213,8 @@ const isSearchMat = function(){
 
 const isBelowThreshold = function(){
     let params = new URLSearchParams(location.search);
-    if(params.get('belowThreshold') && params.get('belowThreshold') == 'true'){
+    // console.log(params.get('lte') == 'threshold')
+    if(params.get('lte') == 'threshold'){
         return true;
     }
     return false;
@@ -224,11 +226,14 @@ const isBelowThreshold = function(){
  */
  const loadTableData = function(data){
     let resultData = {};
-    let loadDataAPIUrl = "/api/page/mats";
+    let loadDataAPIUrl = MAT_API_URI;
+    console.log('-------[')
+    console.log(isBelowThreshold())
     if(isSearchMat() != null){
-        loadDataAPIUrl = "/api/search/mats" + location.search;
+        loadDataAPIUrl = MAT_API_URI+ location.search;
     }else if(isBelowThreshold()){
-        loadDataAPIUrl = "/api/below/threshold/mats";
+        console.log('hits')
+        loadDataAPIUrl = MAT_API_URI+"?lte=threshold";
     }
     
     $.ajax({
@@ -371,6 +376,11 @@ $(document).on("click",".graph-btn",function(){
         alert("매트를 선택해주세요.");
         return;
     }
+    if(checkedItems.length > 100){
+        alert("매트 최대 100개 체크 할 수 있습니다.");
+        return;
+    }
+
     for(let i=0; i<checkedItems.length; i++){
         let mat = checkedItems[i];
         $("#graphForm").append(`<input type="hidden" name="serialNumberList[${i}]" value="${mat['serialNumber']}"/>`);
@@ -433,18 +443,24 @@ $(document).on("click",".graph-btn",function(){
  * 매트 삭제버튼 클릭시
  */
 $(document).on("click",".delete-btn",function(){
-    if(getCheckedItems().length == 0){
+    const items = getCheckedItems();
+    if(items.length == 0){
         alert("매트를 체크해주세요.");
         return;
     }
     if(!confirm(`${getCheckedItems().length}개 매트를 삭제하겠습니까?`)) return;
+
+    if(items.length > 100){
+        alert("최대 100개 매트를 삭제 할수있습니다.");
+        return;
+    }
     
     let formData = getDeleteMatForm();
     let queryString = new URLSearchParams(formData).toString();
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
-    let resultData = loadPostData({
-        url: "/mat/delete",
+    let resultData = deleteRequest({
+        url: "/mats",
         data: queryString,
         header: {
             'header': header,

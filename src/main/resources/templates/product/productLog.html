@@ -34,7 +34,7 @@
     </head>
     <div layout:fragment="content" class="content">
         <div class="header-item1">
-            <form class="search-form" id="product-log-form" action="/product/log/search">
+            <form class="search-form" id="product-log-form" action="/products/log">
                 
                 <!--검색 input-->
                 <div class="input-group-shadow">
@@ -72,6 +72,12 @@
                 </div>
             </form>
         </div>
+        <div class="d-flex justify-content-end mt-3" style="margin-right: 20px;">
+            <div class="rect-button">
+                <a class="a-remove-attr" onclick="location.href='/products/log/csv'+location.search" >CSV Download</a>
+            </div>
+        </div>
+
         <!--PAGINATION-->
         <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center">
             <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>

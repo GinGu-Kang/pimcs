@@ -169,7 +169,7 @@ public class OrderService {
     /**
      * 발주내역 검색
      */
-    public DynamoResultPage orderHistorySearchService(Company company, InOutHistorySearchForm orderSearchForm, Pageable pageable){
+    public DynamoResultPage findOrderHistoryByAllService(Company company, InOutHistorySearchForm orderSearchForm, Pageable pageable){
 
         DynamoDBQueryExpression<OrderHistory> queryExpression = OrderHistory.searchQueryExpression(company,orderSearchForm);
         DynamoDBQueryExpression<OrderHistory> countQueryExpression = OrderHistory.searchQueryExpression(company, orderSearchForm);

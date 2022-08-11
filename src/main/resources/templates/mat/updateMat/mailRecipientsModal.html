@@ -29,23 +29,26 @@
         $('#mailRecipientsModal').on('show.bs.modal', function (e) {
             $("#mailRecipientsModal .target-container").empty();
 
-            
-            
-            const data = new FormData();
-            
-            for(const mat of getCheckedItems()){
-                data.append("serialNumbers",mat.serialNumber);
+            const checkedItems  = getCheckedItems();
+            const serialNumbers = []
+            for(let i=0; i<checkedItems.length; i++){
+                const mat = checkedItems[i];
+                
+                serialNumbers.push(mat.serialNumber);
             }
-            const queryString = new URLSearchParams(data).toString()
+            
+
+            
             const result = loadPostData({
-                    url: "/api/email/recipients",
-                    data: queryString,
+                    url: "/api/mats/email",
+                    contentType: 'application/json',
+                    data: JSON.stringify({"serialNumbers": serialNumbers}),
                     header: {
                         'header': header,
                         'token': token
                     }
                 });
-                
+
             for(let i=0; i<result.length; i++){
                 let html = "";
 
@@ -77,8 +80,8 @@
             }
 
             const queryString = new URLSearchParams(data).toString();
-            const result = loadPostData({
-                    url: "/mat/update/email",
+            const result = putRequest({
+                    url: "/mats/email",
                     data: queryString,
                     header: {
                         'header': header,

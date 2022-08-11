@@ -189,7 +189,7 @@ public class AdminController {
     }
 
     @ResponseBody
-    @PostMapping("company/owndevice")
+    @GetMapping("company/owndevice")
     public HashMap<String,String> ownDeviceSave(@RequestParam(value="deviceSerial") String deviceSerial,@RequestParam(value="companyId") Integer companyId){
         HashMap<String,String> resultMap = adminService.addOwnDevice(deviceSerial,companyId);
 

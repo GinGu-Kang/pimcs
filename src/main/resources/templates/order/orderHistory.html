@@ -17,13 +17,15 @@
                     let size = "[[${dynamoResultPage.getSize()}]]";
                 /*]]>*/
 
-                pagination({
-                    page: page,
-                    size: size,
-                    totalPages: totalPages
-                });
-               
-            })
+                
+                if(totalPages > 0){
+                    pagination({
+                        page: page,
+                        size: size,
+                        totalPages: totalPages
+                    });
+                }
+            });
           </script>
         
     </head>
@@ -42,6 +44,7 @@
                                th:if="${searchForm != null && searchForm.getQuery() != ''}"
                                class="pimcs-bd-group-input text-size-middle" 
                                name="query"  
+                               placeholder="Search by product name"
                                th:value="${searchForm.getQuery()}"
                                />
                         
@@ -49,6 +52,7 @@
                             th:unless="${searchForm != null && searchForm.getQuery() != ''}"
                             class="pimcs-bd-group-input text-size-middle" 
                             name="query"  
+                            
                             placeholder="Search by product name"
                         />
                         

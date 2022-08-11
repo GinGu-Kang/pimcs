@@ -6,6 +6,9 @@ import java.util.List;
 
 @Data
 public class MatCsvForm {
-    List<Integer> checkedMatId;
-    List<String> checkedColumnNames;
+    private  List<Integer> checkedMatId;
+    private  List<String> checkedColumnNames;
+
+
+
 }

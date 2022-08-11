@@ -1,18 +1,17 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
 import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
 import com.PIMCS.PIMCS.repository.MatRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,35 +30,39 @@ public class InOutHistoryService {
 
     private final DynamoDBMapper dynamoDBMapper;
     private final MatRepository matRepository;
+    private final DynamoQuery dynamoQuery;
+
     @Autowired
-    public InOutHistoryService(DynamoDBMapper dynamoDBMapper, MatRepository matRepository) {
+    public InOutHistoryService(DynamoDBMapper dynamoDBMapper, MatRepository matRepository, DynamoQuery dynamoQuery) {
         this.dynamoDBMapper = dynamoDBMapper;
         this.matRepository = matRepository;
+        this.dynamoQuery = dynamoQuery;
     }
 
     /**
      * 입출고내역 서비스
      */
-    public DynamoResultPage inOutHistoryService(Company company, Pageable pageable){
-        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        return dynamoDBUtils.loadByCompany(company,pageable);
+    public DynamoResultPage findInOutHistoryService(Company company, Pageable pageable){
+        DynamoDBQueryExpression<InOutHistory> queryExpression = InOutHistory.queryExpression(company, false);
+        DynamoDBQueryExpression<InOutHistory> countQueryExpression = InOutHistory.queryExpression(company, true);
+        return dynamoQuery.exePageQuery(InOutHistory.class, queryExpression, countQueryExpression, pageable);
     }
     /**
      * 입출내역 검색 서비스
      */
-    public DynamoResultPage inOutHistorySearchService(
+    public DynamoResultPage findInOutHistoryByAllService(
         Company company,
-        InOutHistorySearchForm inOutHistorySearchForm,
+        InOutHistorySearchForm searchForm,
         Pageable pageable){
-
-        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
-        return dynamoDBUtils.searchInOutHistory(company, inOutHistorySearchForm, pageable);
+        DynamoDBQueryExpression<InOutHistory> queryExpression = InOutHistory.searchQueryExpression(company, searchForm);
+        DynamoDBQueryExpression<InOutHistory> countQueryExpression = InOutHistory.searchQueryExpression(company, searchForm);
+        return dynamoQuery.exePageQuery(InOutHistory.class, queryExpression, countQueryExpression, pageable);
     }
 
     /**
      * 입출고 내열 시별그래프
      */
-    public List<ResultGraph> inOutHistoryHourGraphService(Company company, MatGraphForm matGraphForm){
+    public List<ResultGraph> matsHistoryGraphHourService(Company company, MatGraphForm matGraphForm){
         //사용자 선택한 시작시간과 종료시간
         LocalDate startDate = matGraphForm.getStartDate();
         LocalDate endDate = matGraphForm.getEndDate();
@@ -82,7 +85,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
+            resultGraph.setTitle(serialNumber);
             LocalDateTime startLocalDateTime = LocalDateTime.of(
                     startDate,
                     LocalTime.of(00,00)
@@ -122,7 +125,7 @@ public class InOutHistoryService {
     /**
      * 입출고 내역 일별그래프
      */
-    public List<ResultGraph> inOutHistoryDayGraphService(Company company, MatGraphForm matGraphForm){
+    public List<ResultGraph> matsHistoryGraphDayService(Company company, MatGraphForm matGraphForm){
         //사용자 선택한 시작시간과 종료시간
         LocalDate startDate = matGraphForm.getStartDate();
         LocalDate endDate = matGraphForm.getEndDate();
@@ -143,7 +146,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
+            resultGraph.setTitle(serialNumber);
             //startDate, endDate 초기
             startDate = matGraphForm.getStartDate();
             endDate = matGraphForm.getEndDate();
@@ -171,7 +174,7 @@ public class InOutHistoryService {
     /**
      * 주별 입출고 그래프
      */
-    public List<ResultGraph> inOutHistoryWeekGraphService(Company company, MatGraphForm matGraphForm){
+    public List<ResultGraph> matsHistoryGraphWeekService(Company company, MatGraphForm matGraphForm){
 
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
@@ -193,7 +196,7 @@ public class InOutHistoryService {
             ResultGraph resultGraph = new ResultGraph();
 
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
+            resultGraph.setTitle(serialNumber);
             //startDate, endDate초기화
             startDate = LocalDate.of(matGraphForm.getStartDate().getYear(), matGraphForm.getStartDate().getMonth(), 7);
             endDate = matGraphForm.getEndDate();
@@ -220,7 +223,7 @@ public class InOutHistoryService {
     /**
      * 월별 입출고 그래프
      */
-    public List<ResultGraph> inOutHistoryMonthGraphService(Company company, MatGraphForm matGraphForm){
+    public List<ResultGraph> matsHistoryGraphMonthService(Company company, MatGraphForm matGraphForm){
 
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
@@ -243,7 +246,7 @@ public class InOutHistoryService {
         for(int i=0; i < serialNumberList.size(); i++){
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
-            resultGraph.setTitle(serialNumber+"/"+productNameList.get(i));
+            resultGraph.setTitle(serialNumber);
             //startDate, endDate 초기화
             startDate = LocalDate.of(startDate.getYear(), startDate.getMonth(), startDate.lengthOfMonth());
             endDate = LocalDate.of(endDate.getYear(), endDate.getMonth(), endDate.lengthOfMonth());
@@ -316,13 +319,13 @@ public class InOutHistoryService {
         System.out.println(matGraphForm);
         List<ResultGraph> resultGraphs = null;
         if(matGraphForm.getTimeDimension().equals("HOUR"))
-            resultGraphs = inOutHistoryHourGraphService(company, matGraphForm);
+            resultGraphs = matsHistoryGraphHourService(company, matGraphForm);
         else if(matGraphForm.getTimeDimension().equals("DAY"))
-            resultGraphs = inOutHistoryDayGraphService(company, matGraphForm);
+            resultGraphs = matsHistoryGraphDayService(company, matGraphForm);
         else if(matGraphForm.getTimeDimension().equals("WEEK"))
-            resultGraphs = inOutHistoryWeekGraphService(company, matGraphForm);
+            resultGraphs = matsHistoryGraphWeekService(company, matGraphForm);
         else if(matGraphForm.getTimeDimension().equals("MONTH"))
-            resultGraphs = inOutHistoryMonthGraphService(company, matGraphForm);
+            resultGraphs = matsHistoryGraphMonthService(company, matGraphForm);
 
         //csv컬럼 만들고 삽입
         List<String> columns = new ArrayList<>();

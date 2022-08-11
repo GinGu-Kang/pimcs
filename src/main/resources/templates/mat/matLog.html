@@ -34,7 +34,7 @@
     </head>
     <div layout:fragment="content" class="content">
         <div class="header-item1">
-            <form class="search-form" id="mat-log-form" action="/mat/log/search">
+            <form class="search-form" id="mat-log-form" action="/mats/log">
                 
                 <!--검색 input-->
                 <div class="input-group-shadow">
@@ -71,6 +71,11 @@
                     <button class="pimcs-blue-btn inquiry-btn" id="order-inquiry-btn">조회</button>
                 </div>
             </form>
+        </div>
+        <div class="d-flex justify-content-end mt-3" style="margin-right: 20px;">
+            <div class="rect-button">
+                <a class="a-remove-attr" onclick="location.href='/mats/log/csv'+location.search" >CSV Download</a>
+            </div>
         </div>
         <!--PAGINATION-->
         <div aria-label="Page navigation" class="pagination-container d-flex justify-content-center">

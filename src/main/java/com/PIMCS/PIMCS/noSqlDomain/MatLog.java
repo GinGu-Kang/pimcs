@@ -108,6 +108,7 @@ public class MatLog {
             eav.put(":endDate", new AttributeValue().withS(endDate.toString()));
             query = "companyId = :companyId AND createdAt BETWEEN :startDate AND :endDate";
         }
+
         System.out.println(eav);
         return new DynamoDBQueryExpression<MatLog>()
                 .withKeyConditionExpression(query)
@@ -115,5 +116,8 @@ public class MatLog {
                 .withScanIndexForward(false)
                 .withExpressionAttributeValues(eav);
     }
+
+
+
 
 }

@@ -85,6 +85,30 @@ const loadPostMultipartData = function({url,header,data}){
     return resultData;
 }
 
+const putMultipartData = function({url,header,data}){
+    let resultData;
+    $.ajax({
+        url:url,
+        type:'put',
+        data:data,
+        processData: false,
+        contentType: false,
+        async: false, // 동기식으로 동작
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header['header'], header['token']);
+        },
+        success:function(response){ 
+            resultData = response;
+        },
+        error:function(){
+            alert("에러입니다");
+        }
+    });
+    return resultData;
+}
+
+
 /**
  * post 요청
  * @param url 요청할 url
@@ -92,11 +116,38 @@ const loadPostMultipartData = function({url,header,data}){
  * @param data 요청데이터
  * @returns  응답결과를 리턴, ex) html, json 등
  */
-const loadPostData = function({url,header,data}){
+const loadPostData = function({url,header,data, contentType="application/x-www-form-urlencoded"}){
     let resultData;
+
+    // data = queryStringToJSON(data);
+
+
     $.ajax({
         url:url,
         type:'post',
+        data:data,
+        contentType: contentType,
+        async: false, // 동기식으로 동작
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header['header'], header['token']);
+        },
+        success:function(response){ 
+            resultData = response;
+        },
+        error:function(){
+            alert("에러입니다");
+        }
+    });
+    return resultData;
+}
+
+
+const putRequest = function({url, header, data}){
+    let resultData;
+    $.ajax({
+        url:url,
+        type:'put',
         data:data,
         async: false, // 동기식으로 동작
         beforeSend : function(xhr)
@@ -113,6 +164,29 @@ const loadPostData = function({url,header,data}){
     return resultData;
 }
 
+
+const deleteRequest = function({url, header, data}){
+    let resultData;
+    $.ajax({
+        url:url,
+        type:'delete',
+        data:data,
+        async: false, // 동기식으로 동작
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header['header'], header['token']);
+        },
+        success:function(response){ 
+            resultData = response;
+        },
+        error:function(){
+            alert("에러입니다");
+        }
+    });
+    return resultData;
+}
+
+
 /**
  * 천단위 콤바
  */
@@ -121,6 +195,29 @@ const formatKoKr = function(str){
 }
     
     
+function queryStringToJSON(qs) {
+    qs = qs || location.search.slice(1);
+
+    var pairs = qs.split('&');
+    var result = {};
+    pairs.forEach(function(p) {
+        var pair = p.split('=');
+        var key = pair[0];
+        var value = decodeURIComponent(pair[1] || '');
+
+        if( result[key] ) {
+            if( Object.prototype.toString.call( result[key] ) === '[object Array]' ) {
+                result[key].push( value );
+            } else {
+                result[key] = [ result[key], value ];
+            }
+        } else {
+            result[key] = value;
+        }
+    });
+
+    return JSON.parse(JSON.stringify(result));
+};
 
 
 

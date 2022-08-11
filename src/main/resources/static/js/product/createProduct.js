@@ -56,6 +56,7 @@ jQuery(function ($) {
      *  저장하기 클릭시 1개제품시 ajax를 이용해서 저장
      */
     $(document).on("click",".save-product-btn",function(){
+        console.log("저장하기");
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
 
@@ -74,6 +75,7 @@ jQuery(function ($) {
             pass = false;
         }
         if($("input[name='product.productCode']").attr("data") != 'true'){
+            console.log("productCode: ", pass)
             pass = false;
         }
         if($("input[name='product.productWeight']").val() == ''){
@@ -81,8 +83,10 @@ jQuery(function ($) {
             showMessage({element:$("input[name='product.productWeight']").parent(".input-group"), message: "제품무게를 입력해주세요.", isError: true});
             pass = false;
         }
-
+        
         if(!pass) return;
+
+        
 
         if($("[name='productImage']").val() != ''){ // 이미지파일 있으면
             let canvas = $("#edit-img").cropper('getCroppedCanvas');
@@ -90,7 +94,7 @@ jQuery(function ($) {
                 
                 formData.append( "productImage", blob);
                 let resultData = loadPostMultipartData({
-                                    url: "/product/create",
+                                    url: "/products",
                                     data: formData,
                                     header: {
                                         'header': header,
@@ -102,7 +106,7 @@ jQuery(function ($) {
             });
         }else{
             let resultData = loadPostMultipartData({
-                url: "/product/create",
+                url: "/products",
                 data: formData,
                 header: {
                     'header': header,
@@ -163,17 +167,20 @@ jQuery(function ($) {
         hideMessage($(this));
 
         let response = loadGetData({
-            url: "/product/check/name",
-            data: {"productName": $(this).val()}
+            url: "/products/validation",
+            data: {
+                "type": "productName",
+                "value": $(this).val()
+            }
         });
 
         showMessage({
             element: $(this),
             message: response.message,
-            isError: !response.result,
+            isError: !response.valid,
         });
         
-        $(this).attr("data", response.result);
+        $(this).attr("data", response.valid);
     });
 
 
@@ -185,15 +192,18 @@ jQuery(function ($) {
         }
         hideMessage($(this));
         let response = loadGetData({
-            url: "/product/check/code",
-            data: {"productCode": $(this).val()}
+            url: "/products/validation",
+            data: {
+                "type": "productCode",
+                "value": $(this).val()
+            }
         });
         showMessage({
             element: $(this),
             message: response.message,
-            isError: !response.result,
+            isError: !response.valid,
         });
-        $(this).attr("data", response.result);
+        $(this).attr("data", response.valid);
     });
 
     $("input[name='product.productWeight']").focusout(function(){

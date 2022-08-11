@@ -75,8 +75,8 @@ $(document).on("click",".delete-category-btn", function(){
     const data = new FormData();
     data.append("id",$(this).attr("data"));
 
-    let resultData = loadPostData({
-        url: "/product/category/delete",
+    let resultData = deleteRequest({
+        url: "/products/category",
         data: new URLSearchParams(data).toString(),
         header: {
             'header': header,

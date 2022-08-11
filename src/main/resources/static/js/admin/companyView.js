@@ -47,10 +47,9 @@ $(".del").on("click",function (){
 $("#add-mat-button").on("click",function () {
     let deviceSerial= $("#input-serial").val()
 
-
     $.ajax({
-        url: "/admin/company/owndevice",
-        type: 'post',
+        url: `/admin/company/owndevice`,
+        type: 'get',
         data: {deviceSerial: deviceSerial,
             companyId:companyId},
         beforeSend: function (xhr) {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/

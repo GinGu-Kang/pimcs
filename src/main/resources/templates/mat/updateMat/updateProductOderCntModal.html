@@ -47,8 +47,8 @@
             });
             let queryString = new URLSearchParams(formData).toString();
             
-            let resultData = loadPostData({
-                url: "/mat/update",
+            let resultData = putRequest({
+                url: "/mats",
                 data: queryString,
                 header: {
                     'header': header,

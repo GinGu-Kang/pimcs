@@ -13,15 +13,18 @@ public class Search {
 
         while (right >= left) {
             mid = (right + left) / 2;
+            System.out.println(mid);
             String findKey = list.get(mid);
             if (key.compareTo(findKey) == 0) {
                 return mid;
             }
 
-            if (key.compareTo(findKey) == -1) {
+            if (key.compareTo(findKey) < 0) {
                 right = mid - 1;
+
             } else {
                 left = mid + 1;
+
             }
 
         }

@@ -15,7 +15,7 @@
         <div class="card-conatiner col-md-5">
             <p class="text-size-middle card-label">카테고리 등록</p>
             <div class="card">
-                <form th:action="@{/product/category/create}" method="post">
+                <form th:action="@{/products/category}" method="post">
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
                     <p class="text-size-between-middle-samll category-name-label">카테고리 명</p>
                     <input required name="categoryName" class="pimcs-bd-input input text-size-between-middle-samll" placeholder="카테고리 입력"/>

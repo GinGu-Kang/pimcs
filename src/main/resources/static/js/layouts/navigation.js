@@ -1,14 +1,13 @@
 
 const URL_NAV_ITEM_MAPPING = {
-    "/": "#inventory-list",
-    "/product/read": "#product-list",
-    "/inout/history/graph": "#inventory-list",
-    "/inout/history": "#in-out-history",
-    "/inout/history/search": "#in-out-history",
-    "/product/category/create": "#category-registration",
+    "/mats": "#inventory-list",
+    "/products": "#product-list",
+    "/mats/history-graph": "#inventory-list",
+    "/mats/history": "#in-out-history",
+    "/products/category/create": "#category-registration",
     "/company/worker": "#company-worker",
-    "/product/create": "#product-registration",
-    "/mat/create": "#mat-registration",
+    "/products/create": "#product-registration",
+    "/mats/create": "#mat-registration",
     "/company/info": "#companyInfo",
     "/company/info/modify": "#companyInfo",
     "/order/mat": "#orderMat",
@@ -23,10 +22,9 @@ const URL_NAV_ITEM_MAPPING = {
     "/admin/matcategory/read": "#matCategoryRead",
     "/order/history": "#order-history",
     "/order/history/search": "#order-history",
-    "/mat/log": "#matLog",
-    "/mat/log/search": "#matLog",
-    "/product/log": "#productLog",
-    "/product/log/search": "#productLog"
+    "/mats/log": "#matLog",
+    "/products/log": "#productLog",
+    
 
 }
 jQuery(function ($) {

@@ -3,7 +3,10 @@ package com.PIMCS.PIMCS.controller;
 import com.PIMCS.PIMCS.Interface.FileStorage;
 import com.PIMCS.PIMCS.domain.Product;
 import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.form.response.ValidationForm;
+import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,7 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/product")
+//@RequestMapping(value = "/product")
 public class ProductController {
 
 
@@ -31,27 +34,32 @@ public class ProductController {
     @Qualifier("fileStorage")
     private final FileStorage fileStorage;
 
+    private final UserRepository userRepository;
     @Autowired
-    public ProductController(ProductService productService, FileStorage fileStorage) {
+    public ProductController(ProductService productService, FileStorage fileStorage, UserRepository userRepository) {
         this.productService = productService;
         this.fileStorage = fileStorage;
+        this.userRepository = userRepository;
     }
 
 
     /**
      * 상품등록
      */
-    @GetMapping("/create")
-    public String createForm(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
+    @GetMapping("/products/create")
+    public String createProductForm(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
         List<ProductCategory> productCategories = productService.createProductFormService(secUserCustomForm.getCompany());
         model.addAttribute("productCategories", productCategories);
         return "product/createProduct/createProduct";
     }
 
-    @PostMapping("/create")
-    public String create(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductForm productForm, Model model){
+    @PostMapping("/products")
+    public String createProduct(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductForm productForm, Model model){
 
-        Product product = productService.createProduct(productForm, secUserCustomForm.getCompany());
+        System.out.println("======");
+        System.out.println(productForm);
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        Product product = productService.createProductService(productForm, secUserCustomForm.getCompany(), user);
         model.addAttribute("product",product);
         return "product/createProduct/fragment/registeredCardView";
     }
@@ -59,9 +67,9 @@ public class ProductController {
     /**
      * 제품 목록
      */
-    @GetMapping("/read")
-    public String read(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
-        List<Product> products = productService.readProductService(secUserCustomForm.getCompany());
+    @GetMapping("/products")
+    public String findProductList(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
+        List<Product> products = productService.findProductListService(secUserCustomForm.getCompany());
         model.addAttribute("products",products);
         return "product/readProduct";
     }
@@ -72,7 +80,7 @@ public class ProductController {
      * @return 이미지를 byte[]로 return
      * @throws IOException
      */
-    @GetMapping("/image/{fileName:.+}")
+    @GetMapping("/product/images/{fileName:.+}")
     public ResponseEntity<byte[]> loadProductImage(@PathVariable String fileName)  {
 
         try {
@@ -88,26 +96,28 @@ public class ProductController {
     /**
      * 상품수정
      */
-    @PostMapping("/update")
+    @PutMapping("/products")
     @ResponseBody
-    public HashMap<String, Object> update(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, UpdateProductFormList updateProductFormList){
-        return productService.updateProduct(secUserCustomForm.getCompany(), updateProductFormList);
+    public HashMap<String, Object> updateProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, UpdateProductFormList updateProductFormList){
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        return productService.updateProductsService(secUserCustomForm.getCompany(), updateProductFormList, user);
     }
 
     /**
      * 상품삭제
      */
-    @PostMapping("/delete")
+    @DeleteMapping("/products")
     @ResponseBody
     public HashMap<String, Object> delete(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductFormList productFormList){
-        return productService.deleteProduct(secUserCustomForm.getCompany(), productFormList);
+        User user = userRepository.getOne(secUserCustomForm.getUsername());
+        return productService.deleteProduct(secUserCustomForm.getCompany(), productFormList, user);
     }
 
 
     /**
      * 체크된 제품 csv download
      */
-    @PostMapping(value = "/download/csv",  produces = "text/csv")
+    @PostMapping(value = "/products/csv",  produces = "text/csv")
     public void downloadProductCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, ProductCsvForm productCsvForm , HttpServletResponse response) throws IOException {
 
         response.setCharacterEncoding("UTF-8");
@@ -117,48 +127,64 @@ public class ProductController {
         productService.downloadProductCsvService(secUserCustomForm.getCompany(), productCsvForm, response.getWriter());
     }
 
-    /**
-     * 제품명 체크
-     */
-    @GetMapping("/check/name")
-    @ResponseBody
-    public HashMap<String, Object> checkProductName(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("productName") String productName){
-        return productService.checkProductNameService(secUserCustomForm.getCompany(), productName);
-    }
 
-    /**
-     * 제품명 코드
-     */
-    @GetMapping("/check/code")
+    @GetMapping("/products/validation")
     @ResponseBody
-    public HashMap<String, Object> checkProductCode(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("productCode") String productCode){
-        return productService.checkProductCodeSerivice(secUserCustomForm.getCompany(), productCode);
-    }
-
-    @GetMapping("/log")
-    public String productLog(
+    public ValidationForm productValidation(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-            @PageableDefault(size=10) Pageable pageable,
-            Model model){
+            @RequestParam("type") String type,
+            @RequestParam("value") String value){
 
-        DynamoResultPage dynamoResultPage = productService.productLogService(secUserCustomForm.getCompany(), pageable);
+        type = type.toLowerCase();
+        if(type.equals("productname")){
 
-        model.addAttribute("dynamoResultPage", dynamoResultPage);
-        model.addAttribute("searchForm", new InOutHistorySearchForm());
-        return "product/productLog.html";
+            return productService.checkProductsByProductNameService(secUserCustomForm.getCompany(), value);
+
+        }else if(type.equals("productcode")){
+
+            return productService.checkProductsByProductCodeService(secUserCustomForm.getCompany(), value);
+
+        }
+        throw new IllegalStateException("Does not exist type prams");
     }
 
-    @GetMapping("/log/search")
-    public String searchProductLog(
+
+    @GetMapping("/products/log")
+    public String productLog(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             @PageableDefault(size=10) Pageable pageable,
             InOutHistorySearchForm searchForm,
             Model model){
 
-        DynamoResultPage dynamoResultPage = productService.searchProductLogService(secUserCustomForm.getCompany(), searchForm, pageable);
-        model.addAttribute("dynamoResultPage", dynamoResultPage);
-        model.addAttribute("searchForm", searchForm);
-        return "product/productLog.html";
+        DynamoResultPage dynamoResultPage;
 
+        if(searchForm.isExist()){
+            System.out.println("======");
+            System.out.println("hiudhiuhoijio");
+            dynamoResultPage = productService.searchProductLogService(secUserCustomForm.getCompany(), searchForm, pageable);
+            System.out.println(dynamoResultPage);
+        }else{
+             dynamoResultPage = productService.productLogService(secUserCustomForm.getCompany(), pageable);
+        }
+
+
+        model.addAttribute("dynamoResultPage", dynamoResultPage);
+        model.addAttribute("searchForm",searchForm);
+        return "product/productLog.html";
     }
+
+    /**
+     * 매트관리 로그 csv
+     */
+    @GetMapping(value = "/products/log/csv",  produces = "text/csv")
+    public void downloadProductsLogCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm ,InOutHistorySearchForm searchForm, HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "product-log-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+
+        productService.downloadProductsLogCsvService(secUserCustomForm.getCompany(),searchForm ,response.getWriter());
+    }
+
+
 }

@@ -1,10 +1,14 @@
 package com.PIMCS.PIMCS.service;
 
 
+import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.domain.BusinessCategory;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.noSqlDomain.DynamoMat;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
+import com.PIMCS.PIMCS.utils.GenerateEntity;
+import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +17,11 @@ import org.springframework.test.annotation.Commit;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,6 +31,12 @@ public class CompanyManagementServiceTest {
     CompanyRepository companyRepository;
     @Autowired
     CompanyManagementService companyManagementService;
+
+    @Autowired
+    GenerateEntity generateEntity;
+    @Autowired
+    DynamoQuery dynamoQuery;
+
 
 //    @DisplayName("Fetch Join 테스트")
 //    @Test
@@ -64,8 +77,28 @@ public class CompanyManagementServiceTest {
             System.out.println(asd);
 
         }
+
+
     }
 
+    @Test
+    public void test(){
+        List<KeyPair> arr = new ArrayList<>();
+        KeyPair keyPair = new KeyPair();
+        keyPair.withHashKey(1);
+        keyPair.withRangeKey("WS01E210001");
 
+        KeyPair keyPair2 = new KeyPair();
+        keyPair2.withHashKey(114);
+        keyPair2.withRangeKey("test_01");
+
+
+        arr.add(keyPair);
+        arr.add(keyPair2);
+        List<Object> map = dynamoQuery.batchLoad(DynamoMat.class,arr);
+
+
+        System.out.println(map);
+    }
 
 }

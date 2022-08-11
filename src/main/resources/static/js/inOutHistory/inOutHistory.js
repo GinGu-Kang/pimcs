@@ -24,14 +24,15 @@ const pagination = function({page,size,totalPages}){
         last:'',
         onPageClick: function (event, clickedPage) {
             if(page != clickedPage){
-                if(location.pathname == "/inout/history/search"){
-                    let params =  new URLSearchParams(location.search);
+                const params =  new URLSearchParams(location.search);
+                if(params.get('query') && params.get('startDate') && params.get('endDate')){
+                    
                     let query = params.get('query');
                     let startDate = params.get('startDate');
                     let endDate = params.get('endDate');
-                    location.href=`/inout/history/search?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+                    location.href=`/mats/history?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
                 }else{
-                    location.href=`/inout/history?page=${clickedPage}&size=${size}`;
+                    location.href=`/mats/history?page=${clickedPage}&size=${size}`;
                 }
             }
                 
@@ -49,14 +50,15 @@ const pagination = function({page,size,totalPages}){
         last:'',
         onPageClick: function (event, clickedPage) {
             if(page != clickedPage){
-                if(location.pathname == "/inout/history/search"){
-                    let params =  new URLSearchParams(location.search);
+                const params =  new URLSearchParams(location.search);
+                if(params.get('query') && params.get('startDate') && params.get('endDate')){
+                    
                     let query = params.get('query');
                     let startDate = params.get('startDate');
                     let endDate = params.get('endDate');
-                    location.href=`/inout/history/search?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+                    location.href=`/mats/history?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
                 }else{
-                    location.href=`/inout/history?page=${clickedPage}&size=${size}`;
+                    location.href=`/mats/history?page=${clickedPage}&size=${size}`;
                 }
             }
                 
@@ -76,16 +78,16 @@ const initShowItems = function(){
  * show items per page 클릭시
  */
 $(document).on("change",".show-item-select",function(){
-    let params =  new URLSearchParams(location.search);
-    let size = $(this).children("option:selected").val();
+    const params =  new URLSearchParams(location.search);
+    const size = $(this).children("option:selected").val();
 
-    if(location.pathname == "/inout/history/search"){
+    if(params.get('query') && params.get('startDate') && params.get('endDate')){
         let query = params.get('query');
         let startDate = params.get('startDate');
         let endDate = params.get('endDate');    
-        location.href=`/inout/history/search?page=${1}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+        location.href=`/mats/history?page=${1}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
     }else{
-        location.href=`/inout/history?page=${1}&size=${size}`;
+        location.href=`/mats/history?page=${1}&size=${size}`;
     }
 });
 

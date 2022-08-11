@@ -4,13 +4,18 @@
  */
  $(document).on("click",".update-dropdown-item",function(){
 
-    let items = createCheckedItem($(this).attr("data"));
-    if(items == ""){
+    const {html, length} = createCheckedItem($(this).attr("data"));
+    if(length == 0){
         alert("제품을 체크해주세요.");
         return;
     }
+    if(length > 100){
+        alert("최대 100개 제품을 수정 할수있습니다.");
+        return;
+    }
+
     $(".update-mat-modal .target-list-container").empty();
-    $(".update-mat-modal .target-list-container").append(items);
+    $(".update-mat-modal .target-list-container").append(html);
 
     let targetModal = $(this).attr("target");
     const updateModal = new bootstrap.Modal(document.getElementById(targetModal));
@@ -28,7 +33,8 @@
     // if($(".all-rows-checked").is(":checked")){
     //     loadMatAll();
     // }
-    for(let product of getCheckedItems()){
+    const items = getCheckedItems();
+    for(let product of items){
         if(oldKey == "productName"){
             li += `<li>${product[oldKey]}</li>`;
         }else if(oldKey == "productCategory"){
@@ -42,7 +48,7 @@
         }
         
     }
-    return li;
+    return {html: li, length: items.length};
 }
 
 /**

@@ -45,7 +45,6 @@ public class DynamoDBUtils {
                 .withConsistentRead(false)
                 .withKeyConditionExpression("companyId = :companyId")
                 .withScanIndexForward(false)
-                .withScanIndexForward(false)
                 .withExpressionAttributeValues(eav);
 
         List<InOutHistory> inOutHistories = dynamoDBMapper.query(InOutHistory.class, queryExpression);
@@ -275,139 +274,7 @@ public class DynamoDBUtils {
 
     }
 
-    /**
-     * rdbms 수정시
-     * dynamodb 매트위치 및 박스무게 수정
-     */
-//    public void updateMat(List<Mat> mats, Company company){
-//        //요청 쿼리 만들기
-//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-//        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
-//        String query = "";
-//        for(int i=0; i<mats.size(); i++){
-//            Mat mat = mats.get(i);
-//            eav.put(":serialNumber"+i,new AttributeValue().withS(mat.getSerialNumber()));
-//            query += "matSerialNumber = :serialNumber"+i;
-//            if(i != mats.size()-1) query += " or ";
-//        }
-//
-//        //select 쿼리실행
-//        DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-//                .withIndexName("byConpanyId")
-//                .withConsistentRead(false)
-//                .withKeyConditionExpression("companyId = :companyId")
-//                .withFilterExpression(query)
-//                .withExpressionAttributeValues(eav)
-//                .withLimit(SCAN_LIMIT_SIZE);
-//
-//
-//        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
-//
-//        List<InOutHistory> result = new ArrayList<>();
-//        //dynamodb mat위치 및 박스무게 수정
-//        for(InOutHistory inOutHistory : inOutHistories){
-//            Mat mat = Mat.findBySerialNumber(mats, inOutHistory.getMatSerialNumber());
-//            inOutHistory.setMatLocation(mat.getMatLocation());
-//            inOutHistory.setBoxWeight(mat.getBoxWeight());
-//            inOutHistory.setCalcMethod(mat.getCalcMethod());
-//            inOutHistory.setThreshold(mat.getThreshold());
-//
-//            result.add(inOutHistory);
-//        }
-//        //update 쿼리실행
-//        dynamoDBMapper.batchSave(result);
-//    }
 
-//    public void updateProduct(Company company, List<Product> products){
-//
-//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-//        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
-//        String query = "( ";
-//        for(int i=0; i<products.size(); i++){
-//            Product product = products.get(i);
-//            eav.put(":productId"+i, new AttributeValue().withN(String.valueOf(product.getId())));
-//            query += "productId = :productId"+i;
-//            if(i != products.size()-1) query += " or ";
-//        }
-//        query += " )";
-//
-//
-//
-//    DynamoDBQueryExpression<InOutHistory> queryExpression = new DynamoDBQueryExpression<InOutHistory>()
-//                .withIndexName("byConpanyId")
-//                .withConsistentRead(false)
-//                .withKeyConditionExpression("companyId=:companyId")
-//                .withFilterExpression(query)
-//                .withExpressionAttributeValues(eav)
-//                .withLimit(SCAN_LIMIT_SIZE);
-//
-//
-//        List<InOutHistory> inOutHistories = mapperQueryPage(queryExpression);
-//
-//        List<InOutHistory> result = new ArrayList<>();
-//
-//        for(InOutHistory inOutHistory : inOutHistories){
-//            Product product = Product.findByProductId(products, inOutHistory.getProductId());
-//            inOutHistory.setProductCode(product.getProductCode());
-//            inOutHistory.setProductName(product.getProductName());
-//            inOutHistory.setProductWeight(product.getProductWeight());
-//
-//            result.add(inOutHistory);
-//        }
-//
-//        dynamoDBMapper.batchSave(result);
-//    }
-
-
-
-
-//
-//    public List<OrderMailRecipients> loadOrderMailRecipients(List<String> serialNumbers){
-//
-//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-//        String query = "(";
-//        for(int i=0; i<serialNumbers.size(); i++){
-//            String serialNumber = serialNumbers.get(i);
-//            eav.put(":serialNumber"+i,new AttributeValue().withS(serialNumber));
-//            query += "matSerialNumber = :serialNumber"+i;
-//            if(i != serialNumbers.size()-1) query += " or ";
-//        }
-//        query +=")";
-//        System.out.println(query);
-//
-//        //select 쿼리실행
-//        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-//                .withKeyConditionExpression(query)
-//                .withExpressionAttributeValues(eav);
-//
-//        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
-//
-//    }
-
-
-//    public void updateOrderMailRecipients(List<OrderMailRecipients> list){
-//        List<String> serialNumbers = OrderMailRecipients.getSerialNumberList(list);
-//        List<OrderMailRecipients> findMailRecipients = loadOrderMailRecipients(serialNumbers);
-//        List<OrderMailRecipients> save = new ArrayList<>();
-//
-//        for(OrderMailRecipients o : findMailRecipients ){
-//            OrderMailRecipients find = OrderMailRecipients.findBySerialNumber(o.getMatSerialNumber(), list);
-//            o.setMailRecipients(find.getMailRecipients());
-//            save.add(o);
-//        }
-//
-//        dynamoDBMapper.batchSave(save);
-//    }
-
-//    public List<OrderMailRecipients> readMailBySerialNumber(String serialNumber){
-//        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
-//        eav.put(":serialNumber", new AttributeValue().withS(serialNumber));
-//        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-//                .withKeyConditionExpression("matSerialNumber=:serialNumber")
-//                .withExpressionAttributeValues(eav)
-//                .withScanIndexForward(false);
-//        return dynamoDBMapper.query(OrderMailRecipients.class, queryExpression);
-//    }
 
 
 }

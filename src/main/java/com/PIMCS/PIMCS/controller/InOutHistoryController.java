@@ -15,10 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -45,44 +42,32 @@ public class InOutHistoryController {
     /**
      * 입출고 내역
      */
-    @GetMapping("/inout/history")
-    public String inOutHistory(
+    @GetMapping("/mats/history")
+    public String findInOutHistory(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             @PageableDefault(size=10) Pageable pageable,
+            InOutHistorySearchForm searchForm,
             Model model){
 
-        DynamoResultPage dynamoResultPage = inOutHistoryService.inOutHistoryService(secUserCustomForm.getCompany(), pageable);
-        model.addAttribute("dynamoResultPage",dynamoResultPage);
-        return "inOutHistory/inOutHistory";
-    }
-
-    /**
-     * 입출고내역 검색
-     */
-    @GetMapping("/inout/history/search")
-    public String inOutHistorySearch(
-            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-            @PageableDefault(size=10) Pageable pageable,
-            InOutHistorySearchForm inOutHistorySearchForm,
-            Model model){
-        //검색폼 전체 null이면 입출고내역 페이지로 redirect
-        if(inOutHistorySearchForm.getQuery() == null &&
-            inOutHistorySearchForm.getStartDate() == null &&
-            inOutHistorySearchForm.getEndDate() == null){
-            return "redirect:/inout/history";
+        DynamoResultPage dynamoResultPage;
+        if(searchForm.isExist()){
+            dynamoResultPage = inOutHistoryService.findInOutHistoryByAllService(secUserCustomForm.getCompany(), searchForm, pageable);
+        }else{
+            dynamoResultPage = inOutHistoryService.findInOutHistoryService(secUserCustomForm.getCompany(), pageable);
         }
 
-        DynamoResultPage dynamoResultPage = inOutHistoryService.inOutHistorySearchService(secUserCustomForm.getCompany(), inOutHistorySearchForm, pageable);
         model.addAttribute("dynamoResultPage",dynamoResultPage);
-        model.addAttribute("inOutHistorySearchForm",inOutHistorySearchForm);
+        model.addAttribute("inOutHistorySearchForm",searchForm);
         return "inOutHistory/inOutHistory";
     }
 
+
+
     /**
-     * 입출고 내역 그래프
+     * 그래프 페이지 새로고침할때 사용
      */
 
-    @GetMapping("/inout/history/graph")
+    @GetMapping("/mats/history-graph")
     public String inOutHistoryGet(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatGraphForm matGraphForm, Model model) throws JsonProcessingException {
         System.out.println(matGraphForm.toString());
         ObjectMapper objectMapper = new ObjectMapper();
@@ -91,7 +76,10 @@ public class InOutHistoryController {
         return "inOutHistory/inOutHistoryGraph";
     }
 
-    @PostMapping("/inout/history/graph")
+    /**
+     *  재고목록에서 체크한 데이터를 post로 받아서 그래프 html에 전달
+     */
+    @PostMapping("/mats/history-graph")
     public String inOutHistoryGraphPost(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatGraphForm matGraphForm, Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
@@ -111,54 +99,36 @@ public class InOutHistoryController {
         return "inOutHistory/inOutHistoryGraph";
     }
 
-    /**
-     * 시간별 그래프 데이터로드
-     */
-    @PostMapping("/inout/history/graph/hour")
-    @ResponseBody
-    public List<ResultGraph> inOutHistoryGraphHour(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,MatGraphForm matGraphForm){
-        if(matGraphForm.getStartDate().isAfter(matGraphForm.getEndDate())){
-            throw new IllegalStateException("start time is greater than end time");
-        }
 
-        return inOutHistoryService.inOutHistoryHourGraphService(secUserCustomForm.getCompany(),matGraphForm);
-    }
     /**
-     * 일별 그래프 데이터로드
+     * hour, day, week, month별 데이터 추출해서 응답
      */
-    @PostMapping("/inout/history/graph/day")
+    @PostMapping("/mats/history-graph/{timeDimension}")
     @ResponseBody
-    public List<ResultGraph> inOutHistoryGraphDay(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,MatGraphForm matGraphForm){
+    public List<ResultGraph> matsHistoryGraphDay(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            MatGraphForm matGraphForm,
+            @PathVariable String timeDimension){
+
+
         if(matGraphForm.getStartDate().isAfter(matGraphForm.getEndDate())) {
             throw new IllegalStateException("start time is greater than end time");
         }
 
-        return inOutHistoryService.inOutHistoryDayGraphService(secUserCustomForm.getCompany(), matGraphForm);
+        if(timeDimension.equals("hour")){
+           return inOutHistoryService.matsHistoryGraphHourService(secUserCustomForm.getCompany(),matGraphForm);
+        }else if(timeDimension.equals("day")){
+            return inOutHistoryService.matsHistoryGraphDayService(secUserCustomForm.getCompany(), matGraphForm);
+        }else if(timeDimension.equals("week")){
+            return inOutHistoryService.matsHistoryGraphWeekService(secUserCustomForm.getCompany(), matGraphForm);
+        }else if(timeDimension.equals("month")){
+            return inOutHistoryService.matsHistoryGraphMonthService(secUserCustomForm.getCompany(), matGraphForm);
+        }
+
+        return null;
     }
 
-    /**
-     * 주별 그래프 데이터 로드
-     */
-    @PostMapping("/inout/history/graph/week")
-    @ResponseBody
-    public List<ResultGraph> inOutHistoryGraphWeek(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatGraphForm matGraphForm){
-        if(matGraphForm.getStartDate().isAfter(matGraphForm.getEndDate())) {
-            throw new IllegalStateException("start time is greater than end time");
-        }
-        return inOutHistoryService.inOutHistoryWeekGraphService(secUserCustomForm.getCompany(), matGraphForm);
-    }
 
-    /**
-     * 월별 그래프 데이터 로드
-     */
-    @PostMapping("/inout/history/graph/month")
-    @ResponseBody
-    public List<ResultGraph> inOutHistoryGraphMonth(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatGraphForm matGraphForm){
-        if(matGraphForm.getStartDate().isAfter(matGraphForm.getEndDate())) {
-            throw new IllegalStateException("start time is greater than end time");
-        }
-        return inOutHistoryService.inOutHistoryMonthGraphService(secUserCustomForm.getCompany(), matGraphForm);
-    }
 
     /**
      * 입출고 내역 csv 다운로드
@@ -179,7 +149,7 @@ public class InOutHistoryController {
     /**
      * 그래프 데이터 csv다운로드
      */
-    @PostMapping("/download/inout/history/graph/csv")
+    @PostMapping("/mats/csv/history-graph")
     public void downloadInOutHistoryGraphCsv(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             MatGraphForm matGraphForm,

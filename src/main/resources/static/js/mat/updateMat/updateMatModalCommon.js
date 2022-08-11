@@ -9,13 +9,18 @@ $(document).on("click",".update-dropdown-item",function(){
         loadMatAll();
     }
 
-    let items = createCheckedItem($(this).attr("data"));
-    if(items == ""){
+    const {html, length} = createCheckedItem($(this).attr("data"));
+    if(length == 0){
         alert("매트를 체크해주세요.");
         return;
     }
+    if(length > 100){
+        alert("매트 최대 100개만 수정 할 수있습니다.");
+        return;
+    }
+
     $(".update-mat-modal .target-list-container").empty();
-    $(".update-mat-modal .target-list-container").append(items);
+    $(".update-mat-modal .target-list-container").append(html);
 
     let targetModal = $(this).attr("target");
     const updateModal = new bootstrap.Modal(document.getElementById(targetModal));
@@ -32,8 +37,8 @@ $(document).on("click",".update-dropdown-item",function(){
 const createCheckedItem = function(oldKey){
     let li = "";
     
-
-    for(let mat of getCheckedItems()){
+    const items = getCheckedItems();
+    for(let mat of items){
         
         if(oldKey == "calcMethod"){
             let calcMthodStr = (mat[oldKey] == "0") ? "무게(g)" : "갯수(개)";
@@ -48,7 +53,7 @@ const createCheckedItem = function(oldKey){
         }
         
     }
-    return li;
+    return {html: li, length: items};
 }
 
 

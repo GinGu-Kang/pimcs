@@ -1,14 +1,19 @@
 package com.PIMCS.PIMCS.noSqlDomain;
 
 import com.PIMCS.PIMCS.config.AWSConfig;
+import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.form.InOutHistorySearchForm;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import lombok.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -113,14 +118,40 @@ public class InOutHistory {
         return result;
     }
 
-    public static InOutHistory findByProductCode(String productCode, List<InOutHistory> inOutHistories){
+    public static DynamoDBQueryExpression<InOutHistory> queryExpression(Company company, boolean scanIndexForward){
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
 
-        for(InOutHistory inOutHistory : inOutHistories){
-            if(productCode.equals(inOutHistory.getProductCode())){
-                return inOutHistory;
-            }
+        return new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withKeyConditionExpression("companyId = :companyId")
+                .withConsistentRead(false)
+                .withScanIndexForward(scanIndexForward)
+                .withExpressionAttributeValues(eav);
+    }
+
+
+    public static  DynamoDBQueryExpression<InOutHistory> searchQueryExpression(Company company, InOutHistorySearchForm searchForm){
+
+        Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
+        eav.put(":companyId",new AttributeValue().withN(String.valueOf(company.getId())));
+        eav.put(":query", new AttributeValue().withS(searchForm.getQuery()));
+        String query = "companyId = :companyId";
+
+        if(searchForm.getStartDate() != null && searchForm.getEndDate() != null){
+            LocalDate endDate = searchForm.getEndDate().plusDays(1);
+            eav.put(":startDate", new AttributeValue().withS(searchForm.getStartDate().toString()));
+            eav.put(":endDate", new AttributeValue().withS(endDate.toString()));
+            query = "companyId = :companyId AND createdAt BETWEEN :startDate AND :endDate";
         }
-        return null;
+
+        return new DynamoDBQueryExpression<InOutHistory>()
+                .withIndexName("byConpanyId")
+                .withKeyConditionExpression(query)
+                .withFilterExpression("contains (matSerialNumber, :query)")
+                .withScanIndexForward(false)
+                .withConsistentRead(false)
+                .withExpressionAttributeValues(eav);
     }
 
 }

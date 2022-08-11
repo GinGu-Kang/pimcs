@@ -2,12 +2,7 @@ package com.PIMCS.PIMCS.Utils;
 
 import com.PIMCS.PIMCS.form.DynamoQueryForm;
 import com.PIMCS.PIMCS.form.DynamoResultPage;
-import com.PIMCS.PIMCS.noSqlDomain.InOutHistory;
-import com.PIMCS.PIMCS.noSqlDomain.OrderHistory;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.KeyPair;
-import com.amazonaws.services.dynamodbv2.datamodeling.QueryResultPage;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -78,7 +73,6 @@ public class DynamoQuery {
             QueryResultPage queryPage = dynamoDBMapper.queryPage(clazz, queryExpression);
             queryPage.getResults().forEach(o -> result.add(o));
             queryExpression.setExclusiveStartKey(queryPage.getLastEvaluatedKey());
-
         } while (queryExpression.getExclusiveStartKey() != null);
         return result;
     }
@@ -101,6 +95,17 @@ public class DynamoQuery {
         keyPairMap.put(clazz, keyPairList);
         return keyPairMap;
     }
+
+
+    public List<Object> batchLoad(Class clazz, List<KeyPair> keyPairList){
+        Map<Class<?>, List<KeyPair>> keyPairForTable = new HashMap<>();
+        keyPairForTable.put(clazz, keyPairList);
+        Map<String, List<Object>> batchResults = dynamoDBMapper.batchLoad(keyPairForTable);
+        String tableName = clazz.getSimpleName();
+        return batchResults.get(tableName);
+    }
+
+
 
     public DynamoQueryForm getOrQuery(String column, List values){
         String query = "( ";

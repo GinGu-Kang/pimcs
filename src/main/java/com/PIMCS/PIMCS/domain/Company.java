@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
@@ -45,12 +46,15 @@ public class Company {
 
 
   @OneToMany(mappedBy = "company")
+  @JsonIgnore
   private List<Product> products = new ArrayList<>();
 
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<User> companyWorker=new ArrayList<>();
 
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<OwnDevice> ownDeviceList=new ArrayList<>();
 
   public Company() {

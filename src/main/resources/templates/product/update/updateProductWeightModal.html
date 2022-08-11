@@ -50,8 +50,8 @@
                 replaceValue: $("input[name='productWeight']").val()
             });
             let queryString = new URLSearchParams(formData).toString();
-            let resultData = loadPostData({
-                url: "/product/update",
+            let resultData = putRequest({
+                url: "/products",
                 data: queryString,
                 header: {
                     'header': header,

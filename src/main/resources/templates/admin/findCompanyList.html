@@ -48,7 +48,7 @@
     <tbody id="pimcs-tbody" class="pimcs-tbody">
 
     <th:block th:each="company,i:${companyList}">
-      <tr class="worker-tr"  th:onclick="'location.href=\''+ @{/admin/company/{id}(id=${company.getId()})} + '\''">
+      <tr class="worker-tr"  th:onclick="'location.href=\''+ @{/admin/companies/{id}(id=${company.getId()})} + '\''">
         <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
         <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
         <td  th:text="${company.getCreatedAt()}"></td>

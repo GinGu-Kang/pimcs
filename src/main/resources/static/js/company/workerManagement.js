@@ -34,7 +34,7 @@
                 type:'post',
                 data:{"selectWorkersEmail":selectWorkersEmail},
                 beforeSend : function(xhr)
-                {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+                {
                     xhr.setRequestHeader(header, token);
                 },
                 success:function(){ //컨트롤러에서 넘어온 cnt값을 받는다
@@ -120,7 +120,7 @@
     type:'post',
     data:{email:email,authority:authority},
     beforeSend : function(xhr)
-    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    {
         xhr.setRequestHeader(header, token);
     },
         success:function (isEqualCompany){
@@ -146,7 +146,7 @@
     type:'post',
     data:{email:email,authority:authority},
     beforeSend : function(xhr)
-    {   /*데이터를 전송하기 전에 헤더에 csrf값을 설정한다*/
+    {
         xhr.setRequestHeader(header, token);
     },
         error:function(request,status,error){

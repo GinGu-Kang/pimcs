@@ -37,7 +37,7 @@
             <input type="hidden" th:name="id" th:value="${question.getAnswer().getId()}">
             <textarea th:text="${question.getAnswer().getComment()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required></textarea>
         </section>
-        <p id="list-p"><a th:class="list-button"  th:href="@{admin/qna/list}">목록</a><input type="submit" th:class="list-button"  value="답변 등록"></p>
+        <p id="list-p"><a th:class="list-button"  th:href="@{admin/qnas}">목록</a><input type="submit" th:class="list-button"  value="답변 등록"></p>
         </form>
     </section>
 

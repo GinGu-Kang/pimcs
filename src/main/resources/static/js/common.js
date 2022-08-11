@@ -186,6 +186,35 @@ const deleteRequest = function({url, header, data}){
     return resultData;
 }
 
+<<<<<<< HEAD
+=======
+/*json으로 반환후 post*/
+const loadDataToJson = function({url,type,data}){
+    let token = $("meta[name='_csrf']").attr("content");
+    let header = $("meta[name='_csrf_header']").attr("content");
+    let resultData;
+    $.ajax({
+        url:url,
+        type:type,
+        contentType: 'application/json',
+        data:JSON.stringify(data),
+        async: false,
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header, token);
+        },
+        success:function(response){
+            resultData = response;
+        },
+        error:function(request,status,error){
+            let detailMsg = JSON.parse(request.responseText)['trace'].split('\n')[0];
+            let startMsgIndex = detailMsg.indexOf(':');
+            alert(detailMsg.substr(startMsgIndex+1));
+        }
+    });
+    return resultData;
+}
+>>>>>>> 59efc330a8e5b759959aebb664e49d6dd07f78b5
 
 /**
  * 천단위 콤바
@@ -193,7 +222,30 @@ const deleteRequest = function({url, header, data}){
 const formatKoKr = function(str){
     return str.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
-    
+
+/*
+ *  form data를  queryString을 json 형태로 변환
+ *  -> $('#createMatCategoryForm').serializeObject();
+ */
+jQuery.fn.serializeObject = function() {
+    var obj = null;
+    try {
+        if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+            var arr = this.serializeArray();
+            if (arr) {
+                obj = {};
+                jQuery.each(arr, function() {
+                    obj[this.name] = this.value;
+                });
+            }
+        }
+    } catch (e) {
+        alert(e.message);
+    } finally {
+    }
+
+    return obj;
+};
     
 function queryStringToJSON(qs) {
     qs = qs || location.search.slice(1);

@@ -2,13 +2,17 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.repository.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +30,7 @@ public class AdminService {
     private final CompanyRepository companyRepository;
     private final OwnDeviceRepository ownDeviceRepository;
     private final SendHistoryRepository sendHistoryRepository;
+    private static final Logger logger =LoggerFactory.getLogger(AdminService.class);
 
 
     @Autowired
@@ -42,27 +47,39 @@ public class AdminService {
     }
 
 
-    public void addMatCategory(MatCategory matCategory){
-        matCategoryRepository.save(matCategory);
+    public MatCategory createMatCategoryService(MatCategory matCategory){
+        try{
+            return matCategoryRepository.save(matCategory);
+        }catch (DataIntegrityViolationException e){
+            throw new DuplicateKeyException("이름은 중복될수 없습니다.");
+        }
     }
 
-    public void modifyMatCategory(MatCategory matCategory){
-        Optional<MatCategory> matCategorySource=matCategoryRepository.findByMatCategoryName(matCategory.getMatCategoryName());
+    public void updateMatCategoryService(MatCategory matCategory){
+        Optional<MatCategory> optionalMatCategory=matCategoryRepository.findById(matCategory.getId());
 
-        if(matCategorySource.isPresent()){
-            matCategory.setId(matCategorySource.get().getId());
-            matCategoryRepository.save(matCategory);
+        if(optionalMatCategory.isPresent()){
+            try{
+                matCategoryRepository.save(matCategory);
+            }catch (DataIntegrityViolationException e){
+                throw new DuplicateKeyException("이름은 중복될수 없습니다.");
+            }
+        }else {
+            throw new IllegalStateException("존재하지 않는 카테고리 입니다.");
         }
 
     }
-    public List<MatCategory> findMatCategory(){
+
+    public List<MatCategory> findMatCategoryListService(){
         return matCategoryRepository.findAll();
     }
 
-    public void removeMatCategory(Integer id){
-        Optional<MatCategory> matCategory=matCategoryRepository.findById(id);
-        if(matCategory.isPresent()){
-            matCategoryRepository.delete(matCategory.get());
+    public void deleteMatCategoryService(Integer id){
+        Optional<MatCategory> optionalMatCategory=matCategoryRepository.findById(id);
+        if(optionalMatCategory.isPresent()){
+            matCategoryRepository.delete(optionalMatCategory.get());
+        }else {
+            throw new IllegalStateException("존재하지 않는 카테고리 입니다.");
         }
     }
 
@@ -82,12 +99,19 @@ public class AdminService {
     public Page<Company> findAllCompany(Pageable pageable){
         return companyRepository.findAll(pageable);
     }
+
     /*회사 상세*/
-    public Optional<Company> findCompany(Integer companyId){
-        return companyRepository.findById(companyId);
+    public Company detailsCompanyService(Integer companyId) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
+        if (optionalCompany.isPresent()) {
+            return companyRepository.findById(companyId).get();
+        }else{
+            throw new IllegalStateException("존재하지 않는 회사입니다.");
+        }
     }
+
     //회사 검색
-    public Page<Company> filterCompany(String keyword,String selectOption,Pageable pageable){
+    public Page<Company> findCompanyListService(String keyword,String selectOption,Pageable pageable){
 
         Page<Company> searchCompanies =  null ;
 
@@ -105,16 +129,21 @@ public class AdminService {
 
         return searchCompanies;
     }
+
     /*매핑된 기기 삭제*/
     @Transactional
-    public void removeOwndevice(List<Integer> ownDeviceList) {
-        ownDeviceRepository.deleteAllByIdIn(ownDeviceList);
+    public void deleteOwnDeviceListService(List<Integer> ownDeviceIdList) {
+        ownDeviceIdList.remove(0);
+        System.out.println(ownDeviceIdList.size());
+        ownDeviceRepository.deleteAllByIdIn(ownDeviceIdList);
     }
+
     public Page<Question> findAllQuestion(Pageable pageable){
         return questionRepository.findAll(pageable);
     }
 
-    public Question findQuestion(Integer questionId){
+
+    public Question detailsAdminQnaService(Integer questionId){
         Question question=questionRepository.findById(questionId).get();
 
         if (question.getAnswer()==null){
@@ -126,7 +155,7 @@ public class AdminService {
     }
 
     //질문 필터링 검색
-    public Page<Question> filterQuestion(String keyword,String selectOption,Pageable pageable){
+    public Page<Question> findAdminQnaListService(String keyword,String selectOption,Pageable pageable){
 
         Page<Question> searchQuestions =  null ;
 

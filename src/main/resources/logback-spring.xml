@@ -30,11 +30,11 @@
 
 
     <root level="info">
-        <springProfile name="console-logging">
+        <springProfile name="dev">
             <appender-ref ref="LOCAL_CONSOLE_POLICY"/>
         </springProfile>
 
-        <springProfile name="file-info-logging">
+        <springProfile name="prod">
             <appender-ref ref="INFO_FILE_POLICY"/>
         </springProfile>
     </root>

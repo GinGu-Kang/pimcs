@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/admin/categoryManagement.css">
+    <script defer type="text/javascript" src="/js/admin/findMatCategoryList.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <p class="title">
+        매트 카테고리
+    </p>
+    <table class="table pimcs-table">
+        <thead>
+        <th scope="col">기기 종류</th>
+        <th scope="col">매칭 시리얼 코드</th>
+        <th scope="col">기기 정보</th>
+        <th scope="col">기기 가격(원)</th>
+        <th scope="col">기기 최대 무게(g)</th>
+        <th scope="col">DBId</th>
+        <th scope="col">수정</th>
+        <th scope="col">삭제</th>
+
+
+        </thead>
+        <tbody>
+        <tr th:id="|tr-${matCategory.getId()}|" th:each="matCategory:${matCategoryList}">
+            <td ><input th:id="|matCategoryName-${matCategory.getId()}|" type="text" th:value="${matCategory.getMatCategoryName()}"></td>
+            <td ><input th:id="|mappingSerialCode-${matCategory.getId()}|" type="text" th:value="${matCategory.getMappingSerialCode()}"></td>
+            <td ><input th:id="|matInformation-${matCategory.getId()}|" type="text" th:value="${matCategory.getMatInformation()}"></td>
+            <td ><input th:id="|matPrice-${matCategory.getId()}|" type="number" th:value="${matCategory.getMatPrice()}"></td>
+            <td ><input th:id="|maxWeight-${matCategory.getId()}|" type="number" th:value="${matCategory.getMaxWeight()}"></td>
+            <td ><input type="text " th:value="${matCategory.getId()}" disabled></td>
+            <td><input type="button" value="수정" th:onclick="|matCategoryModify(${matCategory.getId()})|"></td>
+            <td><input type="button" value="삭제" th:onclick="|matCategoryRemove(${matCategory.getId()})|"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</html>

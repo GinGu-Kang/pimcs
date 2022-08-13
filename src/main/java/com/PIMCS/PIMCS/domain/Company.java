@@ -44,7 +44,8 @@ public class Company {
   private String ceoName;
 
 
-  @OneToMany(mappedBy = "company")
+
+  @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
   private List<Product> products = new ArrayList<>();
 
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)

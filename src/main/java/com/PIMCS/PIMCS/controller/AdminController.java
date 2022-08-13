@@ -114,83 +114,73 @@ public class AdminController {
     }
 
 
-    @PostMapping("qnas")
-    public String createAnswer(@RequestBody Answer answer,Integer questionId){
-        System.out.println(questionId);
-        System.out.println(answer.getQuestion());
-//        adminService.addAnswer(questionId,answer);
-        return "redirect:/admin/qnas";
+    @ResponseBody
+    @PostMapping("qnas/answer")
+    public Answer createAnswer(@RequestBody Answer answer){
+        return adminService.createAnswerService(answer);
     }
 
-    @GetMapping("email/frame/modify")
-    public String emailFrameModifyForm(Model model){
-        model.addAttribute("OrderMailFrame",adminService.selectOrderMailFrame());
-        return "admin/emailFrameModify";
+
+    @GetMapping("order-mail-frame/create")
+    public String createOrderMailFrameForm(Model model){
+        model.addAttribute("OrderMailFrame",adminService.createOrderMailFrameFormService());
+        return "admin/createOrderMail";
     }
-    @PostMapping("email/frame/modify")
-    public String emailFrameModify(OrderMailFrame orderMailFrame){
-        System.out.println(orderMailFrame.getGreeting());
-        adminService.updateOrderMailFrame(orderMailFrame);
-        return "redirect:/admin/email/frame/modify";
+
+
+    @PostMapping("order-mail-frame")
+    public String createOrderMailFrame(OrderMailFrame orderMailFrame){
+        adminService.createOrderMailFrameService(orderMailFrame);
+        return "redirect:/admin/order-mail-frame/create";
     }
+    
 
     /*
     *주문 목록
      */
-    @GetMapping("/order/list")
-    public String orderList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable, Model model){
-        Page<MatOrder> matOrderPage=adminService.findAllOrder(pageable);
+    @GetMapping("/orders")
+    public String findOrderList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                @RequestParam(value = "totalPriceStart", defaultValue = "0") Integer totalPriceStart,
+                                @RequestParam(value = "totalPriceEnd", defaultValue = "999999999") Integer totalPriceEnd,
+                                Model model){
+        Page<MatOrder> matOrderPage=adminService.findOrderListService(keyword,totalPriceStart,totalPriceEnd,pageable);
         model.addAttribute("matOrderPage",matOrderPage);
         model.addAttribute("matOrderList",matOrderPage.getContent());
-
-        return "admin/orderList";
+        return "admin/findOrderList";
     }
 
-    @GetMapping("order/search")
-    public String adminOrderQuestion(@PageableDefault(page = 0,
-                                     size=10, sort="createdAt",
-                                     direction = Sort.Direction.DESC)
-                                     Pageable pageable,
-                                     String keyword,
-                                     Integer totalPriceStart,
-                                     Integer totalPriceEnd,
-                                     Model model){
-        System.out.println(keyword);
-        Page<MatOrder> matOrderPage=adminService.filterOrder(keyword,totalPriceStart,totalPriceEnd,pageable);
-        model.addAttribute("matOrderPage",matOrderPage);
-        model.addAttribute("matOrderList",matOrderPage.getContent());
-        return "admin/orderList";
-    }
 
-    @GetMapping("order/view/{orderId}")
-    public String detailOrder(Model model,@PathVariable Integer orderId){
-        MatOrder matOrder = adminService.findOrder(orderId);
-        User orderer=matOrder.getUser();
+    @GetMapping("orders/{orderId}")
+    public String detailsOrder(Model model,@PathVariable Integer orderId){
+        MatOrder matOrder = adminService.detailsOrderService(orderId);
         Company orderCompany=matOrder.getCompany();
         model.addAttribute(matOrder);
-        model.addAttribute(orderer);
         model.addAttribute(orderCompany);
         return "admin/orderView";
     }
+
     @ResponseBody
-    @PutMapping("order/deposit/{orderId}")
-    public String depositModify(@PathVariable Integer orderId,Boolean isDeposit){
-        MatOrder matOrder = adminService.modifyDeposit(orderId,isDeposit);
-        return "admin/orderView";
+    @PutMapping("orders/{orderId}/deposit")
+    public MatOrder updateOrderDeposit(@PathVariable Integer orderId,Boolean isDeposit){
+        return adminService.updateOrderDepositService(orderId,isDeposit);
     }
 
     @ResponseBody
     @PostMapping("order/{orderId}/owndevice")
-    public HashMap<String,String> ownDeviceAndSendHistorySave(@PathVariable Integer orderId, @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList , Integer companyId){
-        HashMap<String,String> resultMap = adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
+    public HashMap<String,String> ownDeviceAndSendHistorySave(
+            @PathVariable Integer orderId,
+            @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList ,
+            Integer companyId){
 
+        HashMap<String,String> resultMap = adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
         return resultMap;
     }
 
     @ResponseBody
     @PostMapping("company/owndevice")
-    public HashMap<String,String> ownDeviceSave(@RequestBody Map<String, String> param){
-        HashMap<String,String> resultMap = adminService.addOwnDevice(param.get("deviceSerial"),Integer.parseInt(param.get("companyId")));
+    public HashMap<String,String> createOwnDevice(@RequestBody Map<String, String> param){
+        HashMap<String,String> resultMap = adminService.createOwnDeviceService(param.get("deviceSerial"),Integer.parseInt(param.get("companyId")));
         return resultMap;
     }
 

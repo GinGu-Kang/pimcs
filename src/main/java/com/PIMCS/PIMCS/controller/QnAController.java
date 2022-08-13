@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/qna")
+@RequestMapping("/qnas")
 public class QnAController {
     private final QnaService qnaService;
 
@@ -28,36 +28,36 @@ public class QnAController {
         this.qnaService = qnaService;
     }
 
-    @GetMapping("")
-    public String QnAList(){
-
-        return "/qna/qna";
-    }
+//    @GetMapping("")
+//    public String QnAList(){
+//
+//        return "/qna/qna";
+//    }
 
     @GetMapping("/faq")
     public String FaQList(){
 
         return "/qna/faq";
     }
-    @GetMapping("/question")
-    public String questionForm(){
+    @GetMapping("/create")
+    public String createQuestionForm(){
 
         return "/qna/question";
     }
-    @PostMapping("/question")
+    @PostMapping("")
     public String questionSave(Question question, @AuthenticationPrincipal SecUserCustomForm secUserCustomForm, User user){
         qnaService.addQuestion(question,user,secUserCustomForm.getCompany());
         return "redirect:list";
     }
 
-    @GetMapping("/list")
-    public String qnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+    @GetMapping("")
+    public String findQnaList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
                           Model model){
-        Page<Question> questionPage=qnaService.findAllQuestion(pageable);
+        Page<Question> questionPage=qnaService.findQnaListService(pageable);
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
 
-        return "/qna/qnaList";
+        return "/qna/findQnaList";
     }
 
 

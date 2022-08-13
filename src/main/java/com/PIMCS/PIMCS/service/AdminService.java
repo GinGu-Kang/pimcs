@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -87,12 +88,9 @@ public class AdminService {
         return matCategoryRepository.findAllById(matCategoryIdList);
     }
 
-    //댓글 추가 getOne 방식을 사용하면 select + insert 가 아닌 insert 쿼리만 나간다.
-    public void addAnswer(Integer questionId, Answer answer){
-        Question question=questionRepository.getOne(questionId);
-
-        answer.setQuestion(question);
-        answerRepository.save(answer);
+    //답변 추가
+    public Answer createAnswerService(Answer answer){
+        return answerRepository.save(answer);
     }
 
     /*회사 조회*/
@@ -171,23 +169,41 @@ public class AdminService {
         return searchQuestions;
     }
 
-    public OrderMailFrame updateOrderMailFrame(OrderMailFrame orderMailFrame){
-        orderMailFrame.setId(1);
-        orderMailFrameRepository.save(orderMailFrame);
-        return orderMailFrame;
+    public OrderMailFrame createOrderMailFrameService(OrderMailFrame orderMailFrame){
+        List<OrderMailFrame> optOrderMailFrame=orderMailFrameRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        if(optOrderMailFrame.size()!=0){
+            orderMailFrame.setId(optOrderMailFrame.get(0).getId());
+            return orderMailFrameRepository.save(orderMailFrame);
+        }else{
+            return orderMailFrameRepository.save(orderMailFrame);
+        }
+
     }
 
-    public OrderMailFrame selectOrderMailFrame(){
-        OrderMailFrame orderMailFrame = orderMailFrameRepository.findById(1).get();
-        return orderMailFrame;
+    public OrderMailFrame createOrderMailFrameFormService(){
+        List<OrderMailFrame> optOrderMailFrame=orderMailFrameRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+        if(optOrderMailFrame.size()!=0){
+            return optOrderMailFrame.get(0);
+        }else {
+            OrderMailFrame orderMailFrame = OrderMailFrame.builder().greeting("------------------------------------------------------------------------------------------------------------\n" +
+                    "(주)스마트쇼핑 PIMCS 입니다.\n" +
+                    "이번에는 재고 관리 IoT 스마트 매트를 신청 해 주셔서 감사 합니다 .\n" +
+                    "디바이스 대수·배송처 주소·배송 예정일은 이하와 같습니다."
+            ).managerInfo("(주)스마트쇼핑 PIMCS\n" +
+                    "메일 : support@pimcs.kr ( 영업담당자 메일 주소)\n" +
+                    "전화 : *****                 ( 영업담당자 회사 전화 )\n" +
+                    "접수 시간：평일 9:00〜18:00\n" +
+                    "※본 메일은 송신 전용 주소로부터 보내 드리고 있습니다.").build();
+            return orderMailFrameRepository.save(orderMailFrame);
+        }
     }
 
-    public Page<MatOrder> findAllOrder(Pageable pageable){
+    public Page<MatOrder> findOrderListService(Pageable pageable){
         return matOrderRepository.findAll(pageable);
     }
 
     //주문 필터링 검색
-    public Page<MatOrder> filterOrder(String keyword,Integer totalPriceStart,Integer totalPriceEnd, Pageable pageable){
+    public Page<MatOrder> findOrderListService(String keyword,Integer totalPriceStart,Integer totalPriceEnd, Pageable pageable){
 
         Page<MatOrder> searchOrders =  null ;
 
@@ -196,11 +212,11 @@ public class AdminService {
         return searchOrders;
     }
 
-    public MatOrder findOrder(Integer orderId){
+    public MatOrder detailsOrderService(Integer orderId){
         return matOrderRepository.findById(orderId).get();
     }
 
-    public MatOrder modifyDeposit(Integer orderId,Boolean isDeposit){
+    public MatOrder updateOrderDepositService(Integer orderId,Boolean isDeposit){
         MatOrder matOrder=matOrderRepository.getOne(orderId);
 
         if(isDeposit){
@@ -282,7 +298,7 @@ public class AdminService {
     }
 
     @Transactional
-    public HashMap<String,String> addOwnDevice(String deviceSerial , Integer companyId) {
+    public HashMap<String,String> createOwnDeviceService(String deviceSerial , Integer companyId) {
         String message = "";
         HashMap<String, String> resultMap = new HashMap<>();
         //기기 중복 체크

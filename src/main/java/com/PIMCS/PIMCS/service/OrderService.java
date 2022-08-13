@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,10 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -53,6 +51,7 @@ public class OrderService {
 
         this.dynamoQuery = dynamoQuery;
     }
+
     @Transactional
     public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
@@ -60,11 +59,26 @@ public class OrderService {
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
         Integer totalPrice=0;
         Integer totalCnt=0;
+        String CheifMail="wisp212@gmail.com";
         User user=userRepository.findByEmail(secUserCustomForm.getUsername()).get();
-        String[] emailSednList=new String[]{secUserCustomForm.getUsername(),"wisp212@gmail.com"};
+        String[] emailSednList=new String[]{secUserCustomForm.getUsername(),CheifMail};
         String deviceAmount="";
-        OrderMailFrame orderMailFrame=orderMailFrameRepository.findById(1).get();
+        List<OrderMailFrame> orderMailFrameList=orderMailFrameRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
 
+        if(orderMailFrameList.size()!=0) {
+            OrderMailFrame orderMailFrame = orderMailFrameList.get(0);
+        }else{
+            OrderMailFrame orderMailFrame = OrderMailFrame.builder().greeting("------------------------------------------------------------------------------------------------------------\n" +
+                    "(주)스마트쇼핑 PIMCS 입니다.\n" +
+                    "이번에는 재고 관리 IoT 스마트 매트를 신청 해 주셔서 감사 합니다 .\n" +
+                    "디바이스 대수·배송처 주소·배송 예정일은 이하와 같습니다."
+            ).managerInfo("(주)스마트쇼핑 PIMCS\n" +
+                    "메일 : support@pimcs.kr ( 영업담당자 메일 주소)\n" +
+                    "전화 : *****                 ( 영업담당자 회사 전화 )\n" +
+                    "접수 시간：평일 9:00〜18:00\n" +
+                    "※본 메일은 송신 전용 주소로부터 보내 드리고 있습니다.").build();
+            orderMailFrameRepository.save(orderMailFrame);
+        }
 
         matOrder.setCompany(user.getCompany());
         matOrder.setUser(user);
@@ -74,20 +88,21 @@ public class OrderService {
             MatCategory matCategory=matCategoryList.get(i);
 
             matCategoryOrder.setMatOrder(matOrder);
-            matCategoryOrder.setMatCategory(matCategory);
+            matCategoryOrder.setMatCategoryName(matCategory.getMatCategoryName());
+            matCategoryOrder.setPricePerDevice(matCategory.getMatPrice());
 
             totalCnt+=matCategoryOrder.getOrderCnt();
             totalPrice+=matCategoryOrder.getOrderCnt()*matCategory.getMatPrice();
-            deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+" 대\n" +
-                    matCategoryOrder.getMatCategory().getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
+            deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+" 대\n" +
+                    matCategoryOrder.getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
         }
-        System.out.println(deviceAmount);
         matOrder.setMatCategoryOrderList(matCategoryOrderList);
         matOrder.setTotalCnt(totalCnt);
         matOrder.setTotalPrice(totalPrice);
-        matOrderRepository.save(matOrder);
 
+        matOrderRepository.save(matOrder);
         //이메일 전송
+        OrderMailFrame orderMailFrame = orderMailFrameRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).get(0);
         String orderMail=
                 "< pimcs 주 문 서> "+matOrder.getCreatedAt().toString().substring(0,4)+"년"+matOrder.getCreatedAt().toString().substring(5,7)+"월"+matOrder.getCreatedAt().toString().substring(8,10)+"일"+matOrder.getCreatedAt().toString().substring(10,16)+"분\n" +
                 orderMailFrame.getGreeting()+"\n"+

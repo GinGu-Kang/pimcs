@@ -1,5 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Generated;
@@ -20,6 +22,7 @@ public class Answer {
   @Column(updatable =false)
   @CreationTimestamp
   private Timestamp createdAt;
+  @JsonBackReference
   @OneToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "questionId")
   private Question question;

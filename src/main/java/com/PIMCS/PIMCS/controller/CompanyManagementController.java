@@ -54,6 +54,7 @@ public class CompanyManagementController {
         return "company/companyRegistration";
     }
 
+
     //회사 등록
     @PostMapping("registration")
     public String companyRegistration(User ceo, Company company){
@@ -62,11 +63,13 @@ public class CompanyManagementController {
         companyManagementService.companyRegistration(ceo,company);
         return "user/auth/login";
     }
+
     @GetMapping("registration/verify")
     public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
         companyManagementService.companyRegistrationVerify(verifyKey);
         return "redirect:/company/registration/success";
     }
+
     //회사등록 완료
     @GetMapping("registration/success")
     private String signUpSuccess(){

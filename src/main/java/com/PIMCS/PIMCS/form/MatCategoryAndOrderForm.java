@@ -12,5 +12,4 @@ import java.util.List;
 public class MatCategoryAndOrderForm {
     private List<MatCategoryOrder> matCategoryOrderList;
     private List<Integer> matCategoryIdList;
-
 }

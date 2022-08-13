@@ -4,6 +4,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet"  href="/css/admin/adminQnaView.css">
+    <script defer type="text/javascript" src="/js/admin/detailsAdminQna.js"></script>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
@@ -30,14 +31,14 @@
                 <pre th:text="${question.getContent()}"></pre>
             </section>
         </section>
-        <form th:action="@{/admin/qna/view}" method="post" >
+        <form id="createAnswerForm" method="post" >
         <section th:class="answer-container">
             <span th:class="qa-icon">A.</span>
-            <input type="hidden" th:name="questionId" th:value="${question.getId()}">
-            <input type="hidden" th:name="id" th:value="${question.getAnswer().getId()}">
-            <textarea th:text="${question.getAnswer().getComment()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required></textarea>
+            <input type="hidden" id="questionId" th:name="question" th:value="${question.getId()}">
+            <input type="hidden" id="id" th:name="id" th:value="${question.getAnswer().getId()}">
+            <textarea id="comment" th:text="${question.getAnswer().getComment()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required></textarea>
         </section>
-        <p id="list-p"><a th:class="list-button"  th:href="@{admin/qnas}">목록</a><input type="submit" th:class="list-button"  value="답변 등록"></p>
+        <p id="list-p"><a th:class="list-button"  th:href="@{admin/qnas}">목록</a><input type="button" th:class="list-button" id="submit-btn"  value="답변 등록"></p>
         </form>
     </section>
 

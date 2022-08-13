@@ -22,8 +22,6 @@ public class MatCategory {
   private String matInformation;
   private int maxWeight;
 
-  @OneToMany(mappedBy = "matCategory",fetch = FetchType.LAZY)
-  private List<MatCategoryOrder> matCategoryOrderList;
 
 
 

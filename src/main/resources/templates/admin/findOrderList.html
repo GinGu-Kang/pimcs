@@ -17,7 +17,7 @@
     </p>
     <div id="paging"></div>
     <section class="action-btn-container">
-        <form th:action="@{/admin/order/search}" method="get" >
+        <form th:action="@{/admin/orders}" method="get" >
             <div class="inquery-mat-header-left-box">
                 <div class="search-input-container">
                     <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="입금자 이름" />
@@ -55,7 +55,7 @@
         <tbody id="pimcs-tbody" class="pimcs-tbody">
 
         <th:block th:each="matOrder,i:${matOrderList}">
-            <tr class="matOrder-tr" th:onclick="'location.href=\''+ @{/admin/order/view/{id}(id=${matOrder.getId()})} + '\''">
+            <tr class="matOrder-tr" th:onclick="'location.href=\''+ @{/admin/orders/{id}(id=${matOrder.getId()})} + '\''">
                 <td class="text-center" th:text="${matOrder.getCreatedAt()}"></td>
                 <td class="text-center" th:text="${matOrder.getUser().getEmail()}"></td>
                 <td class="text-center" th:text="${matOrder.getCompany().getCompanyName()}"></td>

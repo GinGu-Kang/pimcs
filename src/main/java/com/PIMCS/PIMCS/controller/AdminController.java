@@ -168,12 +168,12 @@ public class AdminController {
 
     @ResponseBody
     @PostMapping("order/{orderId}/owndevice")
-    public HashMap<String,String> ownDeviceAndSendHistorySave(
+    public HashMap<String,String> createOwnDeviceAndSendHistory(
             @PathVariable Integer orderId,
             @RequestParam(value="deviceSerialList[]") List<String> deviceSerialList ,
             Integer companyId){
 
-        HashMap<String,String> resultMap = adminService.addOwnDeviceAndSendHistory(orderId,deviceSerialList,companyId);
+        HashMap<String,String> resultMap = adminService.createOwnDeviceAndSendHistoryService(orderId,deviceSerialList,companyId);
         return resultMap;
     }
 

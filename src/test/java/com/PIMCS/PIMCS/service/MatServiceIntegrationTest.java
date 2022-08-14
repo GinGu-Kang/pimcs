@@ -101,7 +101,6 @@ public class MatServiceIntegrationTest {
             dynamoDBMapper.delete(dynamoProduct);
         }
     }
-
     private Mat createMat(){
 //        Mat mat = new Mat(dynamoDBMapper);
 //        mat.setSerialNumber("test_"+UUID.randomUUID().toString());

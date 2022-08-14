@@ -1,108 +1,110 @@
 package com.PIMCS.PIMCS.controller;
 
+import com.PIMCS.PIMCS.domain.MatCategoryOrder;
+import com.PIMCS.PIMCS.repository.*;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
 @SpringBootTest
-@Transactional
-/*서블릿 컨테이너 모킹 하기위한 어노테이션*/
 @AutoConfigureMockMvc
 class AdminControllerTest {
 
-    @Autowired AdminController adminController;
 
-    /*HTTP GET, POST 등에 대한 API테스트 가능*/
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private AdminController adminController;
+
+
 
     @Test
-    void matCategoryAddForm() {
-
+    public void basicTest() {
+        mockMvc.perform()
     }
 
     @Test
-    void matCategoryAdd() {
+    void createMatCategoryForm() {
+
+        Assertions.assertThat("12").isEqualTo("12");
     }
 
     @Test
-    void matCategoryList() {
+    void createMatCategory() {
     }
 
     @Test
-    void matCategoryModify() {
+    void findMatCategoryList() {
     }
 
     @Test
-    void matCategoryRemove() {
+    void updateMatCategory() {
     }
 
     @Test
-    void companySearch() {
+    void deleteMatCategory() {
     }
 
     @Test
-    void companyDetail() {
+    void findCompanyList() {
     }
 
     @Test
-    void deleteOwnDevices() {
+    void detailsCompany() {
     }
 
     @Test
-    void adminQnaList() {
+    void deleteOwnDeviceList() {
     }
 
     @Test
-    void adminSearchQuestion() {
+    void findAdminQnaList() {
     }
 
     @Test
-    void detailAdminQna() {
+    void detailsAdminQna() {
     }
 
     @Test
-    void answerAdd() {
+    void createAnswer() {
     }
 
     @Test
-    void emailFrameModifyForm() {
+    void createOrderMailFrameForm() {
     }
 
     @Test
-    void emailFrameModify() {
+    void createOrderMailFrame() {
     }
 
     @Test
-    void orderList() {
+    void findOrderList() {
     }
 
     @Test
-    void adminOrderQuestion() {
+    void detailsOrder() {
     }
 
     @Test
-    void detailOrder() {
+    void updateOrderDeposit() {
     }
 
     @Test
-    void depositModify() {
+    void createOwnDeviceAndSendHistory() {
     }
 
     @Test
-    void ownDeviceAndSendHistorySave() {
-    }
-
-    @Test
-    void ownDeviceSave() {
+    void createOwnDevice() {
     }
 }

@@ -30,18 +30,18 @@ public class OrderServiceTest {
     @Autowired
     DynamoQuery dynamoQuery;
 
-    @Test
-    public void companyTest(){
-        Integer index=0;
-        for (MatOrder matorder:orderService.findOrderList(companyRepository.findById(1).get())
-             ) {
-            System.out.println("몇개양");
-            if (!matorder.getMatCategoryOrderList().isEmpty()){
-                System.out.println(matorder.getMatCategoryOrderList().get(0).getMatCategory().getMatCategoryName());
-            }
-            index++;
-        }
-    }
+//    @Test
+//    public void companyTest(){
+//        Integer index=0;
+//        for (MatOrder matorder:orderService.findOrderList(companyRepository.findById(1).get())
+//             ) {
+//            System.out.println("몇개양");
+//            if (!matorder.getMatCategoryOrderList().isEmpty()){
+//                System.out.println(matorder.getMatCategoryOrderList().get(0).getMatCategory().getMatCategoryName());
+//            }
+//            index++;
+//        }
+//    }
 
     @Test
     public void findMatCategoryOrderTest(){

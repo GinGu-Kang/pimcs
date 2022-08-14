@@ -233,7 +233,7 @@ public class AdminService {
     //csv 형태로 그냥 저장
     //sendHistory 중복체크
     @Transactional
-    public HashMap<String,String> addOwnDeviceAndSendHistory(Integer orderId, List<String> deviceSerialList , Integer companyId){
+    public HashMap<String,String> createOwnDeviceAndSendHistoryService(Integer orderId, List<String> deviceSerialList , Integer companyId){
         List<OwnDevice> ownDeviceList = new ArrayList<OwnDevice>();
         List<OwnDevice> ownDeviceDuplicationCheckList = new ArrayList<OwnDevice>();
         String ownDeviceListCsv ="";

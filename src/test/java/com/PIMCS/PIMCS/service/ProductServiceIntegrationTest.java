@@ -193,7 +193,6 @@ public class ProductServiceIntegrationTest {
         List<ProductForm> array = new ArrayList<>();
         ProductCategory productCategory =  generateEntity.createProductCategory(company, true);
         for(ProductForm productForm : productForms){
-
             productForm.setProductCategoryId(productCategory.getId());
             array.add(productForm);
         }
@@ -204,7 +203,6 @@ public class ProductServiceIntegrationTest {
         productService.updateProductsService(company, productFormList, user);
 
         for(ProductForm productForm : array){
-
             Product find = productRepository.findById(productForm.getProduct().getId()).orElse(null);
             Assertions.assertNotNull(find);
             Assertions.assertEquals(productForm.getProductCategoryId(), find.getProductCategory().getId());

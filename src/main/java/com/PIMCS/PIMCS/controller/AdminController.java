@@ -78,7 +78,6 @@ public class AdminController {
     public String detailsCompany(Model model,@PathVariable Integer companyId){
         Company company = adminService.detailsCompanyService(companyId);
         model.addAttribute("company",company);
-
         return "admin/companyView";
     }
 
@@ -90,9 +89,6 @@ public class AdminController {
         adminService.deleteOwnDeviceListService(ownDeviceIdList);
         return true;
     }
-
-
-
 
     /*관리자 qna*/
     @GetMapping("qnas")
@@ -133,10 +129,9 @@ public class AdminController {
         adminService.createOrderMailFrameService(orderMailFrame);
         return "redirect:/admin/order-mail-frame/create";
     }
-    
 
     /*
-    *주문 목록
+     *주문 목록
      */
     @GetMapping("/orders")
     public String findOrderList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,

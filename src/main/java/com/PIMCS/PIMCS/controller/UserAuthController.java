@@ -17,17 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-/**
- * user_author
- * @author: GinGu-Kang
- *     구현 page
- *     1.회원가입: singUp
- *     2.로그인: login
- *     3.아이디찾기: UserEmailSearch
- *     4.비밀번호찾기: UserPasswordReset
- *     5.개인정보수정: UserInfoModify
- *     6.이메일 인증: EmailCertification
- */
+
 @Slf4j
 @Controller
 @RequestMapping("/auth")

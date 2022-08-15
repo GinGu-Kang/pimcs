@@ -515,7 +515,6 @@ public class MatServiceIntegrationTest {
             dynamoDBMapper.batchDelete(matLogs);
         }
     }
-<<<<<<< HEAD
     private Mat createMat(){
 //        Mat mat = new Mat(dynamoDBMapper);
 //        mat.setSerialNumber("test_"+UUID.randomUUID().toString());
@@ -526,8 +525,6 @@ public class MatServiceIntegrationTest {
 //        mat.setBoxWeight(0);
         return null;
     }
-=======
->>>>>>> f2249456ee17549e3c61f2fc2b0a8d8f69bfc5aa
 
     private MatForm createMatForm(Mat mat,int productId,List<String> mails){
         MatForm matForm = new MatForm();

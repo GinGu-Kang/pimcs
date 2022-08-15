@@ -3,6 +3,7 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.repository.*;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-
+@Slf4j
 @Service
 public class AdminService {
     private final AnswerRepository answerRepository;
@@ -31,7 +32,6 @@ public class AdminService {
     private final CompanyRepository companyRepository;
     private final OwnDeviceRepository ownDeviceRepository;
     private final SendHistoryRepository sendHistoryRepository;
-    private static final Logger logger =LoggerFactory.getLogger(AdminService.class);
 
 
     @Autowired
@@ -58,7 +58,6 @@ public class AdminService {
 
     public void updateMatCategoryService(MatCategory matCategory){
         Optional<MatCategory> optionalMatCategory=matCategoryRepository.findById(matCategory.getId());
-
         if(optionalMatCategory.isPresent()){
             try{
                 matCategoryRepository.save(matCategory);
@@ -68,7 +67,6 @@ public class AdminService {
         }else {
             throw new IllegalStateException("존재하지 않는 카테고리 입니다.");
         }
-
     }
 
     public List<MatCategory> findMatCategoryListService(){
@@ -93,10 +91,6 @@ public class AdminService {
         return answerRepository.save(answer);
     }
 
-    /*회사 조회*/
-    public Page<Company> findAllCompany(Pageable pageable){
-        return companyRepository.findAll(pageable);
-    }
 
     /*회사 상세*/
     public Company detailsCompanyService(Integer companyId) {

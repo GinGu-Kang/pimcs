@@ -1,67 +1,176 @@
 package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.Answer;
+import com.PIMCS.PIMCS.domain.MatCategory;
 import com.PIMCS.PIMCS.domain.OrderMailFrame;
+import com.PIMCS.PIMCS.repository.*;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
+import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 public class AdminServiceTest {
 
-    AdminService adminService;
-
-
     @Autowired
-    public AdminServiceTest(AdminService adminService) {
-        this.adminService = adminService;
+    AdminService adminService;
+    @Autowired
+    AnswerRepository answerRepository;
+    @Autowired
+    MatCategoryRepository matCategoryRepository;
+    @Autowired
+    MatCategoryOrderRepository matCategoryOrderRepository;
+    @Autowired
+    MatOrderRepository matOrderRepository;
+    @Autowired
+    QuestionRepository questionRepository;
+    @Autowired
+    OrderMailFrameRepository orderMailFrameRepository;
+    @Autowired
+    CompanyRepository companyRepository;
+    @Autowired
+    OwnDeviceRepository ownDeviceRepository;
+    @Autowired
+    SendHistoryRepository sendHistoryRepository;
+
+    @Test
+    public void createMatCategoryService(){
+        //given
+        String matCategoryName = "t6";
+        String mappingSerialCode = "t6";
+        int matPrice = 150000;
+        String matInformation = "(240*240)";
+        int maxWeight = 5000;
+
+
+        MatCategory matCategory = MatCategory.builder()
+                .matCategoryName(matCategoryName)
+                .mappingSerialCode(mappingSerialCode)
+                .matPrice(matPrice)
+                .matInformation(matInformation)
+                .maxWeight(maxWeight)
+                .build();
+
+        //when
+        adminService.createMatCategoryService(matCategory);
+
+        //then
+        MatCategory result = matCategoryRepository.findByMatCategoryName("t6").get();
+        assertThat(matCategory).isEqualTo(result);
     }
 
 
     @Test
-    public void findTest(){
-        List<Integer> number = List.of(10,11);
-        System.out.println(adminService.findMatCategoryList(number).get(0).getMatCategoryName());
+    void updateMatCategoryService() {
+        //given
+        String matCategoryName = "t6";
+        String updateMatCategoryName = "t7";
+        String mappingSerialCode = "t6";
+        int matPrice = 150000;
+        String matInformation = "(240*240)";
+        int maxWeight = 5000;
+
+        MatCategory matCategory = MatCategory.builder()
+                .matCategoryName(matCategoryName)
+                .mappingSerialCode(mappingSerialCode)
+                .matPrice(matPrice)
+                .matInformation(matInformation)
+                .maxWeight(maxWeight)
+                .build();
+
+        int savedId = adminService.createMatCategoryService(matCategory).getId();
+
+        //when
+        matCategory.setMatCategoryName(updateMatCategoryName);
+        adminService.updateMatCategoryService(matCategory);
+
+        //then
+        String result = matCategoryRepository.findById(savedId).get().getMatCategoryName();
+        assertThat(updateMatCategoryName).isEqualTo(result);
     }
 
-//    @Test
-//    @Commit
-//    void addAnswer() {
-//        Answer answer=Answer.builder().comment("야임마 그걸내가 어떻게알앙!!!").build();
-//        adminService.addAnswer(1,answer);
-//    }
-//    @Test
-//    @Commit
-//    public void updateoOrderMailFrameTest(){
-//        OrderMailFrame orderMailFrame = OrderMailFrame.builder().greeting("------------------------------------------------------------------------------------------------------------\n" +
-//                        "(주)스마트쇼핑 테크니컬 서포트입니다.\n" +
-//                        "이번에는 재고 관리 IoT 스마트 매트를 신청 해 주셔서 감사 합니다 .\n" +
-//                        "디바이스 대수·배송처 주소·배송 예정일은 이하와 같습니다."
-//                ).managerInfo("(주)스마트쇼핑 테크니컬 서포트\n" +
-//                "메일 : support@smartmat.jp ( 영업담당자 메일 주소)\n" +
-//                "전화 : *****                 ( 영업담당자 회사 전화 )\n" +
-//                "접수 시간：평일 9:00〜18:00\n" +
-//                "※본 메일은 송신 전용 주소로부터 보내 드리고 있습니다.").build();
-//        adminService.updateOrderMailFrame(orderMailFrame);
-//
-//    }
+    @Test
+    void findMatCategoryListService() {
+        //given
+        IntStream.range(1,11).forEach(System.out::println);
 
 
+    }
 
-//    @Test
-//    @Commit
-//    public void addMatCategoryTest(){
-//        MatCategory matCategory = MatCategory.builder()
-//                .matCategory("A2")
-//                .matInformation("(420 × 594)")
-//                .maxWeight(15)
-//                .matPrice(250000)
-//                .build();
-//        adminService.addMatCategory(matCategory);
-//    }
+    @Test
+    void deleteMatCategoryService() {
+    }
+
+    @Test
+    void findMatCategoryList() {
+    }
+
+    @Test
+    void createAnswerService() {
+    }
+
+    @Test
+    void detailsCompanyService() {
+    }
+
+    @Test
+    void findCompanyListService() {
+    }
+
+    @Test
+    void deleteOwnDeviceListService() {
+    }
+
+    @Test
+    void findAllQuestion() {
+    }
+
+    @Test
+    void detailsAdminQnaService() {
+    }
+
+    @Test
+    void findAdminQnaListService() {
+    }
+
+    @Test
+    void createOrderMailFrameService() {
+    }
+
+    @Test
+    void createOrderMailFrameFormService() {
+    }
+
+    @Test
+    void findOrderListService() {
+    }
+
+    @Test
+    void testFindOrderListService() {
+    }
+
+    @Test
+    void detailsOrderService() {
+    }
+
+    @Test
+    void updateOrderDepositService() {
+    }
+
+    @Test
+    void createOwnDeviceAndSendHistoryService() {
+    }
+
+    @Test
+    void createOwnDeviceService() {
+    }
 }

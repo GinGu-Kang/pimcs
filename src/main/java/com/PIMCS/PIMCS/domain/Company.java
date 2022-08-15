@@ -45,13 +45,9 @@ public class Company {
   private String ceoName;
 
 
-<<<<<<< HEAD
 
-  @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
-=======
   @OneToMany(mappedBy = "company")
   @JsonIgnore
->>>>>>> f2249456ee17549e3c61f2fc2b0a8d8f69bfc5aa
   private List<Product> products = new ArrayList<>();
 
   @OneToMany(mappedBy = "company",fetch = FetchType.LAZY)
@@ -63,6 +59,5 @@ public class Company {
   private List<OwnDevice> ownDeviceList=new ArrayList<>();
 
   public Company() {
-
   }
 }

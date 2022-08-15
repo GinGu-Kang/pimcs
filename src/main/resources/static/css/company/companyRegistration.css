@@ -2,7 +2,7 @@
 .email_ok{color:#6A82FB; display: none;}
 .email_already{color: #ff003e; display: none;}
 .pw-text{color: #ff003e; display: none;text-align: left;}
-.email-guide{color: #ff003e;}
+.email-guide{color: #6A82FB;}
 body{
     display: flex;
     justify-content: center;

@@ -1,6 +1,4 @@
     function check_password(){
-
-
         var checkText=$('#pw-check-text');
         var verifyText=$('#pw-verify-text');
         var password =$('#password').val();
@@ -8,8 +6,6 @@
         var eng = password.search(/[a-zA-Z]/g);
         var spe=password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/g);
         var num=password.search(/[0-9]/g);
-
-
         if(spe == -1 || num == -1 || eng==-1 || password.length <= 8 || password.length>=16){
             checkText.css("color","red");
             checkText.css("display","inline-block");
@@ -40,7 +36,6 @@
 
 
     function checkForm(){
-
         if($('.email_ok').css("display")=="none"){
             $('#email').focus();
             alert("이메일을 확인 해주세요.");
@@ -57,15 +52,12 @@
             alert("입력하신 메일로 인증메일이 전송되었습니다. 이메일을 확인해 인증확인을 눌러주세요.\n[유효시간: 10분]")
             return true
         }
-
     }
     function checkEmail(){
         var email = $('#email').val();
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var form = $("#signUp")
-
-
         $.ajax({
             url:'/auth/idCheck',
             type:'post',
@@ -105,13 +97,13 @@
             {
                 xhr.setRequestHeader(header, token);
             },
-            success:function(isCompany){ //컨트롤러에서 넘어온 cnt값을 받는다
-                if(!isCompany){ //cnt가 1이 아니면(=0일 경우) -> 사용 가능한 아이디
+            success:function(isCompany){
+                if(!isCompany){
 
                     $('.company_already').css("display", "none");
                     $('.company_ok').css("display","inline-block");
 
-                } else { // cnt가 1일 경우 -> 이미 존재하는 아이디
+                } else {
                     $('.company_already').css("display","inline-block");
                     $('.company_ok').css("display", "none");
 
@@ -122,7 +114,6 @@
             }
         });
     };
-
 
 
 

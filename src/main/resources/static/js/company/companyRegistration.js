@@ -1,6 +1,4 @@
 function check_password(){
-
-
     var checkText=$('#pw-check-text');
     var verifyText=$('#pw-verify-text');
     var password =$('#password').val();
@@ -8,7 +6,6 @@ function check_password(){
     var eng = password.search(/[a-z]/g);
     var spe=password.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/g);
     var num=password.search(/[0-9]/g);
-
 
     if(spe == -1 || num == -1 || eng==-1 || password.length <= 8 || password.length>=16){
         checkText.css("color","red");

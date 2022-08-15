@@ -40,7 +40,6 @@ public class CompanyManagementController {
     private final UserRoleRepository userRoleRepository;
     private final CompanyManagementService companyManagementService;
 
-
     @Autowired
     public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService) {
         this.userRepository = userRepository;

@@ -113,7 +113,7 @@ const loadPostData = function({url,header,data}){
     return resultData;
 }
 
-/*json으로 반환후 post*/
+/*json으로 반환후 전송*/
 const loadDataToJson = function({url,type,data}){
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
@@ -151,6 +151,7 @@ const formatKoKr = function(str){
  *  form data를  queryString을 json 형태로 변환
  *  -> $('#createMatCategoryForm').serializeObject();
  */
+
 jQuery.fn.serializeObject = function() {
     var obj = null;
     try {

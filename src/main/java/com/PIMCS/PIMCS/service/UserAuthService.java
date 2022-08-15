@@ -78,7 +78,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     public User signUpVerify(String verifyKey) {
         User user = waitingUserRedisRepository.findById(verifyKey).get().getUser();
         Optional<Company> company= companyRepository.findByCompanyCode(user.getCompanyCode());
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         UserRole userRole =UserRole.builder()
                 .user(user)
                 .role(roleRepository.findByName("User"))
@@ -136,7 +136,6 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
-        System.out.println(user.getAuthorities());
         return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany());
     }
 

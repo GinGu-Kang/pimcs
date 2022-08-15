@@ -91,7 +91,7 @@ public class CompanyManagementService {
     @Async
     @Transactional
     public void companyRegistration(User ceo, Company company){
-        String[] emailSednList=new String[]{ceo.getEmail()};
+        String[] emailSendList=new String[]{ceo.getEmail()};
         String url="http://localhost:8080/company/registration/verify?verifyKey=";
         WaitingCeo waitingCeo=WaitingCeo.builder()
                 .company(company)
@@ -105,9 +105,8 @@ public class CompanyManagementService {
                 "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
                 "<a href='"+url+waitingCeo.getId()+"'>인증 확인</a>"+
                 "</div>\n";
-
         emailUtilImpl.sendEmail(
-                emailSednList
+                emailSendList
                 , "PIMCS에서 온 인증 메일입니다."
                 , orderMail
                 ,true
@@ -128,7 +127,6 @@ public class CompanyManagementService {
         company.setCompanyCode(companyServiceUtils.UUIDgeneration().substring(0,30));
         company.setCompanyAddress(company.getCompanyAddress().concat(company.getCompanyAddressdetail()));
         ceo.setCompany(company);
-        System.out.println("====================@@@@@@@@@@@");
         for (Role role:roleRepository.findAll()
         ) {
             if(!role.getName().equals("ChiefOfPimcs")){
@@ -142,7 +140,6 @@ public class CompanyManagementService {
 
         companyRepository.save(company);
         userRepository.save(ceo);
-        System.out.println("====================@@@@@@@@@@@");
         userRoleRepository.saveAll(userRoles);
     }
 

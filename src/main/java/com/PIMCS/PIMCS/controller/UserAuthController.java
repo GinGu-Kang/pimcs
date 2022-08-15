@@ -119,9 +119,6 @@ public class UserAuthController {
         user.setName(userForm.getName());
         user.setPhone(userForm.getPhone());
         user.setDepartment(userForm.getDepartment());
-
-
-
         userAuthService.userUpdate(user);
         model.addAttribute(user);
         return "/user/auth/userInfo";

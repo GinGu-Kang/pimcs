@@ -39,7 +39,7 @@
          */
         $('#productCategoryModal').on('show.bs.modal', function (e) {
             resultProductCategories = loadGetData({
-                url: "/api/product/category",
+                url: "/api/companies/product/categories",
                 data: null
             });
 
@@ -91,8 +91,8 @@
 
             let queryString = new URLSearchParams(formData).toString();
             
-            let resultData = loadPostData({
-                url: "/product/update",
+            let resultData = putRequest({
+                url: "/products",
                 data: queryString,
                 header: {
                     'header': header,

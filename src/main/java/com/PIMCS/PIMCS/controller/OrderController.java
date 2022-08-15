@@ -7,6 +7,7 @@ import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.form.*;
 import com.PIMCS.PIMCS.service.AdminService;
 import com.PIMCS.PIMCS.service.OrderService;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -51,35 +52,29 @@ public class OrderController {
     }
 
     @GetMapping("history")
-    public String orderHistory(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+    public String ordersHistory(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                @PageableDefault(size=10) Pageable pageable,
+                               InOutHistorySearchForm orderSearchForm,
                                Model model){
 
-        DynamoResultPage dynamoResultPage = orderService.orderHistoryService(secUserCustomForm.getCompany(), pageable);
+        DynamoResultPage dynamoResultPage;
+        if(orderSearchForm.isExist()){
+            dynamoResultPage = orderService.findOrderHistoryByAllService(secUserCustomForm.getCompany(), orderSearchForm, pageable);
+        }else{
+            dynamoResultPage = orderService.orderHistoryService(secUserCustomForm.getCompany(), pageable);
+        }
+
 
         model.addAttribute("dynamoResultPage", dynamoResultPage);
-
-        return "order/orderHistory";
-    }
-
-    @GetMapping("history/search")
-    public String orderHistorySearch(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                                     @PageableDefault(size=10) Pageable pageable,
-                                     InOutHistorySearchForm orderSearchForm,
-                                     Model model){
-
-        DynamoResultPage dynamoResultPage = orderService.orderHistorySearchService(secUserCustomForm.getCompany(), orderSearchForm, pageable);
-
         model.addAttribute("searchForm", orderSearchForm);
-        model.addAttribute("dynamoResultPage", dynamoResultPage);
-
         return "order/orderHistory";
     }
+
 
     /**
      *  발주내역 csv 다운로드
      */
-    @GetMapping("history/csv")
+    @GetMapping("csv/history")
     public void downloadOrderHistoryCsv(  @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                           InOutHistorySearchForm searchForm,
                                           HttpServletResponse response) throws IOException {

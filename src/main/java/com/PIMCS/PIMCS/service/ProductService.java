@@ -4,15 +4,10 @@ import com.PIMCS.PIMCS.Interface.FileStorage;
 import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.Utils.ProductServiceUtils;
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.domain.Product;
-import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.form.*;
-import com.PIMCS.PIMCS.noSqlDomain.DynamoMat;
-import com.PIMCS.PIMCS.noSqlDomain.DynamoProduct;
-import com.PIMCS.PIMCS.noSqlDomain.MatLog;
-import com.PIMCS.PIMCS.noSqlDomain.ProductLog;
+import com.PIMCS.PIMCS.form.response.ValidationForm;
+import com.PIMCS.PIMCS.noSqlDomain.*;
 import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
@@ -65,7 +60,7 @@ public class ProductService {
      * @param productForm 제품생성 폼데이터
      * @return 제품객체
      */
-    public Product createProduct(ProductForm productForm, Company company){
+    public Product createProductService(ProductForm productForm, Company company, User user){
 
         Optional<ProductCategory> optProductCategory = productCategoryRepository.findById(productForm.getProductCategoryId());
 
@@ -84,7 +79,7 @@ public class ProductService {
             product.setProductCategory(optProductCategory.get());
             product.setCompany(company);
             if(productImagePath != null)
-                product.setProductImage("/product/image/"+productImagePath);
+                product.setProductImage("/product/images/"+productImagePath);
             else
                 product.setProductImage("null");
             //rdbms 저장
@@ -95,6 +90,12 @@ public class ProductService {
                 dynamoDBMapper.delete(dynamoProduct);
             }
             DynamoProduct.save(dynamoDBMapper,product); // dynamoProduct 저장
+
+            //로깅
+            List<Product> logProducts = new ArrayList<>();
+            logProducts.add(product);
+            ProductLog.batchSave(logProducts, user, "생성", dynamoDBMapper);
+
             return product;
         }else{
             throw new IllegalStateException("Category does not exist.");
@@ -106,7 +107,7 @@ public class ProductService {
     /**
      * 상품읽기 서비스
      */
-    public List<Product> readProductService(Company company){
+    public List<Product> findProductListService(Company company){
         List<Product> products = productRepository.findByCompany(company);
         return products;
     }
@@ -115,8 +116,8 @@ public class ProductService {
     /**
      * 상품수정 서비스
      */
-    public HashMap<String,Object> updateProduct(Company company, UpdateProductFormList updateProductFormList){
-        DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
+    public HashMap<String,Object> updateProductsService(Company company, UpdateProductFormList updateProductFormList, User user){
+
         List<Product> findProducts = productRepository.findByCompany(company);
         ProductCategory updateProductCategory = null;
         if(updateProductFormList.getUpdateTargetColumn().equals("productCategory")){
@@ -163,7 +164,7 @@ public class ProductService {
                 String productImagePath = null;
                 try {
                     productImagePath = fileStorage.save(productForm.getProductImage());
-                    product.setProductImage("/product/image/"+productImagePath);
+                    product.setProductImage("/product/images/"+productImagePath);
                 } catch (Exception e) {
                     throw new IllegalStateException("Failed to upload file.");
                 }
@@ -186,6 +187,8 @@ public class ProductService {
         //dynamodb 업데이트
         DynamoProduct.update(dynamoDBMapper, dynamoQuery, saveProducts, company);
 
+        //로깅
+        ProductLog.batchSave(saveProducts, user, "수정", dynamoDBMapper);
         return result;
     }
 
@@ -204,7 +207,7 @@ public class ProductService {
     /**
      * 상품삭제 서비스
      */
-    public HashMap<String, Object> deleteProduct(Company company, ProductFormList productFormList){
+    public HashMap<String, Object> deleteProduct(Company company, ProductFormList productFormList, User user){
         List<Product> findProducts = productRepository.findByCompany(company);
         List<Product> deleteProducts = new ArrayList<>();
 
@@ -223,6 +226,8 @@ public class ProductService {
         productRepository.deleteAllInBatch(deleteProducts);
         DynamoProduct.delete(dynamoDBMapper, dynamoQuery, deleteProducts, company);
 
+        //로깅
+        ProductLog.batchSave(deleteProducts, user, "삭제", dynamoDBMapper);
 
         HashMap<String,Object> hashMap = new HashMap<>();
         hashMap.put("isSuccess",true);
@@ -261,38 +266,29 @@ public class ProductService {
     /**
      * 제품명 체크
      */
-    public HashMap<String,Object> checkProductNameService(Company company,String productName){
-        HashMap<String, Object> hashMap = new HashMap<>();
+    public ValidationForm checkProductsByProductNameService(Company company,String productName){
 
         Optional<Product> productOpt = productRepository.findByProductNameAndCompany(productName, company);
         if(productOpt.isPresent()){
-            hashMap.put("result",false);
-            hashMap.put("message", "사용할 수 없는 제품명입니다.");
+            return new ValidationForm(false, "사용할 수 없는 제품명입니다.");
         }else{
-            hashMap.put("result", true);
-            hashMap.put("message", "사용할 수 있는 제품명입니다.");
+            return new ValidationForm(true, "사용할 수 있는 제품명입니다.");
         }
 
-        return hashMap;
+
     }
 
     /**
      * 제품코드 체크
      */
-    public HashMap<String, Object> checkProductCodeSerivice(Company company, String productCode){
-        HashMap<String, Object> hashMap = new HashMap<>();
-
+    public ValidationForm checkProductsByProductCodeService(Company company, String productCode){
         Optional<Product> productOpt = productRepository.findByProductCodeAndCompany(productCode, company);
 
         if(productOpt.isPresent()){
-            hashMap.put("result",false);
-            hashMap.put("message", "사용할 수 없는 제품코드입니다.");
+            return new ValidationForm(false, "사용할 수 없는 제품코드입니다.");
         }else{
-            hashMap.put("result", true);
-            hashMap.put("message", "사용할 수 있는 제품코드입니다.");
+            return new ValidationForm(true, "사용할 수 있는 제품코드입니다.");
         }
-
-        return hashMap;
     }
 
     /**
@@ -310,7 +306,42 @@ public class ProductService {
     public DynamoResultPage searchProductLogService(Company company, InOutHistorySearchForm searchForm, Pageable pageable){
         DynamoDBQueryExpression<ProductLog> queryExpression = ProductLog.searchQueryExpression(company, searchForm);
         DynamoDBQueryExpression<ProductLog> countQueryExpression = ProductLog.searchQueryExpression(company, searchForm);
+        System.out.println(queryExpression);
+
         return dynamoQuery.exePageQuery(ProductLog.class, queryExpression, countQueryExpression, pageable);
+    }
+
+    /**
+     * 제품관리 로그 csv 다운로드
+     */
+    public void downloadProductsLogCsvService(Company company,InOutHistorySearchForm searchForm, Writer writer) throws IOException{
+
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        String[] columns = {"상품명","상품코드","사용자 이름", "사용자 이메일", "action", "일시"};
+        DynamoDBQueryExpression<ProductLog> queryExpression = ProductLog.queryExpression(company, true);
+
+        List productLogList;
+
+        if(searchForm.getQuery() != "" || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+            productLogList = dynamoQuery.exeQuery(ProductLog.class,  ProductLog.searchQueryExpression(company, searchForm));
+
+        }else { // 전제데이터 다운로드
+            productLogList = dynamoQuery.exeQuery(ProductLog.class, ProductLog.queryExpression(company, false));
+        }
+
+        csvPrinter.printRecord(columns);
+        for(Object o : productLogList){
+            ProductLog productLog = (ProductLog) o;
+            List<String> record = new ArrayList<>();
+            record.add(productLog.getProductName());
+            record.add(productLog.getProductCode());
+            record.add(productLog.getUserName());
+            record.add(productLog.getUserEmail());
+            record.add(productLog.getAction());
+            record.add(productLog.getCreatedAt().toString());
+            csvPrinter.printRecord(record);
+        }
+
     }
 
 }

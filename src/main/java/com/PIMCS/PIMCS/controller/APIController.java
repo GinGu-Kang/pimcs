@@ -6,8 +6,10 @@ import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Redis.Device;
+import com.PIMCS.PIMCS.form.OperationForm;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.form.response.ValidationForm;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.service.APIService;
@@ -38,32 +40,18 @@ public class APIController {
      */
     @GetMapping("/api/products")
     @ResponseBody
-    public List<ProductJsonAdapter> loadProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
-        return apiService.loadProductsService(secUserCustomForm.getCompany());
+    public List<ProductJsonAdapter> findProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
+        return apiService.findProductsService(secUserCustomForm.getCompany());
     }
     /**
      * 회사에 등록된 제품 page형태로 응답
      */
     @GetMapping("/api/page/products")
     @ResponseBody
-    public ProductPageJsonAdapter loadPageProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+    public ProductPageJsonAdapter findPageProducts(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
                                                    @PageableDefault(size=10) Pageable pageable){
-        ProductPageJsonAdapter productPageJsonAdapter = apiService.loadPageProductsService(secUserCustomForm.getCompany(), pageable);
-        System.out.println("=======");
-        System.out.println(productPageJsonAdapter.getData().size());
-        System.out.println("========");
+        ProductPageJsonAdapter productPageJsonAdapter = apiService.findPageProductsService(secUserCustomForm.getCompany(), pageable);
         return productPageJsonAdapter;
-    }
-
-    /**
-     *  매트 검색시 사용하는 api controller
-     */
-    @GetMapping("/api/search/mats")
-    @ResponseBody
-    public MatPageAdapter searchMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                                     SearchForm searchForm,
-                                     Pageable pageable){
-        return apiService.searchMatsService(searchForm, secUserCustomForm.getCompany(), pageable);
     }
 
     /**
@@ -78,68 +66,80 @@ public class APIController {
     }
 
 
-    /**i
-     *  page query로 select하기 위한 api controler
-     */
-    @GetMapping("/api/page/mats")
+    @GetMapping("/api/mats")
     @ResponseBody
-    public MatPageAdapter loadPageMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                                          Pageable pageable){
-       return apiService.loadPageMatsService(secUserCustomForm.getCompany(), pageable);
+    public MatPageAdapter findMatList(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+                                      OperationForm operationForm,
+                                      SearchForm searchForm,
+                                      Pageable pageable){
+
+        String operationValue = operationForm.getLte();
+        if(searchForm.isExist()){ //매트 검색
+            return apiService.findMatListByAllService(searchForm, secUserCustomForm.getCompany(), pageable);
+        }else if(operationValue != null){
+            return apiService.findMatListByThresholdLte(secUserCustomForm.getCompany(),pageable);
+        }else{
+            return apiService.findMatListService(secUserCustomForm.getCompany(), pageable);
+        }
+
     }
 
-    /**
-     * 임계값 미달 api controller
-     */
-    @GetMapping("/api/below/threshold/mats")
-    @ResponseBody
-    public MatPageAdapter belowThresholdMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-                                             Pageable pageable){
-        return apiService.belowThresholdMats(secUserCustomForm.getCompany(),pageable);
 
+    @GetMapping("/api/mats/{serialNumber}/validations")
+    @ResponseBody
+    public ValidationForm findMatListBySerialNumber(
+            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
+            @PathVariable String serialNumber){
+
+        return apiService.findMatListBySerialNumberService(secUserCustomForm.getCompany(), serialNumber);
     }
 
     /**
      *  제품카테고리 api
      */
-    @GetMapping("/api/product/category")
+    @GetMapping("/api/companies/product/categories")
     @ResponseBody
-    public List<ProductCategoryJsonAdapter> productCategoryAPI(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
-        return apiService.productCategoryAPIService(secUserCustomForm.getCompany());
+    public List<ProductCategoryJsonAdapter> findProductsCategory(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
+        return apiService.findProductsCategoryService(secUserCustomForm.getCompany());
     }
 
     /**
      *  주문이메일 api
      */
-    @PostMapping("/api/email/recipients")
+    @PostMapping("/api/mats/email")
     @ResponseBody
-    public List<OrderMailRecipients> emailRecipientsAPI(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam List<String> serialNumbers){
-        return apiService.emailRecipientsAPIService(serialNumbers, secUserCustomForm.getCompany());
+    public List<OrderMailRecipients> findMatsEmail(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestBody Map<String,List<String>> params){
+
+        return apiService.findMatsEmailService(params.get("serialNumbers"), secUserCustomForm.getCompany());
     }
 
 
-    @GetMapping("/api/device")
+    @GetMapping("/api/devices/{serialNumber}")
     @ResponseBody
-    public Device currentInventoryWeight(@RequestParam String serialNumber){
-        System.out.println("=========");
-        System.out.println(serialNumber);
-        Device device = apiService.currentInventoryWeightService(serialNumber);
+    public Device findDeviceListBySerialNumber(@PathVariable String serialNumber){
+        Device device = apiService.findDeviceListBySerialNumberService(serialNumber);
         System.out.println(device);
         return device;
     }
 
-    @GetMapping("/api/company/exist")
+    @GetMapping("/api/companies/validation")
     @ResponseBody
-    public Map<String, Object> getCompanyByCompanyCode(@RequestParam String companyCode){
-        Company company = companyRepository.findByCompanyCode(companyCode).orElse(null);
-        Map<String, Object> map = new HashMap<>();
-        if(company == null){
-            map.put("isExist", false);
-            map.put("message", "존재하지 않는 회사코드 입니다.");
-        }else{
-            map.put("isExist", true);
+    public ValidationForm findCompaniesValidation(@RequestParam String type, @RequestParam String value){
+        ValidationForm validationForm = null;
+        
+        if(type.equals("companyCode")){
+           Company company = companyRepository.findByCompanyCode(value).orElse(null);
+
+           if(company == null){
+               validationForm = new ValidationForm(false, "존재하지 않는 회사코드 입니다.");
+           }else{
+               validationForm = new ValidationForm(true, "");   
+           }
+            
         }
-        return map;
+
+        return validationForm;
+
     }
 
 

@@ -14,7 +14,7 @@ const setCheckedData = function(matGraphForms){
     if(matGraphForms['serialNumberList'] == null && matGraphForms['productNameList'] == null){
         matGraphForms = getLocalStorage(CHECKED_MAT_STORAGE_KEY);
     }
-    console.log(matGraphForms['timeDimension']);
+    // console.log(matGraphForms['timeDimension']);
     //HOUR, DAY, WEEK, MONTH 설정
     if(matGraphForms['timeDimension'] != null){
         
@@ -97,14 +97,14 @@ const lazyLoadGraph = new IntersectionObserver(entries => {
         console.log("detect");
         
         if($(".time-dimension.active").text() == "HOUR"){
-            resultData = loadGraphData("/inout/history/graph/hour",2, true);
+            resultData = loadGraphData("/mats/history-graph/hour",2, true);
 
         }else if($(".time-dimension.active").text() == "DAY"){
-            resultData = loadGraphData("/inout/history/graph/day",2, true);
+            resultData = loadGraphData("/mats/history-graph/day",2, true);
         }else if($(".time-dimension.active").text() == "WEEK"){
-            resultData = loadGraphData("/inout/history/graph/week",2, true);
+            resultData = loadGraphData("/mats/history-graph/week",2, true);
         }else if($(".time-dimension.active").text() == "MONTH"){
-            resultData = loadGraphData("/inout/history/graph/month",2, true);
+            resultData = loadGraphData("/mats/history-graph/month",2, true);
         }
         if(resultData != undefined)
             createGraphDay(resultData);
@@ -123,7 +123,7 @@ const loadGraphData = function(url,size,isLazyLoad){
     let header = $("meta[name='_csrf_header']").attr("content");
     let drawGraphMatForm = getLocalStorage(CHECKED_MAT_STORAGE_KEY);
 
-    console.log(drawGraphMatForm);
+    // console.log(drawGraphMatForm);
     let serialNumberList = drawGraphMatForm['serialNumberList'];
     let productNameList = drawGraphMatForm['productNameList'];
 
@@ -153,7 +153,9 @@ const loadGraphData = function(url,size,isLazyLoad){
         productNameList.slice(nextIndex, nextIndex+size)
     )
     let queryString = new URLSearchParams(formData).toString();
-    console.log(queryString);
+    // console.log(queryString);
+    console.log("request data");
+    console.log(queryString)
     $(".loading-spinner").show();
     let resultData = loadPostData({
         url: url,
@@ -289,15 +291,15 @@ $(document).on("click",".inquiry-btn",function(e){
         if(diffMS > dayMS * 3){ //차이가 3일보다 크면
             alert("시별조회는 3일이하만 조회할수있습니다.");
         }else{
-            resultData = loadGraphData("/inout/history/graph/hour",2, false);
+            resultData = loadGraphData("/mats/history-graph/hour",2, false);
 
         }
     }else if($(".time-dimension.active").text() == "DAY"){
-        resultData = loadGraphData("/inout/history/graph/day",2, false);
+        resultData = loadGraphData("/mats/history-graph/day",2, false);
     }else if($(".time-dimension.active").text() == "WEEK"){
-        resultData = loadGraphData("/inout/history/graph/week",2, false);
+        resultData = loadGraphData("/mats/history-graph/week",2, false);
     }else if($(".time-dimension.active").text() == "MONTH"){
-        resultData = loadGraphData("/inout/history/graph/month",2, false);
+        resultData = loadGraphData("/mats/history-graph/month",2, false);
     }
 
     if(resultData != undefined){

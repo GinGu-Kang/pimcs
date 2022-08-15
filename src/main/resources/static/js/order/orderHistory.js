@@ -12,12 +12,13 @@ const pagination = function({page,size,totalPages}){
         last:'',
         onPageClick: function (event, clickedPage) {
             if(page != clickedPage){
-                if(location.pathname == "/order/history/search"){
-                    let params =  new URLSearchParams(location.search);
+                const params =  new URLSearchParams(location.search);
+                if(params.get("query") || params.get("startDate") || params.get("endDate")){
+                    
                     let query = params.get('query');
                     let startDate = params.get('startDate');
                     let endDate = params.get('endDate');
-                    location.href=`/order/history/search?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+                    location.href=`/order/history?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
                 }else{
                     location.href=`/order/history?page=${clickedPage}&size=${size}`;
                 }
@@ -70,5 +71,5 @@ $(document).on("click","#order-inquiry-btn",function(e){
         
         
     }
-    location.href=`/order/history/csv?query=${query}&startDate=${startDate}&endDate=${endDate}`;
+    location.href=`/order/csv/history?query=${query}&startDate=${startDate}&endDate=${endDate}`;
 });

@@ -304,8 +304,13 @@ $(document).on("click",".delete-btn",function(){
         alert("제품을 체크해주세요.");
         return;
     }
+    if(getCheckedItems().length > 100){
+        alert("최대 100개 제품을 삭제 할수있습니다.");
+        return;
+    }
     if(!confirm(`${getCheckedItems().length}개 제품을 삭제하겠습니까?`)) return;
 
+    
     let checkedItems = getCheckedItems();
     let formData = new FormData();
     for(let i=0; i<checkedItems.length; i++){
@@ -316,8 +321,8 @@ $(document).on("click",".delete-btn",function(){
     let queryString = new URLSearchParams(formData).toString();
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
-    let resultData = loadPostData({
-        url: "/product/delete",
+    let resultData = deleteRequest({
+        url: "/products",
         data: queryString,
         header: {
             'header': header,

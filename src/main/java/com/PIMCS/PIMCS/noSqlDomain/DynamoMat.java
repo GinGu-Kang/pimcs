@@ -13,16 +13,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @DynamoDBTable(tableName = "DynamoMat")
-public class DynamoMat{
+public class DynamoMat implements Comparable{
 
     @DynamoDBHashKey(attributeName = "companyId")
     private int companyId;
@@ -94,28 +91,28 @@ public class DynamoMat{
 
     public static void update(DynamoDBMapper dynamoDBMapper,DynamoQuery dynamoQuery, List<Mat> mats, Company company){
 
-        List<String> serialNumbers = new ArrayList<>();
-        mats.forEach(mat -> serialNumbers.add(mat.getSerialNumber()));
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("matSerialNumber", serialNumbers);
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
+        List<KeyPair> keyPairList = new ArrayList<>();
 
 
-        DynamoDBQueryExpression<DynamoMat> queryExpression = new DynamoDBQueryExpression<DynamoMat>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
+        mats.forEach(mat -> {
+//            serialNumbers.add(mat.getSerialNumber());
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(mat.getSerialNumber());
+            keyPairList.add(keyPair);
+        });
 
-        List dynamoMats = dynamoQuery.exeQuery(DynamoMat.class, queryExpression);
+
+
+        List dynamoMats = dynamoQuery.batchLoad(DynamoMat.class, keyPairList);
 
         if(dynamoMats.size() != mats.size()){
             throw new IllegalStateException("Synchronization error");
         }
 
+        Collections.sort(dynamoMats);
         List<String> dynamoSerialNumbers = new ArrayList<>();
-
         dynamoMats.forEach(o-> {
             DynamoMat dynamoMat = (DynamoMat)  o;
             dynamoSerialNumbers.add(dynamoMat.getMatSerialNumber());
@@ -139,30 +136,23 @@ public class DynamoMat{
 
 
     public static void delete(DynamoDBMapper dynamoDBMapper,DynamoQuery dynamoQuery, List<Mat> mats, Company company){
-        List<String> serialNumbers = new ArrayList<>();
-        mats.forEach(mat -> serialNumbers.add(mat.getSerialNumber()));
+        List<KeyPair> keyPairList = new ArrayList<>();
 
+        mats.forEach(mat -> {
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(mat.getSerialNumber());
+            keyPairList.add(keyPair);
+        });
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("matSerialNumber", serialNumbers);
-
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
-        System.out.println("========");
-        System.out.println(serialNumbers);
-        System.out.println(query);
-        System.out.println(eav);
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
-
-        DynamoDBQueryExpression<DynamoMat> queryExpression = new DynamoDBQueryExpression<DynamoMat>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
-
-        List dynamoMats = dynamoQuery.exeQuery(DynamoMat.class, queryExpression);
-
+        List dynamoMats = dynamoQuery.batchLoad(DynamoMat.class, keyPairList);
         dynamoDBMapper.batchDelete(dynamoMats);
     }
 
 
-
+    @Override
+    public int compareTo(Object o) {
+        DynamoMat dynamoMat = (DynamoMat)  o;
+        return this.getRangekey().compareTo(dynamoMat.getRangekey());
+    }
 }

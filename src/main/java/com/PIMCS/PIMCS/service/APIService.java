@@ -6,14 +6,13 @@ import com.PIMCS.PIMCS.adapter.MatPageAdapter;
 import com.PIMCS.PIMCS.adapter.ProductCategoryJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductJsonAdapter;
 import com.PIMCS.PIMCS.adapter.ProductPageJsonAdapter;
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.domain.Product;
-import com.PIMCS.PIMCS.domain.ProductCategory;
+import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.domain.Redis.Device;
 import com.PIMCS.PIMCS.form.SearchForm;
+import com.PIMCS.PIMCS.form.response.ValidationForm;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
 import com.PIMCS.PIMCS.repository.MatRepository;
+import com.PIMCS.PIMCS.repository.OwnDeviceRepository;
 import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
 import com.PIMCS.PIMCS.repository.ProductRepository;
 import com.PIMCS.PIMCS.repository.Redis.DeviceRepository;
@@ -25,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,21 +37,23 @@ public class APIService {
     private final DynamoDBMapper dynamoDBMapper;
     private final DynamoQuery dynamoQuery;
     private final DeviceRepository deviceRepository;
+    private final OwnDeviceRepository ownDeviceRepository;
 
     @Autowired
-    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, DeviceRepository deviceRepository) {
+    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, DeviceRepository deviceRepository, OwnDeviceRepository ownDeviceRepository) {
         this.productRepository = productRepository;
         this.matRepository = matRepository;
         this.productCategoryRepository = productCategoryRepository;
         this.dynamoDBMapper = dynamoDBMapper;
         this.dynamoQuery = dynamoQuery;
         this.deviceRepository = deviceRepository;
+        this.ownDeviceRepository = ownDeviceRepository;
     }
 
     /**
      * 회사에 등록된 전체제품 로드
      */
-    public List<ProductJsonAdapter> loadProductsService(Company company) {
+    public List<ProductJsonAdapter> findProductsService(Company company) {
         APIServiceUtils apiServiceUtils = new APIServiceUtils();
         List<Product> products = productRepository.findByCompany(company);
         return apiServiceUtils.creteProductJsonAdapter(products);
@@ -60,7 +62,7 @@ public class APIService {
     /**
      * 회사에 등록된 제품 Page 로드
      */
-    public ProductPageJsonAdapter loadPageProductsService(Company company, Pageable pageable) {
+    public ProductPageJsonAdapter findPageProductsService(Company company, Pageable pageable) {
         APIServiceUtils apiServiceUtils = new APIServiceUtils();
         Page<Product> pageProducts = productRepository.findByCompanyOrderByCreatedAtDesc(company, pageable);
 
@@ -71,7 +73,7 @@ public class APIService {
     /**
      * 매트검색 API
      */
-    public MatPageAdapter searchMatsService(SearchForm searchForm, Company company, Pageable pageable) {
+    public MatPageAdapter findMatListByAllService(SearchForm searchForm, Company company, Pageable pageable) {
 
         MatPageAdapter matPageAdapter = null;
         switch (searchForm.getSearchType()) {
@@ -123,30 +125,45 @@ public class APIService {
     }
 
 
-    public MatPageAdapter loadPageMatsService(Company company, Pageable pageable){
+    public MatPageAdapter findMatListService(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findByCompanyOrderByIdDesc(company, pageable);
 
         return new APIServiceUtils().createMatPageAdapter(pageMats,company, dynamoDBMapper,dynamoQuery);
     }
 
-    public MatPageAdapter belowThresholdMats(Company company, Pageable pageable){
+    public MatPageAdapter findMatListByThresholdLte(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findMatsBelowThreshold(company,pageable);
         System.out.println(pageMats);
         return new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper,dynamoQuery);
     }
 
-    public List<ProductCategoryJsonAdapter> productCategoryAPIService(Company company){
+    public List<ProductCategoryJsonAdapter> findProductsCategoryService(Company company){
         List<ProductCategory> productCategories = productCategoryRepository.findByCompany(company);
         return new APIServiceUtils().createProductCategoryJsonAdapter(productCategories, company);
     }
 
-    public List<OrderMailRecipients> emailRecipientsAPIService(List<String> serialNumbers, Company company){
+    public List<OrderMailRecipients> findMatsEmailService(List<String> serialNumbers, Company company){
         return OrderMailRecipients.findBySerialNumbers(dynamoQuery, serialNumbers, company);
     }
 
-    public Device currentInventoryWeightService(String serialNumber){
+    public Device findDeviceListBySerialNumberService(String serialNumber){
 
         Optional<Device> opt = deviceRepository.findById(serialNumber);
         return opt.orElse(null);
+    }
+
+
+    public ValidationForm findMatListBySerialNumberService(Company company, String serialNumber){
+//        HashMap hashMap = new HashMap<>();
+        Optional<Mat> optMat = matRepository.findBySerialNumber(serialNumber);
+        OwnDevice ownDevice = ownDeviceRepository.findByCompanyAndSerialNumber(company,serialNumber).orElse(null);
+
+        if(optMat.isPresent()){ //null 값이아니면
+            return  new ValidationForm(false, "매트가 이미 등록되어 있습니다.");
+        }
+        if(ownDevice == null) {
+            return new ValidationForm(false, "소유 기기가 아니거나 존재하지않는 기기입니다.");
+        }
+        return new ValidationForm(true, "등록할 수 있는 시리얼번호 입니다.");
     }
 }

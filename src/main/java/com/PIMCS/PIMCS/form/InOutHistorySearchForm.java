@@ -13,5 +13,17 @@ public class InOutHistorySearchForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
+    public boolean isExist(){
+        if(query != null || startDate != null || endDate != null){
+            return true;
+        }
+        return false;
+    }
 
+    public boolean isExistAll(){
+        if(query != null && startDate != null && endDate != null){
+            return true;
+        }
+        return false;
+    }
 }

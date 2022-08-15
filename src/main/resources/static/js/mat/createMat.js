@@ -15,7 +15,7 @@ $(document).on("focusout","input[name='mat.serialNumber']",function(){
     }
 
     let validation = checkSerialNumber($(this).val());
-    if(validation.result) 
+    if(validation.valid) 
         $(messageTag).css("color","#6A82FB");
     else
         $(messageTag).css("color","#ff003e");    
@@ -50,8 +50,8 @@ const checkSerialNumber = function(serialNum){
     
     if(serialNumValidation == null){
         let response = loadGetData({
-                            url: "/mat/check/serialNum",
-                            data: {"serialNum": serialNum}
+                            url: `/api/mats/${serialNum}/validations`,
+                            data: {}
                         });
         serialNumValidation = response;
     }
@@ -106,24 +106,26 @@ $(document).on("click",".register-btn",function(e){
     
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");
-    
-
-    const data = new FormData();
-    data.append("mat.serialNumber",$(`input[name='mat.serialNumber']`).val());
-    data.append("productId",$("select[name='productId']").val());
-    data.append("mat.matLocation", $(`input[name='mat.matLocation']`).val());
-    data.append("mat.threshold",$(`input[name='mat.threshold']`).val());
-    data.append("mat.productOrderCnt",$(`input[name='mat.productOrderCnt']`).val());
-    data.append("mat.boxWeight",$(`input[name='mat.boxWeight']`).val());
-    data.append("mat.calcMethod", $(`input[name='mat.calcMethod']`).val());
+    const orderMailList = []
 
     for(let i=0; i<mailRecipients.length; i++){
-        data.append(`mailRecipients[${i}]`, mailRecipients[i].trim());
+        orderMailList.push(mailRecipients[i].trim());
     }
-    const queryString = new URLSearchParams(data).toString()
+    const saveMat = {
+        "serialNumber": $(`input[name='mat.serialNumber']`).val(),
+        "matLocation": $(`input[name='mat.matLocation']`).val(),
+        "threshold" : $(`input[name='mat.threshold']`).val(),
+        "boxWeight": $(`input[name='mat.boxWeight']`).val(),
+    }
+    
     let resultData = loadPostData({
-        url: "/mat/create",
-        data: queryString,
+        url: "/mats",
+        data: JSON.stringify({
+            "mat": saveMat,   
+            "productId": $("select[name='productId']").val(),
+            "mailRecipients": orderMailList
+        }),
+        contentType: "application/json",
         header: {
             'header': header,
             'token': token
@@ -166,10 +168,9 @@ $(document).on("click",".measurement-btn",function(){
         return;
     }
     const data = loadGetData({
-        url: "/api/device",
-        data:{
-            "serialNumber": serialNumber
-        }});
+        url: `/api/devices/${serialNumber}`,
+        data:{}
+    });
     
     console.log(data);
     if(!data){

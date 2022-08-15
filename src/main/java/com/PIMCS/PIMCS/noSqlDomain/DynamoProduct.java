@@ -16,16 +16,13 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @DynamoDBTable(tableName = "DynamoProduct")
-public class DynamoProduct {
+public class DynamoProduct implements  Comparable{
 
     @DynamoDBHashKey(attributeName = "companyId")
     private int companyId;
@@ -75,20 +72,18 @@ public class DynamoProduct {
     }
 
     public static  void update(DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, List<Product> products, Company company){
-        List<Integer> productIdList = new ArrayList<>();
-        products.forEach(o -> productIdList.add(o.getId()));
+        List<KeyPair> keyPairList = new ArrayList<>();
+        products.forEach(o -> {
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(o.getId());
+            keyPairList.add(keyPair);
+        });
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("productId", productIdList);
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
 
-        DynamoDBQueryExpression<DynamoProduct> queryExpression = new DynamoDBQueryExpression<DynamoProduct>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
+        List dynamoProducts = dynamoQuery.batchLoad(DynamoProduct.class, keyPairList);
 
-        List dynamoProducts = dynamoQuery.exeQuery(DynamoProduct.class, queryExpression);
+        Collections.sort(dynamoProducts);
 
         if(dynamoProducts.size() != products.size()){
             throw new IllegalStateException("Synchronization error");
@@ -99,7 +94,6 @@ public class DynamoProduct {
             DynamoProduct dynamoProduct = (DynamoProduct)  o;
             dynamoProductIdList.add(String.valueOf(dynamoProduct.getProductId()));
         });
-
 
         List<DynamoProduct> save = new ArrayList<>();
         for(Product product : products){
@@ -119,22 +113,25 @@ public class DynamoProduct {
     }
 
     public static void delete(DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, List<Product> products, Company company){
-        List<Integer> productIdList = new ArrayList<>();
-        products.forEach(o -> productIdList.add(o.getId()));
+        List<KeyPair> keyPairList = new ArrayList<>();
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("productId", productIdList);
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
+        products.forEach(o -> {
+//            productIdList.add(o.getId())
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(o.getId());
+            keyPairList.add(keyPair);
+        });
 
-        DynamoDBQueryExpression<DynamoProduct> queryExpression = new DynamoDBQueryExpression<DynamoProduct>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
 
-        List dynamoProducts = dynamoQuery.exeQuery(DynamoProduct.class, queryExpression);
-
+        List dynamoProducts = dynamoQuery.batchLoad(DynamoProduct.class, keyPairList);
         dynamoDBMapper.batchDelete(dynamoProducts);
 
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        DynamoProduct dynamoProduct = (DynamoProduct)  o;
+        return String.valueOf(this.getRangekey()).compareTo(String.valueOf(dynamoProduct.getRangekey()));
     }
 }

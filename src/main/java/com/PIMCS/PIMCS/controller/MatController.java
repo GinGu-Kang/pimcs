@@ -41,29 +41,34 @@ public class MatController {
         binder.setAutoGrowCollectionLimit(Integer.MAX_VALUE);
     }
 
-    /**
-     * 매트 조회
-     */
     @GetMapping("/")
-    public String readMat(){
+    public String index(){
+        return "redirect:/mats";
+    }
+
+
+
+    @GetMapping("/mats")
+    public String findMatList(){
         return "mat/readMat/readMat";
     }
 
     /**
      * 매트생성
      */
-    @GetMapping("/mat/create")
-    public String createMatForm(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
+    @GetMapping("/mats/create")
+    public String createMatsForm(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, Model model){
         List<Product> products = matService.createMatFormService(secUserCustomForm.getCompany());
         model.addAttribute("products",products);
         return "mat/createMat/createMat.html";
     }
 
-    @PostMapping("/mat/create")
-    public String createMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatForm matForm, Model model){
+    @PostMapping("/mats")
+    public String createMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestBody  MatForm matForm, Model model){
 
+        System.out.println(matForm);
         User user = userRepository.getOne(secUserCustomForm.getUsername());
-        Mat mat = matService.createMat(matForm,secUserCustomForm.getCompany(), user);
+        Mat mat = matService.createMatsService(matForm,secUserCustomForm.getCompany(), user);
 
         String mailRecipientsStr = String.join(",",matForm.getMailRecipients());
 
@@ -75,48 +80,46 @@ public class MatController {
     /**
      * 매트수정
      */
-    @PostMapping("/mat/update")
+    @PutMapping("/mats")
     @ResponseBody
-    public HashMap<String,String> updateMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
+    public HashMap<String,String> updateMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
         User user = userRepository.getOne(secUserCustomForm.getUsername());
-        return matService.updateMat(secUserCustomForm.getCompany(),matFormList, user);
+        return matService.updateMatsService(secUserCustomForm.getCompany(),matFormList, user);
     }
 
     /**
      * 주문이메일 변경
      */
-    @PostMapping("/mat/update/email")
+    @PutMapping("/mats/email")
     @ResponseBody
-    public HashMap<String, String> updateMatEmail(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MailRecipientsForm mailRecipientsForm){
+    public HashMap<String, String> updateMatsEmail(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MailRecipientsForm mailRecipientsForm){
         System.out.println(mailRecipientsForm.toString());
-        return matService.updateMatEmailService(mailRecipientsForm.getMailRecipients(), secUserCustomForm.getCompany());
+        return matService.updateMatsEmailService(mailRecipientsForm.getMailRecipients(), secUserCustomForm.getCompany());
     }
 
 
     /**
      * 매트삭제
      */
-
-    @PostMapping("/mat/delete")
+    @DeleteMapping("/mats")
     @ResponseBody
-    public HashMap<String,Object> deleteMat(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
+    public HashMap<String,Object> deleteMats(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, MatFormList matFormList){
         User user = userRepository.getOne(secUserCustomForm.getUsername());
-        return matService.deleteMat(secUserCustomForm.getCompany(), matFormList, user);
+        return matService.deleteMatsService(secUserCustomForm.getCompany(), matFormList, user);
     }
 
-    /**
-     * 매트 serial num 체크
-     */
-    @GetMapping("/mat/check/serialNum")
-    @ResponseBody
-    public HashMap<String,Object> checkMatSerialNum(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm, @RequestParam("serialNum") String serialNum){
-        return matService.checkMatSerialNumberService(secUserCustomForm.getCompany(), serialNum);
-    }
+
+//    @GetMapping("/mats/{columnName}")
+//    @ResponseBody
+//    public HashMap<String, Object> findMatListAll(@PathVariable String columnName){
+//
+////        if(columnName.equals("seri"))
+//    }
 
     /**
      *  매트 csv다운로드
      */
-    @PostMapping(value = "/download/mat/csv",  produces = "text/csv")
+    @PostMapping(value = "/mats/csv/download",  produces = "text/csv")
     public void downloadMatCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,MatCsvForm matCsvForm ,HttpServletResponse response) throws IOException {
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/csv; charset=UTF-8");
@@ -125,47 +128,56 @@ public class MatController {
         matService.downloadMatCsvService(secUserCustomForm.getCompany(), matCsvForm, response.getWriter());
     }
 
-    @GetMapping("/mat/log")
+    @GetMapping("/mats/log")
     public String matLog(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             @PageableDefault(size=10) Pageable pageable,
+            InOutHistorySearchForm searchForm,
             Model model){
 
-        DynamoResultPage dynamoResultPage = matService.matLogService(secUserCustomForm.getCompany(), pageable);
+        DynamoResultPage dynamoResultPage;
+        if(searchForm.isExist()){
+
+            dynamoResultPage = matService.searchMatLogService(secUserCustomForm.getCompany(), searchForm, pageable);
+        }else{
+           dynamoResultPage = matService.matLogService(secUserCustomForm.getCompany(), pageable);
+        }
+
 
         model.addAttribute("dynamoResultPage", dynamoResultPage);
-        model.addAttribute("searchForm", new InOutHistorySearchForm());
+        model.addAttribute("searchForm",searchForm);
         return "mat/matLog.html";
     }
 
-    @GetMapping("/mat/log/search")
-    public String searchMatLog(
-            @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
-            @PageableDefault(size=10) Pageable pageable,
-            InOutHistorySearchForm searchForm,
-            Model model
-    ){
-        System.out.println(searchForm);
 
-        DynamoResultPage dynamoResultPage = matService.searchMatLogService(secUserCustomForm.getCompany(), searchForm, pageable);
-        model.addAttribute("dynamoResultPage", dynamoResultPage);
-        model.addAttribute("searchForm", searchForm);
-        return "mat/matLog.html";
+    /**
+     * 매트관리 로그
+     */
+    @GetMapping(value = "/mats/log/csv",  produces = "text/csv")
+    public void downloadMatsLogCsv(@AuthenticationPrincipal SecUserCustomForm secUserCustomForm,InOutHistorySearchForm searchForm ,HttpServletResponse response) throws IOException {
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv; charset=UTF-8");
+        String exportFileName = "mat-log-" + LocalDate.now().toString() + ".csv";
+        response.setHeader("Content-disposition", "attachment;filename=" + exportFileName);
+
+        matService.downloadMatsLogCsvService(secUserCustomForm.getCompany(), searchForm, response.getWriter());
     }
+
 
     /**
      * 앙도하기
      */
-    @PostMapping("/mat/transfer")
+    @PutMapping("/mats/to/{companyCode}")
     @ResponseBody
-    public HashMap<String, String> transferMat(
+    public HashMap<String, String> matsToOtherCompany(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             MatFormList matFormList,
-            @RequestParam(value = "companyCode")String companyCode){
+            @PathVariable  String companyCode){
 
         User user = userRepository.getOne(secUserCustomForm.getUsername());
 
-        return matService.transferMatService(secUserCustomForm.getCompany(), matFormList, companyCode, user);
+        return matService.matsToOtherCompanyService(secUserCustomForm.getCompany(), matFormList, companyCode, user);
+
     }
 
 }

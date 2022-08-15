@@ -24,7 +24,8 @@ public class ProductCategoryService {
         return productCategoryRepository.findByCompany(company);
     }
 
-    public int createProductCategoryService(ProductCategory productCategory){
+    public int createProductCategoryService(Company company, ProductCategory productCategory){
+        productCategory.setCompany(company);
         productCategoryRepository.save(productCategory);
 
         return productCategory.getId();

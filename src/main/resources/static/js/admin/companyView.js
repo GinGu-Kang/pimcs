@@ -47,7 +47,6 @@ $(".del").on("click",function (){
 $("#add-mat-button").on("click",function () {
     let deviceSerial= $("#input-serial").val()
 
-
     $.ajax({
         url: "/admin/company/owndevice",
         type: 'post',

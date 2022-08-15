@@ -12,15 +12,15 @@ const pagination = function({page,size,totalPages}){
         last:'',
         onPageClick: function (event, clickedPage) {
             if(page != clickedPage){
-                
-                if(location.pathname == "/product/log/search"){
-                    let params =  new URLSearchParams(location.search);
+                const params =  new URLSearchParams(location.search);
+                if(params.get("query") || params.get("startDate") || params.get("endDate")){
+                    
                     let query = params.get('query');
                     let startDate = params.get('startDate');
                     let endDate = params.get('endDate');
-                    location.href=`/product/log/search?page=${clickedPage}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+                    location.href=`/products/log?page=${clickedPage}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
                 }else{
-                    location.href=`/product/log?page=${clickedPage}`;
+                    location.href=`/products/log?page=${clickedPage}`;
                 }
 
             }

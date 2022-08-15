@@ -27,7 +27,7 @@ public class MatGraphForm {
 
     private String timeDimension;
     private List<String> serialNumberList;
-    List<String> productNameList;
+    private List<String> productNameList;
 
 
 }

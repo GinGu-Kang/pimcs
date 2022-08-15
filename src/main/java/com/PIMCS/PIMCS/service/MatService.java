@@ -5,6 +5,7 @@ import com.PIMCS.PIMCS.Utils.DynamoQuery;
 import com.PIMCS.PIMCS.Utils.MatServiceUtils;
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.form.*;
+import com.PIMCS.PIMCS.form.response.ValidationForm;
 import com.PIMCS.PIMCS.noSqlDomain.*;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.MatRepository;
@@ -38,14 +39,16 @@ public class MatService {
     private final DynamoQuery dynamoQuery;
     private final OwnDeviceRepository ownDeviceRepository;
     private final CompanyRepository companyRepository;
+    private final APIService apiService;
     @Autowired
-    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, OwnDeviceRepository ownDeviceRepository, CompanyRepository companyRepository) {
+    public MatService(MatRepository matRepository, ProductRepository productRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, OwnDeviceRepository ownDeviceRepository, CompanyRepository companyRepository, APIService apiService) {
         this.matRepository = matRepository;
         this.productRepository = productRepository;
         this.dynamoDBMapper = dynamoDBMapper;
         this.dynamoQuery = dynamoQuery;
         this.ownDeviceRepository = ownDeviceRepository;
         this.companyRepository = companyRepository;
+        this.apiService = apiService;
     }
 
 
@@ -64,12 +67,14 @@ public class MatService {
      * @throws IllegalStateException 사용할수없는 시리얼번호인 경우 발생
      * @throws IllegalStateException product존재하지 않을때
      */
-    public Mat createMat(MatForm matForm, Company company, User user){
+    public Mat createMatsService(MatForm matForm, Company company, User user){
         Mat mat = matForm.getMat();
+        System.out.println("====");
+        System.out.println(mat);
         //유효성 검사
-        HashMap<String,Object> resultMap = checkMatSerialNumberService(company,mat.getSerialNumber());
-        if(!(boolean)resultMap.get("result")){ //등록할수 없는 매트일때
-            throw new IllegalStateException(resultMap.get("message").toString());
+        ValidationForm validation = apiService.findMatListBySerialNumberService(company,mat.getSerialNumber());
+        if(!validation.isValid()){ //등록할수 없는 매트일때
+            throw new IllegalStateException(validation.getMessage());
         }
         //prudct와 회사 객체를 mat entity에 추가
         Optional<Product> productOpt = productRepository.findByIdAndCompany(matForm.getProductId(), company);
@@ -109,7 +114,7 @@ public class MatService {
      * 매트수정 서비스
      * @throws  IllegalStateException 회사에 등록되지 않은 product 또는 mat 일때 발생
      */
-    public HashMap<String, String> updateMat(Company company, MatFormList matFormList, User user){
+    public HashMap<String, String> updateMatsService(Company company, MatFormList matFormList, User user){
         //로그인한 유저 회사에 등록된 produts와 mats찾기
         List<Product> findProducts = productRepository.findByCompany(company);
         List<Mat> findMats = matRepository.findByCompany(company);
@@ -136,6 +141,7 @@ public class MatService {
 
         matRepository.saveAll(saveMats);
 
+        System.out.println(saveMats);
         //dynamodb 동기화
         DynamoMat.update(dynamoDBMapper,dynamoQuery,saveMats,company);
 
@@ -145,7 +151,7 @@ public class MatService {
         hashMap.put("message","수정 완료했습니다.");
         return hashMap;
     }
-    public HashMap<String,String> updateMatEmailService(List<OrderMailRecipients> orderMailRecipients, Company company){
+    public HashMap<String,String> updateMatsEmailService(List<OrderMailRecipients> orderMailRecipients, Company company){
 
         OrderMailRecipients.update(dynamoDBMapper, dynamoQuery, orderMailRecipients, company);
         HashMap<String, String> hashMap =new HashMap<>();
@@ -156,7 +162,7 @@ public class MatService {
     /**
      * 매트삭제 서비스
      */
-    public HashMap<String, Object> deleteMat(Company company, MatFormList matFormList,  User user){
+    public HashMap<String, Object> deleteMatsService(Company company, MatFormList matFormList,  User user){
         List<Mat> findMats = matRepository.findByCompany(company);
         List<Mat> saveMats = new ArrayList<>();
         MatServiceUtils matServiceUtils = new MatServiceUtils();
@@ -183,31 +189,7 @@ public class MatService {
         return hashMap;
     }
 
-    /**
-     * 매트 serial num 체크 서버스
-     * @return hashMap
-     *      hashMap.get('result'): true면 serialNumber 사용가능, false면 serialNumber 사용불가능
-     */
-    public HashMap checkMatSerialNumberService(Company company,String serialNumber){
-        HashMap hashMap = new HashMap<>();
-        Optional<Mat> optMat = matRepository.findBySerialNumber(serialNumber);
-        OwnDevice ownDevice = ownDeviceRepository.findByCompanyAndSerialNumber(company,serialNumber).orElse(null);
 
-        if(optMat.isPresent()){ //null 값이아니면
-            hashMap.put("result", false);
-            hashMap.put("message","매트가 이미 등록되어 있습니다.");
-        }else if(ownDevice == null){
-            hashMap.put("result", false);
-            hashMap.put("message","소유 기기가 아니거나 존재하지않는 기기입니다..");
-        }else{
-            hashMap.put("result", true);
-            hashMap.put("message","등록할 수 있는 시리얼번호 입니다.");
-        }
-        System.out.println("========");
-        System.out.println(hashMap.get("message"));
-        System.out.println("========");
-        return hashMap;
-    }
 
 
 
@@ -284,7 +266,7 @@ public class MatService {
     /**
      * 양도하기 서비스
      */
-    public HashMap<String, String> transferMatService(Company company, MatFormList matFormList, String targetCompanyCode, User user){
+    public HashMap<String, String> matsToOtherCompanyService(Company company, MatFormList matFormList, String targetCompanyCode, User user){
 
         List<MatForm> matForms = matFormList.getMatForms();
         List<String> serialNumbers = matForms.stream().map(o -> o.getMat().getSerialNumber()).collect(Collectors.toList());
@@ -301,6 +283,7 @@ public class MatService {
 
         //매트와 회사 연결 테이블 업데이터
         List<OwnDevice> ownDevicies = ownDeviceRepository.findAllBySerialNumberIn(serialNumbers);
+
         List<OwnDevice> saveOwnDevicies = ownDevicies.stream().map(o -> {
             o.setCompany(targetCompany);
             return o;
@@ -319,6 +302,40 @@ public class MatService {
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","양도 완료했습니다.");
         return hashMap;
+
+    }
+
+    /**
+     * 매트관리 로그 csv 다운로드
+     */
+    public void downloadMatsLogCsvService(Company company, InOutHistorySearchForm searchForm, Writer writer) throws IOException{
+
+        CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT);
+        String[] columns = {"시리얼 번호","위치","사용자 이름", "사용자 이메일", "action", "일시"};
+        DynamoDBQueryExpression<MatLog> queryExpression = MatLog.queryExpression(company, true);
+
+
+        List matLogList;
+
+        if(searchForm.getQuery() != "" || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+            matLogList = dynamoQuery.exeQuery(MatLog.class,  MatLog.searchQueryExpression(company, searchForm));
+
+        }else { // 전제데이터 다운로드
+            matLogList = dynamoQuery.exeQuery(MatLog.class, MatLog.queryExpression(company, false));
+        }
+
+        csvPrinter.printRecord(columns);
+        for(Object o : matLogList){
+            MatLog matLog = (MatLog) o;
+            List<String> record = new ArrayList<>();
+            record.add(matLog.getMatSerialNumber());
+            record.add(matLog.getMatLocation());
+            record.add(matLog.getUserName());
+            record.add(matLog.getUserEmail());
+            record.add(matLog.getAction());
+            record.add(matLog.getCreatedAt().toString());
+            csvPrinter.printRecord(record);
+        }
 
     }
 

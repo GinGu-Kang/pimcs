@@ -41,14 +41,20 @@
                 return;
             }
             
+            const checkedItems = getCheckedItems();
+            if(checkedItems.length == 0){
+                alert("매트체크해주세요.");
+                return;
+            }
             const res = loadGetData({
-                url: "/api/company/exist",
+                url: `/api/companies/validation`,
                 data: {
-                    "companyCode": $("input[name='companyCode']").val()
+                    "type": "companyCode",
+                    "value": $("input[name='companyCode']").val()
                 }
             })
 
-            if(!res.isExist){
+            if(!res.valid){
                 alert(res.message);
                 return;
             }
@@ -61,13 +67,13 @@
                 replaceValue: null
             });
 
-            formData.append("companyCode", $("input[name='companyCode']").val());
+            // formData.append("companyCode", $("input[name='companyCode']").val());
 
 
             let queryString = new URLSearchParams(formData).toString();
 
-            let resultData = loadPostData({
-                url: "/mat/transfer",
+            let resultData = putRequest({
+                url: `/mats/to/${$("input[name='companyCode']").val()}`,
                 data: queryString,
                 header: {
                     'header': header,

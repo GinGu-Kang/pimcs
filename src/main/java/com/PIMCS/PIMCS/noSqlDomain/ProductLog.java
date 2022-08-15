@@ -2,6 +2,9 @@ package com.PIMCS.PIMCS.noSqlDomain;
 
 import com.PIMCS.PIMCS.config.AWSConfig;
 import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.Mat;
+import com.PIMCS.PIMCS.domain.Product;
+import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.InOutHistorySearchForm;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -11,7 +14,9 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -54,6 +59,23 @@ public class ProductLog {
                 .withExpressionAttributeValues(eav);
     }
 
+    public static void batchSave(List<Product> products, User user, String action, DynamoDBMapper dynamoDBMapper){
+        List<ProductLog> save = new ArrayList<>();
+        for(Product product : products){
+           ProductLog productLog = ProductLog.builder()
+                   .companyId(user.getCompany().getId())
+                   .productName(product.getProductName())
+                   .productCode(product.getProductCode())
+                   .userName(user.getName())
+                   .userEmail(user.getEmail())
+                   .action(action)
+                   .build();
+           save.add(productLog);
+
+        }
+        dynamoDBMapper.batchSave(save);
+    }
+
     public static  DynamoDBQueryExpression<ProductLog> searchQueryExpression(Company company, InOutHistorySearchForm searchForm){
 
         Map<String, AttributeValue> eav = new HashMap<String, AttributeValue>();
@@ -70,7 +92,7 @@ public class ProductLog {
         System.out.println(eav);
         return new DynamoDBQueryExpression<ProductLog>()
                 .withKeyConditionExpression(query)
-                .withFilterExpression("contains (productName, :query)")
+                .withFilterExpression("contains (productName,:query)")
                 .withScanIndexForward(false)
                 .withExpressionAttributeValues(eav);
     }

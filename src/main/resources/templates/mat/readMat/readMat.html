@@ -150,7 +150,7 @@
         <!--DESKTOP ACTION BUTTON RIGHT CONTAINER-->
         <div class="action-btn-right-container d-flex">
             <div class="rect">
-                <a class="a-remove-attr" href="?belowThreshold=true">임계 값미달</a>
+                <a class="a-remove-attr" href="?lte=threshold">임계 값미달</a>
             </div>
             <div class="rect download-csv-btn">CSV</div>
             <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Setting</div>
@@ -193,7 +193,7 @@
         </div>
         <div class="action-btn-right-container d-flex">
             <div class="rect">
-                <a class="a-remove-attr" href="?belowThreshold=true">임계 값미달</a>
+                <a class="a-remove-attr" href="?lte=threshold">임계 값미달</a>
             </div>
             <div class="rect download-csv-btn">CSV</div>
             <div class="rect displaySettingBtn" data-bs-toggle="modal" data-bs-target="#displaySettingModal">Setting</div>
@@ -249,7 +249,7 @@
         <section class="mt-3">
             <div class="px-4 px-lg-5">
                 <div class="pimcs-card-container">
-                    <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-3">
+                    <div class="row gx-4 gx-lg-5 row-cols-1 row-cols-md-2 row-cols-xl-2">
 
                     </div>
                 </div>
@@ -263,7 +263,7 @@
        
     
     <!--csv download form -->
-    <form id="csv-download-form" th:action="@{/download/mat/csv}" method="post">
+    <form id="csv-download-form" th:action="@{/mats/csv/download}" method="post">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <div id="csv-download-form-data">
 
@@ -271,7 +271,7 @@
     </form>
 
     <!--체크된 매트 그래프보내는 폼-->
-    <form id="graphForm" method="post" th:action="@{/inout/history/graph}">
+    <form id="graphForm" method="post" th:action="@{/mats/history-graph}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>
 

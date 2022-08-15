@@ -13,16 +13,13 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Builder
 @AllArgsConstructor
 @DynamoDBTable(tableName = "OrderMailRecipients")
-public class OrderMailRecipients {
+public class OrderMailRecipients implements Comparable{
 
     @DynamoDBAttribute
     private String matSerialNumber;
@@ -99,37 +96,37 @@ public class OrderMailRecipients {
             List<OrderMailRecipients> orderMailRecipientsList,
             Company company){
 
-        List<String> serialNumbers = new ArrayList<>();
-        orderMailRecipientsList.forEach(o -> serialNumbers.add(o.getMatSerialNumber()));
+        List<KeyPair> keyPairList = new ArrayList<>();
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("matSerialNumber", serialNumbers);
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
+        orderMailRecipientsList.forEach(o -> {
 
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(o.getMatSerialNumber());
+            keyPairList.add(keyPair);
+        });
 
-        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
 
-        List findOrderMails = dynamoQuery.exeQuery(OrderMailRecipients.class, queryExpression);
-        if(orderMailRecipientsList.size() != findOrderMails.size()){
+
+        List findItems = dynamoQuery.batchLoad(OrderMailRecipients.class, keyPairList);
+
+        if(orderMailRecipientsList.size() != findItems.size()){
             throw new IllegalStateException("Synchronization error");
         }
 
-        List<String> findSerialNumbers = new ArrayList<>();
-        findOrderMails.forEach(o -> {
-            OrderMailRecipients orderMail = (OrderMailRecipients) o;
-            findSerialNumbers.add(orderMail.getMatSerialNumber());
+        Collections.sort(findItems);
+        List<String> dynamoSerialNumbers = new ArrayList<>();
+        findItems.forEach(o-> {
+            OrderMailRecipients orderMailRecipients = (OrderMailRecipients)  o;
+            dynamoSerialNumbers.add(orderMailRecipients.getMatSerialNumber());
         });
 
         List<OrderMailRecipients> save = new ArrayList<>();
 
         for(OrderMailRecipients o : orderMailRecipientsList){
-            int index = Search.binarySearch(o.getMatSerialNumber(), findSerialNumbers);
+            int index = Search.binarySearch(o.getMatSerialNumber(), dynamoSerialNumbers);
             if(index == -1) continue;
-            OrderMailRecipients find = (OrderMailRecipients) findOrderMails.get(index);
+            OrderMailRecipients find = (OrderMailRecipients) findItems.get(index);
             find.setMailRecipients(o.getMailRecipients());
             save.add(find);
         }
@@ -143,24 +140,27 @@ public class OrderMailRecipients {
                               List<Mat> mats,
                               Company company){
 
-        List<String> serialNumbers = new ArrayList<>();
-        mats.forEach(o -> serialNumbers.add(o.getSerialNumber()));
 
-        DynamoQueryForm dynamoQueryForm = dynamoQuery.getOrQuery("matSerialNumber", serialNumbers);
-        Map<String, AttributeValue> eav = dynamoQueryForm.getEav();
-        String query = dynamoQueryForm.getQuery();
+        List<KeyPair> keyPairList = new ArrayList<>();
 
-        eav.put(":companyId", new AttributeValue().withN(String.valueOf(company.getId())));
+        mats.forEach(mat -> {
+            KeyPair keyPair = new KeyPair();
+            keyPair.withHashKey(company.getId());
+            keyPair.withRangeKey(mat.getSerialNumber());
+            keyPairList.add(keyPair);
+        });
 
-        DynamoDBQueryExpression<OrderMailRecipients> queryExpression = new DynamoDBQueryExpression<OrderMailRecipients>()
-                .withKeyConditionExpression("companyId=:companyId")
-                .withFilterExpression(query)
-                .withExpressionAttributeValues(eav);
+        List dynamoMats = dynamoQuery.batchLoad(OrderMailRecipients.class, keyPairList);
 
-        List findOrderMails = dynamoQuery.exeQuery(OrderMailRecipients.class, queryExpression);
+        dynamoDBMapper.batchDelete(dynamoMats);
 
-        dynamoDBMapper.batchDelete(findOrderMails);
+    }
 
+
+    @Override
+    public int compareTo(Object o) {
+        OrderMailRecipients orderMailRecipients = (OrderMailRecipients)  o;
+        return this.getRangekey().compareTo(orderMailRecipients.getRangekey());
     }
 
 

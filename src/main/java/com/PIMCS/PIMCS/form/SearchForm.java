@@ -16,4 +16,9 @@ public class SearchForm {
         this.searchQuery = searchQuery;
     }
     public SearchForm(){}
+
+    public boolean isExist(){
+        if(searchType != null && searchQuery != null) return true;
+        return false;
+    }
 }

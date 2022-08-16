@@ -82,6 +82,7 @@ public class AdminController {
     }
 
 
+
     /*매핑된 기기 삭제*/
     @ResponseBody
     @DeleteMapping (value = "owndevices")

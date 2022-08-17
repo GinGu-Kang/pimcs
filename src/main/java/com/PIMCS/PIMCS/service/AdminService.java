@@ -151,6 +151,7 @@ public class AdminService {
 
         Page<Question> searchQuestions =  null ;
 
+        System.out.println(keyword+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"+selectOption);
         switch (selectOption){
             case "제목":
                 searchQuestions =questionRepository.findByTitleLike("%"+keyword+"%",pageable);
@@ -192,9 +193,9 @@ public class AdminService {
         }
     }
 
-    public Page<MatOrder> findOrderListService(Pageable pageable){
-        return matOrderRepository.findAll(pageable);
-    }
+//    public Page<MatOrder> findOrderListService(Pageable pageable){
+//        return matOrderRepository.findAll(pageable);
+//    }
 
     //주문 필터링 검색
     public Page<MatOrder> findOrderListService(String keyword,Integer totalPriceStart,Integer totalPriceEnd, Pageable pageable){

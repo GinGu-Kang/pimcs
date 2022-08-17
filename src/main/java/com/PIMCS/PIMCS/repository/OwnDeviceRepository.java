@@ -10,6 +10,7 @@ import java.util.Optional;
 
 public interface OwnDeviceRepository extends JpaRepository<OwnDevice,Integer> {
     List<OwnDevice> findAllBySerialNumberIn(List<String> deviceSerialList);
+    List<OwnDevice> findByCompany(Company company);
     Optional<OwnDevice> findBySerialNumber(String serialNumber);
     Optional<OwnDevice> findByCompanyAndSerialNumber(Company company, String serialNumber);
     void deleteAllByIdIn(List<Integer> ownDeviceList);

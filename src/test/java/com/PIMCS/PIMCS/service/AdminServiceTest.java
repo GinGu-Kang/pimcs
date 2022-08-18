@@ -2,20 +2,18 @@ package com.PIMCS.PIMCS.service;
 import com.PIMCS.PIMCS.Utils.CompanyServiceUtils;
 import com.PIMCS.PIMCS.domain.*;
 import com.PIMCS.PIMCS.repository.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import javax.transaction.Transactional;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -451,7 +449,8 @@ public class AdminServiceTest {
         User user = userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
         Company company = user.getCompany();
         List<MatOrder> matOrderList = new ArrayList<>();
-        String keyword = "aldsf";
+        String depositerName="강진구";
+        String keyword = depositerName;
         Integer totalPriceStart=0;
         Integer totalPriceEnd=1200001;
         Pageable pageable=PageRequest.of(0,10,Sort.by("createdAt").descending());
@@ -465,7 +464,7 @@ public class AdminServiceTest {
                     .deliveryAddress("제주시 테스트동")
                     .postCode("29284")
                     .depositStatus(0)
-                    .depositerName("강진구")
+                    .depositerName(depositerName)
                     .deliveryStatus(0).build();
             matOrderList.add(matOrder);
         }
@@ -485,23 +484,209 @@ public class AdminServiceTest {
         assertThat(matOrderList).isEqualTo(result);
     }
 
-    @Test
-    void testFindOrderListService() {
-    }
-
+//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     @Test
     void detailsOrderService() {
+        //given
+        Company company = createCompany();
+        User user = createUser(company);
+        MatOrder matOrder = createMatOrder(user).get(0);
+        MatCategory matCategory = createMatCategory().get(0);
+        List<MatCategoryOrder> matCategoryOrderList = createMatCategoryOrder(matOrder,matCategory);
+        SendHistory sendHistory = createSendHistory(matOrder);
+        int orderId=matOrder.getId();
+
+        //when
+        matOrder=adminService.detailsOrderService(orderId);
+
+        //then
+        MatOrder result=matOrderRepository.findById(orderId).get();
+        assertThat(matOrder.getUser()).isEqualTo(user);
+        assertThat(matOrder.getCompany()).isEqualTo(company);
+        assertThat(matOrder).isEqualTo(sendHistory.getMatOrder());
+        assertThat(matOrder).isEqualTo(result);
+        assertThat(matOrder).isEqualTo(matCategoryOrderList.get(0).getMatOrder());
     }
 
     @Test
     void updateOrderDepositService() {
-    }
+        //given
+        Company company = createCompany();
+        User user = createUser(company);
+        MatOrder matOrder = createMatOrder(user).get(0);
+        int orderId=matOrder.getId();
 
+        //when
+        adminService.updateOrderDepositService(orderId,true);
+
+        //then
+        int result= 1;
+        assertThat(matOrder.getDepositStatus()).isEqualTo(result);
+
+    }
+//Integer orderId, List<String> deviceSerialList , Integer companyId
     @Test
     void createOwnDeviceAndSendHistoryService() {
+        //given
+        Company company = createCompany();
+        User user = createUser(company);
+        MatOrder matOrder = createMatOrder(user).get(0);
+        List<String> deviceSerialList = Arrays.asList("test1", "test2", "test3");
+
+        //when
+        adminService.createOwnDeviceAndSendHistoryService(matOrder.getId(),deviceSerialList,company.getId());
+
+        //then
+        List<OwnDevice> resultOwnDevice = ownDeviceRepository.findAllBySerialNumberIn(deviceSerialList);
+        String resultSendHistory = String.join("",deviceSerialList);
+        String sendHistory = sendHistoryRepository.findByMatOrder(matOrder).getHistory();
+
+        assertThat(deviceSerialList.size()).isEqualTo(resultOwnDevice.size());
+        assertThat(sendHistory.replaceAll(",","")).isEqualTo(resultSendHistory);
     }
 
     @Test
     void createOwnDeviceService() {
+        //given
+        Company company = createCompany();
+        String deviceSerial = "test1";
+//        int preCnt = ownDeviceRepository.findByCompany(company).size();
+        //when
+        adminService.createOwnDeviceService(deviceSerial,company.getId());
+
+        //then
+        OwnDevice ownDevice = ownDeviceRepository.findByCompanyAndSerialNumber(company, deviceSerial).orElse(null);
+        assertNotNull(ownDevice);
+    }
+
+
+    List<MatOrder> createMatOrder(User user){
+
+        List<MatOrder> matOrderList = new ArrayList<>();
+        String depositerName="강진구";
+        String keyword = depositerName;
+
+        for (int i=0;i<10;i++) {
+            MatOrder matOrder = MatOrder.builder()
+                    .user(user)
+                    .company(user.getCompany())
+                    .totalCnt(30)
+                    .totalPrice(1200000)
+                    .deliveryAddress("제주시 테스트동")
+                    .postCode("29284")
+                    .depositStatus(0)
+                    .depositerName(depositerName)
+                    .deliveryStatus(0).build();
+            matOrderList.add(matOrder);
+        }
+        return matOrderRepository.saveAll(matOrderList);
+    }
+
+    User createUser(Company company){
+        User user= User.builder()
+                .email("test@gmail.com")
+                .company(company)
+                .password("12345678")
+                .name("테스트")
+                .phone("01077777777")
+                .department("sw개발부")
+                .enabled(true).build();
+        return userRepository.save(user);
+    }
+
+    Company createCompany(){
+        CompanyServiceUtils companyServiceUtils = new CompanyServiceUtils();
+
+        Company company=Company.builder()
+                .companyCode(companyServiceUtils.UUIDgeneration().substring(0,30))
+                .companyName("testCom")
+                .companyAddress("제주시 테스트동")
+                .contactPhone("0432222212")
+                .ceoEmail("test@gmail.com")
+                .ceoName("김테스")
+                .build();
+        return companyRepository.save(company);
+    }
+
+    List<MatCategory> createMatCategory(){
+        List<MatCategory> matCategoryList = new ArrayList<>();
+        int inputSize = 10;
+        String matCategoryName = "t";
+        String mappingSerialCode = "t6";
+        int matPrice = 150000;
+        String matInformation = "(240*240)";
+        int maxWeight = 5000;
+
+        for(int i = 0; i < inputSize; i++){
+            MatCategory matCategory = MatCategory.builder()
+                    .matCategoryName(matCategoryName+(i+1))
+                    .mappingSerialCode(mappingSerialCode)
+                    .matPrice(matPrice)
+                    .matInformation(matInformation)
+                    .maxWeight(maxWeight)
+                    .build();
+            matCategoryList.add(matCategory);
+        }
+
+        return matCategoryRepository.saveAll(matCategoryList);
+    }
+
+    List<MatCategoryOrder> createMatCategoryOrder(MatOrder matOrder,MatCategory matCategory){
+        List<MatCategoryOrder> matCategoryOrderList = new ArrayList<>();
+        int inputSize = 10;
+        int orderCnt = 5;
+        int pricePerDevice = 50000;
+        String matCategoryName = matCategory.getMatCategoryName();
+
+        for(int i = 0; i < inputSize; i++){
+            MatCategoryOrder matCategoryOrder = MatCategoryOrder.builder()
+                    .matOrder(matOrder)
+                    .orderCnt(orderCnt)
+                    .matCategoryName(matCategoryName+(i+1))
+                    .pricePerDevice(pricePerDevice)
+                    .build();
+            matCategoryOrderList.add(matCategoryOrder);
+        }
+
+        return matCategoryOrderRepository.saveAll(matCategoryOrderList);
+    }
+
+    List<Question> createQuestion(User user){
+        List<Question> questionList = new ArrayList<>();
+        boolean isSecret = true;
+        String title = "테스트 제목";
+        String content = "테스트가 잘 진행되고 있나요?";
+        int inputSize = 10;
+        for(int i = 0; i < inputSize; i++){
+            Question question = Question.builder()
+                    .user(user)
+                    .company(user.getCompany())
+                    .isSecret(isSecret)
+                    .title(title)
+                    .content(content)
+                    .build();
+            questionList.add(question);
+        }
+        return questionRepository.saveAll(questionList);
+    }
+
+    Answer createAnser(Question question){
+        String comment="잘진행되고 있습니다.";
+        Answer answer = Answer.builder()
+                .comment(comment)
+                .question(question)
+                .build();
+        return answerRepository.save(answer);
+    }
+
+    SendHistory createSendHistory(MatOrder matOrder){
+
+        SendHistory sendHistory = SendHistory.builder()
+                .history("test1,test2,test3,test4,test5")
+                .matOrder(matOrder)
+                .build();
+
+
+        return sendHistoryRepository.save(sendHistory);
     }
 }

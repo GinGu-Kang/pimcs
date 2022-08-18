@@ -89,7 +89,6 @@ public class QnAController {
             }else{
                 return "noneRole";
             }
-
         }
         else {
             model.addAttribute(question);

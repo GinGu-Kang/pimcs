@@ -155,10 +155,4 @@ public class UserAuthController {
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
         return "/user/auth/pwdChange";
     }
-
-
-
-
-
-
 }

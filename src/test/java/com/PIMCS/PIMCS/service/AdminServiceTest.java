@@ -136,7 +136,6 @@ public class AdminServiceTest {
     void deleteMatCategoryService() {
         //given
         String matCategoryName = "t6";
-        String updateMatCategoryName = "t7";
         String mappingSerialCode = "t6";
         int matPrice = 150000;
         String matInformation = "(240*240)";
@@ -169,8 +168,8 @@ public class AdminServiceTest {
         String selectOption = "제목";
         int inputSize = 10;
         Pageable pageable= PageRequest.of(0,inputSize,Sort.by("createdAt").descending());
-        User user =  userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
-        Company company = user.getCompany();
+        Company company = createCompany();
+        User user =  createUser(company);
         List<Question> questionList = new ArrayList<>();
 
         for (int i=0; i<inputSize; i++){
@@ -199,8 +198,8 @@ public class AdminServiceTest {
     @Test
     void createAnswerService() {
         //given
-        User user =  userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
-        Company company = user.getCompany();
+        Company company = createCompany();
+        User user =  createUser(company);
         Question question =Question.builder()
                 .isSecret(true)
                 .title("테스트 제목")
@@ -400,8 +399,8 @@ public class AdminServiceTest {
     @Test
     void detailsAdminQnaService() {
         //given
-        User user = userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
-        Company company = user.getCompany();
+        Company company = createCompany();
+        User user =  createUser(company);
         Question question = Question.builder()
                 .user(user)
                 .company(company)
@@ -446,8 +445,8 @@ public class AdminServiceTest {
     @Test
     void findOrderListService() {
         //given
-        User user = userRepository.findByEmail("rkdwlsrn212@gmail.com").get();
-        Company company = user.getCompany();
+        Company company = createCompany();
+        User user =  createUser(company);
         List<MatOrder> matOrderList = new ArrayList<>();
         String depositerName="강진구";
         String keyword = depositerName;
@@ -480,11 +479,12 @@ public class AdminServiceTest {
 
 
         //then
-        List<MatOrder> result=matOrderRepository.findAllById(saveIdList);
+        List<MatOrder> result = matOrderRepository.findAllById(saveIdList);
         assertThat(matOrderList).isEqualTo(result);
     }
 
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
     @Test
     void detailsOrderService() {
         //given

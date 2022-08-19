@@ -2,24 +2,24 @@ package com.PIMCS.PIMCS.Repository.Redis;
 
 
 import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
+import com.PIMCS.PIMCS.domain.Redis.WaitCeo;
 import com.PIMCS.PIMCS.domain.User;
-import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitCeoRedisRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class WaitingCeoRepositoryTest {
+public class WaitCeoRepositoryTest {
     @Autowired
-    WaitingCeoRedisRepository waitingCeoRedisRepository;
+    WaitCeoRedisRepository waitCeoRedisRepository;
 
     @Test
     public void 테스트(){
         User user = User.builder().email("hi").name("찡꾸").build();
         Company company = Company.builder().companyName("hihi").build();
-        WaitingCeo waitingCeo = WaitingCeo.builder().company(company).user(user).build();
-        waitingCeoRedisRepository.save(waitingCeo);
-        System.out.println(waitingCeo.getId());
+        WaitCeo waitCeo = WaitCeo.builder().company(company).user(user).build();
+        waitCeoRedisRepository.save(waitCeo);
+        System.out.println(waitCeo.getId());
     }
 }

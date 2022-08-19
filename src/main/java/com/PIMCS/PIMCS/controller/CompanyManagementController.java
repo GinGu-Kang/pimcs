@@ -60,7 +60,7 @@ public class CompanyManagementController {
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
         companyManagementService.companyRegistration(ceo,company);
-        return "user/auth/login";
+        return "user/login";
     }
 
     @GetMapping("registration/verify")

@@ -15,7 +15,7 @@
 
 <div class="workerForm">
     <a href="/auth/login"><img src="/img/logo2.png" ></a><br>
-    <form id="signUp" name="signUp" th:action="@{/auth/signUp}" method="post" onsubmit="return checkForm()">
+    <form id="signUp" name="signUp" th:action="@{/auth/user}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /><br>
         <input type="hidden" name="enabled" value="true" /><br>
 

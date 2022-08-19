@@ -34,57 +34,43 @@ public class UserAuthController {
     }
 
     //회원 가입폼
-    @GetMapping("/signUp")
-    private String signUpForm(){
-        return "user/auth/signUp.html";
+    @GetMapping("/user/create")
+    private String createUserForm(){
+        return "user/signUp.html";
     }
 
 
     //회원가입 이메일 인증
-    @PostMapping("/signUp")
-    private String signUp(User user){
-        userAuthService.signUp(user);
+    @PostMapping("/user")
+    private String createUser(User user){
+        userAuthService.createUserService(user);
         return "redirect:/auth/login";
     }
 
-    @GetMapping("signUp/verify")
-    public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
-        userAuthService.signUpVerify(verifyKey);
-        return "redirect:/auth/signUp/success";
+    @GetMapping("user/verify")
+    public String createUserVerify(@RequestParam("verifyKey") String verifyKey,Model model){
+        model.addAttribute("isWaitUser",userAuthService.createUserVerifyService(verifyKey));
+        return "user/signUpSuccess.html";
     }
-    //회원가입 완료
-    @GetMapping("/signUp/success")
-    private String signUpSuccess(){
-        return "user/auth/signUpSuccess.html";
-    }
+
 
     //회원가입 선택
-    @GetMapping("choice/signUp")
+    @GetMapping("user/choice")
     private String signUpChoice(){
-        return "user/auth/signUpChoice.html";
+        return "user/signUpChoice.html";
     }
-
-
-
-    //회원정보수정
-    @GetMapping("update")
-    private String editUserInfoForm(@RequestParam("email") String email, Model model){
-        model.addAttribute("user",userAuthService.findUser(email).get());
-        return "user/auth/userUpdate.html";
-    }
-
 
     //로그인
     @GetMapping("/login")
     private String loginForm(){
-        return "user/auth/login";
+        return "user/login";
     }
 
 
-    @PostMapping("/idCheck")
+    @PostMapping("/emailCheck")
     @ResponseBody
-    public boolean idCheck(@RequestParam("email") String email){
-        boolean isEmail = userAuthService.emailCheck(email);
+    public boolean emailCheck(@RequestParam("email") String email){
+        boolean isEmail = userAuthService.emailCheckService(email);
         return isEmail;
     }
 
@@ -95,11 +81,23 @@ public class UserAuthController {
         return isCompany;
     }
 
+
+
+    //회원정보수정
+    @GetMapping("update")
+    private String editUserInfoForm(@RequestParam("email") String email, Model model){
+        model.addAttribute("user",userAuthService.findUser(email).get());
+        return "user/userUpdate.html";
+    }
+
+
+
+
     //유저 정보
     @GetMapping("/user/info")
     private String userInfo(Model model,@AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",userAuthService.userDetail(user.getUsername()));
-        return "user/auth/userInfo";
+        return "user/userInfo";
     }
 
     //개인정보 변경
@@ -111,25 +109,22 @@ public class UserAuthController {
         user.setDepartment(userForm.getDepartment());
         userAuthService.userUpdate(user);
         model.addAttribute(user);
-        return "/user/auth/userInfo";
+        return "/user/userInfo";
     }
 
     @GetMapping("/pwd/change")
     public String pwdChangeForm(){
-        return "/user/auth/pwdChange";
+        return "/user/pwdChange";
     }
 
 
-
-
-
-    @GetMapping("/pwd/find")
+    @GetMapping("/pwd")
     public String pwdFindForm(){
-        return "/user/auth/pwdFind";
+        return "/user/pwdFind";
     }
 
     @ResponseBody
-    @PostMapping("/pwd/find")
+    @PostMapping("/pwd")
     public Boolean pwdFind(String email){
         Boolean isEmail=userAuthService.pwdFind(email);
         return isEmail;
@@ -138,7 +133,7 @@ public class UserAuthController {
     @GetMapping("/pwd/find/verify")
     public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey,Model model){
         model.addAttribute("verifyKey",verifyKey);
-        return "/user/auth/pwdFindVerify";
+        return "/user/pwdFindVerify";
     }
 
     //인증키 만료 처리
@@ -148,11 +143,9 @@ public class UserAuthController {
         return userAuthService.pwdFindVerify(verifyKey,password);
     }
 
-
-
     @PostMapping("/pwd/change")
     public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
-        return "/user/auth/pwdChange";
+        return "/user/pwdChange";
     }
 }

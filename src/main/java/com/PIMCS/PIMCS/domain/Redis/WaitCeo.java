@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.domain.Redis;
 
+import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +14,10 @@ import javax.persistence.Id;
 @Setter
 @Builder
 @AllArgsConstructor
-@RedisHash(value = "waitingUser", timeToLive = 600)
-public class WaitingUser {
+@RedisHash(value = "waitCeo", timeToLive = 600)
+public class WaitCeo {
     @Id
     private String id;
     private User user;
+    private Company company;
 }

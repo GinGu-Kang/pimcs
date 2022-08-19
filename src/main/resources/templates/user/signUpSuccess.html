@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" >
 <head>
+
     <meta charset="utf-8"/>
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
@@ -18,7 +19,8 @@
     <div class="workerForm">
         <img src="/img/logo2.png" ><br>
         <div >
-            <p class="success-message">성공적으로 <span class="success-message-blue">사원 등록</span>이 완료 되었습니다.</p>
+            <p th:if="${isWaitUser}==true" class="success-message">성공적으로 <span class="success-message-blue">사원 등록</span>이 완료 되었습니다.</p>
+            <p th:unless="${isWaitUser}==true" class="success-message"><span class="failed-message-red">인증시간이 만료되었습니다.</span></p>
             <input  class="button" type="button"  value="로그인 페이지로 바로가기" onclick="location.href='/auth/login';">
         </div>
     </div>

@@ -2,13 +2,13 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.CompanyServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
+import com.PIMCS.PIMCS.domain.Redis.WaitCeo;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
 import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
-import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
@@ -32,19 +32,19 @@ public class CompanyManagementService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyRepository companyRepository;
-    private final WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private final WaitCeoRedisRepository waitCeoRedisRepository;
     private final EmailUtilImpl emailUtilImpl;
 
 
 
 
     @Autowired
-    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitingCeoRedisRepository waitingCeoRedisRepository, EmailUtilImpl emailUtilImpl) {
+    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitCeoRedisRepository waitCeoRedisRepository, EmailUtilImpl emailUtilImpl) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyRepository = companyRepository;
-        this.waitingCeoRedisRepository = waitingCeoRedisRepository;
+        this.waitCeoRedisRepository = waitCeoRedisRepository;
         this.emailUtilImpl = emailUtilImpl;
     }
 
@@ -93,17 +93,17 @@ public class CompanyManagementService {
     public void companyRegistration(User ceo, Company company){
         String[] emailSendList=new String[]{ceo.getEmail()};
         String url="http://localhost:8080/company/registration/verify?verifyKey=";
-        WaitingCeo waitingCeo=WaitingCeo.builder()
+        WaitCeo waitCeo = WaitCeo.builder()
                 .company(company)
                 .user(ceo)
                 .build();
-        waitingCeoRedisRepository.save(waitingCeo);
+        waitCeoRedisRepository.save(waitCeo);
 
         String orderMail="<div style='text-align:center;width: 600px;flex-float:column;' >\n" +
                 "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
                 "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
                 "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
-                "<a href='"+url+waitingCeo.getId()+"'>인증 확인</a>"+
+                "<a href='"+url+ waitCeo.getId()+"'>인증 확인</a>"+
                 "</div>\n";
         emailUtilImpl.sendEmail(
                 emailSendList
@@ -115,10 +115,10 @@ public class CompanyManagementService {
     //회사와 대표 저장 회사코드 : UUID
     @Transactional(rollbackFor = Exception.class)
     public void companyRegistrationVerify(String verifyKey){
-        System.out.println(waitingCeoRedisRepository.findById(verifyKey).isPresent());
-        User ceo=waitingCeoRedisRepository.findById(verifyKey).get().getUser();
+        System.out.println(waitCeoRedisRepository.findById(verifyKey).isPresent());
+        User ceo=waitCeoRedisRepository.findById(verifyKey).get().getUser();
 
-        Company company=waitingCeoRedisRepository.findById(verifyKey).get().getCompany();
+        Company company=waitCeoRedisRepository.findById(verifyKey).get().getCompany();
         List<UserRole> userRoles = new ArrayList<>();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         CompanyServiceUtils companyServiceUtils = new CompanyServiceUtils();

@@ -14,7 +14,7 @@
 .factorypath
 .gradle
 .idea
-.metaWaitingCeo
+.metaWaitCeo
 .project
 .recommenders
 .settings
@@ -23,7 +23,7 @@
 /code
 MANIFEST.MF
 _site/
-activemq-WaitingCeo
+activemq-WaitCeo
 bin
 build
 !/**/src/**/bin

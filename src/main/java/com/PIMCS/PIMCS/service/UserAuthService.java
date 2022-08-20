@@ -14,6 +14,7 @@ import com.PIMCS.PIMCS.repository.Redis.WaitUserRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
+import org.joda.time.IllegalInstantException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -94,15 +95,24 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
             return true;
         }else {
-            return false;
-        }
 
+        }
+        return false;
 
 
     }
 
     public Optional<User> findUser(String email){
         return userRepository.findByEmail(email);
+    }
+    public Optional<User> updateUserFormService(String email){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()){
+            return user;
+        }else {
+            throw new IllegalStateException("존재하지 않는 유저입니다.");
+        }
+
     }
 
     public void deleteUser(String email){

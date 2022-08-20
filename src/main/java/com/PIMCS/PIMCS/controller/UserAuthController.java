@@ -85,8 +85,8 @@ public class UserAuthController {
 
     //회원정보수정
     @GetMapping("update")
-    private String editUserInfoForm(@RequestParam("email") String email, Model model){
-        model.addAttribute("user",userAuthService.findUser(email).get());
+    private String updateUserForm(@RequestParam("email") String email, Model model){
+        model.addAttribute("user",userAuthService.updateUserFormService(email).get());
         return "user/userUpdate.html";
     }
 

@@ -106,4 +106,72 @@ public class UserAuthServiceTest {
     public void findRoleTest(){
         System.out.println(userAuthService.findRole());
     }
+
+    @Test
+    void createUserService() {
+    }
+
+    @Test
+    void createUserVerifyService() {
+    }
+
+    @Test
+    void findUser() {
+    }
+
+    @Test
+    void updateUserFormService() {
+    }
+
+    @Test
+    void deleteUser() {
+    }
+
+    @Test
+    void userUpdate() {
+    }
+
+    @Test
+    void userPwdUpdate() {
+    }
+
+    @Test
+    void roleUpdate() {
+    }
+
+    @Test
+    void userRoleSave() {
+    }
+
+    @Test
+    void loadUserByUsername() {
+    }
+
+    @Test
+    void deleteUserAllRole() {
+    }
+
+    @Test
+    void findRole() {
+    }
+
+    @Test
+    void emailCheckService() {
+    }
+
+    @Test
+    void companyCheck() {
+    }
+
+    @Test
+    void userDetail() {
+    }
+
+    @Test
+    void pwdFind() {
+    }
+
+    @Test
+    void pwdFindVerify() {
+    }
 }

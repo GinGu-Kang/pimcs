@@ -1,7 +1,6 @@
+
 <!DOCTYPE html>
-<html>
-<!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Cocoon</title>
@@ -19,7 +18,7 @@
     <div class="companyForm">
         <a href="/auth/login"><img src="/img/logo2.png" ></a><br>
 
-        <form name="signUp" th:action="@{/company/registration}" method="post"  onsubmit="return checkForm()">
+        <form name="signUp" th:action="@{/companies}" method="post"  onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
         <input type="hidden" name="enabled" value="true" />
 
@@ -27,8 +26,13 @@
         <input type="text" name="companyAddress" placeholder="회사 주소" required><br>
         <input type="text" name="companyAddressdetail" placeholder="상세 주소" required><br>
         <input type="text" name="contactPhone" placeholder="회사 전화번호" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');"><br>
-        <input type="text" name="businessCategoryName" placeholder="업종" required><br>
-
+        <!-- <input type="text" name="businessCategoryName" placeholder="업종" required><br> -->
+        <select id="select-box"  name="businessCategoryId.id" >
+            <option value="">업종을 선택해주세요</option>
+            <th:block th:each="category : ${businessCategories}">
+                <option th:value="${category.getId}" th:text="${category.getCategoryName}"></option>
+            </th:block>
+        </select>
         <input type="text"   name="name" placeholder="이름" required><br>
         <input type="text" name="phone" placeholder="핸드폰 번호" maxlength="11" onKeyup="this.value=this.value.replace(/[^0-9]/g,'');" required><br><br><br>
             <span class="email-guide" >인증을 받을수 있는 수신 가능한 이메일을 입력해주세요.</span>

@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.repository;
 
+import com.PIMCS.PIMCS.domain.MatOrder;
 import org.springframework.data.jpa.repository.Query;
 
 //@Query("select mco from MatCategoryOrder mco " +
@@ -15,8 +16,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.swing.text.html.Option;
 import java.awt.*;
 import java.util.List;
+import java.util.Optional;
 
 
 public interface MatCategoryOrderRepository extends JpaRepository<MatCategoryOrder, Integer> {
@@ -34,4 +37,6 @@ public interface MatCategoryOrderRepository extends JpaRepository<MatCategoryOrd
             "INNER JOIN  MatCategory mc on  mco.matCategory = mc " +
             "where co.id = :companyId")
     List<MatCategoryOrder> findByCompanyId(@Param("companyId") Integer companyID);
+
+    Optional<MatCategoryOrder> findByMatOrderAndMatCategory(MatOrder matOrder, MatCategory matCategory);
 }

@@ -81,7 +81,8 @@ legend {
     height: 82px;
 }
 
-.content form input {
+.content form input,
+.content form select {
     margin-top: 9px;
     border-radius: 5px;
     padding-left: 20px;
@@ -90,6 +91,7 @@ legend {
     height: 36px;
     border-style: solid;
     border-color: #a8c6ff;
+    border-width: 2px;
 }
 
 .content form input[type=submit] {

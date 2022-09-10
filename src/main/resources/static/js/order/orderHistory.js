@@ -18,9 +18,9 @@ const pagination = function({page,size,totalPages}){
                     let query = params.get('query');
                     let startDate = params.get('startDate');
                     let endDate = params.get('endDate');
-                    location.href=`/order/history?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
+                    location.href=`/orders/history?page=${clickedPage}&size=${size}&query=${query}&startDate=${startDate}&endDate=${endDate}`;
                 }else{
-                    location.href=`/order/history?page=${clickedPage}&size=${size}`;
+                    location.href=`/orders/history?page=${clickedPage}&size=${size}`;
                 }
             }
                 
@@ -71,5 +71,5 @@ $(document).on("click","#order-inquiry-btn",function(e){
         
         
     }
-    location.href=`/order/csv/history?query=${query}&startDate=${startDate}&endDate=${endDate}`;
+    location.href=`/orders/csv/history?query=${query}&startDate=${startDate}&endDate=${endDate}`;
 });

@@ -8,14 +8,15 @@
 
 
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>회사 정보</title>
 </head>
 <div layout:fragment="content"  class="content">
 
 
     <div class="container">
         <!--Edit Company Imformation-->
-        <form th:action="@{/company/info/modify}" method="post">
+        <form th:action="@{/companies}" method="POST">
+            <input type="hidden" name="_method" value="PUT"/>
             <legend>
                 <div class="photo"></div>
                 <div th:class="compnay-name"><input required type="text" th:value="${company.getCompanyName}" th:name="companyName"></input></div>
@@ -35,9 +36,19 @@
                             <input required type="text" id="company-addr" name="companyAddress" th:value="${company.getCompanyAddress}"><br>
                         </div>
                         <div class="item-inner">
-<!--                            비즈니스 카테고리 추가-->
                             <label for="industry">업종</label><br>
-                            <input type="text" id="industry" ><br>
+                            <select th:if="${company.getBusinessCategoryId() != null}" id="select-box"  name="businessCategoryId.id">
+                                <th:block th:each="category : ${businessCategories}">
+                                    <option th:if="${category.getId() == company.getBusinessCategoryId.getId()}" selected th:value="${category.getId()}" th:text="${category.getCategoryName}"></option>
+                                    <option th:unless="${category.getId() == company.getBusinessCategoryId.getId()}" th:value="${category.getId()}" th:text="${category.getCategoryName}"></option>
+                                </th:block>
+                            </select>
+                            <select th:unless="${company.getBusinessCategoryId() != null}" id="select-box"  name="businessCategoryId.id">
+                                <option value="" th:text="업종을 선택해주세요."></option>
+                                <th:block th:each="category : ${businessCategories}">
+                                    <option th:value="${category.getId()}" th:text="${category.getCategoryName()}"></option>
+                                </th:block>
+                            </select>
                         </div>
                     </div>
                     <div class="item">

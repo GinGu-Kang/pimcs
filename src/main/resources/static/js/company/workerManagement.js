@@ -27,24 +27,21 @@
         let checkWorkerTr=$('.check-worker:checked').parents('tr')
         let checkWorkerString=$('.check-worker:checked').parents('tr').find('.email').text()
         let selectWorkersEmail=checkWorkerString.slice(0,-1).split(" ");
-
         if(result){
-            $.ajax({
-                url:'/company/worker/remove',
-                type:'post',
-                data:{"selectWorkersEmail":selectWorkersEmail},
-                beforeSend : function(xhr)
-                {
-                    xhr.setRequestHeader(header, token);
-                },
-                success:function(){ //컨트롤러에서 넘어온 cnt값을 받는다
-                    alert("회원이 삭제 되었습니다.")
-                    checkWorkerTr.remove();
-                },
-                error:function(){
-                    alert("에러입니다");
+            
+            const res = deleteRequest({
+                url: "/companies/workers",
+                data: {"selectWorkersEmail":selectWorkersEmail},
+                header: {
+                    'header': header,
+                    'token': token
                 }
             });
+            if(res.success == true){
+                alert(res.message);
+                checkWorkerTr.remove();
+            }
+
         }else{
             alert("취소 하였습니다.")
         }
@@ -112,47 +109,54 @@
     //권한주기
     function giveAuthority({email,authority, checkbox}){
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-    $.ajax({
-    url:'/company/give/authority',
-    type:'post',
-    data:{email:email,authority:authority},
-    beforeSend : function(xhr)
-    {
-        xhr.setRequestHeader(header, token);
-    },
-        success:function (isEqualCompany){
-        if(!isEqualCompany){
-        alert("해당 회사의 사원만 수정할 수 있습니다.")
-    }
-    },
+        $.ajax({
+        url:'/companies/worker/authority',
+        type:'post',
+        data:{email:email,authority:authority},
+        beforeSend : function(xhr)
+        {
+            xhr.setRequestHeader(header, token);
+        },
+        success:function (response){
+            
+            if(!response.success){
+                alert(response.message);
+            }
+        },
         error:function(request,status,error){
-        alert("권한 설정에 실패하였습니다.")
-        $(checkbox).prop("checked",false);
-    }
-    });
+            alert("권한 설정에 실패하였습니다.")
+            $(checkbox).prop("checked",false);
+        }
+        });
 
     }
     //권한뺏기
     function removeAuthority({email,authority, checkbox}){
 
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
 
-    $.ajax({
-    url:'/company/remove/authority',
-    type:'post',
-    data:{email:email,authority:authority},
-    beforeSend : function(xhr)
-    {
-        xhr.setRequestHeader(header, token);
-    },
-        error:function(request,status,error){
-        alert("권한 설정에 실패하였습니다.")
-        $(checkbox).prop("checked",true);
-    }
-    });
+        $.ajax({
+            url:'/companies/worker/authority',
+            type:'delete',
+            data:{email:email,authority:authority},
+            beforeSend : function(xhr)
+            {
+                xhr.setRequestHeader(header, token);
+            },
+            success:function (response){
+            
+                if(!response.success){
+                    alert(response.message);
+                }
+            },
+            error:function(request,status,error){
+                alert("권한 설정에 실패하였습니다.")
+                $(checkbox).prop("checked",true);
+            }
+        });
 
     };

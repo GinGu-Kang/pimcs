@@ -43,7 +43,7 @@ public class ProductCategoryServiceIntergrationTest {
 
     @BeforeAll
     public void start(){
-        company = generateEntity.createCompany(true);
+        company = generateEntity.createCompany(null,true);
     }
 
     @BeforeEach

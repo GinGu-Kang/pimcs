@@ -54,7 +54,7 @@ public class OrderService {
         this.dynamoQuery = dynamoQuery;
     }
     @Transactional
-    public void saveOrder(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
+    public void createOrderMatService(MatOrder matOrder, SecUserCustomForm secUserCustomForm, MatCategoryAndOrderForm matCategoryAndOrderForm){
         List<MatCategoryOrder> matCategoryOrderList= matCategoryAndOrderForm.getMatCategoryOrderList();
         List<Integer> matCategoryId= matCategoryAndOrderForm.getMatCategoryIdList();
         List<MatCategory> matCategoryList=matCategoryRepository.findAllById(matCategoryId);
@@ -72,6 +72,7 @@ public class OrderService {
         for(int i=0;i<matCategoryOrderList.size();i++){
             MatCategoryOrder matCategoryOrder =matCategoryOrderList.get(i);
             MatCategory matCategory=matCategoryList.get(i);
+            if(matCategoryOrder.getOrderCnt() == 0) continue;
 
             matCategoryOrder.setMatOrder(matOrder);
             matCategoryOrder.setMatCategory(matCategory);
@@ -81,6 +82,8 @@ public class OrderService {
             deviceAmount=deviceAmount.concat(matCategoryOrder.getMatCategory().getMatCategoryName()+" 주문갯수: "+matCategoryOrder.getOrderCnt()+" 대\n" +
                     matCategoryOrder.getMatCategory().getMatCategoryName()+" 대당가격: "+matCategory.getMatPrice()+"(원)\n\n");
         }
+        if(totalCnt == 0) return;
+
         System.out.println(deviceAmount);
         matOrder.setMatCategoryOrderList(matCategoryOrderList);
         matOrder.setTotalCnt(totalCnt);

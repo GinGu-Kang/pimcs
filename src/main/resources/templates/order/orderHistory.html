@@ -34,7 +34,7 @@
         <div class="header">
             <!--ITEM1-->
             <div class="header-item1">
-                <form class="search-form" id="order-history-form" action="/order/history/search">
+                <form class="search-form" id="order-history-form" action="/orders/history">
                     <input type="hidden" name="page" th:value="1"/>
                     <input type="hidden" name="size" th:value="${dynamoResultPage.getSize()}"/>
                     <!--검색 input-->

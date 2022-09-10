@@ -81,7 +81,7 @@ public class ProductServiceIntegrationTest {
     @BeforeAll
     public void start(){
 
-        user = generateEntity.createUser(true);
+        user = generateEntity.createUser(null,true);
         company = user.getCompany();
         productCategory = generateEntity.createProductCategory(company, true);
     }

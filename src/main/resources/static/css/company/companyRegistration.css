@@ -36,6 +36,9 @@ input,select {
     letter-spacing: normal;
     color: #707070;
 }
+select{
+    width: 100%;
+}
 .button {
     width: 100%;
     height: 55px;

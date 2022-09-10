@@ -78,7 +78,7 @@ public class MatServiceIntegrationTest {
         }
         serialNumberList = arrays;
 
-        user = generateEntity.createUser(true);
+        user = generateEntity.createUser(null,true);
         company = user.getCompany();
 
         //회사와 mat 연결 테이블 insert
@@ -414,7 +414,7 @@ public class MatServiceIntegrationTest {
         MatFormList matForms = new MatFormList();
         matForms.setMatForms(arr);
 
-        Company toCompany = generateEntity.createCompany(true);
+        Company toCompany = generateEntity.createCompany(null,true);
 
         matService.matsToOtherCompanyService(company,matForms, toCompany.getCompanyCode(), user);
 

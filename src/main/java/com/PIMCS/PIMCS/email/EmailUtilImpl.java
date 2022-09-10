@@ -1,23 +1,33 @@
 package com.PIMCS.PIMCS.email;
 
+
+
+
+import com.amazonaws.services.dynamodbv2.xspec.M;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.transaction.Transactional;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 @Component
 @EnableAsync
+@Slf4j
 public class EmailUtilImpl {//implements EmailUtil
 
     @Autowired
     private final JavaMailSender sender;
+
 
     public EmailUtilImpl(JavaMailSender sender) {
         this.sender = sender;
@@ -26,7 +36,7 @@ public class EmailUtilImpl {//implements EmailUtil
 //    @Override
 //    @Transactional
     @Async
-    public Map<String, Object> sendEmail(String[] toAddress, String subject, String body, boolean ishtml) {
+    public Future<Map> sendEmail(String[] toAddress, String subject, String body, boolean ishtml) {
         Map<String, Object> result = new HashMap<String, Object>();
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -41,6 +51,7 @@ public class EmailUtilImpl {//implements EmailUtil
         }
 
         sender.send(message);
-        return result;
+        return new AsyncResult<>(result);
     }
+
 }

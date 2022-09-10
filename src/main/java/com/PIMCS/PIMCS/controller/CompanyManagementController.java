@@ -1,22 +1,27 @@
 package com.PIMCS.PIMCS.controller;
 
 
+import com.PIMCS.PIMCS.domain.BusinessCategory;
 import com.PIMCS.PIMCS.domain.Company;
+import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
 import com.PIMCS.PIMCS.domain.User;
-import com.PIMCS.PIMCS.domain.UserRole;
+import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
+import com.PIMCS.PIMCS.form.response.ResponseForm;
+import com.PIMCS.PIMCS.repository.BusinessCategoryRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import com.PIMCS.PIMCS.service.CompanyManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 2022.01.27
@@ -33,58 +38,114 @@ import java.util.Optional;
  */
 
 @Controller
-@RequestMapping("company")
+@RequestMapping("companies")
 public class CompanyManagementController {
     private  final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyManagementService companyManagementService;
+    private final WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private final BusinessCategoryRepository businessCategoryRepository;
+
+    @ResponseStatus(value= HttpStatus.NOT_FOUND)
+    public class UrlNotFoundException extends RuntimeException { }
+
 
 
     @Autowired
-    public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService) {
+    public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService, WaitingCeoRedisRepository waitingCeoRedisRepository, BusinessCategoryRepository businessCategoryRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyManagementService = companyManagementService;
+        this.waitingCeoRedisRepository = waitingCeoRedisRepository;
+        this.businessCategoryRepository = businessCategoryRepository;
     }
+
+
+
     //회사 등록
-    @GetMapping("registration")
-    public String companyRegistrationFrom( ){
+    @GetMapping("create")
+    public String createCompanyForm(Model model){
+        List<BusinessCategory> businessCategories = businessCategoryRepository.findAll();
+        model.addAttribute("businessCategories", businessCategories);
         return "company/companyRegistration";
     }
 
     //회사 등록
-    @PostMapping("registration")
-    public String companyRegistration(User ceo, Company company){
+    @PostMapping("")
+    public String createCompany(User ceo, Company company){
+        BusinessCategory businessCategory = businessCategoryRepository.findById(company.getBusinessCategoryId().getId()).orElse(null);
+        if(businessCategory == null){
+            throw new IllegalStateException("Does not exist business category");
+        }
+
+        company.setBusinessCategoryId(businessCategory);
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
-        companyManagementService.companyRegistration(ceo,company);
+        companyManagementService.createCompanyService(ceo,company);
         return "user/auth/login";
     }
-    @GetMapping("registration/verify")
-    public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
-        companyManagementService.companyRegistrationVerify(verifyKey);
-        return "redirect:/company/registration/success";
-    }
-    //회사등록 완료
-    @GetMapping("registration/success")
-    private String signUpSuccess(){
-        return "company/companyRegistrationSuccess.html";
+
+    //회사정보 수정
+    @PutMapping("")
+    public String updateCompany(Model model,@AuthenticationPrincipal SecUserCustomForm user,Company companyForm){
+
+        BusinessCategory businessCategory = businessCategoryRepository.findById(companyForm.getBusinessCategoryId().getId()).orElse(null);
+        if(businessCategory == null){
+            throw new IllegalStateException("Does not exist business category");
+        }
+
+        Company userCompany =  user.getCompany();
+        userCompany.setCompanyAddress(companyForm.getCompanyAddress());
+        userCompany.setCompanyName(companyForm.getCompanyName());
+        userCompany.setContactPhone(companyForm.getContactPhone());
+        userCompany.setCeoName(companyForm.getCeoName());
+        userCompany.setCeoEmail(companyForm.getCeoEmail());
+        userCompany.setBusinessCategoryId(businessCategory);
+        companyManagementService.updateCompanyService(userCompany);
+        model.addAttribute("company",userCompany);
+        return "redirect:/companies/details";
     }
 
+    //회사 정보
+    @GetMapping("/details")
+    public String companyDetails(@AuthenticationPrincipal SecUserCustomForm user,Model model){
+        Company company = user.getCompany();
 
-    //회사원 전체 조회
-    @GetMapping("worker")
-    public String companyWorkerManagement(Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        List<User> companyWorker=companyManagementService.findMyCompanyWorker(user.getCompany());
-        model.addAttribute("companyWorker",companyWorker);
-        return "company/worker/workerManagement";
+        List<BusinessCategory> businessCategories = businessCategoryRepository.findAll();
+        model.addAttribute("businessCategories", businessCategories);
+        model.addAttribute(company);
+        return "/company/companyInfoModify.html";
     }
-    //필터링 조회
-    @GetMapping("search")
-    public String searchCompanyWorkerManagement(String keyword,String selectOption,Model model, @AuthenticationPrincipal SecUserCustomForm user){
-        List<User> companyWorker=companyManagementService.filterMyCompanyWorker(keyword,selectOption,user.getCompany());
+
+    //회사등록시 발급한 검증키 확인 및 회사와 대표등록
+    @GetMapping("verification/{verifyKey}")
+    public String confirmVerificationKey(@PathVariable String verifyKey){
+
+        WaitingCeo waitingCeo = waitingCeoRedisRepository.findById(verifyKey).orElse(null);
+
+        if(waitingCeo != null){ // 유효한 검증키일때
+            companyManagementService.createCompanyAndCeoService(waitingCeo.getCompany(), waitingCeo.getUser());
+            return "company/companyRegistrationSuccess.html";
+
+        }else{// 유효하지 않은 검증키면 404발생시키기
+            throw new UrlNotFoundException();
+        }
+    }
+
+    /**
+     * 회사원 전체 조회 또는 회사원 검색
+     */
+    @GetMapping("workers")
+    public String findCompanyWorkers(Model model, @AuthenticationPrincipal SecUserCustomForm user, SearchForm searchForm){
+        List<User> companyWorker;
+
+        if(searchForm.isExist()) {// 검색일때
+            companyWorker=companyManagementService.findCompanyWorkersByNameOrDepartmentService(searchForm,user.getCompany());
+        }else{
+            companyWorker = companyManagementService.findCompanyWorkersService(user.getCompany());
+        }
         model.addAttribute("companyWorker",companyWorker);
         return "company/worker/workerManagement";
     }
@@ -93,50 +154,35 @@ public class CompanyManagementController {
      * 선택된 회사원 삭제
      * 선택된 이메일 받아오기
      */
-    @PostMapping("worker/remove")
+    @DeleteMapping("workers")
     @ResponseBody
-    public void removeSelectWorker(@RequestParam(value="selectWorkersEmail[]") List<String> selectWorkersEmail,@AuthenticationPrincipal SecUserCustomForm workerManager){
-        companyManagementService.companyWorkerDelete(selectWorkersEmail,workerManager.getCompany());
-        System.out.println(selectWorkersEmail.get(0));
+    public ResponseForm deleteCompanyWorkers(@RequestParam(value="selectWorkersEmail[]") List<String> selectWorkersEmail, @AuthenticationPrincipal SecUserCustomForm workerManager){
+
+        companyManagementService.deleteCompanyWorkersService(selectWorkersEmail,workerManager.getCompany());
+        return new ResponseForm(true, "회원 삭제 되었습니다.", null);
     }
 
-
-    @PostMapping("give/authority")
+    /**
+     * 선택한 이메일에 권한부여
+     */
+    @PostMapping("worker/authority")
     @ResponseBody
-    public boolean giveAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
-        boolean isEqualCompany=companyManagementService.userRoleSave(email,authority,user.getCompany().getCompanyCode());
-        return isEqualCompany;
+    public ResponseForm createWorkerAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
+        System.out.println("=====djiojdmio");
+        System.out.println("email:"+ email);
+        System.out.println("auth: "+authority);
+        System.out.println(user.getCompany());
+        System.out.println("===");
+        return companyManagementService.createWorkerAuthorityService(email,authority,user.getCompany().getCompanyCode());
     }
 
-    @PostMapping("remove/authority")
+    //선택한 이메일의 권한 회수
+    @DeleteMapping("worker/authority")
     @ResponseBody
-    public boolean removeAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
-        boolean isEqualCompany=companyManagementService.userRoleDelete(email,authority,user.getCompany().getCompanyCode());
-        return isEqualCompany;
+    public ResponseForm deleteWorkerAuthority(String email, String authority,@AuthenticationPrincipal SecUserCustomForm user){
+
+        return companyManagementService.deleteWorkerAuthorityService(email,authority,user.getCompany().getCompanyCode());
     }
-
-
-    //회사 정보
-    @GetMapping("/info")
-    public String companyInfo(@AuthenticationPrincipal SecUserCustomForm user,Model model){
-        Company company = user.getCompany();
-        model.addAttribute(company);
-        return "/company/companyInfoModify.html";
-    }
-
-    @PostMapping("/info/modify")
-    public String companyInfoModify(Model model,@AuthenticationPrincipal SecUserCustomForm user,Company companyForm){
-        Company userCompany =  user.getCompany();
-        userCompany.setCompanyAddress(companyForm.getCompanyAddress());
-        userCompany.setCompanyName(companyForm.getCompanyName());
-        userCompany.setContactPhone(companyForm.getContactPhone());
-        userCompany.setCeoName(companyForm.getCeoName());
-        userCompany.setCeoEmail(companyForm.getCeoEmail());
-        companyManagementService.updateCompany(userCompany);
-        model.addAttribute("company",userCompany);
-        return "/company/companyInfoModify.html";
-    }
-
 
 
 

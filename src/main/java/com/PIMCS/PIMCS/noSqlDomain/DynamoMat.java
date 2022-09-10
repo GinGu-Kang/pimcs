@@ -38,7 +38,7 @@ public class DynamoMat implements Comparable{
     private int productId;
 
     @DynamoDBAttribute
-    private int calcMethod;
+    private int calcMethod; //계산방식(0이면 무게, 1이면 갯수)
 
     @DynamoDBAttribute
     private String matLocation;

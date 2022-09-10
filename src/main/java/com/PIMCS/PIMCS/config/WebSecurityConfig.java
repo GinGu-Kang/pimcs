@@ -4,6 +4,7 @@ import com.PIMCS.PIMCS.service.UserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -42,10 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/home/hello","/home","auth/update","/order/**","/qna/**","/auth/user/info/**","/auth/pwd/change").hasRole("User")
-                .antMatchers("/mat/create","/mat/update","/mat/delete","/product/category/create").hasRole("InventoryManagement")
-                .antMatchers("/product/create","/product/update","/product/delete").hasRole("InventoryManagement")
-                .antMatchers( "/auth/**","/company/registration/**","/auth/idCheck","/email/**").permitAll() //permitAll이 있을시 로그인없이도 접근가능
-                .antMatchers("/company/**").hasRole("UserManagement")
+                .antMatchers("/mats/**","/product/category/create").hasRole("InventoryManagement")
+                .antMatchers("/products/**").hasRole("InventoryManagement")
+                .antMatchers( "/auth/**","/companies/create","/companies/verification/**","/companies/completion","/companies/test","/auth/idCheck","/email/**").permitAll() //permitAll이 있을시 로그인없이도 접근가능
+                .antMatchers(HttpMethod.POST, "/companies").permitAll()
+                .antMatchers("/companies/**").hasRole("UserManagement")
                 .antMatchers("/admin/**").hasRole("ChiefOfPimcs")
 
 //                    .antMatchers("company/worker").hasRole("UserManagement")

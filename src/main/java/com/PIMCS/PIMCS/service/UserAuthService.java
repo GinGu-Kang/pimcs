@@ -136,7 +136,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user=userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException((email)));
-        System.out.println(user.getAuthorities());
+//        System.out.println(user.getAuthorities());
         return new SecUserCustomForm(user.getEmail(),user.getPassword(),user.getAuthorities(),user.getCompany());
     }
 

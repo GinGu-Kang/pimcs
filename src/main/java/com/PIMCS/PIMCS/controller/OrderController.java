@@ -24,7 +24,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-@RequestMapping("order")
+@RequestMapping("orders")
 public class OrderController {
     private final AdminService adminService;
     private final OrderService orderService;
@@ -38,17 +38,17 @@ public class OrderController {
     }
 
 
-    @GetMapping("mat")
-    public String orderMat(Model model){
+    @GetMapping("mats/create")
+    public String createOrderMatForm(Model model){
         List<MatCategory> matCategoryList=orderService.findMatCategoryListService();
         model.addAttribute("matCategoryList",matCategoryList);
         return "order/orderMat";
     }
 
-    @PostMapping("mat")
-    public String orderMat(MatOrder matOrder, @AuthenticationPrincipal SecUserCustomForm user, MatCategoryAndOrderForm matCategoryAndOrderForm){
-        orderService.saveOrder(matOrder,user, matCategoryAndOrderForm);
-        return "redirect:/order/mat";
+    @PostMapping("mats")
+    public String createOrderMat(MatOrder matOrder, @AuthenticationPrincipal SecUserCustomForm user, MatCategoryAndOrderForm matCategoryAndOrderForm){
+        orderService.createOrderMatService(matOrder,user, matCategoryAndOrderForm);
+        return "redirect:/orders/mats/create";
     }
 
     @GetMapping("history")

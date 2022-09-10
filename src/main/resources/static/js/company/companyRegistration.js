@@ -41,6 +41,7 @@ function check_password(){
 
 function checkForm(){
 
+
     if($('.email_ok').css("display")=="none"){
         $('#email').focus();
         alert("이메일을 확인 해주세요.");
@@ -49,7 +50,10 @@ function checkForm(){
         $('#password').focus();
         alert("비밀번호를 확인 해주세요.");
         return false
-    } else{
+    } else if($("#select-box option:selected").val() == ""){
+        alert("업종을 선택해주세요.")
+        return false;
+    }else{
         return true
     }
 

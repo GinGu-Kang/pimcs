@@ -357,9 +357,67 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
     ENGINE = InnoDB;
 
 
+CREATE TABLE IF NOT EXISTS `pimcs`.`ownDevice` (
+                                                         `id` INT NOT NULL AUTO_INCREMENT,
+                                                         `createdAt` DATETIME NULL,
+                                                         `serialNumber` VARCHAR(45) NULL,
+                                                         `companyId` INT NOT NULL,
+                                                         PRIMARY KEY (`id`),
+                                                         INDEX `fk_ownDevice_company1_idx` (`companyId` ASC) VISIBLE,
+                                                         INDEX `fk_ownDevice_serialNumber_company1_idx` (`serialNumber` ASC) VISIBLE,
+                                                         CONSTRAINT `fk_ownDevice_company1`
+                                                             FOREIGN KEY (`companyId`)
+                                                                 REFERENCES `pimcs`.`company` (`id`)
+                                                                 ON DELETE cascade)
 
+    ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `pimcs`.`sendHistory` (
+                                                         `id` INT NOT NULL AUTO_INCREMENT,
+                                                         `createdAt` DATETIME NULL,
+                                                         `history` BLOB NULL,
+                                                         `matOrderId` INT NOT NULL,
+                                                         PRIMARY KEY (`id`),
+                                                         INDEX `fk_matOrderId_company1_idx` (`matOrderId` ASC) VISIBLE,
+                                                         CONSTRAINT `fk_matOrderId_company1`
+                                                             FOREIGN KEY (`matOrderId`)
+                                                                 REFERENCES `pimcs`.`matOrder` (`id`)
+                                                                 ON DELETE cascade)
 
+    ENGINE = InnoDB;
+desc user;
+desc userRole;
 
-SET SQL_MODE=@OLD_SQL_MODE;
+select * from user;
+select * from role;
+desc productCategory;
+
+select * from userRole;
+desc mat;
+select * from ownDevice;
+desc product;
+select * from mat;
+
+delete from user where email="2543817958@qq.com";
+
+select * from company;
+select * from User;
+
+desc businessCategory;
+
+insert into businessCategory (categoryName) values("abc");
+select * from businessCategory;
+
+select * from role;
+
+select * from company; 
+desc company;
+
+update company set businessCategoryId=1 where ceoEmail ="ryongho1997@gmail.com" ;
+ 
+desc businessCategory;
+delete from user where email='2543817958@qq.com';
+delete from ownDevice;
+truncate ownDevice;
+seT SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

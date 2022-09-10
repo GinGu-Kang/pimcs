@@ -165,7 +165,7 @@ const putRequest = function({url, header, data}){
 }
 
 
-const deleteRequest = function({url, header, data}){
+const deleteRequest = function({url, header, data,successCallback=undefined ,errorCallback=undefined}){
     let resultData;
     $.ajax({
         url:url,
@@ -177,7 +177,8 @@ const deleteRequest = function({url, header, data}){
             xhr.setRequestHeader(header['header'], header['token']);
         },
         success:function(response){ 
-            resultData = response;
+        
+            resultData = response;    
         },
         error:function(){
             alert("에러입니다");
@@ -186,8 +187,6 @@ const deleteRequest = function({url, header, data}){
     return resultData;
 }
 
-<<<<<<< HEAD
-=======
 /*json으로 반환후 post*/
 const loadDataToJson = function({url,type,data}){
     let token = $("meta[name='_csrf']").attr("content");
@@ -214,7 +213,6 @@ const loadDataToJson = function({url,type,data}){
     });
     return resultData;
 }
->>>>>>> 59efc330a8e5b759959aebb664e49d6dd07f78b5
 
 /**
  * 천단위 콤바

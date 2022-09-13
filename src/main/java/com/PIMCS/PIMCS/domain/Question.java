@@ -1,6 +1,8 @@
 package com.PIMCS.PIMCS.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +36,8 @@ public class Question {
   @Transient
   private String radioValue;
 
+
+  @JsonManagedReference
   @OneToOne(mappedBy = "question",fetch = FetchType.EAGER)
   private Answer answer;
 

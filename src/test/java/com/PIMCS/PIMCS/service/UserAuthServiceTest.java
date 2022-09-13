@@ -24,34 +24,6 @@ public class UserAuthServiceTest {
 
     @Test
     @Commit
-    public void saveTest(){
-        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
-        userAuthService.userUpdate(user.get());
-        System.out.println(user.isEmpty());
-    }
-
-    @Test
-    public void emailCheck() {
-        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
-        System.out.println(user.get().getName());
-    }
-
-    @Test
-    public void nullTest() {
-        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
-        System.out.println(user.isEmpty());
-    }
-
-    @Test
-    @Commit
-    public void deleteUserTest() {
-        userAuthService.deleteUser("wisp212@gmail.com");
-//        Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
-//        System.out.println(user.isEmpty());
-    }
-
-    @Test
-    @Commit
     public void updateTest() {
         Optional<User> user = userAuthService.findUser("wlsrn212@gmail.com");
         user.get().setName("강진구");
@@ -105,5 +77,73 @@ public class UserAuthServiceTest {
     @Test
     public void findRoleTest(){
         System.out.println(userAuthService.findRole());
+    }
+
+    @Test
+    void createUserService() {
+    }
+
+    @Test
+    void createUserVerifyService() {
+    }
+
+    @Test
+    void findUser() {
+    }
+
+    @Test
+    void updateUserFormService() {
+    }
+
+    @Test
+    void deleteUser() {
+    }
+
+    @Test
+    void userUpdate() {
+    }
+
+    @Test
+    void userPwdUpdate() {
+    }
+
+    @Test
+    void roleUpdate() {
+    }
+
+    @Test
+    void userRoleSave() {
+    }
+
+    @Test
+    void loadUserByUsername() {
+    }
+
+    @Test
+    void deleteUserAllRole() {
+    }
+
+    @Test
+    void findRole() {
+    }
+
+    @Test
+    void emailCheckService() {
+    }
+
+    @Test
+    void companyCheck() {
+    }
+
+    @Test
+    void userDetail() {
+    }
+
+    @Test
+    void pwdFind() {
+    }
+
+    @Test
+    void pwdFindVerify() {
     }
 }

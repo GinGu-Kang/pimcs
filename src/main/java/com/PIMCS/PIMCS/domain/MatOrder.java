@@ -46,7 +46,7 @@ public class MatOrder {
   private List<MatCategoryOrder> matCategoryOrderList;
 
 
-  @OneToOne(mappedBy = "matOrder",fetch = FetchType.EAGER)
+  @OneToOne(mappedBy = "matOrder",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
   private SendHistory sendHistory;
 
 

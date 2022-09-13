@@ -38,6 +38,7 @@ public class Mat  implements Comparable<Mat>{
     private int currentInventory; //현재재고
     private int battery;
 
+    @Column(updatable =false)
     @CreationTimestamp
     private Timestamp createdAt;
     @UpdateTimestamp

@@ -8,7 +8,7 @@
     <title>Title</title>
 </head>
 <div layout:fragment="content"  class="content">
-    <form th:action="@{/admin/email/frame/modify}" method="post">
+    <form th:action="@{/admin/order-mail-frame}" method="post">
         <p th:class="title" >인사말 수정</p>
         <textarea id="greeting" th:name="greeting" th:text="${OrderMailFrame.getGreeting()}" rows="10" placeholder="답변을 입력해 주세요" class="text-area" name="comment" required onkeyup="mailExample()"></textarea>
         <p th:class="title">매니저 정보 수정</p>

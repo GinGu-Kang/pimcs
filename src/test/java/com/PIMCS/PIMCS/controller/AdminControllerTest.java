@@ -1,108 +1,137 @@
 package com.PIMCS.PIMCS.controller;
 
+import com.PIMCS.PIMCS.domain.MatCategoryOrder;
+import com.PIMCS.PIMCS.domain.User;
+import com.PIMCS.PIMCS.repository.*;
+import org.assertj.core.api.Assertions;
+import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @SpringBootTest
-@Transactional
-/*서블릿 컨테이너 모킹 하기위한 어노테이션*/
 @AutoConfigureMockMvc
 class AdminControllerTest {
 
-    @Autowired AdminController adminController;
 
-    /*HTTP GET, POST 등에 대한 API테스트 가능*/
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private AdminController adminController;
+    @Autowired
+    private UserRepository userRepository;
 
-    @Test
-    void matCategoryAddForm() {
+    @BeforeEach
+    public void setup(){
 
     }
 
+
+    @BeforeEach
+    public void before() {
+        mockMvc =
+                MockMvcBuilders
+                        .standaloneSetup(AdminController.class) // 테스트 대상 Controller 를 넣어준다.
+                        .alwaysExpect(MockMvcResultMatchers.status().isOk()) // 특정 필수 조건을 지정
+                        .build();
+    }
+
+
     @Test
-    void matCategoryAdd() {
+    void testControllerMapping() throws Exception {
+        RequestBuilder reqBuilder = MockMvcRequestBuilders
+                .post("/auth/login");
+        mockMvc.perform(reqBuilder)
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+
+
+    @Test
+    void createMatCategoryForm() {
+
+        Assertions.assertThat("12").isEqualTo("12");
     }
 
     @Test
-    void matCategoryList() {
+    void createMatCategory() {
     }
 
     @Test
-    void matCategoryModify() {
+    void findMatCategoryList() {
     }
 
     @Test
-    void matCategoryRemove() {
+    void updateMatCategory() {
     }
 
     @Test
-    void companySearch() {
+    void deleteMatCategory() {
     }
 
     @Test
-    void companyDetail() {
+    void findCompanyList() {
     }
 
     @Test
-    void deleteOwnDevices() {
+    void detailsCompany() {
     }
 
     @Test
-    void adminQnaList() {
+    void deleteOwnDeviceList() {
     }
 
     @Test
-    void adminSearchQuestion() {
+    void findAdminQnaList() {
     }
 
     @Test
-    void detailAdminQna() {
+    void detailsAdminQna() {
     }
 
     @Test
-    void answerAdd() {
+    void createAnswer() {
     }
 
     @Test
-    void emailFrameModifyForm() {
+    void createOrderMailFrameForm() {
     }
 
     @Test
-    void emailFrameModify() {
+    void createOrderMailFrame() {
     }
 
     @Test
-    void orderList() {
+    void findOrderList() {
     }
 
     @Test
-    void adminOrderQuestion() {
+    void detailsOrder() {
     }
 
     @Test
-    void detailOrder() {
+    void updateOrderDeposit() {
     }
 
     @Test
-    void depositModify() {
+    void createOwnDeviceAndSendHistory() {
     }
 
     @Test
-    void ownDeviceAndSendHistorySave() {
-    }
-
-    @Test
-    void ownDeviceSave() {
+    void createOwnDevice() {
     }
 }

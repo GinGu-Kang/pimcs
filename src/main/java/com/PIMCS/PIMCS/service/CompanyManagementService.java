@@ -2,7 +2,7 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.Utils.CompanyServiceUtils;
 import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
+import com.PIMCS.PIMCS.domain.Redis.WaitCeo;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
@@ -10,7 +10,7 @@ import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.response.ResponseForm;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
-import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
@@ -37,7 +37,7 @@ public class CompanyManagementService {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyRepository companyRepository;
-    private final WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private final WaitCeoRedisRepository waitCeoRedisRepository;
     private final EmailUtilImpl emailUtilImpl;
 
     @Value("${server.address}")
@@ -49,12 +49,12 @@ public class CompanyManagementService {
 
 
     @Autowired
-    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitingCeoRedisRepository waitingCeoRedisRepository, EmailUtilImpl emailUtilImpl) {
+    public CompanyManagementService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitCeoRedisRepository waitCeoRedisRepository, EmailUtilImpl emailUtilImpl) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyRepository = companyRepository;
-        this.waitingCeoRedisRepository = waitingCeoRedisRepository;
+        this.waitCeoRedisRepository = waitCeoRedisRepository;
         this.emailUtilImpl = emailUtilImpl;
     }
 
@@ -107,7 +107,7 @@ public class CompanyManagementService {
                 .company(company)
                 .user(ceo)
                 .build();
-        waitingCeoRedisRepository.save(waitingCeo);
+        waitCeoRedisRepository.save(waitCeo);
 
         String comfirmUrl = String.format("http://%s:%s/companies/verification/%s", address, port, waitingCeo.getId());
 
@@ -119,7 +119,6 @@ public class CompanyManagementService {
                 "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
                 "<a href='"+comfirmUrl+"'>인증 확인</a>"+
                 "</div>\n";
-
         emailUtilImpl.sendEmail(
                     emailSednList
                     , "PIMCS에서 온 인증 메일입니다."
@@ -141,7 +140,6 @@ public class CompanyManagementService {
         company.setCompanyAddress(company.getCompanyAddress().concat(company.getCompanyAddressdetail()));
         ceo.setPassword(encoder.encode(ceo.getPassword()));
         ceo.setCompany(company);
-
         for (Role role:roleRepository.findAll()
         ) {
             if(!role.getName().equals("ChiefOfPimcs")){

@@ -1,6 +1,7 @@
 package com.PIMCS.PIMCS.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
@@ -11,6 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
 public class MatCategory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +25,6 @@ public class MatCategory {
   private String matInformation;
   private int maxWeight;
 
-  @OneToMany(mappedBy = "matCategory",fetch = FetchType.LAZY)
-  private List<MatCategoryOrder> matCategoryOrderList;
 
 
 

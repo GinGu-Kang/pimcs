@@ -51,7 +51,6 @@ public class CompanyManagementController {
     public class UrlNotFoundException extends RuntimeException { }
 
 
-
     @Autowired
     public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService, WaitingCeoRedisRepository waitingCeoRedisRepository, BusinessCategoryRepository businessCategoryRepository) {
         this.userRepository = userRepository;
@@ -72,6 +71,7 @@ public class CompanyManagementController {
         return "company/companyRegistration";
     }
 
+
     //회사 등록
     @PostMapping("")
     public String createCompany(User ceo, Company company){
@@ -83,6 +83,7 @@ public class CompanyManagementController {
         company.setBusinessCategoryId(businessCategory);
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
+<<<<<<< HEAD
         companyManagementService.createCompanyService(ceo,company);
         return "user/auth/login";
     }
@@ -117,6 +118,22 @@ public class CompanyManagementController {
         model.addAttribute("businessCategories", businessCategories);
         model.addAttribute(company);
         return "/company/companyInfoModify.html";
+=======
+        companyManagementService.companyRegistration(ceo,company);
+        return "user/login";
+    }
+
+    @GetMapping("registration/verify")
+    public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
+        companyManagementService.companyRegistrationVerify(verifyKey);
+        return "redirect:/company/registration/success";
+    }
+
+    //회사등록 완료
+    @GetMapping("registration/success")
+    private String signUpSuccess(){
+        return "company/companyRegistrationSuccess.html";
+>>>>>>> 368c2ce87415b60e5d235dda23c3aecfac5c4bf7
     }
 
     //회사등록시 발급한 검증키 확인 및 회사와 대표등록

@@ -87,8 +87,6 @@ public class GenerateEntity {
 
         if(isSave) productCategoryRepository.save(productCategory);
         return productCategory;
-
-
     }
 
 

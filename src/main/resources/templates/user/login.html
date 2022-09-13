@@ -35,7 +35,7 @@
     <br><br>
     <section class="loginForm-footer">
         <a href='#' class="text" onclick="pwdChange()"> 비밀번호 찾기 </a><span>&nbsp;|&nbsp;</span>
-        <a href='/auth/choice/signUp' class="text"> 회원가입 </a>
+        <a href='/auth/user/choice' class="text"> 회원가입 </a>
     </section>
 </form>
 </section>
@@ -44,8 +44,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script>
     function pwdChange(){
-
-        popup=window.open("/auth/pwd/find","비밀번호 변경","width=734, height=500, top=10, left=10");
+        popup=window.open("/auth/pwd","비밀번호 변경","width=734, height=500, top=10, left=10");
     }
 </script>
 </html>

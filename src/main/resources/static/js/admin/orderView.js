@@ -70,10 +70,8 @@ $("#depositComplete, #depositIncomplete").on("click", function(){
 });
 
 function depositChange({isDeposit}){
-
-
     $.ajax({
-        url:matOrderId,
+        url:depositChangeUrl,
         type:'put',
         data:{isDeposit:isDeposit},
         beforeSend : function(xhr)
@@ -90,24 +88,6 @@ function depositChange({isDeposit}){
     });
 };
 
-
-
-
-// function inputFormChange(){
-//     let changeButton=$("#form-change-button")
-//     if(changeButton.text()=="CSV 입력"){
-//         $("#self-input").css("display","none")
-//         $("#csv-input").css("display","block")
-//         changeButton.text("직접 입력")
-//     }
-//     else{
-//         $("#csv-input").css("display","none")
-//         $("#self-input").css("display","block")
-//         changeButton.text("CSV 입력")
-//     }
-//
-//
-// }
 
 //엑셀을 읽어오는 함수
 function readExcel() {

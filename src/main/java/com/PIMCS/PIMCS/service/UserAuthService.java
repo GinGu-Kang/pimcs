@@ -2,7 +2,7 @@ package com.PIMCS.PIMCS.service;
 
 import com.PIMCS.PIMCS.domain.Company;
 import com.PIMCS.PIMCS.domain.Redis.FindPwdVO;
-import com.PIMCS.PIMCS.domain.Redis.WaitingUser;
+import com.PIMCS.PIMCS.domain.Redis.WaitUser;
 import com.PIMCS.PIMCS.domain.Role;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.domain.UserRole;
@@ -10,19 +10,17 @@ import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.Redis.FindPwdVORedisRepository;
-import com.PIMCS.PIMCS.repository.Redis.WaitingUserRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitUserRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
+import org.joda.time.IllegalInstantException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +31,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyRepository companyRepository;
-    private final WaitingUserRedisRepository waitingUserRedisRepository;
+    private final WaitUserRedisRepository waitUserRedisRepository;
     private final EmailUtilImpl emailUtilImpl;
     private final FindPwdVORedisRepository findPwdVoRedisRepository;
 
@@ -42,12 +40,12 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
 
     @Autowired
-    public UserAuthService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitingUserRedisRepository waitingUserRedisRepository, EmailUtilImpl emailUtilImpl, FindPwdVORedisRepository findPwdVoRedisRepository) {
+    public UserAuthService(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyRepository companyRepository, WaitUserRedisRepository waitUserRedisRepository, EmailUtilImpl emailUtilImpl, FindPwdVORedisRepository findPwdVoRedisRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyRepository = companyRepository;
-        this.waitingUserRedisRepository = waitingUserRedisRepository;
+        this.waitUserRedisRepository = waitUserRedisRepository;
         this.emailUtilImpl = emailUtilImpl;
         this.findPwdVoRedisRepository = findPwdVoRedisRepository;
     }
@@ -55,18 +53,21 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
 
 
     //회사 등록후 이메일 인증 대기
-    public void signUp(User user){
+    public void createUserService(User user){
         String[] emailSednList=new String[]{user.getEmail()};
-        String url="http://localhost:8080/auth/signUp/verify?verifyKey=";
-        WaitingUser waitingUser=WaitingUser.builder()
+        String domain="http://localhost:8080";
+        String path = "/auth/user/verify";
+        String parameter="?verifyKey=";
+        String url = domain + path+parameter;
+        WaitUser waitUser = WaitUser.builder()
                 .user(user)
                 .build();
-        waitingUserRedisRepository.save(waitingUser);
+        waitUserRedisRepository.save(waitUser);
         String orderMail="<div style='text-align:center;width: 600px;flex-float:column;' >\n" +
                 "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
                 "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
                 "    <p >인증 확인을 누르면 사원이 등록됩니다.</p>\n" +
-                "<a href='"+url+waitingUser.getId()+"'>인증 확인</a>"+
+                "<a href='"+url+ waitUser.getId()+"'>인증 확인</a>"+
                 "</div>\n";
         emailUtilImpl.sendEmail(
                 emailSednList
@@ -75,26 +76,43 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
                 ,true
         );
     }
-    public User signUpVerify(String verifyKey) {
-        User user = waitingUserRedisRepository.findById(verifyKey).get().getUser();
-        Optional<Company> company= companyRepository.findByCompanyCode(user.getCompanyCode());
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); //비밀번호 암호화
-        UserRole userRole =UserRole.builder()
-                .user(user)
-                .role(roleRepository.findByName("User"))
-                .build();
+    public boolean createUserVerifyService(String verifyKey) {
+        Optional<WaitUser> optionalUser = waitUserRedisRepository.findById(verifyKey);
+        if (optionalUser.isPresent()){
+            User user = optionalUser.get().getUser();
+            Optional<Company> company= companyRepository.findByCompanyCode(user.getCompanyCode());
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            UserRole userRole =UserRole.builder()
+                    .user(user)
+                    .role(roleRepository.findByName("User"))
+                    .build();
 
-        user.setPassword(encoder.encode(user.getPassword()));
-        user.setCompany(company.get());
+            user.setPassword(encoder.encode(user.getPassword()));
+            user.setCompany(company.get());
 
-        userRepository.save(user);
-        userRoleRepository.save(userRole);
+            userRepository.save(user);
+            userRoleRepository.save(userRole);
 
-        return user;
+            return true;
+        }else {
+
+        }
+        return false;
+
+
     }
 
     public Optional<User> findUser(String email){
         return userRepository.findByEmail(email);
+    }
+    public Optional<User> updateUserFormService(String email){
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()){
+            return user;
+        }else {
+            throw new IllegalStateException("존재하지 않는 유저입니다.");
+        }
+
     }
 
     public void deleteUser(String email){
@@ -151,14 +169,13 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return roleRepository.findAll();
 
     }
-    public boolean emailCheck(String email) {
-        System.out.println("asdfasdf");
-        boolean isEmail = userRepository.findByEmail(email).isEmpty();
-        return isEmail;
+
+    public boolean emailCheckService(String email) {
+        return userRepository.findByEmail(email).isEmpty();
     }
-    public boolean companyCheck(String companyCode) {
-        boolean isCompany = companyRepository.findByCompanyCode(companyCode).isEmpty();
-        return isCompany;
+
+    public boolean companyCheckService(String companyCode) {
+        return companyRepository.findByCompanyCode(companyCode).isEmpty();
     }
 
     public User userDetail(String email){
@@ -166,7 +183,6 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
     }
 
     public Boolean pwdFind(String email){
-        System.out.println(email+"@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         Optional<User> user=userRepository.findByEmail(email);
         String url="http://localhost:8080/auth/pwd/find/verify?verifyKey=";
         if(user.isPresent()){

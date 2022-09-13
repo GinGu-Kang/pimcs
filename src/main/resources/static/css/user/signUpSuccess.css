@@ -105,6 +105,18 @@ input[type="checkbox"]{
     text-align: center;
     color: #4282ff
 }
+.failed-message-red{
+    margin: 68px 0 73px;
+    font-family: Roboto;
+    font-size: 30px;
+    font-weight: 500;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.56;
+    letter-spacing: normal;
+    text-align: center;
+    color: red;
+}
 
 .button{
     cursor: pointer;

@@ -19,13 +19,13 @@
 
 
 
-    <springProfile name="console-logging">
-        <appender name="LOCAL_CONSOLE_POLICY" class="ch.qos.logback.core.ConsoleAppender">
-            <layout class="ch.qos.logback.classic.PatternLayout">
-                <Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
-            </layout>
-        </appender>
-    </springProfile>
+
+    <appender name="LOCAL_CONSOLE_POLICY" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>%d{HH:mm:ss.SSS} [%-5level] [%thread] [%logger{36}] - %m%n</Pattern>
+        </layout>
+    </appender>
+
 
 
 

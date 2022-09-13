@@ -5,22 +5,17 @@
     <title>Cocoon</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/user/signUp.css" />
-
-
-    <style>
-
-
-    </style>
+    <script defer type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script defer type="text/javascript" src="/js/user/signUp.js" ></script>
 </head>
 <body>
 
 
 <div class="workerForm">
     <a href="/auth/login"><img src="/img/logo2.png" ></a><br>
-    <form id="signUp" name="signUp" th:action="@{/auth/signUp}" method="post" onsubmit="return checkForm()">
+    <form id="signUp" name="signUp" th:action="@{/auth/user}" method="post" onsubmit="return checkForm()">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /><br>
         <input type="hidden" name="enabled" value="true" /><br>
 
@@ -52,8 +47,7 @@
         <input  class="button" type="submit"  value="확인">
 
     </form>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="/js/user/signUp.js" ></script>
+
 </div>
 
 </body>

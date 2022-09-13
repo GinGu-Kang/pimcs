@@ -245,9 +245,10 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
                                                           `id` INT NOT NULL AUTO_INCREMENT,
-                                                          `orderId` INT NULL,
-                                                          `orderCnt` INT NULL,
-                                                          `matCategoryId` INT NULL,
+                                                          `orderId` INT NOT NULL,
+                                                          `orderCnt` INT NOT NULL,
+                                                          `pricePerDevice` INT NOT NULL,
+                                                          `matCategoryName` VARCHAR(20) NOT NULL,
                                                           INDEX `fk_mat_device_order_order1_idx` (`orderId` ASC) VISIBLE,
                                                           PRIMARY KEY (`id`),
                                                           INDEX `fk_mat_category_order_mat_category1_idx` (`matCategoryId` ASC) VISIBLE,
@@ -256,11 +257,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
                                                                   REFERENCES `pimcs`.`matOrder` (`id`)
                                                                   ON DELETE cascade
                                                                   ON UPDATE NO ACTION,
-                                                          CONSTRAINT `fk_mat_category_order_mat_category1`
-                                                              FOREIGN KEY (`matCategoryId`)
-                                                                  REFERENCES `pimcs`.`matCategory` (`id`)
-                                                                  ON DELETE set null
-                                                                  ON UPDATE NO ACTION)
+                                                          )
     ENGINE = InnoDB;
 
 

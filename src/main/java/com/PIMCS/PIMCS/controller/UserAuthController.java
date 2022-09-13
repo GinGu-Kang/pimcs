@@ -17,17 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
-/**
- * user_author
- * @author: GinGu-Kang
- *     구현 page
- *     1.회원가입: singUp
- *     2.로그인: login
- *     3.아이디찾기: UserEmailSearch
- *     4.비밀번호찾기: UserPasswordReset
- *     5.개인정보수정: UserInfoModify
- *     6.이메일 인증: EmailCertification
- */
+
 @Slf4j
 @Controller
 @RequestMapping("/auth")
@@ -44,72 +34,71 @@ public class UserAuthController {
     }
 
     //회원 가입폼
-    @GetMapping("/signUp")
-    private String signUpForm(){
-        return "user/auth/signUp.html";
+    @GetMapping("/user/create")
+    private String createUserForm(){
+        return "user/signUp.html";
     }
 
 
     //회원가입 이메일 인증
-    @PostMapping("/signUp")
-    private String signUp(User user){
-        userAuthService.signUp(user);
+    @PostMapping("/user")
+    private String createUser(User user){
+        userAuthService.createUserService(user);
         return "redirect:/auth/login";
     }
 
-    @GetMapping("signUp/verify")
-    public String signUpVerify(@RequestParam("verifyKey") String verifyKey){
-        userAuthService.signUpVerify(verifyKey);
-        return "redirect:/auth/signUp/success";
-    }
-    //회원가입 완료
-    @GetMapping("/signUp/success")
-    private String signUpSuccess(){
-        return "user/auth/signUpSuccess.html";
+    @GetMapping("user/verify")
+    public String createUserVerify(@RequestParam("verifyKey") String verifyKey,Model model){
+        model.addAttribute("isWaitUser",userAuthService.createUserVerifyService(verifyKey));
+        return "user/signUpSuccess.html";
     }
 
+
     //회원가입 선택
-    @GetMapping("choice/signUp")
+    @GetMapping("user/choice")
     private String signUpChoice(){
-        return "user/auth/signUpChoice.html";
+        return "user/signUpChoice.html";
+    }
+
+    //로그인
+    @GetMapping("/login")
+    private String loginForm(){
+        return "user/login";
+    }
+
+
+    @PostMapping("/check-email")
+    @ResponseBody
+    public boolean emailCheck(@RequestParam("email") String email){
+        System.out.println(email);
+        boolean isEmail = userAuthService.emailCheckService(email);
+        return isEmail;
+    }
+
+    @PostMapping("/check-company")
+    @ResponseBody
+    public boolean companyCheck(@RequestParam("company") String companyCode){
+        boolean isCompany = userAuthService.companyCheckService(companyCode);
+        return isCompany;
     }
 
 
 
     //회원정보수정
     @GetMapping("update")
-    private String editUserInfoForm(@RequestParam("email") String email, Model model){
-        model.addAttribute("user",userAuthService.findUser(email).get());
-        return "user/auth/userUpdate.html";
+    private String updateUserForm(@RequestParam("email") String email, Model model){
+        model.addAttribute("user",userAuthService.updateUserFormService(email).get());
+        return "user/userUpdate.html";
     }
 
 
-    //로그인
-    @GetMapping("/login")
-    private String loginForm(){
-        return "user/auth/login";
-    }
 
-
-    @PostMapping("/idCheck")
-    @ResponseBody
-    public boolean idCheck(@RequestParam("email") String email){
-        boolean isEmail = userAuthService.emailCheck(email);
-        return isEmail;
-    }
-
-    @PostMapping("/companyCheck")
-    @ResponseBody
-    public boolean companyCheck(@RequestParam("company") String companyCode){
-        boolean isCompany = userAuthService.companyCheck(companyCode);
-        return isCompany;
-    }
 
     //유저 정보
     @GetMapping("/user/info")
     private String userInfo(Model model,@AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",userAuthService.userDetail(user.getUsername()));
-        return "user/auth/userInfo";
+        return "user/userInfo";
     }
 
     //개인정보 변경
@@ -119,30 +108,24 @@ public class UserAuthController {
         user.setName(userForm.getName());
         user.setPhone(userForm.getPhone());
         user.setDepartment(userForm.getDepartment());
-
-
-
         userAuthService.userUpdate(user);
         model.addAttribute(user);
-        return "/user/auth/userInfo";
+        return "/user/userInfo";
     }
 
     @GetMapping("/pwd/change")
     public String pwdChangeForm(){
-        return "/user/auth/pwdChange";
+        return "/user/pwdChange";
     }
 
 
-
-
-
-    @GetMapping("/pwd/find")
+    @GetMapping("/pwd")
     public String pwdFindForm(){
-        return "/user/auth/pwdFind";
+        return "/user/pwdFind";
     }
 
     @ResponseBody
-    @PostMapping("/pwd/find")
+    @PostMapping("/pwd")
     public Boolean pwdFind(String email){
         Boolean isEmail=userAuthService.pwdFind(email);
         return isEmail;
@@ -151,7 +134,7 @@ public class UserAuthController {
     @GetMapping("/pwd/find/verify")
     public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey,Model model){
         model.addAttribute("verifyKey",verifyKey);
-        return "/user/auth/pwdFindVerify";
+        return "/user/pwdFindVerify";
     }
 
     //인증키 만료 처리
@@ -161,17 +144,9 @@ public class UserAuthController {
         return userAuthService.pwdFindVerify(verifyKey,password);
     }
 
-
-
     @PostMapping("/pwd/change")
     public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
-        return "/user/auth/pwdChange";
+        return "/user/pwdChange";
     }
-
-
-
-
-
-
 }

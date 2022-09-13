@@ -18,16 +18,11 @@ public class MatCategoryOrder {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private int orderCnt;
-
-
+  private int pricePerDevice;
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "orderId")
   private MatOrder matOrder;
-
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name="matCategoryId")
-  private MatCategory matCategory;
+  private String matCategoryName;
 
 
   public MatCategoryOrder() {

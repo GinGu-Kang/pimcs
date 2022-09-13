@@ -36,7 +36,7 @@ public class QnaService {
         questionRepository.save(question);
     }
 
-    public Page<Question> findAllQuestion(Pageable pageable){
+    public Page<Question> findQnaListService(Pageable pageable){
         return questionRepository.findAll(pageable);
     }
 

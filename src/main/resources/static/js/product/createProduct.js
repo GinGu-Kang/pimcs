@@ -243,10 +243,8 @@ jQuery(function ($) {
         }
 
         const data = loadGetData({
-            url: "/api/device",
-            data:{
-                "serialNumber": serialNumber
-            }});
+            url: `/api/devices/${serialNumber}`,
+            });
         
         console.log(data);
         if(!data){

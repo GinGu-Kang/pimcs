@@ -67,17 +67,18 @@ public class UserAuthController {
     }
 
 
-    @PostMapping("/emailCheck")
+    @PostMapping("/check-email")
     @ResponseBody
     public boolean emailCheck(@RequestParam("email") String email){
+        System.out.println(email);
         boolean isEmail = userAuthService.emailCheckService(email);
         return isEmail;
     }
 
-    @PostMapping("/companyCheck")
+    @PostMapping("/check-company")
     @ResponseBody
     public boolean companyCheck(@RequestParam("company") String companyCode){
-        boolean isCompany = userAuthService.companyCheck(companyCode);
+        boolean isCompany = userAuthService.companyCheckService(companyCode);
         return isCompany;
     }
 

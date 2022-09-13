@@ -173,7 +173,7 @@ public class UserAuthService  implements UserDetailsService {//implements UserDe
         return userRepository.findByEmail(email).isEmpty();
     }
 
-    public boolean companyCheck(String companyCode) {
+    public boolean companyCheckService(String companyCode) {
         return companyRepository.findByCompanyCode(companyCode).isEmpty();
     }
 

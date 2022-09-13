@@ -90,7 +90,7 @@ function checkCompany(){
 
 
     $.ajax({
-        url:'/auth/companyCheck',
+        url:'/auth/check-company',
         type:'post',
         data:{company:company},
         beforeSend : function(xhr)

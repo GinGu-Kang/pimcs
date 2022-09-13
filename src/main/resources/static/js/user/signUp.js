@@ -59,7 +59,7 @@
         var header = $("meta[name='_csrf_header']").attr("content");
         var form = $("#signUp")
         $.ajax({
-            url:'/auth/emailCheck',
+            url:'/auth/check-email',
             type:'post',
             data:{email:email},
             beforeSend : function(xhr)
@@ -90,7 +90,7 @@
 
 
         $.ajax({
-            url:'/auth/companyCheck',
+            url:'/auth/check-company',
             type:'post',
             data:{company:company},
             beforeSend : function(xhr)

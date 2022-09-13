@@ -2,11 +2,11 @@ package com.PIMCS.PIMCS.service;
 
 
 import com.PIMCS.PIMCS.domain.*;
-import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
+import com.PIMCS.PIMCS.domain.Redis.WaitCeo;
 import com.PIMCS.PIMCS.email.EmailUtilImpl;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
-import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
 import com.PIMCS.PIMCS.utils.UserDetailsServiceTest;
@@ -79,7 +79,7 @@ public class CompanyManagementServiceTest {
 
 
     @Autowired
-    private WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private WaitCeoRedisRepository waitCeoRedisRepository;
 
     private MockMvc mockMvc;
 
@@ -147,11 +147,11 @@ public class CompanyManagementServiceTest {
         resultActions.andExpect(status().isOk());
 
         // redis에 정상 저장되었는 체크
-        WaitingCeo waitingCeo = findWaitingCeo();
-        Assertions.assertNotNull(waitingCeo);
+        WaitCeo waitCeo = findWaitCeo();
+        Assertions.assertNotNull(waitCeo);
 
         // 검증 get 요청 및 rdbms에저장
-        mockMvc.perform(get("/companies/verification/"+waitingCeo.getId()))
+        mockMvc.perform(get("/companies/verification/"+waitCeo.getId()))
                 .andExpect(status().isOk());
 
         Company company = companyRepository.findByCompanyName(getFormItem("companyName")).orElse(null);
@@ -344,11 +344,11 @@ public class CompanyManagementServiceTest {
     }
 
 
-    public WaitingCeo findWaitingCeo(){
-        List<WaitingCeo> waitingCeoList = waitingCeoRedisRepository.findAll();
-        int start = waitingCeoList.size() - 1;
+    public WaitCeo findWaitCeo(){
+        List<WaitCeo> waitCeoList = waitCeoRedisRepository.findAll();
+        int start = waitCeoList.size() - 1;
         for(int i = start; i > -1; i-- ){
-            WaitingCeo o = waitingCeoList.get(i);
+            WaitCeo o = waitCeoList.get(i);
             if(o == null) continue;
             if(o.getCompany().getCeoEmail().equals(form.get("ceoEmail").get(0))){
                 return o;
@@ -366,8 +366,8 @@ public class CompanyManagementServiceTest {
 
     @AfterEach
     public void afterEach(){
-        if(waitingCeoRedisRepository.findAll().size() > 0)
-            waitingCeoRedisRepository.deleteAll();
+        if(waitCeoRedisRepository.findAll().size() > 0)
+            waitCeoRedisRepository.deleteAll();
     }
 
 

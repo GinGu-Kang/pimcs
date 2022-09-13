@@ -164,9 +164,6 @@ const putRequest = function({url, header, data}){
     return resultData;
 }
 
-<<<<<<< HEAD
-/*json으로 반환후 전송*/
-=======
 
 const deleteRequest = function({url, header, data,successCallback=undefined ,errorCallback=undefined}){
     let resultData;
@@ -191,7 +188,6 @@ const deleteRequest = function({url, header, data,successCallback=undefined ,err
 }
 
 /*json으로 반환후 post*/
->>>>>>> f2249456ee17549e3c61f2fc2b0a8d8f69bfc5aa
 const loadDataToJson = function({url,type,data}){
     let token = $("meta[name='_csrf']").attr("content");
     let header = $("meta[name='_csrf_header']").attr("content");

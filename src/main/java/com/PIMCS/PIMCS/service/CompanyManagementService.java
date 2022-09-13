@@ -103,13 +103,13 @@ public class CompanyManagementService {
     public void createCompanyService(User ceo, Company company){
         String[] emailSednList=new String[]{ceo.getEmail()};
 
-        WaitingCeo waitingCeo=WaitingCeo.builder()
+        WaitCeo waitCeo=WaitCeo.builder()
                 .company(company)
                 .user(ceo)
                 .build();
         waitCeoRedisRepository.save(waitCeo);
 
-        String comfirmUrl = String.format("http://%s:%s/companies/verification/%s", address, port, waitingCeo.getId());
+        String comfirmUrl = String.format("http://%s:%s/companies/verification/%s", address, port, waitCeo.getId());
 
 
 

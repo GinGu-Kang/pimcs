@@ -3,13 +3,13 @@ package com.PIMCS.PIMCS.controller;
 
 import com.PIMCS.PIMCS.domain.BusinessCategory;
 import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Redis.WaitingCeo;
+import com.PIMCS.PIMCS.domain.Redis.WaitCeo;
 import com.PIMCS.PIMCS.domain.User;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.SecUserCustomForm;
 import com.PIMCS.PIMCS.form.response.ResponseForm;
 import com.PIMCS.PIMCS.repository.BusinessCategoryRepository;
-import com.PIMCS.PIMCS.repository.Redis.WaitingCeoRedisRepository;
+import com.PIMCS.PIMCS.repository.Redis.WaitCeoRedisRepository;
 import com.PIMCS.PIMCS.repository.RoleRepository;
 import com.PIMCS.PIMCS.repository.UserRepository;
 import com.PIMCS.PIMCS.repository.UserRoleRepository;
@@ -44,7 +44,7 @@ public class CompanyManagementController {
     private final RoleRepository roleRepository;
     private final UserRoleRepository userRoleRepository;
     private final CompanyManagementService companyManagementService;
-    private final WaitingCeoRedisRepository waitingCeoRedisRepository;
+    private final WaitCeoRedisRepository waitCeoRedisRepository;
     private final BusinessCategoryRepository businessCategoryRepository;
 
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
@@ -52,12 +52,12 @@ public class CompanyManagementController {
 
 
     @Autowired
-    public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService, WaitingCeoRedisRepository waitingCeoRedisRepository, BusinessCategoryRepository businessCategoryRepository) {
+    public CompanyManagementController(UserRepository userRepository, RoleRepository roleRepository, UserRoleRepository userRoleRepository, CompanyManagementService companyManagementService, WaitCeoRedisRepository waitCeoRedisRepository, BusinessCategoryRepository businessCategoryRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.userRoleRepository = userRoleRepository;
         this.companyManagementService = companyManagementService;
-        this.waitingCeoRedisRepository = waitingCeoRedisRepository;
+        this.waitCeoRedisRepository = waitCeoRedisRepository;
         this.businessCategoryRepository = businessCategoryRepository;
     }
 
@@ -83,7 +83,6 @@ public class CompanyManagementController {
         company.setBusinessCategoryId(businessCategory);
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
-<<<<<<< HEAD
         companyManagementService.createCompanyService(ceo,company);
         return "user/auth/login";
     }
@@ -118,32 +117,16 @@ public class CompanyManagementController {
         model.addAttribute("businessCategories", businessCategories);
         model.addAttribute(company);
         return "/company/companyInfoModify.html";
-=======
-        companyManagementService.companyRegistration(ceo,company);
-        return "user/login";
-    }
-
-    @GetMapping("registration/verify")
-    public String companyRegistrationVerify(@RequestParam("verifyKey") String verifyKey){
-        companyManagementService.companyRegistrationVerify(verifyKey);
-        return "redirect:/company/registration/success";
-    }
-
-    //회사등록 완료
-    @GetMapping("registration/success")
-    private String signUpSuccess(){
-        return "company/companyRegistrationSuccess.html";
->>>>>>> 368c2ce87415b60e5d235dda23c3aecfac5c4bf7
     }
 
     //회사등록시 발급한 검증키 확인 및 회사와 대표등록
     @GetMapping("verification/{verifyKey}")
     public String confirmVerificationKey(@PathVariable String verifyKey){
 
-        WaitingCeo waitingCeo = waitingCeoRedisRepository.findById(verifyKey).orElse(null);
+        WaitCeo waitCeo = waitCeoRedisRepository.findById(verifyKey).orElse(null);
 
-        if(waitingCeo != null){ // 유효한 검증키일때
-            companyManagementService.createCompanyAndCeoService(waitingCeo.getCompany(), waitingCeo.getUser());
+        if(waitCeo != null){ // 유효한 검증키일때
+            companyManagementService.createCompanyAndCeoService(waitCeo.getCompany(), waitCeo.getUser());
             return "company/companyRegistrationSuccess.html";
 
         }else{// 유효하지 않은 검증키면 404발생시키기

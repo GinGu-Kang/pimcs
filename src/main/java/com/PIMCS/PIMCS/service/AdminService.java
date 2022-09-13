@@ -25,7 +25,6 @@ import java.util.Optional;
 public class AdminService {
     private final AnswerRepository answerRepository;
     private final MatCategoryRepository matCategoryRepository;
-    private final MatCategoryOrderRepository matCategoryOrderRepository;
     private final MatOrderRepository matOrderRepository;
     private final QuestionRepository questionRepository;
     private final OrderMailFrameRepository orderMailFrameRepository;
@@ -35,10 +34,9 @@ public class AdminService {
 
 
     @Autowired
-    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatCategoryOrderRepository matCategoryOrderRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository, SendHistoryRepository sendHistoryRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository, SendHistoryRepository sendHistoryRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
-        this.matCategoryOrderRepository = matCategoryOrderRepository;
         this.matOrderRepository = matOrderRepository;
         this.questionRepository = questionRepository;
         this.orderMailFrameRepository = orderMailFrameRepository;

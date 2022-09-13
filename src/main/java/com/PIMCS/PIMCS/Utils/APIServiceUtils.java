@@ -137,6 +137,8 @@ public class APIServiceUtils {
 
             List<OrderMailRecipients> orderMailRecipients = OrderMailRecipients.findBySerialNumber(dynamoQuery, company,mat.getSerialNumber());
 
+            System.out.println("=======abc");
+            System.out.println(mat.getSerialNumber());
             DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, company.getId(), mat.getSerialNumber());
             mat.setInventoryWeight(dynamoMat.getInventoryWeight());
             // adapter mat데이터 추가

@@ -1,5 +1,6 @@
 package com.PIMCS.PIMCS.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,16 +38,21 @@ public class MatOrder {
 
   @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
   @JoinColumn(name = "userEmail")
+  @JsonIgnore
   private User user;
+
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="companyId")
+  @JsonIgnore
   private Company company;
 
   @OneToMany(mappedBy = "matOrder",fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+  @JsonIgnore
   private List<MatCategoryOrder> matCategoryOrderList;
 
 
   @OneToOne(mappedBy = "matOrder",fetch = FetchType.EAGER,cascade=CascadeType.ALL)
+  @JsonIgnore
   private SendHistory sendHistory;
 
 

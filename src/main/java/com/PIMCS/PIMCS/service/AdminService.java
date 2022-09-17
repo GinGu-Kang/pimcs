@@ -210,7 +210,7 @@ public class AdminService {
     }
 
     public MatOrder updateOrderDepositService(Integer orderId,Boolean isDeposit){
-        MatOrder matOrder=matOrderRepository.getOne(orderId);
+        MatOrder matOrder=matOrderRepository.findById(orderId).get();
 
         if(isDeposit){
             matOrder.setDepositStatus(1);

@@ -84,7 +84,7 @@ public class CompanyManagementController {
         company.setCeoName(ceo.getName());
         ceo.setEmail(company.getCeoEmail());
         companyManagementService.createCompanyService(ceo,company);
-        return "user/auth/login";
+        return "redirect:/auth/login";
     }
 
     //회사정보 수정

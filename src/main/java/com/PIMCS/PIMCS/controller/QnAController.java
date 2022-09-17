@@ -47,7 +47,7 @@ public class QnAController {
     @PostMapping("")
     public String questionSave(Question question, @AuthenticationPrincipal SecUserCustomForm secUserCustomForm, User user){
         qnaService.addQuestion(question,user,secUserCustomForm.getCompany());
-        return "redirect:list";
+        return "redirect:/qnas";
     }
 
     @GetMapping("")

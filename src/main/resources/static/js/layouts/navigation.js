@@ -17,12 +17,14 @@ const URL_NAV_ITEM_MAPPING = {
     "/admin/qnas": "#adminQnA",
     "/admin/orders": "#adminOrderMat",
     "/admin/companies": "#companyManagement",
+    // "/admin/companies/\d": "#companyManagement",
     "/admin/order-mail-frame/create": "#emailFrame",
-    "/admin/matcategories": "#matCategory",
+    "/admin/matcategories/create": "#matCategory",
     "/admin/matcategories": "#matCategoryRead",
     "/orders/history": "#order-history",
     "/mats/log": "#matLog",
     "/products/log": "#productLog",
+    
     
 
 }
@@ -31,8 +33,19 @@ jQuery(function ($) {
 });
 
 const initNavigation = function(){
-    
-    const navItem = URL_NAV_ITEM_MAPPING[location.pathname];
+    let navItem = undefined;    
+    if (location.pathname in URL_NAV_ITEM_MAPPING){
+        navItem = URL_NAV_ITEM_MAPPING[location.pathname];
+    }else{
+        for(const key of Object.keys(URL_NAV_ITEM_MAPPING)){
+            if(location.pathname.startsWith(key)){
+                console.log(key);
+                navItem = URL_NAV_ITEM_MAPPING[key];
+                break;
+            }
+        }
+    }
+    console.log(navItem);
 
     $(navItem).parents("details").each(function(index, element){
         $(element).attr("open","");

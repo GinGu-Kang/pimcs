@@ -10,10 +10,13 @@
         </div>
         <form method="post" >
             <div class="modal-body">
-                <div class="target-container h-100" style="overflow-y: auto;">
-                    
+                <div class="target-container h-80" style="overflow-y: auto;">
                     
                 </div>
+                <h5 class="pimcs-bold" style="margin-top: 15px;">변경 값</h5>
+                <div class="d-flex justify-content-between mt-2">
+                    <input id="mail-modify-input" style="font-size: 11px;" type="text" required class="pimcs-blue-input" placeholder="다중이메일 입력시 ','로 구분해주세요."/>
+                </div> 
                 
             </div>
             <div class="modal-footer">
@@ -24,6 +27,14 @@
       </div>
     </div>
     <script>
+
+        /**
+         * 모달 숨겨질때 초기화
+         **/
+         $('#mailRecipientsModal').on('hide.bs.modal', function (e) {
+            $("#mail-modify-input").val('');
+        });
+
         let token = $("meta[name='_csrf']").attr("content");
         let header = $("meta[name='_csrf_header']").attr("content");
         $('#mailRecipientsModal').on('show.bs.modal', function (e) {
@@ -53,7 +64,7 @@
                 let html = "";
 
                 html += `<label>${result[i]['matSerialNumber']}</label>`;
-                html += `<input id="${result[i]['matSerialNumber']}" class="pimcs-blue-input mail-recipients-input" value="${result[i]['mailRecipients']}"/><br>`;
+                html += `<input id="${result[i]['matSerialNumber']}" readonly class="pimcs-gray-input mail-recipients-input" value="${result[i]['mailRecipients']}"/><br>`;
                 html += `<input type="hidden" class="serialNumber" value="${result[i]['matSerialNumber']}"/>`;
                 $("#mailRecipientsModal .target-container").append(html);
             }
@@ -62,23 +73,23 @@
 
         const changeOrderEmailRecipients = function(){
             const data = new FormData();
-
+            
+            let mailRecipients = $(`#mail-modify-input`).val().split(",");
+            
             for(let i=0; i<$("input.serialNumber").length; i++){
-                let serialNumber = $("input.serialNumber")[i].value;
-                let mailRecipients = $(`#${serialNumber}`).val().split(",");
-                let validation = validate(mailRecipients);
-               if(validation.isError){
-                    alert(validation.message);
-                    $(this).addClass("pimcs-error-input");
-                    return;
-               }else{
-                    data.append(`mailRecipients[${i}].matSerialNumber`, serialNumber);
-                    for(let j=0; j<mailRecipients.length; j++){
-                        data.append(`mailRecipients[${i}].mailRecipients[${j}]`, mailRecipients[j].trim());
-                    }
-               }
+                data.append(`mailRecipients[${i}].matSerialNumber`, $("input.serialNumber")[i].value);
+                for(let j=0; j<mailRecipients.length; j++){
+                    data.append(`mailRecipients[${i}].mailRecipients[${j}]`, mailRecipients[j].trim());
+                }
             }
 
+            
+            let validation = validate(mailRecipients);
+            if(validation.isError){
+                alert(validation.message);
+                return;
+            }
+                
             const queryString = new URLSearchParams(data).toString();
             const result = putRequest({
                     url: "/mats/email",
@@ -127,16 +138,6 @@
             }
         }
 
-        
-        $(document).on("focusout",".mail-recipients-input", function(){
-            const validation = validate($(this).val().split(","));
-            if(validation.isError){
-                alert(validation.message);
-                $(this).addClass("pimcs-error-input");
-            }else{
-                $(this).removeClass("pimcs-error-input")
-            }
-        });
        
     </script>
 </div>

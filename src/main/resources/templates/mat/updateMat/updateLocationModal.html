@@ -33,6 +33,14 @@
     <script>
         
         /**
+         * 모달 숨겨질때 초기화
+         **/
+         $('#locationModal').on('hide.bs.modal', function (e) {
+
+            $("input[name='mat.matLocation']").val('');
+        });
+
+        /**
          * 변경 버튼클릭시 
          */
         const onClickedUpdateMatLocation = function(){

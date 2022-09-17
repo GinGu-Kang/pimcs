@@ -41,6 +41,7 @@
                         <input th:if="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
                                class="pimcs-bd-group-input text-size-middle" 
                                th:value="${inOutHistorySearchForm.getQuery()}"
+                               placeholder="Search by product name"
                                name="query"
                               />
                         <input th:unless="${inOutHistorySearchForm != null && inOutHistorySearchForm.getQuery() != ''}" 
@@ -144,7 +145,7 @@
                         <th scope="col col-md-2" >제품 코드</th>
                         <th scope="col col-md-2" >장소</th>
                         <th scope="col col-md-2" >입/출고 상태</th>
-                        <th scope="col col-md-2" >갯수</th>
+                        <th scope="col col-md-2" >개/g</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -161,7 +162,9 @@
                         <td th:unless="${inOutHistory.getInOutStatus.toString() == 'IN'}">
                             <div class="out text-size-between-middle-samll">출고</div>
                         </td>
-                        <td class="text-size-between-middle-samll" th:text="${inOutHistory.getUpdateCnt()}"></td>
+
+                        <td th:if="${inOutHistory.getCalcMethod() == 0}" class="text-size-between-middle-samll" th:text='${inOutHistory.getUpdateCnt()+"g"}'></td>
+                        <td th:unless="${inOutHistory.getCalcMethod() == 0}" class="text-size-between-middle-samll" th:text='${inOutHistory.getUpdateCnt()+"개"}'></td>
                     </tr>
                 </tbody>
             </table>

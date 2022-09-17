@@ -18,9 +18,11 @@
                 <h5 class="pimcs-bold">변경 값</h5>
                 <div class="d-flex justify-content-between mt-2">
                     <div class="input-group">
-                        <input type="number" style="height: 22px;" required="" name="productWeight" class="pimcs-blue-input input">
+                        <input type="number" style="height: 22px;" required="" name="productWeight" placeholder="제품무게 입력 또는 측정해주세요." class="pimcs-blue-input input">
                         <span class="input-group-text text-size-between-middle-samll">g</span>
+                        
                     </div>    
+                    <button type="button" style="width: 50px; margin-left: 10px;" class="pimcs-blue-btn text-size-between-middle-samll ml-2 mr-2" onclick="measurementWeight()">측정</button>
                 </div>
                 
             </div>
@@ -34,6 +36,37 @@
       </div>
     </div>
     <script>
+
+        /**
+         * 모달 숨겨질때 input 값 초기화
+         **/
+         $('#boxWeightModal').on('hide.bs.modal', function (e) {
+            $("input[name='productWeight']").val('');
+
+        });
+
+        const measurementWeight = (e)=>{
+            
+            const serialNumber = prompt("매트 시리얼번호", '');
+            if(serialNumber == ''){
+                alert('매트 시리얼번호를 입력해주세요.');
+                return;
+            }
+            const data = loadGetData({
+                url: `/api/devices/${serialNumber}`,
+                data:{}
+            });
+            
+            console.log(data);
+            if(!data){
+                alert("상품을 매트에 올려주세요.");
+                return;
+            }
+            $("input[name='productWeight']").val(data.inventoryWeight);
+
+        }
+
+
         $('#productWeightModal').on('show.bs.modal', function (e) {
             $("input[name='productWeight']").val("");
         });

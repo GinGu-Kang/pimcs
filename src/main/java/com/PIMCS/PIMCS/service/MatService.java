@@ -154,8 +154,10 @@ public class MatService {
     public HashMap<String,String> updateMatsEmailService(List<OrderMailRecipients> orderMailRecipients, Company company){
 
         OrderMailRecipients.update(dynamoDBMapper, dynamoQuery, orderMailRecipients, company);
+
         HashMap<String, String> hashMap =new HashMap<>();
         hashMap.put("message","수정 완료했습니다.");
+        
         return hashMap;
     }
 
@@ -172,8 +174,7 @@ public class MatService {
             Mat findMat = matServiceUtils.findMat(findMats, matForm.getMat().getId());
             if(findMat != null) {
                 saveMats.add(findMat);
-            }
-            else {
+            }else {
                 throw new IllegalStateException("Mat does not exist.");
             }
         }

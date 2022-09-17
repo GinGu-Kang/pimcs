@@ -108,14 +108,6 @@ public class MatController {
         return matService.deleteMatsService(secUserCustomForm.getCompany(), matFormList, user);
     }
 
-
-//    @GetMapping("/mats/{columnName}")
-//    @ResponseBody
-//    public HashMap<String, Object> findMatListAll(@PathVariable String columnName){
-//
-////        if(columnName.equals("seri"))
-//    }
-
     /**
      *  매트 csv다운로드
      */

@@ -1,6 +1,9 @@
 .content{
     padding-right: 34px;
 }
+.pimcs-blue-input{
+    font-size: 12px;
+}
 .header-child{
     display: flex;
 }

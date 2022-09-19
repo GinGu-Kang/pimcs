@@ -4,6 +4,8 @@ services:
   db-mysql:
     image: mysql:8.0.27
     container_name: db-mysql
+    volumes:
+      - ./db_data:/var/lib/mysql
     environment:
       MYSQL_DATABASE: pimcs
       MYSQL_ROOT_PASSWORD: 11111111
@@ -31,10 +33,6 @@ services:
     restart: always
     ports:
       - 8000:8000
-#    depends_on:
-#      - db-mysql
-#    networks:
-#      - springboot-mysql-net
 networks:
   springboot-mysql-net:
     driver: bridge

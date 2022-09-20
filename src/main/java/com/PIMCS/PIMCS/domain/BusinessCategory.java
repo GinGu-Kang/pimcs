@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name="businessCategory")
 @Getter
 @Setter
 public class BusinessCategory {

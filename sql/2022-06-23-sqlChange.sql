@@ -20,7 +20,7 @@ USE `pimcs` ;
 -- -----------------------------------------------------
 -- Table `pimcs`.`business_category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`businessCategory` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`BusinessCategory` (
                                                           `id` INT NOT NULL AUTO_INCREMENT,
                                                           `categoryName` VARCHAR(30) NOT NULL,
                                                           PRIMARY KEY (`id`))
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`businessCategory` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`company`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`company` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Company` (
                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                  `companyCode` VARCHAR(30) NOT NULL,
                                                  `businessCategoryId` INT  NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`company` (
                                                  INDEX `fk_company_business_category1_idx` (`businessCategoryId` ASC) VISIBLE,
                                                  CONSTRAINT `fk_company_business_category1`
                                                      FOREIGN KEY (`businessCategoryId`)
-                                                         REFERENCES `pimcs`.`businessCategory` (`id`)
+                                                         REFERENCES `pimcs`.`BusinessCategory` (`id`)
                                                          ON DELETE set null)
     ENGINE = InnoDB;
 
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`company` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`user`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`user` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`User` (
                                               `email` VARCHAR(60) NOT NULL,
                                               `companyId` INT NOT NULL,
                                               `password` VARCHAR(100) NULL,
@@ -66,13 +66,13 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`user` (
                                               INDEX `fk_user_company1_idx` (`companyId` ASC) VISIBLE,
                                               CONSTRAINT `fk_user_company1`
                                                   FOREIGN KEY (`companyId`)
-                                                      REFERENCES `pimcs`.`company` (`id`)
+                                                      REFERENCES `pimcs`.`Company` (`id`)
                                                       ON DELETE cascade)
     ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `pimcs`.`product_category`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`productCategory` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`ProductCategory` (
                                                          `id` INT NOT NULL AUTO_INCREMENT,
                                                          `categoryName` VARCHAR(45) NULL,
                                                          `companyId` INT NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`productCategory` (
                                                          INDEX `fk_product_category_company1_idx` (`companyId` ASC) VISIBLE,
                                                          CONSTRAINT `fk_product_category_company1`
                                                              FOREIGN KEY (`companyId`)
-                                                                 REFERENCES `pimcs`.`company` (`id`)
+                                                                 REFERENCES `pimcs`.`Company` (`id`)
                                                                  ON DELETE cascade)
     ENGINE = InnoDB;
 
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`productCategory` (
 -- Table `pimcs`.`product`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Product` (
                                                  `id` INT NOT NULL AUTO_INCREMENT,
                                                  `productCode` VARCHAR(45) NOT NULL,
                                                  `productCategoryId` INT  NULL,
@@ -104,11 +104,11 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
                                                  INDEX `fk_product_company1_idx` (`companyId` ASC) VISIBLE,
                                                  CONSTRAINT `fk_product_product_category1`
                                                      FOREIGN KEY (`productCategoryId`)
-                                                         REFERENCES `pimcs`.`productCategory` (`id`)
+                                                         REFERENCES `pimcs`.`ProductCategory` (`id`)
                                                          ON DELETE set null,
                                                  CONSTRAINT `fk_product_company1`
                                                      FOREIGN KEY (`companyId`)
-                                                         REFERENCES `pimcs`.`company` (`id`)
+                                                         REFERENCES `pimcs`.`Company` (`id`)
                                                          ON DELETE cascade)
     ENGINE = InnoDB;
 
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`product` (
 
 -- set FOREIGN_KEY_CHECKS = 1;
 -- drop table mat;
-CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Mat` (
                                              `id` INT NOT NULL AUTO_INCREMENT,
                                              `productId` INT  NULL,
                                              `companyId` INT NOT NULL,
@@ -144,12 +144,12 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
                                              INDEX `fk_mat_company1_idx` (`companyId` ASC) VISIBLE,
                                              CONSTRAINT `fk_mat_product1`
                                                  FOREIGN KEY (`productId`)
-                                                     REFERENCES `pimcs`.`product` (`id`)
+                                                     REFERENCES `pimcs`.`Product` (`id`)
                                                      ON DELETE set null
                                                      ON UPDATE NO ACTION,
                                              CONSTRAINT `fk_mat_company1`
                                                  FOREIGN KEY (`companyId`)
-                                                     REFERENCES `pimcs`.`company` (`id`)
+                                                     REFERENCES `pimcs`.`Company` (`id`)
                                                      ON DELETE cascade
                                                      ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`mat` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`notice_email`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`NoticeEmail` (
                                                      `id` INT NOT NULL AUTO_INCREMENT,
                                                      `email` VARCHAR(45) NOT NULL,
                                                      `matId` INT NOT NULL,
@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
                                                      INDEX `fk_notice_email_mat1_idx` (`matId` ASC) VISIBLE,
                                                      CONSTRAINT `fk_notice_email_mat1`
                                                          FOREIGN KEY (`matId`)
-                                                             REFERENCES `pimcs`.`mat` (`id`)
+                                                             REFERENCES `pimcs`.`Mat` (`id`)
                                                              ON DELETE NO ACTION
                                                              ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`noticeEmail` (
 -- Table `pimcs`.`mat_category`
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `pimcs`.`matCategory` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`MatCategory` (
                                                      `id` INT NOT NULL AUTO_INCREMENT,
                                                      `matCategoryName` VARCHAR(45) NOT NULL,
                                                      `mappingSerialCode` VARCHAR(45) NULL,
@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategory` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`mat_device`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`MatDevice` (
                                                    `id` INT NOT NULL AUTO_INCREMENT,
                                                    `serialNumber` VARCHAR(40) NOT NULL,
                                                    `matCategory` VARCHAR(45)  NULL,
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
                                                    UNIQUE INDEX `serial_number_UNIQUE` (`serialNumber` ASC) VISIBLE,
                                                    CONSTRAINT `fk_mat_device_mat_category1`
                                                        FOREIGN KEY (`matCategory`)
-                                                           REFERENCES `pimcs`.`matCategory` (`matCategoryName`)
+                                                           REFERENCES `pimcs`.`MatCategory` (`matCategoryName`)
                                                            ON DELETE set null
                                                            ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matDevice` (
 
 -- -----------------------------------------------------
 
-CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`MatOrder` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `userEmail` VARCHAR(60) NOT NULL,
                                                   `companyId` INT NULL,
@@ -230,12 +230,12 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
                                                   INDEX `fk_matOrder_company1_idx` (`companyId` ASC) VISIBLE,
                                                   CONSTRAINT `fk_matOrder_user1`
                                                       FOREIGN KEY (`userEmail`)
-                                                          REFERENCES `pimcs`.`user` (`email`)
+                                                          REFERENCES `pimcs`.`User` (`email`)
                                                           ON DELETE CASCADE
                                                           ON UPDATE NO ACTION,
                                                   CONSTRAINT `fk_matOrder_company1`
                                                       FOREIGN KEY (`companyId`)
-                                                          REFERENCES `pimcs`.`company` (`id`)
+                                                          REFERENCES `pimcs`.`Company` (`id`)
                                                           ON DELETE set null
                                                           ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matOrder` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`mat_category_order`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`MatCategoryOrder` (
                                                           `id` INT NOT NULL AUTO_INCREMENT,
                                                           `orderId` INT NOT NULL,
                                                           `orderCnt` INT NOT NULL,
@@ -251,12 +251,11 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
                                                           `matCategoryName` VARCHAR(20) NOT NULL,
                                                           INDEX `fk_mat_device_order_order1_idx` (`orderId` ASC) VISIBLE,
                                                           PRIMARY KEY (`id`),
-                                                          INDEX `fk_mat_category_order_mat_category1_idx` (`matCategoryId` ASC) VISIBLE,
                                                           CONSTRAINT `fk_mat_device_order_order1`
                                                               FOREIGN KEY (`orderId`)
-                                                                  REFERENCES `pimcs`.`matOrder` (`id`)
+                                                                  REFERENCES `pimcs`.`MatOrder` (`id`)
                                                                   ON DELETE cascade
-                                                                  ON UPDATE NO ACTION,
+                                                                  ON UPDATE NO ACTION
                                                           )
     ENGINE = InnoDB;
 
@@ -267,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`matCategoryOrder` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`question`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Question` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `userEmail` VARCHAR(60) NOT NULL,
                                                   `companyId` INT NOT NULL,
@@ -280,12 +279,12 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
                                                   INDEX `fk_question_company1_idx` (`companyId` ASC) VISIBLE,
                                                   CONSTRAINT `fk_question_user1`
                                                       FOREIGN KEY (`userEmail`)
-                                                          REFERENCES `pimcs`.`user` (`email`)
+                                                          REFERENCES `pimcs`.`User` (`email`)
                                                           ON DELETE cascade
                                                           ON UPDATE NO ACTION,
                                                   CONSTRAINT `fk_question_company1`
                                                       FOREIGN KEY (`companyId`)
-                                                          REFERENCES `pimcs`.`company` (`id`)
+                                                          REFERENCES `pimcs`.`Company` (`id`)
                                                           ON DELETE cascade
                                                           ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -294,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`question` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`answer`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`answer` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Answer` (
                                                 `id` INT NOT NULL AUTO_INCREMENT,
                                                 `comment` BLOB NULL,
                                                 `createdAt` DATETIME NULL,
@@ -303,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`answer` (
                                                 INDEX `fk_answer_question1_idx` (`questionId` ASC) VISIBLE,
                                                 CONSTRAINT `fk_answer_question1`
                                                     FOREIGN KEY (`questionId`)
-                                                        REFERENCES `pimcs`.`question` (`id`)
+                                                        REFERENCES `pimcs`.`Question` (`id`)
                                                         ON DELETE cascade
                                                         ON UPDATE NO ACTION)
     ENGINE = InnoDB;
@@ -312,7 +311,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`answer` (
 -- -----------------------------------------------------
 -- Table `pimcs`.`role`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`role` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`Role` (
                                               `id` INT NOT NULL AUTO_INCREMENT,
                                               `name` VARCHAR(45) NULL,
                                               PRIMARY KEY (`id`),
@@ -323,7 +322,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`role` (
 -- -----------------------------------------------------
 -- Table `pimcs`.``
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `pimcs`.`userRole` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`UserRole` (
                                                   `id` INT NOT NULL AUTO_INCREMENT,
                                                   `userEmail` VARCHAR(60) NOT NULL,
                                                   `roleId` INT NOT NULL,
@@ -332,18 +331,18 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`userRole` (
                                                   INDEX `fk_user_role_role1_idx` (`roleId` ASC) VISIBLE,
                                                   CONSTRAINT `fk_user_role_user1`
                                                       FOREIGN KEY (`userEmail`)
-                                                          REFERENCES `pimcs`.`user` (`email`)
+                                                          REFERENCES `pimcs`.`User` (`email`)
                                                           ON DELETE cascade
                                                           ON UPDATE NO ACTION,
                                                   CONSTRAINT `fk_user_role_role1`
                                                       FOREIGN KEY (`roleId`)
-                                                          REFERENCES `pimcs`.`role` (`id`)
+                                                          REFERENCES `pimcs`.`Role` (`id`)
                                                           ON DELETE cascade
                                                           ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
 
-CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`OrderMailFrame` (
                                                         `id` INT NOT NULL AUTO_INCREMENT,
                                                         `greeting` BLOB NULL,
                                                         `managerInfo` BLOB NULL,
@@ -352,7 +351,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`orderMailFrame` (
     ENGINE = InnoDB;
 
 -- 기기 소유확인 테이블
-CREATE TABLE IF NOT EXISTS `pimcs`.`ownDevice` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`OwnDevice` (
                                                          `id` INT NOT NULL AUTO_INCREMENT,
                                                          `createdAt` DATETIME NULL,
                                                          `serialNumber` VARCHAR(45) NULL,
@@ -362,11 +361,11 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`ownDevice` (
                                                          INDEX `fk_ownDevice_serialNumber_company1_idx` (`serialNumber` ASC) VISIBLE,
                                                          CONSTRAINT `fk_ownDevice_company1`
                                                              FOREIGN KEY (`companyId`)
-                                                                 REFERENCES `pimcs`.`company` (`id`)
+                                                                 REFERENCES `pimcs`.`Company` (`id`)
                                                                  ON DELETE cascade)
 
     ENGINE = InnoDB;
-CREATE TABLE IF NOT EXISTS `pimcs`.`sendHistory` (
+CREATE TABLE IF NOT EXISTS `pimcs`.`SendHistory` (
                                                          `id` INT NOT NULL AUTO_INCREMENT,
                                                          `createdAt` DATETIME NULL,
                                                          `history` BLOB NULL,
@@ -375,7 +374,7 @@ CREATE TABLE IF NOT EXISTS `pimcs`.`sendHistory` (
                                                          INDEX `fk_matOrderId_company1_idx` (`matOrderId` ASC) VISIBLE,
                                                          CONSTRAINT `fk_matOrderId_company1`
                                                              FOREIGN KEY (`matOrderId`)
-                                                                 REFERENCES `pimcs`.`matOrder` (`id`)
+                                                                 REFERENCES `pimcs`.`MatOrder` (`id`)
                                                                  ON DELETE cascade)
 
     ENGINE = InnoDB;

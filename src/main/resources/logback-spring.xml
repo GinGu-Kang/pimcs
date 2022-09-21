@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <springProfile name="file-info-logging">
-        <appender name="INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>./application_log/application.log</file>
+        <appender name="LOCAL_INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/Users/gangjingu/pimcs/application_log/application.log</file>
             <encoder>
                 <pattern>
                     %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [traceId=%X{traceId}] %-5level %logger{36}.%M - %msg%n
                 </pattern>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>./application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <fileNamePattern>/Users/gangjingu/pimcs/application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>5MB</maxFileSize>
                 <maxHistory>30</maxHistory>
                 <totalSizeCap>5GB</totalSizeCap>
             </rollingPolicy>
         </appender>
-    </springProfile>
 
 
 
@@ -26,16 +24,33 @@
         </layout>
     </appender>
 
-
+    <springProfile name="prod">
+        <appender name="PROD_INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>/home/pimcs/application_log/application.log</file>
+            <encoder>
+                <pattern>
+                    %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [traceId=%X{traceId}] %-5level %logger{36}.%M - %msg%n
+                </pattern>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>/home/pimcs/application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <maxFileSize>5MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>5GB</totalSizeCap>
+            </rollingPolicy>
+        </appender>
+    </springProfile>
 
 
     <root level="info">
         <springProfile name="dev">
             <appender-ref ref="LOCAL_CONSOLE_POLICY"/>
+            <appender-ref ref="LOCAL_INFO_FILE_POLICY"/>
         </springProfile>
 
         <springProfile name="prod">
-            <appender-ref ref="INFO_FILE_POLICY"/>
+            <appender-ref ref="LOCAL_CONSOLE_POLICY"/>
+            <appender-ref ref="PROD_INFO_FILE_POLICY"/>
         </springProfile>
     </root>
 

@@ -14,6 +14,7 @@ const URL_NAV_ITEM_MAPPING = {
     "/qnas": "#QnA",
     "/qna/question": "#QnA",
     "/qna/view": "#QnA",
+    "/admin/user": "#adminUsers",
     "/admin/qnas": "#adminQnA",
     "/admin/orders": "#adminOrderMat",
     "/admin/companies": "#companyManagement",

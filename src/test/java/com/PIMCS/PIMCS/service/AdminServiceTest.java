@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,8 +18,8 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-@Transactional
+//
+//@Transactional
 @SpringBootTest
 public class AdminServiceTest {
 
@@ -688,5 +689,49 @@ public class AdminServiceTest {
 
 
         return sendHistoryRepository.save(sendHistory);
+    }
+
+    @Test
+    void findUserListService() {
+        //given
+        List<User> userList = new ArrayList<>();
+        int inputSize = 10;
+        Pageable pageable= PageRequest.of(0,inputSize,Sort.by("createdAt").descending());
+        String email = "gdgd@gdgd.gd";
+        String name = "testName";
+        String phone = "01022222222";
+        Company company = Company.builder()
+                .ceoName("hi")
+                .companyCode("test")
+                .ceoEmail("test")
+                .build();
+        String password = "testpwd";
+        String department = "재고관리부";
+        companyRepository.save(company);
+
+        for(int i = 0; i < inputSize; i++){
+            User user = User.builder()
+                    .name(name+i)
+                    .email(email+i)
+                    .company(company)
+                    .password(password)
+                    .department(department)
+                    .phone(phone)
+                    .enabled(true)
+                    .build();
+            userList.add(user);
+        }
+
+        userRepository.saveAll(userList);
+
+        //when
+        Page<User> resultUserPageFindByName=adminService.findUserListService(name+5,"이름",pageable);
+        Page<User> resultUserPageFindByEmail=adminService.findUserListService(email+5,"이메일",pageable);
+        Page<User> resultUserPageFindByPhone=adminService.findUserListService(phone,"핸드폰",pageable);
+
+        //then
+        assertThat(resultUserPageFindByPhone.getContent().size()).isEqualTo(inputSize);
+        assertThat(resultUserPageFindByName.getContent().get(0).getName()).isEqualTo(name+5);
+        assertThat(resultUserPageFindByEmail.getContent().get(0).getEmail()).isEqualTo(email+5);
     }
 }

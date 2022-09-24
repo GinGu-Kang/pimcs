@@ -180,5 +180,18 @@ public class AdminController {
         return resultMap;
     }
 
+    /*관리자 User*/
+    @GetMapping("users")
+    public String findAdminUserList(@PageableDefault(page = 0, size=10, sort="createdAt", direction = Sort.Direction.DESC) Pageable pageable,
+                                   @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                                   @RequestParam(value = "selectOption", defaultValue = "") String selectOption,
+                                   Model model){
+        Page<User> userPage=adminService.findUserListService(keyword,selectOption,pageable);
+        model.addAttribute("userPage",userPage);
+        model.addAttribute("userList",userPage.getContent());
+
+        return "admin/findUserList";
+    }
+
 
 }

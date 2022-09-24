@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/default}">
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet"  href="/css/admin/adminQnaList.css">
+    <script type="text/javascript" src="/js/jquery.twbsPagination.js"></script>
+    <script defer type="text/javascript" src="/js/admin/findUserList.js"></script>
+
+
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<div layout:fragment="content"  class="content">
+    <p class="title">
+        회사 관리
+    </p>
+    <div id="paging"></div>
+    <section class="action-btn-container">
+        <form th:action="@{/admin/users}" method="get" >
+            <div class="inquery-mat-header-left-box">
+                <select class="search-select" name="selectOption" >
+                    <option>이름</option>
+                    <option>이메일</option>
+                    <option>핸드폰</option>
+                </select>
+                <div class="search-input-container">
+                    <input name="keyword" type="text" id="search" class="search-input text-size-middle" placeholder="Search" />
+                </div>
+            </div>
+        </form>
+
+
+    </section>
+    <!--DESKTOP PAGINATION-->
+    <div aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
+    </div>
+    <table class="table pimcs-table">
+        <thead>
+        <th scope="col" class="text-center">번호</th>
+        <th scope="col" class="text-center">이메일</th>
+        <th scope="col" class="text-center">회사명</th>
+        <th scope="col" class="text-center">이름</th>
+        <th scope="col" class="text-center">핸드폰</th>
+
+        </thead>
+        <tbody id="pimcs-tbody" class="pimcs-tbody">
+
+        <th:block th:each="user,i:${userList}">
+            <tr class="worker-tr">
+                <td  th:text="${userPage.getSize()}*${userPage.getNumber()}+${i.index}+1"></td>
+                <td  th:text="${user.getEmail()}"></td>
+                <td  th:text="${user.getCompany().getCompanyName()}"></td>
+                <td  th:text="${user.getName()}"></td>
+                <td  th:text="${user.getPhone()}"></td>
+            </tr>
+        </th:block>
+        </tbody>
+    </table>
+
+    <script >
+
+        /*<![CDATA[*/
+        let totalPage = "[[${userPage.getTotalPages()}]]";
+        let size = "[[${userPage.getSize()}]]";
+        let currentPage = "[[${userPage.getNumber()}]]";
+        /*]]>*/
+    </script>
+</div>
+
+</html>

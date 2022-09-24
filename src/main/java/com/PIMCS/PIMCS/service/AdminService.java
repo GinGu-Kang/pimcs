@@ -12,10 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import javax.swing.text.html.Option;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,18 +26,20 @@ public class AdminService {
     private final QuestionRepository questionRepository;
     private final OrderMailFrameRepository orderMailFrameRepository;
     private final CompanyRepository companyRepository;
+    private final UserRepository userRepository;
     private final OwnDeviceRepository ownDeviceRepository;
     private final SendHistoryRepository sendHistoryRepository;
 
 
     @Autowired
-    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, OwnDeviceRepository ownDeviceRepository, SendHistoryRepository sendHistoryRepository) {
+    public AdminService(AnswerRepository answerRepository, MatCategoryRepository matCategoryRepository, MatOrderRepository matOrderRepository, QuestionRepository questionRepository, OrderMailFrameRepository orderMailFrameRepository, CompanyRepository companyRepository, UserRepository userRepository, OwnDeviceRepository ownDeviceRepository, SendHistoryRepository sendHistoryRepository) {
         this.answerRepository = answerRepository;
         this.matCategoryRepository = matCategoryRepository;
         this.matOrderRepository = matOrderRepository;
         this.questionRepository = questionRepository;
         this.orderMailFrameRepository = orderMailFrameRepository;
         this.companyRepository = companyRepository;
+        this.userRepository = userRepository;
         this.ownDeviceRepository = ownDeviceRepository;
         this.sendHistoryRepository = sendHistoryRepository;
     }
@@ -319,6 +318,32 @@ public class AdminService {
 
         }
         return resultMap;
+    }
+
+
+    //관리자 회원 검색
+    public Page<User> findUserListService(String keyword,String selectOption,Pageable pageable){
+
+        Page<User> searchUsers =  null ;
+        System.out.println(keyword);
+        System.out.println(selectOption);
+
+        switch (selectOption){
+            case "이름":
+                searchUsers =userRepository.findByNameLikeOrderByName("%"+keyword+"%",pageable);
+                break;
+            case "이메일":
+                searchUsers =userRepository.findByEmailLikeOrderByName("%"+keyword+"%",pageable);
+                break;
+            case "핸드폰":
+                searchUsers =userRepository.findByPhoneLikeOrderByName("%"+keyword+"%",pageable);
+                break;
+            default:
+                searchUsers =userRepository.findByNameLikeOrderByName("%"+keyword+"%",pageable);
+                break;
+        };
+
+        return searchUsers;
     }
 
 }

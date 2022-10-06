@@ -9,26 +9,26 @@
 
 [(1분 48초 이전은 등록과정이기 때문에 바쁘시다면 이후부터 시청하는것을 추천드립니다😁)](https://www.youtube.com/watch?v=Y6_GGQf_fus)
 
-<img width="393" alt="Untitled (3)" src="https://user-images.githubusercontent.com/72248952/194247214-03c45ba6-4a99-4507-a57d-4aa5116fa51d.png">
 
 프로젝트 주제
+<img width="1143" alt="Untitled (4)" src="https://user-images.githubusercontent.com/72248952/194247423-dac89a7a-d9d3-463f-969e-b2d25a7b0085.png">
 
-![**소프트웨어 구조**](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/5251793d-ab74-4148-800d-24b66aee4445/Untitled.png)
 
 **소프트웨어 구조**
+<img width="1167" alt="Untitled (5)" src="https://user-images.githubusercontent.com/72248952/194247493-b95ab59c-d414-4957-9815-68d765fc8991.png">
 
-![메인 화면](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6b341f9a-4971-40b2-85a9-d2297328e7c5/Untitled.png)
 
 메인 화면
+<img width="444" alt="Untitled (6)" src="https://user-images.githubusercontent.com/72248952/194247572-c79d457f-8b83-48f9-a652-fb3f6749edac.png">
 
-![IOT 기기](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/26091fa9-75c5-48a9-9a94-fdbff864aba2/Untitled.png)
 
 IOT 기기
+<img width="285" alt="Untitled (7)" src="https://user-images.githubusercontent.com/72248952/194247593-476e910b-c63a-4bdf-bd0d-32f4733b24e6.png">
 
-![CSV 리포트 기능](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/c9cab944-ebef-4ce6-a099-5ae60e432dbd/Untitled.png)
 
 CSV 리포트 기능
+<img width="393" alt="Untitled (8)" src="https://user-images.githubusercontent.com/72248952/194247609-64e20e4d-b2b3-42e4-b5d0-fe53d909015f.png">
 
-![그래프 시각화 기능](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/7afc72c1-ddbf-4d4b-96ca-dcaa086b8f52/Untitled.png)
 
 그래프 시각화 기능
+<img width="420" alt="Untitled (9)" src="https://user-images.githubusercontent.com/72248952/194247618-8655f5aa-adda-467b-848d-51249c03d676.png">

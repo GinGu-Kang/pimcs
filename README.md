@@ -11,7 +11,7 @@
 
 
 프로젝트 주제
-<img width="1143" alt="Untitled (4)" src="https://user-images.githubusercontent.com/72248952/194247423-dac89a7a-d9d3-463f-969e-b2d25a7b0085.png">
+<br><img width="600" alt="Untitled (4)" src="https://user-images.githubusercontent.com/72248952/194247423-dac89a7a-d9d3-463f-969e-b2d25a7b0085.png">
 
 
 **소프트웨어 구조**

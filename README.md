@@ -15,20 +15,20 @@
 
 
 **소프트웨어 구조**
-<img width="1167" alt="Untitled (5)" src="https://user-images.githubusercontent.com/72248952/194247493-b95ab59c-d414-4957-9815-68d765fc8991.png">
+<br><img width="600" alt="Untitled (5)" src="https://user-images.githubusercontent.com/72248952/194247493-b95ab59c-d414-4957-9815-68d765fc8991.png">
 
 
 메인 화면
-<img width="444" alt="Untitled (6)" src="https://user-images.githubusercontent.com/72248952/194247572-c79d457f-8b83-48f9-a652-fb3f6749edac.png">
+<br><img width="600" alt="Untitled (6)" src="https://user-images.githubusercontent.com/72248952/194247572-c79d457f-8b83-48f9-a652-fb3f6749edac.png">
 
 
 IOT 기기
-<img width="285" alt="Untitled (7)" src="https://user-images.githubusercontent.com/72248952/194247593-476e910b-c63a-4bdf-bd0d-32f4733b24e6.png">
+<br><img width="600" alt="Untitled (7)" src="https://user-images.githubusercontent.com/72248952/194247593-476e910b-c63a-4bdf-bd0d-32f4733b24e6.png">
 
 
 CSV 리포트 기능
-<img width="393" alt="Untitled (8)" src="https://user-images.githubusercontent.com/72248952/194247609-64e20e4d-b2b3-42e4-b5d0-fe53d909015f.png">
+<br><img width="600" alt="Untitled (8)" src="https://user-images.githubusercontent.com/72248952/194247609-64e20e4d-b2b3-42e4-b5d0-fe53d909015f.png">
 
 
 그래프 시각화 기능
-<img width="420" alt="Untitled (9)" src="https://user-images.githubusercontent.com/72248952/194247618-8655f5aa-adda-467b-848d-51249c03d676.png">
+<br><img width="600" alt="Untitled (9)" src="https://user-images.githubusercontent.com/72248952/194247618-8655f5aa-adda-467b-848d-51249c03d676.png">

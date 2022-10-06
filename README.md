@@ -9,7 +9,7 @@
 
 [(1분 48초 이전은 등록과정이기 때문에 바쁘시다면 이후부터 시청하는것을 추천드립니다😁)](https://www.youtube.com/watch?v=Y6_GGQf_fus)
 
-![프로젝트 주제](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/58d43b72-6177-4c76-a88c-e642c009e4b7/Untitled.png)
+<img width="393" alt="Untitled (3)" src="https://user-images.githubusercontent.com/72248952/194247214-03c45ba6-4a99-4507-a57d-4aa5116fa51d.png">
 
 프로젝트 주제
 

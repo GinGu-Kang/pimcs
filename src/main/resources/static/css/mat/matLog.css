@@ -136,3 +136,19 @@ button{
     width: 310px !important;
     margin-left: 20px;
 }
+
+
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        margin: 0 auto;
+    }
+    .datepicker-container{
+        margin-left: 0px;
+    }
+    .input-group-shadow{
+        width: 80% !important;
+        margin-bottom: 15px;
+    }
+
+}

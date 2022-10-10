@@ -41,35 +41,36 @@
     <div aria-label="Page navigation" class="d-flex justify-content-center">
         <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
     </div>
-    <table class="table pimcs-table">
-        <thead>
-            <th scope="col" class="text-center">주문일자</th>
-            <th scope="col" class="text-center">주문자 이메일</th>
-            <th scope="col" class="text-center">주문자 회사</th>
-            <th scope="col" class="text-center">총 주문 금액</th>
-            <th scope="col" class="text-center">입금 상태</th>
-            <th scope="col" class="text-center">주문희망 일자</th>
-            <th scope="col" class="text-center">입금자 이름</th>
-            <th scope="col" class="text-center">배송 상태</th>
-        </thead>
-        <tbody id="pimcs-tbody" class="pimcs-tbody">
+    <div class="pimcs-table-container">
+        <table class="table pimcs-table">
+            <thead>
+                <th scope="col" class="text-center">주문일자</th>
+                <th scope="col" class="text-center">주문자 이메일</th>
+                <th scope="col" class="text-center">주문자 회사</th>
+                <th scope="col" class="text-center">총 주문 금액</th>
+                <th scope="col" class="text-center">입금 상태</th>
+                <th scope="col" class="text-center">주문희망 일자</th>
+                <th scope="col" class="text-center">입금자 이름</th>
+                <th scope="col" class="text-center">배송 상태</th>
+            </thead>
+            <tbody id="pimcs-tbody" class="pimcs-tbody">
 
-        <th:block th:each="matOrder,i:${matOrderList}">
-            <tr class="matOrder-tr" th:onclick="'location.href=\''+ @{/admin/orders/{id}(id=${matOrder.getId()})} + '\''">
-                <td class="text-center" th:text="${matOrder.getCreatedAt()}"></td>
-                <td class="text-center" th:text="${matOrder.getUser().getEmail()}"></td>
-                <td class="text-center" th:text="${matOrder.getCompany().getCompanyName()}"></td>
-                <td class="text-center" th:text="${matOrder.getTotalPrice()}"></td>
-                <td class="text-center" th:text="${matOrder.getDepositStatus()}"></td>
-                <td class="text-center" th:text="${matOrder.getHopeDeliveryDate()}"></td>
-                <td class="text-center" th:text="${matOrder.getDepositerName()}"></td>
-                <td class="text-center" th:text="${matOrder.getDeliveryStatus()}"></td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
-
-    <script >
+            <th:block th:each="matOrder,i:${matOrderList}">
+                <tr class="matOrder-tr" th:onclick="'location.href=\''+ @{/admin/orders/{id}(id=${matOrder.getId()})} + '\''">
+                    <td class="text-center" th:text="${matOrder.getCreatedAt()}"></td>
+                    <td class="text-center" th:text="${matOrder.getUser().getEmail()}"></td>
+                    <td class="text-center" th:text="${matOrder.getCompany().getCompanyName()}"></td>
+                    <td class="text-center" th:text="${matOrder.getTotalPrice()}"></td>
+                    <td class="text-center" th:text="${matOrder.getDepositStatus()}"></td>
+                    <td class="text-center" th:text="${matOrder.getHopeDeliveryDate()}"></td>
+                    <td class="text-center" th:text="${matOrder.getDepositerName()}"></td>
+                    <td class="text-center" th:text="${matOrder.getDeliveryStatus()}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
+    <script>
 
 
 

@@ -34,34 +34,35 @@
   <div aria-label="Page navigation" class="d-flex justify-content-center">
     <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
   </div>
-  <table class="table pimcs-table">
-    <thead>
-    <th scope="col" class="text-center">번호</th>
-    <th scope="col" class="text-center">설립 일자</th>
-    <th scope="col" class="text-center">회사 이름</th>
-    <th scope="col" class="text-center">회사 코드</th>
-    <th scope="col" class="text-center">대표 이름</th>
-    <th scope="col" class="text-center">대표 이메일</th>
-    <th scope="col" class="text-center">전화 번호</th>
+  <div class="pimcs-table-container">
+    <table class="table pimcs-table">
+      <thead>
+      <th scope="col" class="text-center">번호</th>
+      <th scope="col" class="text-center">설립 일자</th>
+      <th scope="col" class="text-center">회사 이름</th>
+      <th scope="col" class="text-center">회사 코드</th>
+      <th scope="col" class="text-center">대표 이름</th>
+      <th scope="col" class="text-center">대표 이메일</th>
+      <th scope="col" class="text-center">전화 번호</th>
 
-    </thead>
-    <tbody id="pimcs-tbody" class="pimcs-tbody">
+      </thead>
+      <tbody id="pimcs-tbody" class="pimcs-tbody">
 
-    <th:block th:each="company,i:${companyList}">
-      <tr class="worker-tr"  th:onclick="'location.href=\''+ @{/admin/companies/{id}(id=${company.getId()})} + '\''">
-        <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
-        <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
-        <td  th:text="${company.getCreatedAt()}"></td>
-        <td  th:text="${company.getCompanyName()}"></td>
-        <td  th:text="${company.getCompanyCode()}"></td>
-        <td  th:text="${company.getCeoName()}"></td>
-        <td  th:text="${company.getCeoEmail()}"></td>
-        <td  th:text="${company.getContactPhone()}"></td>
-      </tr>
-    </th:block>
-    </tbody>
-  </table>
-
+      <th:block th:each="company,i:${companyList}">
+        <tr class="worker-tr"  th:onclick="'location.href=\''+ @{/admin/companies/{id}(id=${company.getId()})} + '\''">
+          <input type="hidden" th:class="db-id" th:value="${company.getId()}" name="company">
+          <td  th:text="${companyPage.getSize()}*${companyPage.getNumber()}+${i.index}+1"></td>
+          <td  th:text="${company.getCreatedAt()}"></td>
+          <td  th:text="${company.getCompanyName()}"></td>
+          <td  th:text="${company.getCompanyCode()}"></td>
+          <td  th:text="${company.getCeoName()}"></td>
+          <td  th:text="${company.getCeoEmail()}"></td>
+          <td  th:text="${company.getContactPhone()}"></td>
+        </tr>
+      </th:block>
+      </tbody>
+    </table>
+  </div>
 
 
   <script >

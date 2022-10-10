@@ -7,7 +7,7 @@
 /*SEARCH FORM*/
 .header-item1 .search-form{
     display: flex;
-    width: 75%;
+    width: 88%;
 }
 /*search input*/
 .header-item1 .input-group-shadow{
@@ -158,7 +158,7 @@ button{
         margin-right: 12px;
     }
     .search-form{
-        width: 100%;
+        
         flex-direction: column;
         margin: 0 auto;
     }

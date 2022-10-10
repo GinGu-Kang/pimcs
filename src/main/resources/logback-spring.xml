@@ -3,14 +3,14 @@
 
     <springProfile name="dev">
         <appender name="LOCAL_INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/Users/gangjingu/pimcs/application_log/application.log</file>
+            <file>application_log/application.log</file>
             <encoder>
                 <pattern>
                     %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [traceId=%X{traceId}] %-5level %logger{36}.%M - %msg%n
                 </pattern>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/Users/gangjingu/pimcs/application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <fileNamePattern>application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>5MB</maxFileSize>
                 <maxHistory>30</maxHistory>
                 <totalSizeCap>5GB</totalSizeCap>
@@ -29,14 +29,14 @@
 
     <springProfile name="prod">
         <appender name="PROD_INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>/home/pimcs/application_log/application.log</file>
+            <file>application_log/application.log</file>
             <encoder>
                 <pattern>
                     %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [traceId=%X{traceId}] %-5level %logger{36}.%M - %msg%n
                 </pattern>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <fileNamePattern>/home/pimcs/application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <fileNamePattern>application_log/application.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
                 <maxFileSize>5MB</maxFileSize>
                 <maxHistory>30</maxHistory>
                 <totalSizeCap>5GB</totalSizeCap>

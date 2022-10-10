@@ -140,13 +140,11 @@ const createMatRow = function(mat, length){
         communicationStatus = `<i class="bi bi-wifi-off" style="font-size:20px; color:red"></i>`
     }
 
-    console.log("----")
-    console.log()
 
     let row = `<tr class='text-size-between-middle-samll' data=${mat.id}>`;
         row +=    `<td><input class='row-checked' type='checkbox' data=${mat.id} ${checked}/></td>`;
         row +=    `<td columnName='serialNumber'>${mat.serialNumber}</td>`;
-        row +=    `<td columnName='matVersion'>A3</td>`;
+        row +=    `<td columnName='matVersion'>${mat.matVersion}</td>`;
         row +=    `<td columnName='productCode'>${(mat.product != null ? mat.product.productCode : 'N/A')}</td>`;
         row +=    `<td columnName='productName'>${(mat.product != null ? mat.product.productName : 'N/A')}</td>`;
         row +=    `<td columnName='productImage'>`;
@@ -175,6 +173,8 @@ const getArrayToString = (array)=>{
     }
     return "N/A";
 }
+
+
 
 
 /**

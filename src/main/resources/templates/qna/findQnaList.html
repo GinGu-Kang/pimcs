@@ -45,34 +45,37 @@
     <div aria-label="Page navigation" class="d-flex justify-content-center">
         <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
     </div>
-    <table class="table pimcs-table">
-        <thead>
-        <th scope="col" class="text-center">번호</th>
-        <th scope="col" class="text-center">제목</th>
-        <th scope="col" class="text-center">비밀글 여부</th>
-        <th scope="col" class="text-center">작성자</th>
-        <th scope="col" class="text-center">등록일</th>
-        <th scope="col" class="text-center">답변여부</th>
 
-        </thead>
-        <tbody id="pimcs-tbody" class="pimcs-tbody">
+    <!--Table-->
+    <div class="pimcs-table-container">
+        <table class="table pimcs-table">
+            <thead>
+            <th scope="col" class="text-center">번호</th>
+            <th scope="col" class="text-center">제목</th>
+            <th scope="col" class="text-center">비밀글 여부</th>
+            <th scope="col" class="text-center">작성자</th>
+            <th scope="col" class="text-center">등록일</th>
+            <th scope="col" class="text-center">답변여부</th>
 
-        <th:block th:each="question,i:${questionList}">
-            <tr class="worker-tr"  th:onclick="|location.href='@{/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
-                <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
-                <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
-                <td  th:text="${question.getTitle()}"></td>
-                <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
-                <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
-                <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
-                <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
-                <td th:if="${question.getAnswer()!=null}">완료</td>
-                <td th:unless="${question.getAnswer()!=null}">미완료</td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
+            </thead>
+            <tbody id="pimcs-tbody" class="pimcs-tbody">
 
+            <th:block th:each="question,i:${questionList}">
+                <tr class="worker-tr"  th:onclick="|location.href='@{/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
+                    <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
+                    <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
+                    <td  th:text="${question.getTitle()}"></td>
+                    <td  th:if="${question.isSecret()}" ><img src="/img/lock-solid.svg"></td>
+                    <td  th:unless="${question.isSecret()}"><img th:class="unlock-icon" src="/img/lock-open-solid.svg"></td>
+                    <td th:text="${question.getUser().getName().substring(0,2)+'*'}"></td>
+                    <td th:text="${question.getCreatedAt().toString().replace('-','.').substring(0,10)}"></td>
+                    <td th:if="${question.getAnswer()!=null}">완료</td>
+                    <td th:unless="${question.getAnswer()!=null}">미완료</td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
 
 
     <script >

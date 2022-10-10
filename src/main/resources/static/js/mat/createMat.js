@@ -15,6 +15,7 @@ $(document).on("focusout","input[name='mat.serialNumber']",function(){
     }
 
     let validation = checkSerialNumber($(this).val());
+    
     if(validation.valid) 
         $(messageTag).css("color","#6A82FB");
     else
@@ -47,15 +48,10 @@ $(document).on("click",".calc-method-btn",function(){
  * @returns ex) {"result": true, "message":"사용가능한 시리얼번호"}
  */
 const checkSerialNumber = function(serialNum){
-    
-    if(serialNumValidation == null){
-        let response = loadGetData({
-                            url: `/api/mats/${serialNum}/validations`,
-                            data: {}
-                        });
-        serialNumValidation = response;
-    }
-    return serialNumValidation;
+    return loadGetData({
+        url: `/api/mats/${serialNum}/validations`,
+        data: {}
+    });
 }
 
 /**
@@ -116,7 +112,10 @@ $(document).on("click",".register-btn",function(e){
         "matLocation": $(`input[name='mat.matLocation']`).val(),
         "threshold" : $(`input[name='mat.threshold']`).val(),
         "boxWeight": $(`input[name='mat.boxWeight']`).val(),
+        "calcMethod": $(`input[name='mat.calcMethod']`).val(),
+        "productOrderCnt": $(`input[name='mat.productOrderCnt']`).val()
     }
+
     
     let resultData = loadPostData({
         url: "/mats",

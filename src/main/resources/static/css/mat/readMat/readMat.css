@@ -553,4 +553,11 @@ tbody td{
         width: 345px;
         margin: 0 auto;
     }
+    section{
+        display: flex;
+        justify-content: center;
+    }
+    .pimcs-card-container{
+        margin-left:0;
+    }
 }

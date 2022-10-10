@@ -33,6 +33,7 @@ public class MatPageAdapter {
         private int boxWeight;
         private int currentInventory;
         private int communicationStatus;
+        private String matVersion;
         List<OrderMailRecipients> orderMailRecipients;
 
     }

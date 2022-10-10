@@ -87,11 +87,11 @@ public class APIController {
 
     @GetMapping("/api/mats/{serialNumber}/validations")
     @ResponseBody
-    public ValidationForm findMatListBySerialNumber(
+    public ValidationForm validateSerialNumber(
             @AuthenticationPrincipal SecUserCustomForm secUserCustomForm,
             @PathVariable String serialNumber){
 
-        return apiService.findMatListBySerialNumberService(secUserCustomForm.getCompany(), serialNumber);
+        return apiService.validateSerialNumberService(secUserCustomForm.getCompany(), serialNumber);
     }
 
     /**

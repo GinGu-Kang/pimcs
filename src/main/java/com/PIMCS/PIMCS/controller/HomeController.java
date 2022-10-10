@@ -20,15 +20,15 @@ public class HomeController {
     @GetMapping("")
     public String Home(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",user);
-        return "/home";
+        return "home";
     }
     @GetMapping("/hello")
     public String Hello(Model model, @AuthenticationPrincipal SecUserCustomForm user){
         model.addAttribute("user",user);
         return "hello";
     }
-    @GetMapping("/noneRole")
+    @GetMapping("/error/permission")
     public String noneRole(){
-        return "/noneRole";
+        return "noneRole";
     }
 }

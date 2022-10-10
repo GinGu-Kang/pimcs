@@ -69,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-        http.exceptionHandling().accessDeniedPage("/home/noneRole");
+        http.exceptionHandling().accessDeniedPage("/home/error/permission");
     }
 
 //    @Autowired

@@ -1,2 +1,5 @@
-insert into userRole (userEmail,roleId)
-values ('rkdwlsrn212@gmail.com',2)
+insert into userRole (name)
+values ('InventoryManagement'),
+       ('ChiefOfPimcs'),
+       ('UserManagement'),
+       ('User');

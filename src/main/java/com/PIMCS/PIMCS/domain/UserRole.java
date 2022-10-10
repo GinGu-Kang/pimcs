@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name="userRole")
 @Builder
 @AllArgsConstructor
 public class UserRole {

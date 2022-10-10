@@ -110,18 +110,18 @@ public class UserAuthController {
         user.setDepartment(userForm.getDepartment());
         userAuthService.userUpdate(user);
         model.addAttribute(user);
-        return "/user/userInfo";
+        return "user/userInfo";
     }
 
     @GetMapping("/pwd/change")
     public String pwdChangeForm(){
-        return "/user/pwdChange";
+        return "user/pwdChange";
     }
 
 
     @GetMapping("/pwd")
     public String pwdFindForm(){
-        return "/user/pwdFind";
+        return "user/pwdFind";
     }
 
     @ResponseBody
@@ -134,7 +134,7 @@ public class UserAuthController {
     @GetMapping("/pwd/find/verify")
     public String pwdFindVerify(@RequestParam("verifyKey") String verifyKey,Model model){
         model.addAttribute("verifyKey",verifyKey);
-        return "/user/pwdFindVerify";
+        return "user/pwdFindVerify";
     }
 
     //인증키 만료 처리
@@ -147,6 +147,6 @@ public class UserAuthController {
     @PostMapping("/pwd/change")
     public String pwdChange(@AuthenticationPrincipal SecUserCustomForm currentUser,String password){
         userAuthService.userPwdUpdate(currentUser.getUsername(),password);
-        return "/user/pwdChange";
+        return "user/pwdChange";
     }
 }

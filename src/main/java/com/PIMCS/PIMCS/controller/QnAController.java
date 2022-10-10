@@ -37,12 +37,12 @@ public class QnAController {
     @GetMapping("/faq")
     public String FaQList(){
 
-        return "/qna/faq";
+        return "qna/faq";
     }
     @GetMapping("/create")
     public String createQuestionForm(){
 
-        return "/qna/question";
+        return "qna/question";
     }
     @PostMapping("")
     public String questionSave(Question question, @AuthenticationPrincipal SecUserCustomForm secUserCustomForm, User user){
@@ -57,7 +57,7 @@ public class QnAController {
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
 
-        return "/qna/findQnaList";
+        return "qna/findQnaList";
     }
 
 
@@ -68,7 +68,7 @@ public class QnAController {
         Page<Question> questionPage=qnaService.filterQuestion(keyword,selectOption,pageable);
         model.addAttribute("questionPage",questionPage);
         model.addAttribute("questionList",questionPage.getContent());
-        return "/qna/qnaList";
+        return "qna/qnaList";
     }
 
     /*
@@ -85,14 +85,14 @@ public class QnAController {
 
             if(question.getUser().getEmail().equals(secUserCustomForm.getUsername())){
                 model.addAttribute(question);
-                return "/qna/qnaView";
+                return "qna/qnaView";
             }else{
                 return "noneRole";
             }
         }
         else {
             model.addAttribute(question);
-            return "/qna/qnaView";
+            return "qna/qnaView";
         }
 
     }

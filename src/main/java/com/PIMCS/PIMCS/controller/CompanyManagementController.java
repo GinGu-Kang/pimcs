@@ -95,7 +95,6 @@ public class CompanyManagementController {
         if(businessCategory == null){
             throw new IllegalStateException("Does not exist business category");
         }
-
         Company userCompany =  user.getCompany();
         userCompany.setCompanyAddress(companyForm.getCompanyAddress());
         userCompany.setCompanyName(companyForm.getCompanyName());
@@ -104,19 +103,21 @@ public class CompanyManagementController {
         userCompany.setCeoEmail(companyForm.getCeoEmail());
         userCompany.setBusinessCategoryId(businessCategory);
         companyManagementService.updateCompanyService(userCompany);
+        List<BusinessCategory> businessCategories = businessCategoryRepository.findAll();
+        model.addAttribute("businessCategories", businessCategories);
         model.addAttribute("company",userCompany);
-        return "redirect:/companies/details";
+        return "/company/companyInfoModify";
     }
 
     //회사 정보
-    @GetMapping("/details")
+    @GetMapping("details")
     public String companyDetails(@AuthenticationPrincipal SecUserCustomForm user,Model model){
         Company company = user.getCompany();
 
         List<BusinessCategory> businessCategories = businessCategoryRepository.findAll();
         model.addAttribute("businessCategories", businessCategories);
         model.addAttribute(company);
-        return "/company/companyInfoModify.html";
+        return "company/companyInfoModify.html";
     }
 
     //회사등록시 발급한 검증키 확인 및 회사와 대표등록

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+
+    <springProfile name="dev">
         <appender name="LOCAL_INFO_FILE_POLICY" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>/Users/gangjingu/pimcs/application_log/application.log</file>
             <encoder>
@@ -14,6 +16,7 @@
                 <totalSizeCap>5GB</totalSizeCap>
             </rollingPolicy>
         </appender>
+    </springProfile>
 
 
 

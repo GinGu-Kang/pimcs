@@ -60,17 +60,6 @@
                 <td th:if="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
                 <td th:unless="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" ></td>
             </tr>
-            <tr class="worker-tr" th:if="${worker.getEmail()}!=${#httpServletRequest.remoteUser}">
-                <td ><input type="checkbox" class="check-worker" name="check-worker" onclick="checkCount()"></td>
-                <td class="name" th:text="${worker.getName()}"></td>
-                <td class="email" name="email[]" th:id="${worker.getEmail()}" th:text="${worker.getEmail()}+' '"></td>
-                <td th:text="${worker.getPhone()}"></td>
-                <td th:text="${worker.getDepartment()}"></td>
-                <td th:if="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
-                <td th:unless="${#strings.contains(worker.getAuthorities(),'InventoryManagement')}"><input class="inventoryManagement" type="checkbox"  onclick="checkEvent(this)"></td>
-                <td th:if="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" checked></td>
-                <td th:unless="${#strings.contains(worker.getAuthorities(),'UserManagement')}"><input class="UserManagement" type="checkbox" onclick="checkEvent(this)" ></td>
-            </tr>
         </th:block>
         </tbody>
     </table>

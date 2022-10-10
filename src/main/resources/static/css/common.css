@@ -335,6 +335,7 @@ thead th:last-child {
 .pimcs-table td{
   vertical-align: middle;
   position: relative;
+  word-break: break-all;
 }
 
 /*REMOVE A_TAG ATTRIBUTE*/
@@ -358,6 +359,13 @@ thead th:last-child {
   -webkit-box-orient: vertical;
   word-wrap:break-word;
 }
+.pimcs-table-container{
+  width: 100%;
+  height: 76%;
+  overflow-x: auto;
+  overflow-y: auto;
+
+}
 
 
 @media (max-width: 768px) {
@@ -366,11 +374,23 @@ thead th:last-child {
   }
   .pimcs-table{
     width: 100% !important;
+    table-layout: fixed;
     padding: 0px;
     margin:  0px;
     overflow: auto;
 
   }
+  .pimcs-table th{
+    width: 124px;
+  }
+  .pimcs-table th:first{
+    width: 35px;
+  }
+
+  .pimcs-table-container{
+    width: 100vw;
+  }
+
   /*목록 버튼*/
   .footer-button{
     width: 155px;
@@ -383,4 +403,5 @@ thead th:last-child {
     text-decoration : none;
     color: #ffffff;
   }
+ 
 }

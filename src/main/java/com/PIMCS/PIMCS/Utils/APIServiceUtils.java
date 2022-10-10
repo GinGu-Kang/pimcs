@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class APIServiceUtils {
 
@@ -106,7 +107,7 @@ public class APIServiceUtils {
     /**
      * mat 데이터를 json 직렬하기 편한 객체로 만들어준다
      */
-    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery) {
+    public MatPageAdapter createMatPageAdapter(Page<Mat> pageMats, Company company, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, Map<String,String> matVersionMap) {
         List<MatPageAdapter.Mat> resultMats = new ArrayList<>();
 
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
@@ -136,14 +137,13 @@ public class APIServiceUtils {
 
 
             List<OrderMailRecipients> orderMailRecipients = OrderMailRecipients.findBySerialNumber(dynamoQuery, company,mat.getSerialNumber());
-
-            System.out.println("=======abc");
-            System.out.println(mat.getSerialNumber());
             DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, company.getId(), mat.getSerialNumber());
+
             mat.setInventoryWeight(dynamoMat.getInventoryWeight());
             // adapter mat데이터 추가
             MatPageAdapter.Mat matPageAdapter = MatPageAdapter.Mat.builder()
                     .id(mat.getId())
+                    .matVersion(matVersionMap.get(mat.getSerialNumber()))
                     .product(mProduct)
                     .company(mCompany)
                     .serialNumber(mat.getSerialNumber())

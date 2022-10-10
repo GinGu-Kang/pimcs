@@ -36,29 +36,30 @@
     <div aria-label="Page navigation" class="d-flex justify-content-center">
         <ul id="desktop-pagination" class="pagination text-size-between-middle-samll"></ul>
     </div>
-    <table class="table pimcs-table">
-        <thead>
-        <th scope="col" class="text-center">번호</th>
-        <th scope="col" class="text-center">이메일</th>
-        <th scope="col" class="text-center">회사명</th>
-        <th scope="col" class="text-center">이름</th>
-        <th scope="col" class="text-center">핸드폰</th>
+    <div class="pimcs-table-container">
+        <table class="table pimcs-table">
+            <thead>
+            <th scope="col" class="text-center">번호</th>
+            <th scope="col" class="text-center">이메일</th>
+            <th scope="col" class="text-center">회사명</th>
+            <th scope="col" class="text-center">이름</th>
+            <th scope="col" class="text-center">핸드폰</th>
 
-        </thead>
-        <tbody id="pimcs-tbody" class="pimcs-tbody">
+            </thead>
+            <tbody id="pimcs-tbody" class="pimcs-tbody">
 
-        <th:block th:each="user,i:${userList}">
-            <tr class="worker-tr">
-                <td  th:text="${userPage.getSize()}*${userPage.getNumber()}+${i.index}+1"></td>
-                <td  th:text="${user.getEmail()}"></td>
-                <td  th:text="${user.getCompany().getCompanyName()}"></td>
-                <td  th:text="${user.getName()}"></td>
-                <td  th:text="${user.getPhone()}"></td>
-            </tr>
-        </th:block>
-        </tbody>
-    </table>
-
+            <th:block th:each="user,i:${userList}">
+                <tr class="worker-tr">
+                    <td  th:text="${userPage.getSize()}*${userPage.getNumber()}+${i.index}+1"></td>
+                    <td  th:text="${user.getEmail()}"></td>
+                    <td  th:text="${user.getCompany().getCompanyName()}"></td>
+                    <td  th:text="${user.getName()}"></td>
+                    <td  th:text="${user.getPhone()}"></td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
     <script >
 
         /*<![CDATA[*/

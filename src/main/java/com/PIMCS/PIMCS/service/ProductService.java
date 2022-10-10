@@ -322,7 +322,7 @@ public class ProductService {
 
         List productLogList;
 
-        if(searchForm.getQuery() != "" || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+        if(searchForm.getQuery() != null || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
             productLogList = dynamoQuery.exeQuery(ProductLog.class,  ProductLog.searchQueryExpression(company, searchForm));
 
         }else { // 전제데이터 다운로드

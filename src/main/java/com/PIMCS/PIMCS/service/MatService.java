@@ -69,10 +69,9 @@ public class MatService {
      */
     public Mat createMatsService(MatForm matForm, Company company, User user){
         Mat mat = matForm.getMat();
-        System.out.println("====");
-        System.out.println(mat);
+
         //유효성 검사
-        ValidationForm validation = apiService.findMatListBySerialNumberService(company,mat.getSerialNumber());
+        ValidationForm validation = apiService.validateSerialNumberService(company,mat.getSerialNumber());
         if(!validation.isValid()){ //등록할수 없는 매트일때
             throw new IllegalStateException(validation.getMessage());
         }
@@ -317,11 +316,17 @@ public class MatService {
 
 
         List matLogList;
+        System.out.println(searchForm);
 
-        if(searchForm.getQuery() != "" || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+        if(searchForm.getQuery() != null || (searchForm.getStartDate() != null && searchForm.getEndDate() != null)){
+            System.out.println("======");
+            System.out.println("search");
             matLogList = dynamoQuery.exeQuery(MatLog.class,  MatLog.searchQueryExpression(company, searchForm));
 
+
         }else { // 전제데이터 다운로드
+            System.out.println("======");
+            System.out.printf("all");
             matLogList = dynamoQuery.exeQuery(MatLog.class, MatLog.queryExpression(company, false));
         }
 

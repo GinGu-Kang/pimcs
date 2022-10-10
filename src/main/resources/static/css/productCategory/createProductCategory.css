@@ -41,7 +41,7 @@
     margin-top: 18px;
 }
 .category-list-card{
-    height: 291px !important;
+    height: 65% !important;
 }
 
 .product-category-container .vertical-line{
@@ -117,6 +117,9 @@
     }
     .card-conatiner:last-child{
         margin-bottom: 20px;
+    }
+    .card-conatiner:last-child{
+        height: 57%;
     }
 
 }

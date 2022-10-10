@@ -11,10 +11,7 @@ import com.PIMCS.PIMCS.domain.Redis.Device;
 import com.PIMCS.PIMCS.form.SearchForm;
 import com.PIMCS.PIMCS.form.response.ValidationForm;
 import com.PIMCS.PIMCS.noSqlDomain.OrderMailRecipients;
-import com.PIMCS.PIMCS.repository.MatRepository;
-import com.PIMCS.PIMCS.repository.OwnDeviceRepository;
-import com.PIMCS.PIMCS.repository.ProductCategoryRepository;
-import com.PIMCS.PIMCS.repository.ProductRepository;
+import com.PIMCS.PIMCS.repository.*;
 import com.PIMCS.PIMCS.repository.Redis.DeviceRepository;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +21,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.HashMap;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -39,8 +38,10 @@ public class APIService {
     private final DeviceRepository deviceRepository;
     private final OwnDeviceRepository ownDeviceRepository;
 
+    private final MatCategoryRepository matCategoryRepository;
+
     @Autowired
-    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, DeviceRepository deviceRepository, OwnDeviceRepository ownDeviceRepository) {
+    public APIService(ProductRepository productRepository, MatRepository matRepository, ProductCategoryRepository productCategoryRepository, DynamoDBMapper dynamoDBMapper, DynamoQuery dynamoQuery, DeviceRepository deviceRepository, OwnDeviceRepository ownDeviceRepository, MatCategoryRepository matCategoryRepository) {
         this.productRepository = productRepository;
         this.matRepository = matRepository;
         this.productCategoryRepository = productCategoryRepository;
@@ -48,6 +49,7 @@ public class APIService {
         this.dynamoQuery = dynamoQuery;
         this.deviceRepository = deviceRepository;
         this.ownDeviceRepository = ownDeviceRepository;
+        this.matCategoryRepository = matCategoryRepository;
     }
 
     /**
@@ -74,25 +76,27 @@ public class APIService {
      * 매트검색 API
      */
     public MatPageAdapter findMatListByAllService(SearchForm searchForm, Company company, Pageable pageable) {
+        List<MatCategory> matCategoryList = matCategoryRepository.findAll();
+        Map<String, String> matVersionMap = matCategoryList.stream().collect(Collectors.toMap(MatCategory::getMappingSerialCode,MatCategory::getMatCategoryName));
 
         MatPageAdapter matPageAdapter = null;
         switch (searchForm.getSearchType()) {
             case "serialNumber":
             case "matVersion":
                 Page<Mat> pageMats = matRepository.findByCompanyAndSerialNumberContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper, dynamoQuery);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper, dynamoQuery, matVersionMap);
                 break;
             case "matLocation":
                 Page<Mat> pageMats2 = matRepository.findByCompanyAndMatLocationContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats2, company, dynamoDBMapper, dynamoQuery);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats2, company, dynamoDBMapper, dynamoQuery, matVersionMap);
                 break;
             case "productCode":
                 Page<Mat> pageMats3 = matRepository.findByCompanyAndProductProductCodeContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats3, company, dynamoDBMapper, dynamoQuery);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats3, company, dynamoDBMapper, dynamoQuery,matVersionMap);
                 break;
             case "productName":
                 Page<Mat> pageMats4 = matRepository.findByCompanyAndProductProductNameContaining(company, searchForm.getSearchQuery(), pageable);
-                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats4, company, dynamoDBMapper, dynamoQuery);
+                matPageAdapter = new APIServiceUtils().createMatPageAdapter(pageMats4, company, dynamoDBMapper, dynamoQuery, matVersionMap);
                 break;
 
             default:
@@ -127,14 +131,18 @@ public class APIService {
 
     public MatPageAdapter findMatListService(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findByCompanyOrderByIdDesc(company, pageable);
+        List<MatCategory> matCategoryList = matCategoryRepository.findAll();
+        Map<String, String> matVersionMap = matCategoryList.stream().collect(Collectors.toMap(MatCategory::getMappingSerialCode,MatCategory::getMatCategoryName));
 
-        return new APIServiceUtils().createMatPageAdapter(pageMats,company, dynamoDBMapper,dynamoQuery);
+
+        return new APIServiceUtils().createMatPageAdapter(pageMats,company, dynamoDBMapper,dynamoQuery, matVersionMap);
     }
 
     public MatPageAdapter findMatListByThresholdLte(Company company, Pageable pageable){
         Page<Mat> pageMats = matRepository.findMatsBelowThreshold(company,pageable);
-        System.out.println(pageMats);
-        return new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper,dynamoQuery);
+        List<MatCategory> matCategoryList = matCategoryRepository.findAll();
+        Map<String, String> matVersionMap = matCategoryList.stream().collect(Collectors.toMap(MatCategory::getMappingSerialCode,MatCategory::getMatCategoryName));
+        return new APIServiceUtils().createMatPageAdapter(pageMats, company, dynamoDBMapper,dynamoQuery, matVersionMap);
     }
 
     public List<ProductCategoryJsonAdapter> findProductsCategoryService(Company company){
@@ -153,7 +161,7 @@ public class APIService {
     }
 
 
-    public ValidationForm findMatListBySerialNumberService(Company company, String serialNumber){
+    public ValidationForm validateSerialNumberService(Company company, String serialNumber){
 //        HashMap hashMap = new HashMap<>();
         Optional<Mat> optMat = matRepository.findBySerialNumber(serialNumber);
         OwnDevice ownDevice = ownDeviceRepository.findByCompanyAndSerialNumber(company,serialNumber).orElse(null);

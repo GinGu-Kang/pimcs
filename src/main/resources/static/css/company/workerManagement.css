@@ -61,4 +61,14 @@ td{
     cursor: pointer;
 }
 
+@media (max-width: 768px) {
+    .action-btn-container {
+        flex-flow: column;
+        padding-left: 10px !important;
+    }
+    .inquery-mat-header-right-box{
+        justify-content: left !important;
+        padding-top: 2.2% !important;
+    }
+}
 

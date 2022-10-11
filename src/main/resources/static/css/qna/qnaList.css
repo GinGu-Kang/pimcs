@@ -105,3 +105,31 @@ td{
     overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
     max-width:130px;
 }
+
+@media (max-width: 768px) {
+    .action-btn-container {
+        flex-flow: column;
+        padding-left: 20px;
+    }
+    .title{
+        padding-left: 20px;
+    }
+    .action-btn-left-container{
+        padding-top: 20px;
+        justify-content: inherit;
+        width: 140px !important;
+    }
+    .inquery-mat-header-left-box {
+        width: 350px !important;
+
+    }
+    .search-input-container{
+        width: 190px;
+    }
+    /*.content {*/
+    /*    height: 125%;*/
+    /*} 다시*/
+
+
+
+}

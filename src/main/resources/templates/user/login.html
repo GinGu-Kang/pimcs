@@ -11,12 +11,12 @@
 </head>
 <body>
 <div class="wrraper">
-<section class="loginForm">
+<section class="loginSection">
     <img src="/img/logo2.png" ><br><br>
 <div th:if="${param.error}" class="failedMessage">
     <p>아이디가 존재하지 않거나 비밀번호가 틀립니다.</p>
 </div>
-<form th:action="@{/auth/login}" method="post">
+<form id="loginForm" th:action="@{/auth/login}" method="post">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
     <section class="textWrraper">

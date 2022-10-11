@@ -93,7 +93,7 @@ input[type=button]:hover,input[type=submit]:hover{
     color: #fff;
 }
 
-.loginForm{
+.loginSection{
     display: inline-block;
     height: 100vw;
     width: 25vw;
@@ -104,6 +104,28 @@ input[type=button]:hover,input[type=submit]:hover{
 
 }
 
+@media (max-width: 1000px) {
+    .loginSection{
+        width: 80vw !important;
+    }
+
+
+    .textWrraper input {
+        font-size: 2vmax;
+    }
+
+    .button {
+        font-size: 2vmax !important;
+    }
+    .loginForm-footer a, span{
+        font-size: 2vmax;
+    }
+    img{
+        width: 20vmax;
+        height: 12vmax;
+    }
+
+}
 
 
 

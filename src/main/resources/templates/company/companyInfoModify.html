@@ -18,7 +18,9 @@
         <form th:action="@{/companies}" method="POST">
             <input type="hidden" name="_method" value="PUT"/>
             <legend>
-                <div class="photo"></div>
+                <div class="photo">
+                    <img src="/img/logo2.png">
+                </div>
                 <div th:class="compnay-name"><input required type="text" th:value="${company.getCompanyName}" th:name="companyName"></input></div>
 
                 <!-- <></> -->

@@ -170,3 +170,18 @@ input[type=submit]{
     display: flex;
     justify-content: space-between;
 }
+
+@media (max-width: 1080px) {
+    .input-wrapper{
+        flex-flow: column;
+    }
+    .input-wrapper p{
+        text-align: center;
+        padding-top: 20px;
+    }
+    .title{
+        font-size: 16px;
+        font-weight: normal;
+    }
+
+}

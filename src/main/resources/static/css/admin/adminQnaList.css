@@ -62,6 +62,7 @@
     border: 2px solid #ffffff;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
     padding-left: 15px;
+    min-width: 75px;
 }
 
 .search-input{padding-left: 20px;}
@@ -89,4 +90,14 @@ td{
     width:130px;
     overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
     max-width:130px;
+}
+
+@media (max-width: 768px) {
+    .title{
+        padding-left: 20px;
+    }
+    .action-btn-container{
+        padding-left: 20px;
+    }
+
 }

@@ -1,4 +1,7 @@
- .content{
+html{
+  background-color: #fafafa;
+}
+.content{
   padding-top: 45px;
   padding-left: 34px;
 

@@ -78,6 +78,7 @@
 pre{
     white-space: pre-wrap;
     overflow: hidden;
+    padding-top: 3px;
 }
 
 
@@ -115,4 +116,14 @@ pre{
 }
 #list-p{
     text-align: -webkit-center;
+}
+
+@media (max-width: 768px) {
+    .title{
+        margin-left: 5%;
+    }
+    .isAnswer-false {
+        display: none;
+    }
+
 }

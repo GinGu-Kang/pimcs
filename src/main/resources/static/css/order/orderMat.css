@@ -183,5 +183,11 @@ input[type=submit]{
         font-size: 16px;
         font-weight: normal;
     }
+    .container{
+        width: 350px;
+    }
+    input{
+        font-size: 0.8rem;
+    }
 
 }

@@ -109,6 +109,9 @@ input[type=button]:hover,input[type=submit]:hover{
         width: 80vw !important;
     }
 
+    .failedMessage{
+        font-size: 2vmax;
+    }
 
     .textWrraper input {
         font-size: 2vmax;
@@ -124,6 +127,7 @@ input[type=button]:hover,input[type=submit]:hover{
         width: 20vmax;
         height: 12vmax;
     }
+
 
 }
 

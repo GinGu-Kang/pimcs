@@ -115,6 +115,7 @@ td{
         padding-left: 20px;
     }
     .action-btn-left-container{
+        min-width: 137px;
         padding-top: 20px;
         justify-content: inherit;
         width: 140px !important;
@@ -126,10 +127,9 @@ td{
     .search-input-container{
         width: 190px;
     }
-    /*.content {*/
-    /*    height: 125%;*/
-    /*} 다시*/
-
+    .pimcs-table-container {
+        background-color: #ffffff;
+    }
 
 
 }

@@ -145,7 +145,6 @@ input[type="checkbox"]{
 
 
 .title{
-    width: 188px;
     height: 5%;
     font-family: Roboto;
     font-size: 22px;
@@ -183,4 +182,34 @@ input[type="checkbox"]{
     font-size: 16px;
     color: #4282ff;
     font-family: Roboto;
+}
+
+@media (max-width: 1000px) {
+    .workerForm{
+        width: 80vw !important;
+    }
+
+    .failedMessage{
+        font-size: 2vmax;
+    }
+    .input,p,.title{
+        font-size: 2vmax;
+    }
+    input{
+        height: 5vh !important;
+    }
+
+
+
+    .button {
+        font-size: 2vmax !important;
+    }
+    .loginForm-footer a, span{
+        font-size: 2vmax;
+    }
+    img{
+        width: 20vmax;
+        height: 12vmax;
+    }
+
 }

@@ -15,7 +15,7 @@ img{
 }
 form span{
     width: 90%;
-    text-align: left;
+    text-align: center;
 }
 
 input,select {
@@ -137,7 +137,6 @@ input[type="checkbox"]{
     border-radius: 5px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
     background-color: #fff;
-
     font-family: Roboto;
     font-size: 18px;
     font-weight: 500;
@@ -156,7 +155,6 @@ input[type="checkbox"]{
     border:1px solid;
     font-size:18px;
     box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.16);
-
 }
 
 .domain_input{
@@ -202,3 +200,24 @@ input[type="checkbox"]{
 
 }
 
+
+@media (max-width: 1000px) {
+    input,select{
+        height: 100px;
+        font-size: 1.6rem !important;
+    }
+    span{
+        font-size: 1.6rem !important;
+    }
+    .companyForm{
+        width: 798px;
+    }
+    img {
+        width: 284px;
+        height: 170px;
+    }
+    input[type=submit] {
+        height: 100px;
+        margin-bottom: 40px;
+    }
+}

@@ -127,3 +127,30 @@ button {cursor: pointer;}
 .item:hover .description{
     color: #4282ff;
 }
+
+@media (max-width: 768px) {
+    .items{
+        flex-flow: column;
+        width: 100%;
+
+    }
+    .card{
+        width: 200px;
+        height: 200px;
+
+    }
+    .card-btn{
+        width: 200px;
+        padding: 28px 80px 29px 80px;
+    }
+    .description{
+        padding: 30px;
+    }
+    .item{
+        align-items: center;
+    }
+    .header-logo img{
+        margin-bottom: 15px;
+    }
+
+}

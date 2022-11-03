@@ -61,7 +61,7 @@
             <tbody id="pimcs-tbody" class="pimcs-tbody">
 
             <th:block th:each="question,i:${questionList}">
-                <tr class="worker-tr"  th:onclick="|location.href='@{/qna/view/?questionId={questionId}(questionId=${question.getId()})}'|">
+                <tr class="worker-tr"  th:onclick="|location.href='@{/qnas/{questionId}(questionId=${question.getId()})}'|">
                     <input type="hidden" th:class="db-id" th:value="${question.getId()}" name="question">
                     <td  th:text="${questionPage.getSize()}*${questionPage.getNumber()}+${i.index}+1"></td>
                     <td  th:text="${question.getTitle()}"></td>

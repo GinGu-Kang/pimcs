@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+
+    <meta charset="utf-8"/>
+    <title>Cocoon</title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/user/signUpSuccess.css" />
+
+
+    <style>
+    </style>
+</head>
+<body>
+
+<div class="workerForm">
+    <img src="/img/logo2.png" ><br>
+    <div >
+        <p class="success-message"><span class="failed-message-red">비공개 글입니다. </span></p>
+        <input  class="button" type="button"  value="이전 페이지로 바로가기" onclick="location.href='javascript:window.history.back();'">
+    </div>
+</div>
+</div>
+
+</body>
+</html>

@@ -14,3 +14,11 @@
 input{
     width: 100%;
 }
+
+@media (max-width: 768px) {
+    .title{
+        padding-left: 20px;
+        padding-bottom: 60px;
+    }
+
+}

@@ -195,3 +195,21 @@ pre{
 .sendHistory{
     display: initial;
 }
+
+@media (max-width: 768px){
+    .title{
+        padding-left: 10px;
+    }
+    .list-button{
+        width: 170px;
+        margin: 15px;
+    }
+    #list-p{
+        display: flex;
+        justify-content: center;
+        flex-flow: column;
+        align-items: center;
+    }
+
+
+}

@@ -42,7 +42,6 @@ hr{
 .question-form{
 
     width: 100%;
-    height: 100%;
     border-radius: 6px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
     background-color: #fff;
@@ -144,10 +143,23 @@ input[type=submit]{
 }
 
 .submit-wrapper{
+    padding-bottom: 20px;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+@media (max-width: 786px) {
+    .question-left {
+        display: none;
+    }
+    .question-left {
+        width: auto;
+    }
+    .title{
+        padding: 34px;
+    }
+
+}
 

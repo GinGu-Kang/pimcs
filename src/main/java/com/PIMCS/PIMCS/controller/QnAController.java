@@ -12,10 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -76,8 +73,8 @@ public class QnAController {
         비밀글 여부가 on이면 글쓴이와 일치하는지 검사하고 아니면 noneRole
         비밀글 여부가 off면 아무나 공개
      */
-    @GetMapping("/view")
-    public String detailQna(Model model,Integer questionId, @AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
+    @GetMapping("/{questionId}")
+    public String detailQna(Model model,@PathVariable(value = "questionId") Integer questionId, @AuthenticationPrincipal SecUserCustomForm secUserCustomForm){
 
         Question question = qnaService.findQuestion(questionId);
 
@@ -87,7 +84,7 @@ public class QnAController {
                 model.addAttribute(question);
                 return "qna/qnaView";
             }else{
-                return "noneRole";
+                return "noneQnaRole";
             }
         }
         else {

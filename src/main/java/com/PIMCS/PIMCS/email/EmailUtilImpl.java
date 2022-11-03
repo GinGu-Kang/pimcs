@@ -37,6 +37,7 @@ public class EmailUtilImpl {//implements EmailUtil
 //    @Transactional
     @Async
     public Future<Map> sendEmail(String[] toAddress, String subject, String body, boolean ishtml) {
+
         Map<String, Object> result = new HashMap<String, Object>();
         MimeMessage message = sender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
@@ -51,6 +52,7 @@ public class EmailUtilImpl {//implements EmailUtil
         }
 
         sender.send(message);
+        System.out.println("여기오니 ?");
         return new AsyncResult<>(result);
     }
 

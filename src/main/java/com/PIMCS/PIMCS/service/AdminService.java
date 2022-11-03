@@ -122,7 +122,8 @@ public class AdminService {
     /*매핑된 기기 삭제*/
     @Transactional
     public void deleteOwnDeviceListService(List<Integer> ownDeviceIdList) {
-        ownDeviceIdList.remove(0);
+        System.out.println(ownDeviceIdList.get(0));
+//        ownDeviceIdList.remove(0);
         System.out.println(ownDeviceIdList.size());
         ownDeviceRepository.deleteAllByIdIn(ownDeviceIdList);
     }

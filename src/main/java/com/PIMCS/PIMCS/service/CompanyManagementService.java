@@ -109,7 +109,8 @@ public class CompanyManagementService {
                 .build();
         waitCeoRedisRepository.save(waitCeo);
 
-        String comfirmUrl = String.format("http://%s:%s/companies/verification/%s", address, port, waitCeo.getId());
+        String confirmUrl = String.format("http://%s:%s/companies/verification/%s", address, port, waitCeo.getId());
+        System.out.println(confirmUrl);
 
 
 
@@ -117,7 +118,7 @@ public class CompanyManagementService {
                 "    <span style='margin-right: 205px;text-align:center;width: 188px;height: 40px;font-family: Roboto;font-size: 22px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: normal;letter-spacing: normal;text-align: left;color: #4282ff;'>PIMCS</span>\n" +
                 "    <p style='margin-top: 40px;'>안녕하세요 PIMCS입니다.</p>\n" +
                 "    <p >인증 확인을 누르면 회사가 등록됩니다.</p>\n" +
-                "<a href='"+comfirmUrl+"'>인증 확인</a>"+
+                "<a href='"+confirmUrl+"'>인증 확인</a>"+
                 "</div>\n";
         emailUtilImpl.sendEmail(
                     emailSednList

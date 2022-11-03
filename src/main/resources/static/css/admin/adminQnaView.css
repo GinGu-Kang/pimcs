@@ -129,3 +129,12 @@ pre{
 #list-p{
     text-align: -webkit-center;
 }
+
+@media (max-width: 768px) {
+    .title {
+        margin-left: 5%;
+    }
+    pre{
+        padding-top:10px;
+    }
+}

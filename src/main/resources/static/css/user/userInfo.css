@@ -121,3 +121,27 @@ legend {
 .content form{
     margin-top: 60px;
 }
+
+@media (max-width: 1000px) {
+    .photo{
+        display: none;
+    }
+    fieldset {
+        flex-flow: column !important;
+        width: 325px;
+        height: 700px;
+    }
+    .compnay-name{
+        padding: 0;
+    }
+    .compnay-name input{
+        width: 200px !important;
+    }
+    legend{
+        width: 0px !important;
+        height: 65px !important;
+    }
+    .content form p {
+        margin-left: 0;
+    }
+}

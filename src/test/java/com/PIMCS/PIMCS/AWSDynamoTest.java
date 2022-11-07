@@ -1,10 +1,6 @@
 package com.PIMCS.PIMCS;
 
-import com.PIMCS.PIMCS.Utils.DynamoDBUtils;
 import com.PIMCS.PIMCS.Utils.DynamoQuery;
-import com.PIMCS.PIMCS.domain.Company;
-import com.PIMCS.PIMCS.domain.Mat;
-import com.PIMCS.PIMCS.form.DynamoResultPage;
 import com.PIMCS.PIMCS.noSqlDomain.*;
 import com.PIMCS.PIMCS.repository.CompanyRepository;
 import com.PIMCS.PIMCS.repository.MatRepository;
@@ -13,24 +9,13 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import com.amazonaws.services.dynamodbv2.model.*;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.amazonaws.services.dynamodbv2.xspec.M;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Random;
 
 //@ContextConfiguration()
 //@RunWith(SpringRunner.class)
@@ -145,6 +130,54 @@ public class AWSDynamoTest {
         Assertions.assertThat(TableUtils.createTableIfNotExists(amazonDynamoDB, createTableRequest)).isEqualTo(true);
     }
 
+
+    @Test
+    public void createInoutHistory(){
+        DynamoMat dynamoMat = dynamoDBMapper.load(DynamoMat.class, 2, "WS01E210001");
+
+        Random random = new Random();
+        for(int i=1; i <= 32; i++){
+
+            LocalDateTime createdAt;
+            try{
+                Thread.sleep(500);
+            }catch (Exception e){
+
+            }
+
+            LocalDateTime new_date = LocalDateTime.now();
+            if(i == 32){
+              createdAt = LocalDateTime.of(2022,11, 1,new_date.getHour() , new_date.getMinute(),new_date.getSecond(), new_date.getNano());
+            }else {
+                createdAt = LocalDateTime.of(2022,10, i, new_date.getHour() , new_date.getMinute(),new_date.getSecond(), new_date.getNano());
+            }
+
+            int weight = random.nextInt(400 - 40 + 1) + 40;
+            System.out.println(createdAt);
+
+            InOutHistory inOutHistory = InOutHistory.builder()
+                    .matSerialNumber(dynamoMat.getMatSerialNumber())
+                    .currentWeight(weight)
+                    .productId(dynamoMat.getProductId())
+                    .updateCurrentInventory(weight)
+                    .isSendEmail(0)
+                    .threshold(50)
+                    .productWeight(136)
+                    .productName("츄파춥스")
+                    .calcMethod(0)
+                    .updateCnt(10)
+                    .companyId(2)
+                    .inOutStatus("IN")
+                    .productCode("code_food")
+                    .matLocation("창고3")
+                    .boxWeight(0)
+                    .createdAt(createdAt)
+
+                    .build();
+            dynamoDBMapper.save(inOutHistory);
+        }
+
+    }
 
 }
 

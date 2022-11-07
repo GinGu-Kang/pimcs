@@ -135,6 +135,7 @@ public class InOutHistoryService {
         LocalDate queryDate = startDate.minusMonths(1);
         DynamoDBUtils dynamoDBUtils = new DynamoDBUtils(dynamoDBMapper);
         List<InOutHistory> inOutHistories = dynamoDBUtils.loadByCompanyAndSerialNumberAndDate(company,matGraphForm, queryDate, endDate);
+        System.out.println(inOutHistories.size());
 
         List<ResultGraph> resultGraphs = new ArrayList<>(); //최종 return lsit
         List<String> serialNumberList = matGraphForm.getSerialNumberList();
@@ -144,6 +145,7 @@ public class InOutHistoryService {
             throw new IllegalStateException("serial number and product name differ in number");
 
         for(int i=0; i < serialNumberList.size(); i++){
+
             ResultGraph resultGraph = new ResultGraph();
             String serialNumber = serialNumberList.get(i);
             resultGraph.setTitle(serialNumber);
@@ -152,10 +154,13 @@ public class InOutHistoryService {
             endDate = matGraphForm.getEndDate();
 
             while(startDate.isBefore(endDate) || startDate.isEqual(endDate)){ //startDate <= endDate
-                InOutHistory inOutHistoryDay = InOutHistory.findByLocalDate(inOutHistories,startDate,serialNumber);
 
+                InOutHistory inOutHistoryDay = InOutHistory.findByLocalDate(inOutHistories,startDate,serialNumber);
+                System.out.println(startDate);
+                System.out.println(inOutHistoryDay);
                 //queryDate 보다 이전날짜의 채워넣을 마지막값 검색
                 if(inOutHistoryDay == null) inOutHistoryDay = dynamoDBUtils.findLastInOutHistory(serialNumber, queryDate);
+
 
                 //graph label과 data
                 resultGraph.setLabels(startDate.toString());
